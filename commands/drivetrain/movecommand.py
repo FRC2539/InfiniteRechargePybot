@@ -1,4 +1,4 @@
-from wpilib.command import Command
+from commands2 import Command
 from custom import driverhud
 from custom.config import MissingConfigError
 import robot

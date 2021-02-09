@@ -51,7 +51,7 @@ class BaseDrive(CougarSystem):
         """Initialize the navX MXP"""
         self.navX = AHRS.create_spi()
 
-        self.setGyroAngle(-90)
+        #self.setGyroAngle(-90)
         self.resetGyro()
 
         self.flatAngle = 0

@@ -6,7 +6,7 @@ import pprint
 
 import inspect
 
-from wpilib.command import Subsystem
+from commands2 import Subsystem
 
 ALLOWPRINTS = True
 
