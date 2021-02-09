@@ -5,7 +5,7 @@ import robot
 
 class ToggleFieldOrientationCommand(InstantCommand):
     def __init__(self):
-        super().__init__("Toggle Field Orientation")
+        super().__init__()
 
         self.requires(robot.drivetrain)
 

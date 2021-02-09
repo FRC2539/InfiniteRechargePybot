@@ -10,7 +10,7 @@ class Hood(CougarSystem):
     """Controls the robot's shooter."""
 
     def __init__(self):
-        super().__init__("Hood")
+        super().__init__()
 
         self.encoder = wpilib.DutyCycle(
             wpilib.DigitalInput(ports.hood.encoderID)

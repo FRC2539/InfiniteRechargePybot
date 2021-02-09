@@ -9,7 +9,7 @@ class Chamber(CougarSystem):
     The chamber moves the balls vertically and preceeds the shooter."""
 
     def __init__(self):
-        super().__init__("Chamber")
+        super().__init__()
 
         self.motor = WPI_TalonSRX(ports.conveyor.motorID)
 

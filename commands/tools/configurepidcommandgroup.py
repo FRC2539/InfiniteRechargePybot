@@ -14,7 +14,7 @@ from custom.config import Config
 
 class ConfigurePIDCommandGroup(CommandGroup):
     def __init__(self):
-        super().__init__("Configure PID")
+        super().__init__()
 
         output = """
 Your F and P values have been configured. However, P is probably too small.

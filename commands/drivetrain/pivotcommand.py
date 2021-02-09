@@ -9,11 +9,9 @@ import math
 class PivotCommand(TurnCommand):
     """Allows autonomous turning using the drive base encoders."""
 
-    def __init__(self, degrees, reverse=False, name=None):
-        if name is None:
-            name = "Pivot %f degrees" % degrees
+    def __init__(self, degrees, reverse=False):
 
-        super().__init__(degrees, name)
+        super().__init__(degrees)
 
         # 0 = Left Side, 1 = Right Side
         self.pivotSide = 0

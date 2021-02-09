@@ -4,7 +4,7 @@ from wpilib.joystick import Joystick
 
 class ControllerDebugCommand(Command):
     def __init__(self, port=0):
-        super().__init__("Get Controller Values")
+        super().__init__()
 
         self.setRunWhenDisabled(True)
         self.joystick = Joystick(port)

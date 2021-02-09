@@ -8,7 +8,7 @@ from .drivetrain.resettiltcommand import ResetTiltCommand
 
 class StartUpCommandGroup(CommandGroup):
     def __init__(self):
-        super().__init__("Start Up")
+        super().__init__()
         self.setRunWhenDisabled(True)
 
         self.addParallel(ResetTiltCommand())

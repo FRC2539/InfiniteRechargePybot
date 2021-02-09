@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 
-import wpilib.command
-
-wpilib.command.Command.isFinished = lambda x: False
-
 from commands2 import TimedCommandRobot
 from wpilib._impl.main import run
 from wpilib import RobotBase
@@ -13,7 +9,7 @@ import controller.layout
 import subsystems
 import shutil, sys
 
-from wpilib.command import Subsystem
+from commands2 import Subsystem
 
 from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain

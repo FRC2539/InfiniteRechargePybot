@@ -7,7 +7,7 @@ class MonitorCommand(Command):
     """Runs continually while the robot is powered on."""
 
     def __init__(self):
-        super().__init__("MonitorCommand")
+        super().__init__()
 
         """
         Required because this is the default command for the monitor subsystem.

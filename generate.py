@@ -40,7 +40,7 @@ class {subsystem}(Subsystem):
     \'\'\'Describe what this subsystem does.\'\'\'
 
     def __init__(self):
-        super().__init__('{subsystem}')
+        super().__init__()
 """.lstrip().format(
                 subsystem=subsystem
             )

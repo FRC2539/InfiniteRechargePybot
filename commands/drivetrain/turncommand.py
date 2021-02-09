@@ -9,9 +9,9 @@ import math
 class TurnCommand(Command):
     """Allows autonomous turning using the drive base encoders."""
 
-    def __init__(self, degrees, tolerance=3, name=None):
-        if name is None:
-            name = "Turn %f degrees" % degrees
+    def __init__(self, degrees, tolerance=3):
+        
+        super().__init__()
 
         self.degrees = degrees
         self.tolerance = tolerance

@@ -25,7 +25,7 @@ class CurveCommand(Command):
         -Ben
         """
 
-        super().__init__("Curve")
+        super().__init__()
 
         robot.drivetrain.stop()  # Stop it just to make sure we ain't moving after a previous command.
 

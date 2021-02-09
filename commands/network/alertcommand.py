@@ -6,7 +6,7 @@ from custom import driverhud
 class AlertCommand(InstantCommand):
     def __init__(self, msg, type="Alerts"):
         """Show an alert on the dashboard"""
-        super().__init__("Alert: %s" % msg)
+        super().__init__()
 
         self.setRunWhenDisabled(True)
 

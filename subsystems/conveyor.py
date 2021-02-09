@@ -9,7 +9,7 @@ class Conveyor(CougarSystem):
     The conveyor is horizontal and preceeds the chamber."""
 
     def __init__(self):
-        super().__init__("Conveyor")
+        super().__init__()
 
         self.motor = WPI_TalonSRX(ports.conveyor.motorID)
 

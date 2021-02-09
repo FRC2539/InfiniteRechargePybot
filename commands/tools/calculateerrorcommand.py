@@ -10,7 +10,10 @@ class CalculateErrorCommand(MoveCommand):
     errors = []
 
     def __init__(self, direction=1):
-        super().__init__(30 * direction, "Calculate Error")
+        
+        raise Exception('Please don\'t use this. :)')
+        
+        super().__init__()
 
         self.requires(robot.drivetrain)
         Config("DriveTrain/wheelDiameter", 8)

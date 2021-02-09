@@ -11,18 +11,18 @@ class Shooter(CougarSystem):
     """Controls the robot's shooter."""
 
     def __init__(self):
-        super().__init__("Shooter")
+        super().__init__()
 
         self.table = nt.getTable("Shooter")
 
         # Initialize the first motor.
-        self.shooterMotorOne = WPI_TalonFX(ports.shooter.shooterMotorOneID)
+        self.shooterMotorOne = WPI_TalonFX(ports.shooter.motorOneID)
         self.shooterMotorOne.configSelectedFeedbackSensor(
             FeedbackDevice.IntegratedSensor, 0, 0
         )
 
         # Initialize the second motor.
-        self.shooterMotorTwo = WPI_TalonFX(ports.shooter.shooterMotorTwoID)
+        self.shooterMotorTwo = WPI_TalonFX(ports.shooter.motorTwoID)
         self.shooterMotorTwo.configSelectedFeedbackSensor(
             FeedbackDevice.IntegratedSensor, 0, 0
         )

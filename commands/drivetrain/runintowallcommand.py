@@ -6,8 +6,8 @@ import robot
 class RunIntoWallCommand(Command):
     """Drives the robot at a steady speed until it crashes into something."""
 
-    def __init__(self, timelimit=None):
-        super().__init__("Run Into Wall", timelimit)
+    def __init__(self):
+        super().__init__()
 
         self.requires(robot.drivetrain)
 

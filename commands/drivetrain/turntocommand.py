@@ -7,7 +7,7 @@ class TurnToCommand(TurnCommand):
     """Turn to a specified angle using the gyroscope."""
 
     def __init__(self, targetDegrees):
-        super().__init__(targetDegrees, "Turn to %f degrees" % targetDegrees)
+        super().__init__(targetDegrees)
 
         self.targetDegrees = targetDegrees
 

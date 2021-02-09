@@ -8,7 +8,7 @@ class AlterConfigCommand(InstantCommand):
     """Changes the value stored in Config."""
 
     def __init__(self, key, func):
-        super().__init__("Alter %s" % key)
+        super().__init__()
         self.setRunWhenDisabled(True)
 
         self.config = Config(key)

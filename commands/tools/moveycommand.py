@@ -5,7 +5,7 @@ import robot
 
 class MoveYCommand(InstantCommand):
     def __init__(self, y):
-        super().__init__("Move Y")
+        super().__init__()
 
         self.requires(robot.drivetrain)
         self.y = y

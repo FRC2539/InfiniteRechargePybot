@@ -8,7 +8,7 @@ class SetConfigCommand(InstantCommand):
     """Stores a given value in Config."""
 
     def __init__(self, key, value):
-        super().__init__("Set %s to %s" % (key, value))
+        super().__init__()
         self.setRunWhenDisabled(True)
 
         self.config = Config(key)

@@ -5,7 +5,7 @@ import robot
 
 class ZeroGyroCommand(InstantCommand):
     def __init__(self):
-        super().__init__("Zero Gyro")
+        super().__init__()
 
         self.requires(robot.drivetrain)
 

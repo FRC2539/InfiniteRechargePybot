@@ -13,7 +13,7 @@ logicalaxes.registerAxis("rotate")
 
 class DriveCommand(Command):
     def __init__(self, speedLimit):
-        super().__init__("DriveCommand %s" % speedLimit)
+        super().__init__()
 
         self.requires(robot.drivetrain)
         self.speedLimit = speedLimit
