@@ -1,4 +1,4 @@
-from wpilib.command import Command
+from commands2 import Command
 
 import math
 

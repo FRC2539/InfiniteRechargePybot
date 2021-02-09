@@ -31,7 +31,7 @@ def generateSubsystem():
     with open("subsystems/%s.py" % module, "w") as f:
         f.write(
             """
-from wpilib.command import Subsystem
+from commands2 import Subsystem
 
 import ports
 
@@ -206,7 +206,7 @@ def generateCommand():
     if inherits == "fc.CommandFlow":
         content = "import commandbased.flowcontrol as fc"
     else:
-        content = "from wpilib.command import %s" % inherits
+        content = "from commands2 import %s" % inherits
 
         if len(requirements) > 0:
             content += "\n\nimport robot"

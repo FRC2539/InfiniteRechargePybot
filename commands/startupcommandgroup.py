@@ -1,4 +1,4 @@
-from wpilib.command import CommandGroup
+from commands2 import CommandGroup
 import commandbased.flowcontrol as fc
 
 import robot
