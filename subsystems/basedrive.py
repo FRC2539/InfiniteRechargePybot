@@ -51,7 +51,7 @@ class BaseDrive(CougarSystem):
         """Initialize the navX MXP"""
         self.navX = AHRS.create_spi()
 
-        self.setGyroAngle(-90)
+        #self.setGyroAngle(-90)
         self.resetGyro()
 
         self.flatAngle = 0
@@ -86,8 +86,6 @@ class BaseDrive(CougarSystem):
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
         """
-
-        print("please god no")
 
         if [x, y, rotate] == self.lastInputs:
             return

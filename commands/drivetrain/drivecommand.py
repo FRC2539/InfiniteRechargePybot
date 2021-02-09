@@ -25,7 +25,6 @@ class DriveCommand(Command):
         self.slowed = False
 
     def execute(self):
-        print(robot.drivetrain.getModuleAngles())
         # Avoid quick changes in direction
         y = logicalaxes.forward.get()
         if self.lastY is None:
