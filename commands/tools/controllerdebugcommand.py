@@ -1,4 +1,4 @@
-from commands2 import Command
+from commands2 import CommandBase
 from wpilib.joystick import Joystick
 
 

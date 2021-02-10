@@ -1,4 +1,4 @@
-from commands2 import Command
+from commands2 import CommandBase
 
 import robot
 from controller import logicalaxes
@@ -11,11 +11,11 @@ logicalaxes.registerAxis("strafe")
 logicalaxes.registerAxis("rotate")
 
 
-class DriveCommand(Command):
+class DriveCommand(CommandBase):
     def __init__(self, speedLimit):
         super().__init__()
 
-        self.requires(robot.drivetrain)
+        self.addRequirements(robot.drivetrain)
         self.speedLimit = speedLimit
 
     def initialize(self):

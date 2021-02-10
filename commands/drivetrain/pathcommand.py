@@ -1,14 +1,14 @@
-from commands2 import Command
+from commands2 import CommandBase
 import math
 
 import robot
 
 
-class PathCommand(Command):
+class PathCommand(CommandBase):
     def __init__(self):
         super().__init__()
 
-        self.requires(robot.drivetrain)
+        self.addRequirements(robot.drivetrain)
 
     def initialize(self):
         self.lastPositions = robot.drivetrain.getPositions()

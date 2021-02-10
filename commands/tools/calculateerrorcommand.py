@@ -11,11 +11,9 @@ class CalculateErrorCommand(MoveCommand):
 
     def __init__(self, direction=1):
         
-        raise Exception('Please don\'t use this. :)')
-        
-        super().__init__()
+        super().__init__(30 * direction)
 
-        self.requires(robot.drivetrain)
+        self.addRequirements(robot.drivetrain)
         Config("DriveTrain/wheelDiameter", 8)
         self.table = NetworkTables.getTable("DriveTrain/Speed")
 

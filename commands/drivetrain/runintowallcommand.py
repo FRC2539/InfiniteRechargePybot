@@ -1,15 +1,15 @@
-from commands2 import Command
+from commands2 import CommandBase
 
 import robot
 
 
-class RunIntoWallCommand(Command):
+class RunIntoWallCommand(CommandBase):
     """Drives the robot at a steady speed until it crashes into something."""
 
     def __init__(self):
         super().__init__()
 
-        self.requires(robot.drivetrain)
+        self.addRequirements(robot.drivetrain)
 
     def initialize(self):
         robot.drivetrain.setProfile(0)

@@ -1,12 +1,13 @@
-import commandbased.flowcontrol as fc
+from commands2 import SequentialCommandGroup
 
 from commands.drivetrain.turncommand import TurnCommand
 from commands.drivetrain.movecommand import MoveCommand
 
 
-class AutonomousCommandGroup(fc.CommandFlow):
+class AutonomousCommandGroup(SequentialCommandGroup):
     def __init__(self):
-        super().__init__()
+        super().__init__([
+            MoveCommand(100)
+            ])
 
         # self.addSequential(TurnCommand(90))
-        self.addSequential(MoveCommand(100))

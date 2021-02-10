@@ -9,7 +9,7 @@ class SetUseEncodersCommand(InstantCommand):
     def __init__(self, encodersEnabled):
         super().__init__()
 
-        self.requires(robot.drivetrain)
+        self.addRequirements(robot.drivetrain)
         self.encodersEnabled = encodersEnabled
 
     def initialize(self):

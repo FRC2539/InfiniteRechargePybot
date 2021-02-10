@@ -1,4 +1,4 @@
-from commands2 import Command
+from commands2 import CommandBase
 
 import robot
 
@@ -12,7 +12,7 @@ class MonitorCommand(Command):
         """
         Required because this is the default command for the monitor subsystem.
         """
-        self.requires(robot.monitor)
+        self.addRequirements(robot.monitor)
 
         self.setInterruptible(False)
         self.setRunWhenDisabled(True)

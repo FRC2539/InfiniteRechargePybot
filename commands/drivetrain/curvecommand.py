@@ -1,11 +1,11 @@
-from commands2 import Command
+from commands2 import CommandBase
 
 import math
 
 import robot
 
 
-class CurveCommand(Command):
+class CurveCommand(CommandBase):
     def __init__(self, *argv):
 
         """
@@ -66,7 +66,7 @@ class CurveCommand(Command):
             self.b * (math.pi / 180)
         ) * self.radius  # The total length of our path.
 
-        self.requires(robot.drivetrain)
+        self.addRequirements(robot.drivetrain)
 
     def initialize(self):
         print("starting ")

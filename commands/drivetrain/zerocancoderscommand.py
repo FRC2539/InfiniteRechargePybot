@@ -1,9 +1,9 @@
-from commands2 import Command
+from commands2 import CommandBase
 
 import robot
 
 
-class ZeroCANCodersCommand(Command):
+class ZeroCANCodersCommand(CommandBase):
     def __init__(self, offsets=[-255.9375, -271.9, -41.8, -130.1]):
         super().__init__()
 
@@ -12,7 +12,7 @@ class ZeroCANCodersCommand(Command):
         call this command. 
         """
 
-        #self.requires(robot.drivetrain)
+        self.addRequirements(robot.drivetrain)
 
         self.offsets = offsets
 

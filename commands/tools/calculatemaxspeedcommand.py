@@ -12,7 +12,7 @@ class CalculateMaxSpeedCommand(InstantCommand):
     def __init__(self):
         super().__init__()
 
-        self.requires(robot.drivetrain)
+        self.addRequirements(robot.drivetrain)
         self.table = NetworkTables.getTable("DriveTrain")
 
     def initialize(self):

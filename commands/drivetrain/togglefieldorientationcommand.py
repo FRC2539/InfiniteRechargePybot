@@ -7,7 +7,7 @@ class ToggleFieldOrientationCommand(InstantCommand):
     def __init__(self):
         super().__init__()
 
-        self.requires(robot.drivetrain)
+        self.addRequirements(robot.drivetrain)
 
     def initialize(self):
         robot.drivetrain.isFieldOriented = not robot.drivetrain.isFieldOriented
