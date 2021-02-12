@@ -43,7 +43,6 @@ turret.motorID = 10
 
 hood = PortsList()
 hood.motorID = 11
-hood.encoderID = 0
 
 intake = PortsList()
 intake.motorID = 12
