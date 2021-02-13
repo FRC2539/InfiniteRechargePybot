@@ -13,6 +13,11 @@ from commands.drivetrain.zerocancoderscommand import ZeroCANCodersCommand
 
 from commands.resetcommand import ResetCommand
 
+from commands.intake.intakecommand import IntakeCommand
+from commands.intake.outtakecommand import OuttakeCommand
+from commands.intake.slowouttakecommand import SlowOuttakeCommand
+
+from commands.conveyor.conveyorforwardcommand import ConveyorForwardCommand
 
 def init():
     """
@@ -40,6 +45,9 @@ def init():
     )  # (120, 120) @ max of 60 in/sec
     driveControllerOne.RightThumb.whenPressed(ToggleFieldOrientationCommand())
 
+    driveControllerTwo.LeftThumb.toggleWhenPressed(IntakeCommand())
+    driveControllerTwo.RightThumb.toggleWhenPressed(OuttakeCommand())
+    driveControllerTwo.BottomThumb.toggleWhenPressed(ConveyorForwardCommand())
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(1)
 

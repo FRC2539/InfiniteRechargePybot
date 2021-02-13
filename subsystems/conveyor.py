@@ -22,16 +22,16 @@ class Conveyor(CougarSystem):
         # Option: separate into forward and backward speeds
 
     def forward(self):
-        move(self.speed)
+        self.move(self.speed)
 
     def backward(self):
-        move(-self.speed)
+        self.move(-self.speed)
 
     def slowForward(self):
-        move(self.slowSpeed)
+        self.move(self.slowSpeed)
 
     def slowBackward(self):
-        move(-self.slowSpeed)
+        self.move(-self.slowSpeed)
 
     def move(self, speed):
         self.motor.set(ControlMode.PercentOutput, speed)

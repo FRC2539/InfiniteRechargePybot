@@ -17,6 +17,9 @@ from wpilib.command import Subsystem
 
 from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
+from subsystems.chamber import Chamber as chamber
+from subsystems.conveyor import Conveyor as conveyor
+from subsystems.intake import Intake as intake
 
 
 class KryptonBot(CommandBasedRobot):
