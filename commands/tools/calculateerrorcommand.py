@@ -35,7 +35,7 @@ class CalculateErrorCommand(MoveCommand):
 
         return self.onTarget > 5
 
-    def end(self):
+    def end(self, interrupted):
         self.errors.append(robot.drivetrain.averageError())
 
         avgError = sum(self.errors) / len(self.errors)

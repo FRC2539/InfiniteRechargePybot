@@ -6,7 +6,7 @@ import pprint
 
 import inspect
 
-from commands2 import Subsystem
+from commands2 import SubsystemBase
 
 ALLOWPRINTS = True
 
@@ -42,7 +42,7 @@ def enablePrints():
         pass
 
 
-class CougarSystem(Subsystem):
+class CougarSystem(SubsystemBase):
     def __init__(self):
         
         super().__init__()

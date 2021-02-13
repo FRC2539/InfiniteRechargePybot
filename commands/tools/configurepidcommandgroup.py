@@ -13,8 +13,7 @@ from custom.config import Config
 
 class ConfigurePIDCommandGroup(SequentialCommandGroup):
     def __init__(self):
-        super().__init__()
-
+        
         output = """
 Your F and P values have been configured. However, P is probably too small.
 Use MoveCommand to drive the robot a set distance. (If you have not already done
@@ -29,39 +28,41 @@ the average error is less than 10.
 For details see the Motion Magic Closed-Loop Walkthrough section of the Talon
 SRX Software Reference Manual.
         """
-
-        self.addCommands([
-            AlertCommand("Do not disable the robot!"),
-            WaitCommand(1),
-            AlertCommand("Enable netconsole for details", "Info"),
-            WaitCommand(2),
-            PrintCommand("Zeroing PID Values"),
-            ResetPIDCommand(),
-            PrintCommand("Calculating Max Speed"),
-            SetUseEncodersCommand(False),
-            MoveYCommand(1),
-            WaitCommand(2),
-            CalculateMaxSpeedCommand(),
-            MoveYCommand(0),
-            WaitCommand(2),
-            MoveYCommand(-1),
-            WaitCommand(2),
-            CalculateMaxSpeedCommand(),
-            PrintCommand("Testing PID driving"),
-            SetUseEncodersCommand(True),
-            SetSpeedCommand(Config("DriveTrain/normalSpeed")),
-            MoveYCommand(1),
-            WaitCommand(2),
-            MoveYCommand(0),
-            WaitCommand(2),
-            SetSpeedCommand(Config("DriveTrain/preciseSpeed")),
-            MoveYCommand(-1),
-            WaitCommand(2),
-            MoveYCommand(0),
-            WaitCommand(2),
-            PrintCommand("Generating starting P value"),
-            CalculateErrorCommand(1),
-            CalculateErrorCommand(-1),
-            PrintCommand(output.strip()),
-            AlertCommand("You may now disable the robot", "Info"),
-        ])
+        
+        super().__init__()
+        
+        # self.addCommands(
+        #     AlertCommand("Do not disable the robot!"),
+        #     WaitCommand(1),
+        #     AlertCommand("Enable netconsole for details", "Info"),
+        #     WaitCommand(2),
+        #     PrintCommand("Zeroing PID Values"),
+        #     ResetPIDCommand(),
+        #     PrintCommand("Calculating Max Speed"),
+        #     SetUseEncodersCommand(False),
+        #     MoveYCommand(1),
+        #     WaitCommand(2),
+        #     CalculateMaxSpeedCommand(),
+        #     MoveYCommand(0),
+        #     WaitCommand(2),
+        #     MoveYCommand(-1),
+        #     WaitCommand(2),
+        #     CalculateMaxSpeedCommand(),
+        #     PrintCommand("Testing PID driving"),
+        #     SetUseEncodersCommand(True),
+        #     SetSpeedCommand(Config("DriveTrain/normalSpeed")),
+        #     MoveYCommand(1),
+        #     WaitCommand(2),
+        #     MoveYCommand(0),
+        #     WaitCommand(2),
+        #     SetSpeedCommand(Config("DriveTrain/preciseSpeed")),
+        #     MoveYCommand(-1),
+        #     WaitCommand(2),
+        #     MoveYCommand(0),
+        #     WaitCommand(2),
+        #     PrintCommand("Generating starting P value"),
+        #     CalculateErrorCommand(1),
+        #     CalculateErrorCommand(-1),
+        #     PrintCommand(output.strip()),
+        #     AlertCommand("You may now disable the robot", "Info"),
+        # )

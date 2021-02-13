@@ -93,7 +93,7 @@ class CurveCommand(CommandBase):
             >= self.totalArcLength
         )
 
-    def end(self):
+    def end(self, interrupted):
         robot.drivetrain.stop()
         if self.needLoop:
             needRepeat(
