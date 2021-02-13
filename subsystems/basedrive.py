@@ -16,8 +16,8 @@ class BaseDrive(CougarSystem):
     without knowing what type of drive system we have should be implemented here.
     """
 
-    def __init__(self, name):
-        super().__init__(name)
+    def __init__(self):
+        super().__init__()
 
         """
         Create all motors, disable the watchdog, and turn off neutral braking
@@ -51,7 +51,7 @@ class BaseDrive(CougarSystem):
         """Initialize the navX MXP"""
         self.navX = AHRS.create_spi()
 
-        self.setGyroAngle(-90)
+        #self.setGyroAngle(-90)
         self.resetGyro()
 
         self.flatAngle = 0
@@ -86,8 +86,6 @@ class BaseDrive(CougarSystem):
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
         """
-
-        print("please god no")
 
         if [x, y, rotate] == self.lastInputs:
             return

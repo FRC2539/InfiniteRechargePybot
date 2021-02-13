@@ -1,14 +1,14 @@
-from wpilib.command import Command
+from commands2 import CommandBase
 import math
 
 import robot
 
 
-class PathCommand(Command):
+class PathCommand(CommandBase):
     def __init__(self):
-        super().__init__("Path")
+        super().__init__()
 
-        self.requires(robot.drivetrain)
+        self.addRequirements(robot.drivetrain)
 
     def initialize(self):
         self.lastPositions = robot.drivetrain.getPositions()
@@ -36,8 +36,8 @@ class PathCommand(Command):
         angle = []
 
         for dx in self.totalDisplacements:
-            angle.append(math.atan(2(dx)))
-            self.lastSlope.append(2(dx))
+            angle.append(math.atan(2*dx))
+            self.lastSlope.append(2*dx)
 
         avg = sum(angle) / len(angle)
         robot.drivetrain.setModuleAngles(avg)
@@ -48,5 +48,5 @@ class PathCommand(Command):
         always starting at 0,0
         """
 
-    def end(self):
+    def end(self, interrupted):
         pass

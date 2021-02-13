@@ -1,13 +1,13 @@
-from wpilib.command import InstantCommand
+from commands2 import InstantCommand
 
 import robot
 
 
 class MoveYCommand(InstantCommand):
     def __init__(self, y):
-        super().__init__("Move Y")
+        super().__init__()
 
-        self.requires(robot.drivetrain)
+        self.addRequirements(robot.drivetrain)
         self.y = y
 
     def initialize(self):

@@ -1,11 +1,11 @@
-from wpilib.command import Command
+from commands2 import CommandBase
 
 import math
 
 import robot
 
 
-class CurveCommand(Command):
+class CurveCommand(CommandBase):
     def __init__(self, *argv):
 
         """
@@ -25,7 +25,7 @@ class CurveCommand(Command):
         -Ben
         """
 
-        super().__init__("Curve")
+        super().__init__()
 
         robot.drivetrain.stop()  # Stop it just to make sure we ain't moving after a previous command.
 
@@ -66,7 +66,7 @@ class CurveCommand(Command):
             self.b * (math.pi / 180)
         ) * self.radius  # The total length of our path.
 
-        self.requires(robot.drivetrain)
+        self.addRequirements(robot.drivetrain)
 
     def initialize(self):
         print("starting ")
@@ -93,7 +93,7 @@ class CurveCommand(Command):
             >= self.totalArcLength
         )
 
-    def end(self):
+    def end(self, interrupted):
         robot.drivetrain.stop()
         if self.needLoop:
             needRepeat(

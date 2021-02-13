@@ -1,4 +1,4 @@
-from wpilib.command import InstantCommand
+from commands2 import InstantCommand
 
 from custom import driverhud
 
@@ -6,9 +6,8 @@ from custom import driverhud
 class AlertCommand(InstantCommand):
     def __init__(self, msg, type="Alerts"):
         """Show an alert on the dashboard"""
-        super().__init__("Alert: %s" % msg)
+        super().__init__()
 
-        self.setRunWhenDisabled(True)
 
         self.msg = msg
         self.type = type
@@ -18,3 +17,6 @@ class AlertCommand(InstantCommand):
 
     def setMessage(self, msg):
         self.msg = msg
+    
+    def runWhenDisabled(self):
+        return True

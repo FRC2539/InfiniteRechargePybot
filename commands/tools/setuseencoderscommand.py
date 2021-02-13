@@ -1,4 +1,4 @@
-from wpilib.command import InstantCommand
+from commands2 import InstantCommand
 
 import robot
 from custom.config import Config
@@ -7,9 +7,9 @@ from networktables import NetworkTables
 
 class SetUseEncodersCommand(InstantCommand):
     def __init__(self, encodersEnabled):
-        super().__init__("Set Use Encoders")
+        super().__init__()
 
-        self.requires(robot.drivetrain)
+        self.addRequirements(robot.drivetrain)
         self.encodersEnabled = encodersEnabled
 
     def initialize(self):

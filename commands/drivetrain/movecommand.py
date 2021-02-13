@@ -1,10 +1,10 @@
-from wpilib.command import Command
+from commands2 import CommandBase
 from custom import driverhud
 from custom.config import MissingConfigError
 import robot
 
 
-class MoveCommand(Command):
+class MoveCommand(CommandBase):
     def __init__(self, distance, angle=0, tolerance=3, name=None):
         """
         Takes a distance in inches and stores it for later. We allow overriding
@@ -14,14 +14,14 @@ class MoveCommand(Command):
         if name is None:
             name = "Move %f inches" % distance
 
-        super().__init__(name, 0.2)
+        super().__init__()
 
         self.distance = -distance
         self.angle = angle
         self.tol = tolerance  # Angle tolerance in degrees.
 
         self.moveSet = False
-        self.requires(robot.drivetrain)
+        self.addRequirements(robot.drivetrain)
 
     def initialize(self):
         robot.drivetrain.setModuleProfiles(1, turn=False)
@@ -63,7 +63,7 @@ class MoveCommand(Command):
         if count == 4:
             return True
 
-    def end(self):
+    def end(self, interrupted):
         robot.drivetrain.stop()
         robot.drivetrain.setModuleProfiles(0, turn=False)
         self.moveSet = False

@@ -1,4 +1,4 @@
-from wpilib.command.instantcommand import InstantCommand
+from commands2 import InstantCommand
 from networktables import NetworkTables
 
 from custom.config import Config
@@ -8,7 +8,7 @@ class AlterConfigCommand(InstantCommand):
     """Changes the value stored in Config."""
 
     def __init__(self, key, func):
-        super().__init__("Alter %s" % key)
+        super().__init__()
         self.setRunWhenDisabled(True)
 
         self.config = Config(key)

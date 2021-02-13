@@ -8,4 +8,4 @@ class DriveTrain(SwerveDrive):
     """
 
     def __init__(self):
-        super().__init__("DriveTrain")
+        super().__init__()

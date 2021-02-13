@@ -10,9 +10,10 @@ class CalculateErrorCommand(MoveCommand):
     errors = []
 
     def __init__(self, direction=1):
-        super().__init__(30 * direction, "Calculate Error")
+        
+        super().__init__(30 * direction)
 
-        self.requires(robot.drivetrain)
+        self.addRequirements(robot.drivetrain)
         Config("DriveTrain/wheelDiameter", 8)
         self.table = NetworkTables.getTable("DriveTrain/Speed")
 
@@ -34,7 +35,7 @@ class CalculateErrorCommand(MoveCommand):
 
         return self.onTarget > 5
 
-    def end(self):
+    def end(self, interrupted):
         self.errors.append(robot.drivetrain.averageError())
 
         avgError = sum(self.errors) / len(self.errors)

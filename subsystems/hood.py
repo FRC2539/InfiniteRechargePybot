@@ -1,6 +1,7 @@
 from .cougarsystem import *
 
 import wpilib
+import math
 import ports
 
 from rev import CANSparkMax, MotorType, ControlType
@@ -10,7 +11,7 @@ class Hood(CougarSystem):
     """Controls the robot's shooter."""
 
     def __init__(self):
-        super().__init__("Hood")
+        super().__init__()
 
         self.encoder = wpilib.DutyCycle(
             wpilib.DigitalInput(ports.hood.encoderID)
@@ -30,7 +31,6 @@ class Hood(CougarSystem):
         self.angleMin = 170.00 # Difference of 70 degrees between min and max angle
 
         self.speed = 0.1 # 10 Percent
-        # Option: separate into up and down speeds
 
     def getPosition(self):
         return self.encoder.getOutput() * 360

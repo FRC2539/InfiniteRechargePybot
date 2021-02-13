@@ -1,28 +1,26 @@
 #!/usr/bin/env python3
 
-import wpilib.command
-
-wpilib.command.Command.isFinished = lambda x: False
-
-from commandbased import CommandBasedRobot
+from commands2 import TimedCommandRobot
 from wpilib._impl.main import run
 from wpilib import RobotBase
 
 from custom import driverhud
 import controller.layout
 import subsystems
-import shutil, sys
+import shutil, sys, os, inspect
 
-from wpilib.command import Subsystem
+from commands2 import Subsystem
 
 from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
 from subsystems.chamber import Chamber as chamber
 from subsystems.conveyor import Conveyor as conveyor
 from subsystems.intake import Intake as intake
+from subsystems.shooter import Shooter as shooter
+from subsystems.limelight import Limelight as limelight
 
 
-class KryptonBot(CommandBasedRobot):
+class KryptonBot(TimedCommandRobot):
     """Implements a Command Based robot design"""
 
     def robotInit(self):
@@ -32,14 +30,14 @@ class KryptonBot(CommandBasedRobot):
             import mockdata
 
         self.subsystems()
-
+        
         controller.layout.init()
         driverhud.init()
-
+        
         from commands.drivetrain.zerocancoderscommand import ZeroCANCodersCommand
         from commands.startupcommandgroup import StartUpCommandGroup
 
-        StartUpCommandGroup().start()
+        StartUpCommandGroup().schedule()
 
     def autonomousInit(self):
         """This function is called each time autonomous mode starts."""
@@ -49,9 +47,15 @@ class KryptonBot(CommandBasedRobot):
 
         # Schedule the autonomous command
         auton = driverhud.getAutonomousProgram()
-        auton.start()
+        auton.schedule()
         driverhud.showInfo("Starting %s" % auton)
-
+        
+    def disabledInit(self):
+        pass
+    
+    def disabledPeriodic(self):
+        pass
+                
     def handleCrash(self, error):
         super().handleCrash()
         driverhud.showAlert("Fatal Error: %s" % error)
@@ -72,8 +76,7 @@ class KryptonBot(CommandBasedRobot):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1 and sys.argv[1] == "deploy":
-        shutil.rmtree("opkg_cache", ignore_errors=True)
-        shutil.rmtree("pip_cache", ignore_errors=True)
-
+    # if len(sys.argv) > 1 and sys.argv[1] == "deploy":
+        # shutil.rmtree("opkg_cache", ignore_errors=True)
+        # shutil.rmtree("pip_cache", ignore_errors=True)
     run(KryptonBot)
