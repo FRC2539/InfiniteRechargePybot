@@ -1,15 +1,13 @@
-from wpilib.command import Command
+from commands2 import CommandBase
 
 import robot
 
-
-class ConveyorBackwardCommand(Command):
+class ConveyorBackwardCommand(CommandBase):
 
     def __init__(self):
-        super().__init__('Conveyor Backward')
+        super().__init__()
 
-        self.requires(robot.conveyor)
-
+        self.addRequirements(robot.conveyor)
 
     def initialize(self):
         robot.conveyor.backward()

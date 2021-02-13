@@ -44,6 +44,9 @@ turret.motorID = 10
 hood = PortsList()
 hood.motorID = 11
 
+conveyor = PortsList()
+conveyor.motorID = 9
+
 intake = PortsList()
 intake.motorID = 12
 

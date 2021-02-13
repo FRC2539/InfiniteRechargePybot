@@ -1,14 +1,14 @@
-from wpilib.command import Command
+from commands2 import CommandBase
 
 import robot
 
 
-class OuttakeCommand(Command):
+class OuttakeCommand(CommandBase):
 
     def __init__(self):
-        super().__init__('Outtake')
+        super().__init__()
 
-        self.requires(robot.intake)
+        self.addRequirements(robot.intake)
 
     def initialize(self):
         robot.intake.fastOut()
