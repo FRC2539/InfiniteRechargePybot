@@ -48,5 +48,5 @@ class PathCommand(CommandBase):
         always starting at 0,0
         """
 
-    def end(self):
+    def end(self, interrupted):
         pass

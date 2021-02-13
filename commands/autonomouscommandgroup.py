@@ -6,8 +6,6 @@ from commands.drivetrain.movecommand import MoveCommand
 
 class AutonomousCommandGroup(SequentialCommandGroup):
     def __init__(self):
-        super().__init__([
-            MoveCommand(100)
-            ])
-
-        # self.addSequential(TurnCommand(90))
+        super().__init__()
+        
+        self.addCommands(MoveCommand(10))

@@ -21,5 +21,5 @@ class RunIntoWallCommand(CommandBase):
 
         return abs(robot.drivetrain.getAcceleration()) > 1
 
-    def end(self):
+    def end(self, interrupted):
         robot.drivetrain.stop()

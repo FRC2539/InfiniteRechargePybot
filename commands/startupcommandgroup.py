@@ -1,4 +1,4 @@
-from commands2 import CommandGroupBase
+from commands2 import ParallelCommandGroup
 import commandbased.flowcontrol as fc
 
 import robot
@@ -6,9 +6,13 @@ import robot
 from .drivetrain.resettiltcommand import ResetTiltCommand
 
 
-class StartUpCommandGroup(CommandGroupBase):
+class StartUpCommandGroup(ParallelCommandGroup):
     def __init__(self):
         super().__init__()
-        self.setRunWhenDisabled(True)
-
-        self.addParallel(ResetTiltCommand())
+        
+        t = ResetTiltCommand()
+        
+        self.addCommands(t)
+        
+    def runsWhenDisabled(self):
+        return True

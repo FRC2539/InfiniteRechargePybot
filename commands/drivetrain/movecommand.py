@@ -63,7 +63,7 @@ class MoveCommand(CommandBase):
         if count == 4:
             return True
 
-    def end(self):
+    def end(self, interrupted):
         robot.drivetrain.stop()
         robot.drivetrain.setModuleProfiles(0, turn=False)
         self.moveSet = False

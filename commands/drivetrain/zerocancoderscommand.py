@@ -22,5 +22,5 @@ class ZeroCANCodersCommand(CommandBase):
 
         print("my angles (zeroes)" + str(robot.drivetrain.getModuleAngles()))
 
-    def end(self):
+    def end(self, interrupted):
         pass
