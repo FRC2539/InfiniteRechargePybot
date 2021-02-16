@@ -11,7 +11,7 @@ class Chamber(CougarSystem):
     def __init__(self):
         super().__init__()
 
-        self.motor = WPI_TalonSRX(ports.conveyor.motorID)
+        self.motor = WPI_TalonSRX(ports.chamber.motorID)
 
         self.motor.setNeutralMode(NeutralMode.Brake)
         self.motor.setInverted(True)

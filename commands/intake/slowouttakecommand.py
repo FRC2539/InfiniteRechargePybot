@@ -1,17 +1,16 @@
-from wpilib.command import Command
-
+from commands2 import CommandBase
 import robot
 
 
-class SlowOuttakeCommand(Command):
+class SlowOuttakeCommand(CommandBase):
 
     def __init__(self):
-        super().__init__('Slow Outtake')
+        super().__init__()
 
-        self.requires(robot.intake)
+        self.addRequirements(robot.intake)
 
     def initialize(self):
         robot.intake.slowOut()
 
-    def end(self):
+    def end(self, interrupted):
         robot.intake.dontIntakeBalls()
