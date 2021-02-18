@@ -14,5 +14,5 @@ class ConveyorForwardCommand(CommandBase):
     def initialize(self):
         robot.conveyor.forward()
 
-    def end(self):
+    def end(self, interrupted):
         robot.conveyor.stop()

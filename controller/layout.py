@@ -18,6 +18,10 @@ from commands.intake.outtakecommand import OuttakeCommand
 from commands.intake.slowouttakecommand import SlowOuttakeCommand
 
 from commands.conveyor.conveyorforwardcommand import ConveyorForwardCommand
+from commands.conveyor.conveyorbackwardcommand import ConveyorBackwardCommand
+
+from commands.chamber.chamberforwardcommand import ChamberForwardCommand
+from commands.chamber.chamberbackwardcommand import ChamberBackwardCommand
 
 def init():
     """
@@ -40,14 +44,12 @@ def init():
     logicalaxes.rotate = driveControllerTwo.X
 
     driveControllerOne.LeftBottomLeft.whenPressed(ZeroCANCodersCommand())
-    driveControllerOne.BottomThumb.toggleWhenPressed(
-        CurveCommand([120, 120], [120, 120], 60)
-    )  # (120, 120) @ max of 60 in/sec
-    driveControllerOne.RightThumb.whenPressed(ToggleFieldOrientationCommand())
+    driveControllerOne.LeftThumb.toggleWhenPressed(ChamberForwardCommand())
+    driveControllerOne.RightThumb.toggleWhenPressed(ChamberBackwardCommand())
 
-    driveControllerTwo.LeftThumb.toggleWhenPressed(IntakeCommand())
-    driveControllerTwo.RightThumb.toggleWhenPressed(OuttakeCommand())
-    driveControllerTwo.BottomThumb.toggleWhenPressed(ConveyorForwardCommand())
+    driveControllerTwo.LeftThumb.toggleWhenPressed(ConveyorForwardCommand())
+    driveControllerTwo.RightThumb.toggleWhenPressed(ConveyorBackwardCommand())
+    driveControllerTwo.BottomThumb.toggleWhenPressed(IntakeCommand())
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(1)
 

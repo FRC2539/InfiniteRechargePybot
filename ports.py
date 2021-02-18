@@ -47,6 +47,9 @@ hood.motorID = 11
 conveyor = PortsList()
 conveyor.motorID = 9
 
+chamber = PortsList()
+chamber.motorID = 13
+
 intake = PortsList()
 intake.motorID = 12
 

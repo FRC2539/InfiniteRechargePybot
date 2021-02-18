@@ -12,5 +12,5 @@ class ConveyorBackwardCommand(CommandBase):
     def initialize(self):
         robot.conveyor.backward()
 
-    def end(self):
+    def end(self, interrupted):
         robot.conveyor.stop()
