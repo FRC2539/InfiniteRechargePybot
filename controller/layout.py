@@ -27,6 +27,7 @@ from commands.shooter.setrpmcommand import SetRPMCommand
 
 from commands.hood.raisehoodcommand import RaiseHoodCommand
 
+
 def init():
     """
     Declare all controllers, assign axes to logical axes, and trigger
@@ -55,7 +56,7 @@ def init():
     driveControllerTwo.RightThumb.toggleWhenPressed(ConveyorBackwardCommand())
     driveControllerTwo.BottomThumb.toggleWhenPressed(IntakeCommand())
     driveControllerTwo.Trigger.toggleWhenPressed(SetRPMCommand())
-    
+
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(1)
 
