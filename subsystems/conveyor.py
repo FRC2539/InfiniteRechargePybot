@@ -4,8 +4,9 @@ import ports
 
 from ctre import WPI_TalonSRX, NeutralMode, ControlMode
 
+
 class Conveyor(CougarSystem):
-    """Controls the conveyor in the ball system. 
+    """Controls the conveyor in the ball system.
     The conveyor is horizontal and preceeds the chamber."""
 
     def __init__(self):

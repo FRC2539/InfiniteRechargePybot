@@ -4,8 +4,9 @@ import ports
 
 from ctre import WPI_TalonSRX, NeutralMode, ControlMode
 
+
 class Chamber(CougarSystem):
-    """Controls the chamber in the ball system. 
+    """Controls the chamber in the ball system.
     The chamber moves the balls vertically and preceeds the shooter."""
 
     def __init__(self):
