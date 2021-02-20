@@ -26,6 +26,7 @@ from commands.chamber.chamberbackwardcommand import ChamberBackwardCommand
 from commands.shooter.setrpmcommand import SetRPMCommand
 
 from commands.hood.raisehoodcommand import RaiseHoodCommand
+from commands.hood.lowerhoodcommand import LowerHoodCommand
 
 
 def init():
@@ -55,6 +56,8 @@ def init():
     driveControllerTwo.LeftThumb.toggleWhenPressed(ConveyorForwardCommand())
     driveControllerTwo.RightThumb.toggleWhenPressed(ConveyorBackwardCommand())
     driveControllerTwo.BottomThumb.toggleWhenPressed(IntakeCommand())
+    driveControllerTwo.LeftBottomLeft.whileHeld(RaiseHoodCommand())
+    driveControllerTwo.LeftBottomRight.whileHeld(LowerHoodCommand())
     driveControllerTwo.Trigger.toggleWhenPressed(SetRPMCommand())
 
     # The controller for non-driving subsystems of the robot
