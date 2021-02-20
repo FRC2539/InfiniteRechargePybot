@@ -221,9 +221,7 @@ class SwerveDrive(BaseDrive):
         for module, angle in zip(self.modules, angles):
             module.setWheelAngle(angle)
 
-    def setModuleAngles(
-        self, angle: int
-    ):  # This sets a uniform angle. Overrides the method above.
+    def setUniformModuleAngles(self, angle: int):  # This sets a uniform angle.
         for module in self.modules:
             module.setWheelAngle(angle)
 

@@ -34,18 +34,15 @@ drivetrain.backRightCANCoder = 20
 limelight = PortsList()
 limelight.port = 8
 
-conveyor = PortsList()
-conveyor.motorID = 9
-
-chamber = PortsList()
-chamber.motorID = 13
+ballsystem = PortsList()
+ballsystem.motorOneID = 9
+ballsystem.motorTwoID = 13
 
 turret = PortsList()
 turret.motorID = 10
 
 hood = PortsList()
 hood.motorID = 11
-hood.encoderID = 0
 
 intake = PortsList()
 intake.motorID = 12

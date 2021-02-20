@@ -9,7 +9,7 @@ import controller.layout
 import subsystems
 import shutil, sys, os, inspect
 
-from commands2 import Subsystem
+from commands2 import Subsystem, CommandScheduler
 
 from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
@@ -30,14 +30,16 @@ class KryptonBot(TimedCommandRobot):
             import mockdata
 
         self.subsystems()
-        
+
         controller.layout.init()
         driverhud.init()
-        
+
         from commands.drivetrain.zerocancoderscommand import ZeroCANCodersCommand
         from commands.startupcommandgroup import StartUpCommandGroup
 
         StartUpCommandGroup().schedule()
+
+        from commands.drivetrain.drivecommand import DriveCommand
 
     def autonomousInit(self):
         """This function is called each time autonomous mode starts."""
@@ -49,13 +51,22 @@ class KryptonBot(TimedCommandRobot):
         auton = driverhud.getAutonomousProgram()
         auton.schedule()
         driverhud.showInfo("Starting %s" % auton)
-        
+
+    def teleopInit(self):
+        self.temp.initialize()
+
+    def teleopPeriodic(self):
+
+        print("scheudle")
+        self.temp.execute()
+        print("done")
+
     def disabledInit(self):
         pass
-    
+
     def disabledPeriodic(self):
         pass
-                
+
     def handleCrash(self, error):
         super().handleCrash()
         driverhud.showAlert("Fatal Error: %s" % error)
@@ -70,13 +81,14 @@ class KryptonBot(TimedCommandRobot):
                     try:
                         setattr(module, key, var())
                     except TypeError as e:
+                        print("failed " + str(key))
                         raise ValueError(f"Could not instantiate {key}") from e
             except TypeError:
                 pass
 
 
 if __name__ == "__main__":
-    # if len(sys.argv) > 1 and sys.argv[1] == "deploy":
-        # shutil.rmtree("opkg_cache", ignore_errors=True)
-        # shutil.rmtree("pip_cache", ignore_errors=True)
+    if len(sys.argv) > 1 and sys.argv[1] == "deploy":
+        shutil.rmtree("opkg_cache", ignore_errors=True)
+        shutil.rmtree("pip_cache", ignore_errors=True)
     run(KryptonBot)
