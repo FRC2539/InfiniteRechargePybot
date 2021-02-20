@@ -25,6 +25,8 @@ from commands.chamber.chamberbackwardcommand import ChamberBackwardCommand
 
 from commands.shooter.setrpmcommand import SetRPMCommand
 
+from commands.hood.raisehoodcommand import RaiseHoodCommand
+
 def init():
     """
     Declare all controllers, assign axes to logical axes, and trigger
