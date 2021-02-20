@@ -44,7 +44,7 @@ def enablePrints():
 
 class CougarSystem(SubsystemBase):
     def __init__(self):
-        
+
         super().__init__()
 
         self.data = {}  # Individual to each subsystem. {Name : Method}

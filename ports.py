@@ -43,6 +43,7 @@ turret.motorID = 10
 
 hood = PortsList()
 hood.motorID = 11
+hood.encoderID = 0  # DI/O
 
 conveyor = PortsList()
 conveyor.motorID = 9

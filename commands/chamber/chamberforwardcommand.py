@@ -4,7 +4,6 @@ import robot
 
 
 class ChamberForwardCommand(CommandBase):
-
     def __init__(self):
         super().__init__()
 
@@ -13,13 +12,10 @@ class ChamberForwardCommand(CommandBase):
     def initialize(self):
         robot.chamber.forward()
 
-    def end(
-            self,
-            interrupted
-        ):
+    def end(self, interrupted):
         robot.chamber.stop()
 
-class ChamberSlowForwardCommand(ChamberForwardCommand):
 
+class ChamberSlowForwardCommand(ChamberForwardCommand):
     def initialize(self):
         robot.chamber.slowForward()

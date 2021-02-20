@@ -11,14 +11,16 @@ import math
 class TurnCommand(CommandBase):
     """Allows autonomous turning using the drive base encoders."""
 
-    def __init__(self, degrees, tolerance=3):
-        
+    def __init__(self, degrees, tolerance=10):
+
         super().__init__()
 
         self.degrees = degrees
         self.tolerance = tolerance
         # Radius (in) * 2 * pi
         self.robotCircumference = constants.drivetrain.robotRadius * math.pi * 2
+
+        self.addRequirements(robot.drivetrain)
 
     def initialize(self):
         """Calculates new positions by offseting the current ones."""
@@ -32,6 +34,8 @@ class TurnCommand(CommandBase):
 
         # Rotate the swerve modules to a position where they can rotate in a circle.
         robot.drivetrain.setModuleAngles(self.targetAngles)
+        
+        print('wheel angle set')
 
         self.targetDistance = self._calculateDisplacement()
 
@@ -39,8 +43,9 @@ class TurnCommand(CommandBase):
         if self.modulesInPosition and not self.turnSet:
             robot.drivetrain.setPositions(self.targetDistance)
             self.turnSet = True
+            print('vroom')
         else:
-            ## Compare the degrees within a tolerance of 3 degrees.
+            # Compare the degrees within a tolerance of 3 degrees.
             allAnglesWithinTolerance = True
 
             for angle, targetAngle in zip(
@@ -51,6 +56,9 @@ class TurnCommand(CommandBase):
 
             if allAnglesWithinTolerance:
                 self.modulesInPosition = True
+
+    def isFinished(self):
+        return abs(self.startAngle - robot.drivetrain.getAngle()) > self.degrees
 
     def end(self, interrupted):
         robot.drivetrain.stop()

@@ -33,7 +33,7 @@ class Shooter(CougarSystem):
 
         # Set the PID configuration.
         self.shooterMotorOne.config_kF(0, 0.055, 0)
-        self.shooterMotorOne.config_kP(0, 0.2, 0)
+        self.shooterMotorOne.config_kP(0, 0.6, 0)
         self.shooterMotorOne.config_kI(0, 0, 0)
         self.shooterMotorOne.config_kD(0, 0.0001, 0)
         self.shooterMotorOne.config_IntegralZone(0, 0, 0)
@@ -49,7 +49,8 @@ class Shooter(CougarSystem):
         # Set the range of velocities.
         self.maxVel = 5800
         self.minVel = 2800
-        
+
+
     def periodic(self):
         print(self.getRPM())
 

@@ -40,8 +40,8 @@ def init():
 
     SmartDashboard.putData("Autonomous Program", autonChooser)
 
-    #showCommand(ResetTiltCommand())
-    #showCommand(ConfigurePIDCommandGroup())
+    # showCommand(ResetTiltCommand())
+    # showCommand(ConfigurePIDCommandGroup())
 
 
 def getAutonomousProgram():
@@ -64,6 +64,7 @@ def showCommand(cmd):
     name = cmd.getName()
     name.replace("/", "_")
     SmartDashboard.putData("Commands/%s" % name, cmd)
+
 
 def showAlert(msg, type="Alerts"):
     """Display a text notification on the dashboard."""

@@ -133,10 +133,10 @@ def generateCommand():
         inherits = input("")
         if inherits.isdigit():
             inherits = bases[int(inherits)]
-        
+
         if inherits == "Command" or inherits == "CommandGroup":
             inherits += "Base"
-            
+
         if not inherits in bases:
             error("Unknown base class %s" % inherits)
 

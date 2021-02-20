@@ -20,6 +20,7 @@ from subsystems.shooter import Shooter as shooter
 from subsystems.limelight import Limelight as limelight
 from subsystems.hood import Hood as hood
 
+
 class KryptonBot(TimedCommandRobot):
     """Implements a Command Based robot design"""
 
@@ -30,10 +31,10 @@ class KryptonBot(TimedCommandRobot):
             import mockdata
 
         self.subsystems()
-        
+
         controller.layout.init()
         driverhud.init()
-        
+
         from commands.drivetrain.zerocancoderscommand import ZeroCANCodersCommand
         from commands.startupcommandgroup import StartUpCommandGroup
 
@@ -49,13 +50,13 @@ class KryptonBot(TimedCommandRobot):
         auton = driverhud.getAutonomousProgram()
         auton.schedule()
         driverhud.showInfo("Starting %s" % auton)
-        
+
     def disabledInit(self):
         pass
-    
+
     def disabledPeriodic(self):
         pass
-                
+
     def handleCrash(self, error):
         super().handleCrash()
         driverhud.showAlert("Fatal Error: %s" % error)
@@ -77,6 +78,6 @@ class KryptonBot(TimedCommandRobot):
 
 if __name__ == "__main__":
     # if len(sys.argv) > 1 and sys.argv[1] == "deploy":
-        # shutil.rmtree("opkg_cache", ignore_errors=True)
-        # shutil.rmtree("pip_cache", ignore_errors=True)
+    # shutil.rmtree("opkg_cache", ignore_errors=True)
+    # shutil.rmtree("pip_cache", ignore_errors=True)
     run(KryptonBot)

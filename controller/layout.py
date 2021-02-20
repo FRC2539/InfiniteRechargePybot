@@ -56,8 +56,8 @@ def init():
     driveControllerTwo.LeftThumb.toggleWhenPressed(ConveyorForwardCommand())
     driveControllerTwo.RightThumb.toggleWhenPressed(ConveyorBackwardCommand())
     driveControllerTwo.BottomThumb.toggleWhenPressed(IntakeCommand())
-    driveControllerTwo.LeftBottomLeft.whileHeld(RaiseHoodCommand())
-    driveControllerTwo.LeftBottomRight.whileHeld(LowerHoodCommand())
+    driveControllerTwo.LeftTopLeft.whileHeld(RaiseHoodCommand())
+    driveControllerTwo.LeftBottomLeft.whileHeld(LowerHoodCommand())
     driveControllerTwo.Trigger.toggleWhenPressed(SetRPMCommand())
 
     # The controller for non-driving subsystems of the robot

@@ -8,12 +8,13 @@ import ports
 import robot
 import math
 
+
 class Turret(CougarSystem):
     """Controls the turret."""
 
     def __init__(self):
-        super().__init__('Turret')
-                
+        super().__init__("Turret")
+
         self.motor = WPI_TalonSRX(ports.turret.motorID)
         self.motor.config_kP(0, 3.9, 0)
         self.motor.config_kI(0, 0, 0)
@@ -29,14 +30,13 @@ class Turret(CougarSystem):
 
         self.motor.setSelectedSensorPosition(0, 0, 0)
 
-    
     def move(self, speed):
         if self.positionIsInBounds():
             self.motor.set(speed)
 
     def positionIsInBounds(self):
         return self.minPosition <= self.getPosition() <= self.maxPosition
-    
+
     def getPosition(self):
         return self.motor.getSelectedSensorPosition(0)
 

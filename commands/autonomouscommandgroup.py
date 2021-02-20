@@ -7,5 +7,5 @@ from commands.drivetrain.movecommand import MoveCommand
 class AutonomousCommandGroup(SequentialCommandGroup):
     def __init__(self):
         super().__init__()
-        
+
         self.addCommands(TurnCommand(90))

@@ -4,7 +4,6 @@ import robot
 
 
 class SlowOuttakeCommand(CommandBase):
-
     def __init__(self):
         super().__init__()
 

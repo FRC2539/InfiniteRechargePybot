@@ -2,6 +2,7 @@ from commands2 import CommandBase
 
 import robot
 
+
 class RaiseHoodCommand(CommandBase):
     def __init__(self):
         super().__init__()
@@ -10,5 +11,5 @@ class RaiseHoodCommand(CommandBase):
     def execute(self):
         robot.hood.move(robot.hood.speed)
 
-    def end(self,cheese):
+    def end(self, cheese):
         robot.hood.stop()

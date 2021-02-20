@@ -10,7 +10,7 @@ class CalculateErrorCommand(MoveCommand):
     errors = []
 
     def __init__(self, direction=1):
-        
+
         super().__init__(30 * direction)
 
         self.addRequirements(robot.drivetrain)

@@ -2,8 +2,8 @@ from commands2 import CommandBase
 
 import robot
 
-class ConveyorBackwardCommand(CommandBase):
 
+class ConveyorBackwardCommand(CommandBase):
     def __init__(self):
         super().__init__()
 
