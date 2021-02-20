@@ -26,7 +26,7 @@ class TurnCommand(CommandBase):
         self.modulesInPosition = False
         self.turnSet = False
 
-        self.targetAngles = [45, 135, -45, -135]
+        self.targetAngles = [135, 45, -135, -45]
 
         self.startAngle = robot.drivetrain.getAngle()
 
@@ -35,29 +35,29 @@ class TurnCommand(CommandBase):
 
         self.targetDistance = self._calculateDisplacement()
 
-        def execute(self):
-            if self.modulesInPosition and not self.turnSet:
-                robot.drivetrain.setPositions(self.targetDistance)
-                self.turnSet = True
-            else:
-                ## Compare the degrees within a tolerance of 3 degrees.
-                allAnglesWithinTolerance = True
+    def execute(self):
+        if self.modulesInPosition and not self.turnSet:
+            robot.drivetrain.setPositions(self.targetDistance)
+            self.turnSet = True
+        else:
+            ## Compare the degrees within a tolerance of 3 degrees.
+            allAnglesWithinTolerance = True
 
-                for angle, targetAngle in zip(
-                    robot.drivetrain.getModuleAngles(), self.targetAngles
-                ):
-                    if abs(angle - targetAngle) >= self.tolerance:
-                        allAnglesWithinTolerance = False
+            for angle, targetAngle in zip(
+                robot.drivetrain.getModuleAngles(), self.targetAngles
+            ):
+                if abs(angle - targetAngle) >= self.tolerance:
+                    allAnglesWithinTolerance = False
 
-                if allAnglesWithinTolerance:
-                    self.modulesInPosition = True
+            if allAnglesWithinTolerance:
+                self.modulesInPosition = True
 
-        def end(self, interrupted):
-            robot.drivetrain.stop()
+    def end(self, interrupted):
+        robot.drivetrain.stop()
 
-        def _calculateDisplacement(self):
-            """Returns the distance (in) for the given degrees.
-            This feeds into the drivetrain's positioning method,
-            where the distance is based on the robot's circumference."""
-            # Angle -> percentage of the robot's circumference
-            return (self.degrees / 360) * self.robotCircumference
+    def _calculateDisplacement(self):
+        """Returns the distance (in) for the given degrees.
+        This feeds into the drivetrain's positioning method,
+        where the distance is based on the robot's circumference."""
+        # Angle -> percentage of the robot's circumference
+        return (self.degrees / 360) * self.robotCircumference

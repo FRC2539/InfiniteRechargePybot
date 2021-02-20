@@ -4,7 +4,7 @@ import wpilib
 import math
 import ports
 
-from rev import CANSparkMax, MotorType, ControlType
+from rev import CANSparkMax, MotorType, ControlType, IdleMode
 from custom.config import Config
 
 class Hood(CougarSystem):
@@ -18,6 +18,10 @@ class Hood(CougarSystem):
         )
 
         self.motor = CANSparkMax(ports.hood.motorID, MotorType.brushless)
+
+        self.motor.setIdleMode(IdleMode.kBrake)
+        
+        self.motor.burnFlash()
         
         self.controller = self.motor.getPIDController()
 
