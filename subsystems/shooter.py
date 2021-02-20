@@ -38,11 +38,8 @@ class Shooter(CougarSystem):
         self.shooterMotorOne.config_kD(0, 0.0001, 0)
         self.shooterMotorOne.config_IntegralZone(0, 0, 0)
 
-        self.shooterMotorOne.setInverted(False)
-        self.shooterMotorTwo.setInverted(True)
-
         # Tell the second motor to follow the behavior of the first motor.
-        self.shooterMotorTwo.follow(self.shooterMotorOne)
+        self.shooterMotorTwo.follow(self.shooterMotorOne, invert=True)
 
         # Create state variables.
         self.shooting = False
