@@ -23,6 +23,8 @@ from commands.conveyor.conveyorbackwardcommand import ConveyorBackwardCommand
 from commands.chamber.chamberforwardcommand import ChamberForwardCommand
 from commands.chamber.chamberbackwardcommand import ChamberBackwardCommand
 
+from commands.shooter.setrpmcommand import SetRPMCommand
+
 from commands.hood.raisehoodcommand import RaiseHoodCommand
 from commands.hood.lowerhoodcommand import LowerHoodCommand
 
@@ -55,6 +57,8 @@ def init():
     driveControllerTwo.BottomThumb.toggleWhenPressed(IntakeCommand())
     driveControllerTwo.LeftBottomLeft.whileHeld(RaiseHoodCommand())
     driveControllerTwo.LeftBottomRight.whileHeld(LowerHoodCommand())
+    driveControllerTwo.Trigger.toggleWhenPressed(SetRPMCommand())
+    
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(1)
 

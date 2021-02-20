@@ -13,5 +13,5 @@ class IntakeCommand(CommandBase):
     def initialize(self):
         robot.intake.intakeBalls()
 
-    def end(self):
+    def end(self, interrupted):
         robot.intake.dontIntakeBalls()

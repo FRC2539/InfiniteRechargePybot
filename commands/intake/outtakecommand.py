@@ -13,5 +13,5 @@ class OuttakeCommand(CommandBase):
     def initialize(self):
         robot.intake.fastOut()
     
-    def end(self):
+    def end(self, interrupted):
         robot.intake.dontIntakeBalls()

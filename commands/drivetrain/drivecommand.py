@@ -12,11 +12,10 @@ logicalaxes.registerAxis("rotate")
 
 
 class DriveCommand(CommandBase):
-    def __init__(self, speedLimit):
+    def __init__(self):
         super().__init__()
 
         self.addRequirements(robot.drivetrain)
-        self.speedLimit = speedLimit
 
     def initialize(self):
         robot.drivetrain.stop()
@@ -40,6 +39,4 @@ class DriveCommand(CommandBase):
             if abs(y) > abs(self.lastY):
                 self.lastY = y
                 
-        print('hello?')
-
         robot.drivetrain.move(logicalaxes.strafe.get(), y, logicalaxes.rotate.get())

@@ -13,5 +13,5 @@ class SlowOuttakeCommand(CommandBase):
     def initialize(self):
         robot.intake.slowOut()
 
-    def end(self):
+    def end(self, interrupted):
         robot.intake.dontIntakeBalls()

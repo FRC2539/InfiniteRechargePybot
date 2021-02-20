@@ -8,13 +8,15 @@ class SetRPMCommand(CommandBase):
     def __init__(self, targetRPM = 5000):
         
         super().__init__()
+        
+        self.targetRPM = targetRPM
 
         self.addRequirements(robot.shooter)
 
     def initialize(self):
-        robot.shooter.setRPM(targetRPM)
+        robot.shooter.setRPM(self.targetRPM)
 
-    def end(self):
+    def end(self, interrupted):
         robot.shooter.stopShooter()
 
 
