@@ -23,6 +23,8 @@ from commands.conveyor.conveyorbackwardcommand import ConveyorBackwardCommand
 from commands.chamber.chamberforwardcommand import ChamberForwardCommand
 from commands.chamber.chamberbackwardcommand import ChamberBackwardCommand
 
+from commands.hood.raisehoodcommand import RaiseHoodCommand
+
 def init():
     """
     Declare all controllers, assign axes to logical axes, and trigger

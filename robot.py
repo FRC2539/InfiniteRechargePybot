@@ -18,7 +18,7 @@ from subsystems.conveyor import Conveyor as conveyor
 from subsystems.intake import Intake as intake
 from subsystems.shooter import Shooter as shooter
 from subsystems.limelight import Limelight as limelight
-
+from subsystems.hood import Hood as hood
 
 class KryptonBot(TimedCommandRobot):
     """Implements a Command Based robot design"""
