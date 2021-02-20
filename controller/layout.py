@@ -23,6 +23,8 @@ from commands.conveyor.conveyorbackwardcommand import ConveyorBackwardCommand
 from commands.chamber.chamberforwardcommand import ChamberForwardCommand
 from commands.chamber.chamberbackwardcommand import ChamberBackwardCommand
 
+from commands.shooter.setrpmcommand import SetRPMCommand
+
 def init():
     """
     Declare all controllers, assign axes to logical axes, and trigger
@@ -50,6 +52,8 @@ def init():
     driveControllerTwo.LeftThumb.toggleWhenPressed(ConveyorForwardCommand())
     driveControllerTwo.RightThumb.toggleWhenPressed(ConveyorBackwardCommand())
     driveControllerTwo.BottomThumb.toggleWhenPressed(IntakeCommand())
+    driveControllerTwo.Trigger.toggleWhenPressed(SetRPMCommand())
+    
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(1)
 
