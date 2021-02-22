@@ -4,7 +4,6 @@ import robot
 
 
 class OuttakeCommand(CommandBase):
-
     def __init__(self):
         super().__init__()
 
@@ -12,6 +11,6 @@ class OuttakeCommand(CommandBase):
 
     def initialize(self):
         robot.intake.fastOut()
-    
-    def end(self):
+
+    def end(self, interrupted):
         robot.intake.dontIntakeBalls()

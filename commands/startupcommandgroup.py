@@ -9,10 +9,10 @@ from .drivetrain.resettiltcommand import ResetTiltCommand
 class StartUpCommandGroup(ParallelCommandGroup):
     def __init__(self):
         super().__init__()
-        
-        t = ResetTiltCommand()
-        
-        self.addCommands(t)
-        
+
+        robot.drivetrain.initDefaultCommand()
+
+        self.addCommands(ResetTiltCommand())
+
     def runsWhenDisabled(self):
         return True

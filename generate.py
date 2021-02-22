@@ -34,6 +34,7 @@ def generateSubsystem():
 from commands2 import Subsystem
 
 import ports
+import math
 
 
 class {subsystem}(Subsystem):
@@ -111,17 +112,16 @@ def generateCommand():
 
     inherits = None
     if command.endswith("CommandGroup"):
-        inherits = "CommandGroup"
+        inherits = "CommandGroupBase"
     elif not command.endswith("Command"):
         command += "Command"
 
     if command == "DefaultCommand":
-        inherits = "Command"
+        inherits = "CommandBase"
 
     if inherits is None:
         bases = [
             "InstantCommand",
-            "TimedCommand",
             "CommandGroup",
             "Command",
             "DefaultCommand",
@@ -134,16 +134,19 @@ def generateCommand():
         if inherits.isdigit():
             inherits = bases[int(inherits)]
 
+        if inherits == "Command" or inherits == "CommandGroup":
+            inherits += "Base"
+
         if not inherits in bases:
             error("Unknown base class %s" % inherits)
 
     if inherits == "CommandGroup":
         inherits = "fc.CommandFlow"
         if command.endswith("Command"):
-            command += "Group"
+            command += "GroupBase"
 
     if inherits == "DefaultCommand":
-        inherits = "Command"
+        inherits = "CommandBase"
         command = "DefaultCommand"
 
     # Put spaces before capital letters
@@ -220,12 +223,12 @@ def generateCommand():
 
     if inherits == "TimedCommand":
         if duration:
-            content += "        super().__init__('%s', %s)"
+            content += "        super().__init__()"
             content = content % (description, duration)
         else:
-            content += "        super().__init__('%s', timeout)" % description
+            content += "        super().__init__()"
     else:
-        content += "        super().__init__('%s')" % description
+        content += "        super().__init__()"
 
     content += "\n\n"
 

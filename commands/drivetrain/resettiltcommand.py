@@ -8,7 +8,7 @@ class ResetTiltCommand(InstantCommand):
         super().__init__()
 
         self.addRequirements(robot.drivetrain)
-    
+
     def runsWhenDisabled(self):
         return True
 

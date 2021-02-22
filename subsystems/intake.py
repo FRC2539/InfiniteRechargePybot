@@ -3,14 +3,12 @@ import ports
 from rev import CANSparkMax, IdleMode, MotorType
 from .cougarsystem import *
 
-import random
-
 class Intake(CougarSystem):
-    '''Describe what this subsystem does.'''
+    """Describe what this subsystem does."""
 
     def __init__(self):
         super().__init__()
-        
+
         self.motor = CANSparkMax(ports.intake.motorID, MotorType.kBrushless)
         self.motor.setIdleMode(IdleMode.kBrake)
         self.motor.setInverted(True)
@@ -22,21 +20,24 @@ class Intake(CougarSystem):
         
     def intakeBalls(self):
         self.intakeRunning = True
-        self.motor.set(.5)
-        
+        self.motor.set(0.5)
+
     def dontIntakeBalls(self):
         self.intakeBalls = False
         self.motor.stopMotor()
-        
+
     def fastOut(self):
         self.intakeRunning = True
-        self.motor.set(-.5)
+        self.motor.set(-0.5)
     
     def slowOut(self):
         self.intakeRunning = True
-        self.motor.set(-.25)
+        self.motor.set(-0.25)
 
     def periodic(self):
         if self.hasChanged('Intake Running', self.intakeRunning):
             print('changed')
             self.put('Intake Running', self.intakeRunning)
+
+    def slowOut(self):
+        self.motor.set(-0.25)

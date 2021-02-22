@@ -11,8 +11,8 @@ import math
 class TurnCommand(CommandBase):
     """Allows autonomous turning using the drive base encoders."""
 
-    def __init__(self, degrees, tolerance=3):
-        
+    def __init__(self, degrees, tolerance=10):
+
         super().__init__()
 
         self.degrees = degrees
@@ -20,44 +20,52 @@ class TurnCommand(CommandBase):
         # Radius (in) * 2 * pi
         self.robotCircumference = constants.drivetrain.robotRadius * math.pi * 2
 
+        self.addRequirements(robot.drivetrain)
+
     def initialize(self):
         """Calculates new positions by offseting the current ones."""
 
         self.modulesInPosition = False
         self.turnSet = False
 
-        self.targetAngles = [45, 135, -45, -135]
+        self.targetAngles = [135, 45, -135, -45]
 
         self.startAngle = robot.drivetrain.getAngle()
 
         # Rotate the swerve modules to a position where they can rotate in a circle.
         robot.drivetrain.setModuleAngles(self.targetAngles)
+        
+        print('wheel angle set')
 
         self.targetDistance = self._calculateDisplacement()
 
-        def execute(self):
-            if self.modulesInPosition and not self.turnSet:
-                robot.drivetrain.setPositions(self.targetDistance)
-                self.turnSet = True
-            else:
-                ## Compare the degrees within a tolerance of 3 degrees.
-                allAnglesWithinTolerance = True
+    def execute(self):
+        if self.modulesInPosition and not self.turnSet:
+            robot.drivetrain.setPositions(self.targetDistance)
+            self.turnSet = True
+            print('vroom')
+        else:
+            # Compare the degrees within a tolerance of 3 degrees.
+            allAnglesWithinTolerance = True
 
-                for angle, targetAngle in zip(
-                    robot.drivetrain.getModuleAngles(), self.targetAngles
-                ):
-                    if abs(angle - targetAngle) >= self.tolerance:
-                        allAnglesWithinTolerance = False
+            for angle, targetAngle in zip(
+                robot.drivetrain.getModuleAngles(), self.targetAngles
+            ):
+                if abs(angle - targetAngle) >= self.tolerance:
+                    allAnglesWithinTolerance = False
 
-                if allAnglesWithinTolerance:
-                    self.modulesInPosition = True
+            if allAnglesWithinTolerance:
+                self.modulesInPosition = True
 
-        def end(self, interrupted):
-            robot.drivetrain.stop()
+    def isFinished(self):
+        return abs(self.startAngle - robot.drivetrain.getAngle()) > self.degrees
 
-        def _calculateDisplacement(self):
-            """Returns the distance (in) for the given degrees.
-            This feeds into the drivetrain's positioning method,
-            where the distance is based on the robot's circumference."""
-            # Angle -> percentage of the robot's circumference
-            return (self.degrees / 360) * self.robotCircumference
+    def end(self, interrupted):
+        robot.drivetrain.stop()
+
+    def _calculateDisplacement(self):
+        """Returns the distance (in) for the given degrees.
+        This feeds into the drivetrain's positioning method,
+        where the distance is based on the robot's circumference."""
+        # Angle -> percentage of the robot's circumference
+        return (self.degrees / 360) * self.robotCircumference

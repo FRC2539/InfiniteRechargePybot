@@ -4,7 +4,6 @@ import robot
 
 
 class IntakeCommand(CommandBase):
-
     def __init__(self):
         super().__init__()
 
@@ -13,5 +12,5 @@ class IntakeCommand(CommandBase):
     def initialize(self):
         robot.intake.intakeBalls()
 
-    def end(self):
+    def end(self, interrupted):
         robot.intake.dontIntakeBalls()

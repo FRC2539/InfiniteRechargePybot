@@ -51,7 +51,7 @@ class BaseDrive(CougarSystem):
         """Initialize the navX MXP"""
         self.navX = AHRS.create_spi()
 
-        #self.setGyroAngle(-90)
+        # self.setGyroAngle(-90)
         self.resetGyro()
 
         self.flatAngle = 0
@@ -77,7 +77,7 @@ class BaseDrive(CougarSystem):
         """
         from commands.drivetrain.drivecommand import DriveCommand
 
-        self.setDefaultCommand(DriveCommand(self.speedLimit))
+        self.setDefaultCommand(DriveCommand())
 
     def move(self, x, y, rotate):
         """Turns coordinate arguments into motor outputs."""

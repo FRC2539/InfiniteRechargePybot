@@ -13,7 +13,7 @@ from custom.config import Config
 
 class ConfigurePIDCommandGroup(SequentialCommandGroup):
     def __init__(self):
-        
+
         output = """
 Your F and P values have been configured. However, P is probably too small.
 Use MoveCommand to drive the robot a set distance. (If you have not already done
@@ -28,9 +28,9 @@ the average error is less than 10.
 For details see the Motion Magic Closed-Loop Walkthrough section of the Talon
 SRX Software Reference Manual.
         """
-        
+
         super().__init__()
-        
+
         # self.addCommands(
         #     AlertCommand("Do not disable the robot!"),
         #     WaitCommand(1),

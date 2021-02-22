@@ -33,15 +33,13 @@ class Shooter(CougarSystem):
 
         # Set the PID configuration.
         self.shooterMotorOne.config_kF(0, 0.055, 0)
-        self.shooterMotorOne.config_kP(0, 0.165, 0)
+        self.shooterMotorOne.config_kP(0, 0.6, 0)
         self.shooterMotorOne.config_kI(0, 0, 0)
         self.shooterMotorOne.config_kD(0, 0.0001, 0)
         self.shooterMotorOne.config_IntegralZone(0, 0, 0)
 
-        self.shooterMotorOne.setInverted(False)
-        self.shooterMotorTwo.setInverted(True)
-
         # Tell the second motor to follow the behavior of the first motor.
+        self.shooterMotorOne.setInverted(True)
         self.shooterMotorTwo.follow(self.shooterMotorOne)
 
         # Create state variables.
@@ -52,42 +50,46 @@ class Shooter(CougarSystem):
         self.maxVel = 5800
         self.minVel = 2800
 
-        def setRPM(self, rpm):
-            # Update the state of the subsytem.
-            self.shooting = True
-            # Update the current speed of the motor.
-            # With the second motor following the first, no command is needed for the second motor.
-            self.shooterMotorOne.set(ControlMode.Velocity, self.rpmToSensor(rpm))
 
-        def setPercent(self, val):
-            self.shooting = True
-            self.shooterMotorOne.set(ControlMode.PercentOutput, val)
+    def periodic(self):
+        print(self.getRPM())
 
-        def reverseShooter(self):
-            self.shooting = True
-            # Tell the motor to go in reverse (negative percent).
-            self.shooterMotorOne.set(ControlMode.PercentOutput, -0.4)
+    def setRPM(self, rpm):
+        # Update the state of the subsytem.
+        self.shooting = True
+        # Update the current speed of the motor.
+        # With the second motor following the first, no command is needed for the second motor.
+        self.shooterMotorOne.set(ControlMode.Velocity, self.rpmToSensor(rpm))
 
-        def stopShooter(self):
-            self.shooting = False
-            self.shooterMotorOne.stopMotor()
+    def setPercent(self, val):
+        self.shooting = True
+        self.shooterMotorOne.set(ControlMode.PercentOutput, val)
 
-        def updateNetworkTables(self):
-            # Send the current average RPM to network tables.
-            self.table.putNumber("ShooterRPM", round(self.getRPM(), 0))
+    def reverseShooter(self):
+        self.shooting = True
+        # Tell the motor to go in reverse (negative percent).
+        self.shooterMotorOne.set(ControlMode.PercentOutput, -0.4)
 
-        def zeroNetworkTables(self):
-            self.table.putNumber("ShooterRPM", 0)
+    def stopShooter(self):
+        self.shooting = False
+        self.shooterMotorOne.stopMotor()
 
-        def rpmToSensor(self, rpm):
-            return (rpm * 2048) / 600
+    def updateNetworkTables(self):
+        # Send the current average RPM to network tables.
+        self.table.putNumber("ShooterRPM", round(self.getRPM(), 0))
 
-        def sensorToRPM(self, units):
-            return (units * 600) / 2048
+    def zeroNetworkTables(self):
+        self.table.putNumber("ShooterRPM", 0)
 
-        def isShooting(self):
-            return self.shooting
+    def rpmToSensor(self, rpm):
+        return (rpm * 2048) / 600
 
-        def getRPM(self):
-            # Return the current average RPM of the motor.
-            return self.sensorToRPM(self.shooterMotorOne.getSelectedSensorVelocity())
+    def sensorToRPM(self, units):
+        return (units * 600) / 2048
+
+    def isShooting(self):
+        return self.shooting
+
+    def getRPM(self):
+        # Return the current average RPM of the motor.
+        return self.sensorToRPM(self.shooterMotorOne.getSelectedSensorVelocity())

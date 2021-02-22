@@ -4,7 +4,6 @@ import robot
 
 
 class SlowOuttakeCommand(CommandBase):
-
     def __init__(self):
         super().__init__()
 
@@ -13,5 +12,5 @@ class SlowOuttakeCommand(CommandBase):
     def initialize(self):
         robot.intake.slowOut()
 
-    def end(self):
+    def end(self, interrupted):
         robot.intake.dontIntakeBalls()

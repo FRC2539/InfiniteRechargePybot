@@ -1,4 +1,4 @@
-from  commands2.button import Button
+from commands2.button import Button
 
 
 class POVButton(Button):

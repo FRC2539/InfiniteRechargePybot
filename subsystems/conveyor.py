@@ -4,8 +4,9 @@ import ports
 
 from ctre import WPI_TalonSRX, NeutralMode, ControlMode
 
+
 class Conveyor(CougarSystem):
-    """Controls the conveyor in the ball system. 
+    """Controls the conveyor in the ball system.
     The conveyor is horizontal and preceeds the chamber."""
 
     def __init__(self):
@@ -17,7 +18,7 @@ class Conveyor(CougarSystem):
         self.motor.setInverted(True)
 
         # INFO: Percentages are from 0 - 1, 1 being 100%
-        self.speed = 0.4
+        self.speed = 0.6
         self.slowSpeed = 0.2
         # Option: separate into forward and backward speeds
 

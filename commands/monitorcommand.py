@@ -12,7 +12,7 @@ class MonitorCommand(Command):
         """
         Required because this is the default command for the monitor subsystem.
         """
-        #self.addRequirements(robot.monitor)
+        # self.addRequirements(robot.monitor)
 
         self.setInterruptible(False)
         self.setRunWhenDisabled(True)

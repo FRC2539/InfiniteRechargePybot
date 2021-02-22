@@ -64,6 +64,7 @@ class SwerveDrive(BaseDrive):
             ),
         ]
 
+
     def _configureMotors(self):
         """
         Configures the motors. Shouldn't need this.
@@ -221,7 +222,7 @@ class SwerveDrive(BaseDrive):
         for module, angle in zip(self.modules, angles):
             module.setWheelAngle(angle)
 
-    def setModuleAngles(
+    def setUniformModuleAngle(
         self, angle: int
     ):  # This sets a uniform angle. Overrides the method above.
         for module in self.modules:
