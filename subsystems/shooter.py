@@ -51,9 +51,6 @@ class Shooter(CougarSystem):
         self.minVel = 2800
 
 
-    def periodic(self):
-        print(self.getRPM())
-
     def setRPM(self, rpm):
         # Update the state of the subsytem.
         self.shooting = True

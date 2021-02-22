@@ -23,7 +23,7 @@ class Intake(CougarSystem):
         self.motor.set(0.5)
 
     def dontIntakeBalls(self):
-        self.intakeBalls = False
+        self.intakeRunning = False
         self.motor.stopMotor()
 
     def fastOut(self):
@@ -36,7 +36,6 @@ class Intake(CougarSystem):
 
     def periodic(self):
         if self.hasChanged('Intake Running', self.intakeRunning):
-            print('changed')
             self.put('Intake Running', self.intakeRunning)
 
     def slowOut(self):
