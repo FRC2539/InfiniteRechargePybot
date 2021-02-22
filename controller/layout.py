@@ -48,7 +48,9 @@ def init():
     driveControllerTwo.LeftThumb.toggleWhenPressed(IntakeCommand())
     driveControllerTwo.RightThumb.toggleWhenPressed(OuttakeCommand())
     driveControllerTwo.BottomThumb.toggleWhenPressed(ConveyorForwardCommand())
+    
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(1)
 
     componentController.Back.whenPressed(ResetCommand())
+    componentController.A.toggleWhenPressed(IntakeCommand())

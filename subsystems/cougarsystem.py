@@ -8,6 +8,8 @@ import inspect
 
 from commands2 import SubsystemBase
 
+from networktables import NetworkTables
+
 ALLOWPRINTS = True
 
 printsDisabled = []
@@ -40,14 +42,54 @@ def enablePrints():
         printsDisabled.remove(str(caller))
     except (ValueError):
         pass
-
+    
 
 class CougarSystem(SubsystemBase):
-    def __init__(self):
+
+    intialized = False
+    
+    def __init__(self, subsystemName="Unknown Subsystem"):
         
         super().__init__()
 
-        self.data = {}  # Individual to each subsystem. {Name : Method}
-        self.writeOnDisable = []  # [Parent, Name, Value]
+        self.tableName = subsystemName
+        self.table = NetworkTables.getTable(self.tableName)
 
         # Need to re-write the nt system.
+                        
+        if not CougarSystem.intialized:
+            self.intializeNTServer()
+            CougarSystem.intialized = True 
+            
+    def intializeNTServer(self):
+        NetworkTables.initialize(server="roborio-2539-frc.local")
+        
+    def put(self, valueName, value):
+        try:
+            self.table.putValue(valueName, value)
+            
+        except: # Must be a list or tuple.
+            
+            try:
+                if type(value[0]) is bool:
+                    self.table.putBooleanArray(valueName, value)
+                    
+                if type(value[0]) is str:
+                    self.table.putStringArray(valueName, value)
+                    
+                else:
+                    self.table.putNumberArray(valueName, value)
+                    
+            except(TypeError):
+                raise Exception("Unrecognizable Data Type . . . \nShould be a: boolean, int, float, string, list of bools, \nlist of strings, list of numbers.")
+            
+    def get(self, valueName):
+        return self.table.getValue(valueName, None) # Returns None if it doesn't exist.
+
+    def hasChanged(self, valueName, compareTo):
+        if compareTo is None:
+            return True
+        return not self.table.getValue(valueName, None) == compareTo
+    
+    def delete(self, valueName):
+        self.table.delete(valueName)

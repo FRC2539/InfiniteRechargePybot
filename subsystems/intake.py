@@ -3,6 +3,8 @@ import ports
 from rev import CANSparkMax, IdleMode, MotorType
 from .cougarsystem import *
 
+import random
+
 class Intake(CougarSystem):
     '''Describe what this subsystem does.'''
 
@@ -14,14 +16,27 @@ class Intake(CougarSystem):
         self.motor.setInverted(True)
         self.motor.burnFlash()
         
+        self.intakeRunning = False
+        
+        self.put('Intake Running', self.intakeRunning)
+        
     def intakeBalls(self):
+        self.intakeRunning = True
         self.motor.set(.5)
         
     def dontIntakeBalls(self):
+        self.intakeBalls = False
         self.motor.stopMotor()
         
     def fastOut(self):
+        self.intakeRunning = True
         self.motor.set(-.5)
     
     def slowOut(self):
+        self.intakeRunning = True
         self.motor.set(-.25)
+
+    def periodic(self):
+        if self.hasChanged('Intake Running', self.intakeRunning):
+            print('changed')
+            self.put('Intake Running', self.intakeRunning)
