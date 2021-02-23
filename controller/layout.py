@@ -63,7 +63,7 @@ def init():
     driveControllerTwo.Trigger.toggleWhenPressed(SetRPMCommand())
 
     # The controller for non-driving subsystems of the robot
-    componentController = LogitechDualShock(1)
+    componentController = LogitechDualShock(2)
 
     componentController.Back.whenPressed(ResetCommand())
     componentController.A.toggleWhenPressed(IntakeCommand())

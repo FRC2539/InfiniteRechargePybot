@@ -54,6 +54,8 @@ class CougarSystem(SubsystemBase):
 
         self.tableName = subsystemName
         self.table = NetworkTables.getTable(self.tableName)
+        
+        self.updateThese = {}
 
         # Need to re-write the nt system.
                         
@@ -93,3 +95,16 @@ class CougarSystem(SubsystemBase):
     
     def delete(self, valueName):
         self.table.delete(valueName)
+        
+    def constantlyUpdate(self, valueName, call):
+        # The callable should take nothing (or use a lambda), and return the desired, updated value. For example, if 
+        # you wanted RPM: "self.motor.getRPM()", or something of the liking. 
+        
+        if not callable(call):
+            raise Exception('Please pass a callable! ' + str(call) + ', is not callable!')
+        
+        self.updateThese[valueName] = call
+         
+    def feed(self): # Call in periodic.
+        for key, value in self.updateThese.items():
+            self.put(key, value())

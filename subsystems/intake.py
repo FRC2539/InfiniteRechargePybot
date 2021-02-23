@@ -13,30 +13,23 @@ class Intake(CougarSystem):
         self.motor.setIdleMode(IdleMode.kBrake)
         self.motor.setInverted(True)
         self.motor.burnFlash()
-        
-        self.intakeRunning = False
-        
-        self.put('Intake Running', self.intakeRunning)
+                
+        self.constantlyUpdate('Intake Running', (lambda: self.motor.get() != 0))
         
     def intakeBalls(self):
-        self.intakeRunning = True
         self.motor.set(0.5)
 
+    def fastOut(self):
+        self.motor.set(-0.5)
+
+    def slowIn(self):
+        self.motor.set(0.25)
+
+    def slowOut(self):
+        self.motor.set(-0.25)
+
     def dontIntakeBalls(self):
-        self.intakeRunning = False
         self.motor.stopMotor()
 
-    def fastOut(self):
-        self.intakeRunning = True
-        self.motor.set(-0.5)
-    
-    def slowOut(self):
-        self.intakeRunning = True
-        self.motor.set(-0.25)
-
     def periodic(self):
-        if self.hasChanged('Intake Running', self.intakeRunning):
-            self.put('Intake Running', self.intakeRunning)
-
-    def slowOut(self):
-        self.motor.set(-0.25)
+        self.feed() # Required for the constant update.

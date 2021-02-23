@@ -247,7 +247,7 @@ def generateCommand():
 
         if inherits != "InstantCommand":
             content += "    def execute(self):\n        pass\n\n\n"
-            content += "    def end(self):\n        pass\n"
+            content += "    def end(self, interrupted):\n        pass\n"
 
     with open("%s/%s.py" % (path, command.lower()), "w") as f:
         f.write(content)
