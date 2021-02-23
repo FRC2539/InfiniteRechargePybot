@@ -7,7 +7,7 @@ class Intake(CougarSystem):
     """Describe what this subsystem does."""
 
     def __init__(self):
-        super().__init__()
+        super().__init__('Intake')
 
         self.motor = CANSparkMax(ports.intake.motorID, MotorType.kBrushless)
         self.motor.setIdleMode(IdleMode.kBrake)
