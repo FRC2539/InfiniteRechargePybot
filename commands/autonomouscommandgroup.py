@@ -8,4 +8,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     def __init__(self):
         super().__init__()
 
-        self.addCommands(TurnCommand(90))
+        self.addCommands(MoveCommand(60),
+                         TurnCommand(90),
+                         MoveCommand(60)
+                         )

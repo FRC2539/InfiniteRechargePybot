@@ -50,7 +50,6 @@ class Shooter(CougarSystem):
         self.maxVel = 5800
         self.minVel = 2800
 
-
     def setRPM(self, rpm):
         # Update the state of the subsytem.
         self.shooting = True

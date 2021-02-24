@@ -21,14 +21,17 @@ class Turret(CougarSystem):
         self.motor.config_kD(0, 30, 0)
         self.motor.config_kF(0, 0.07, 0)
 
-        self.maxPosition = 100
-        self.minPosition = 0
+        self.maxPosition = 13
+        self.minPosition = -13
 
         self.motor.setNeutralMode(NeutralMode.Brake)
 
-        self.motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute)
+        self.motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
 
         self.motor.setSelectedSensorPosition(0, 0, 0)
+
+    def periodic(self):
+        print(self.getPosition())
 
     def move(self, speed):
         if self.positionIsInBounds():

@@ -19,6 +19,7 @@ from subsystems.intake import Intake as intake
 from subsystems.shooter import Shooter as shooter
 from subsystems.limelight import Limelight as limelight
 from subsystems.hood import Hood as hood
+from subsystems.turret import Turret as turret
 
 
 class KryptonBot(TimedCommandRobot):

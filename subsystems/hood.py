@@ -30,10 +30,11 @@ class Hood(CougarSystem):
         self.controller.setFF(0, 0)
         self.controller.setIZone(0, 0)
 
-        self.angleMax = 240.00
-        self.angleMin = 170.00  # Difference of 70 degrees between min and max angle
+        self.angleMax = 253.00
+        self.angleMin = 220.00 
 
         self.speed = 0.1  # 10 Percent
+
 
     def getPosition(self):
         return self.encoder.getOutput() * 360
