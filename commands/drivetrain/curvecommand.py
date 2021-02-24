@@ -85,7 +85,8 @@ class CurveCommand(CommandBase):
         self.desiredHeading = self.calcPosition()
         print("dh " + str(self.desiredHeading))
 
-        robot.drivetrain.setModuleAngles(self.desiredHeading)
+        robot.drivetrain.setUniformModuleAngle(self.desiredHeading)
+        robot.drivetrain.setUniformModuleSpeed(self.maxSpeed)
 
     def isFinished(self):
         return (
@@ -122,11 +123,13 @@ class CurveCommand(CommandBase):
         # Finds the slope at the current x with easy calculus and returns that in degrees above the horizontal (so subtract it from 90 ;) ).
 
     def getSlopeToSet(self, x):
-        return (
-            (math.atan((-x / (math.sqrt(self.radius ** 2 - x ** 2))))) * 180 / math.pi
-        )
-        # Return the slope in degrees using first derivative.
-
+        try:
+            return (
+                (math.atan((-x / (math.sqrt(self.radius ** 2 - x ** 2))))) * 180 / math.pi
+            )
+            # Return the slope in degrees using first derivative.
+        except(TypeError, ValueError):
+            return 0
 
 def needRepeat(lists, maxSpeed):
     CurveCommand(lists, maxSpeed)

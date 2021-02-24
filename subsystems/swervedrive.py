@@ -210,6 +210,10 @@ class SwerveDrive(BaseDrive):
         for module, speed in zip(self.modules, speeds):
             module.setWheelSpeed(speed)
 
+    def setUniformModuleSpeed(self, speed: float):  # Set a speed in inches per second.
+        for module in self.modules:
+            module.setWheelSpeed(speed)
+
     def updateCANCoders(self, positions: list):
         for module, position in zip(self.modules, positions):
             module.updateCANCoder(position)

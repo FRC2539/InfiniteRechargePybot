@@ -42,7 +42,6 @@ class TurnCommand(CommandBase):
         # 316, 227
     
     def execute(self):
-        print(robot.drivetrain.getAngle())
         if self.modulesInPosition and not self.turnSet:
             robot.drivetrain.setPositions(
                 [self.targetDistance, self.targetDistance, self.targetDistance, self.targetDistance]
@@ -61,8 +60,11 @@ class TurnCommand(CommandBase):
             if allAnglesWithinTolerance:
                 self.modulesInPosition = True
 
+        #print(abs(robot.drivetrain.getAngleTo(self.startAngle)) + 3 > self.degrees)
+
     def isFinished(self):
-        return abs(robot.drivetrain.getAngleTo(self.startAngle)) > self.degrees
+        
+        return abs(robot.drivetrain.getAngleTo(self.startAngle)) + 3 > self.degrees
 
     def end(self, interrupted):
         print('me done')

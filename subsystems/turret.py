@@ -30,9 +30,6 @@ class Turret(CougarSystem):
 
         self.motor.setSelectedSensorPosition(0, 0, 0)
 
-    def periodic(self):
-        print(self.getPosition())
-
     def move(self, speed):
         if self.positionIsInBounds():
             self.motor.set(speed)
