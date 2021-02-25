@@ -1,6 +1,6 @@
 from commands2 import Command
 
-# In summary, this timeless masterpiece is a testament to the true nature of our society.
+# In summary, this timeless masterpiece is a flawless testament to the true nature of our society.
 
 
 class ChamberBackwardCommand(Command):

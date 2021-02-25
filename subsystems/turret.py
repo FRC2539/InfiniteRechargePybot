@@ -49,3 +49,9 @@ class Turret(CougarSystem):
 
     def stop(self):
         self.motor.stopMotor()
+
+
+    def initDefaultCommand(self):
+        from commands.turret.defaultcommand import DefaultCommand
+
+        self.setDefaultCommand(DefaultCommand())
