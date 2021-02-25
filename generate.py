@@ -78,11 +78,11 @@ class {subsystem}(Subsystem):
     with open("commands/resetcommand.py") as f:
         resetcommand = f.read()
 
-    requires = re.compile("(self\.requires\(robot.\w+\)\s*)+")
+    requires = re.compile("(self\.addRequirements\(robot.\w+\)\s*)+")
     match = requires.search(resetcommand)
 
     old = match[0].strip()
-    new = "%s\n        self.requires(robot.%s)"
+    new = "%s\n        self.addRequirements(robot.%s)"
     resetcommand = resetcommand.replace(old, new % (old, module))
 
     with open("commands/resetcommand.py", "w") as f:
@@ -239,7 +239,7 @@ def generateCommand():
     else:
         if len(requirements) > 0:
             for subsystem in requirements:
-                content += "        self.requires(robot.%s)\n" % subsystem
+                content += "        self.addRequirements(robot.%s)\n" % subsystem
 
             content += "\n"
 
