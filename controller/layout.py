@@ -64,6 +64,8 @@ def init():
 
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(2)
+    
+    logicalaxes.TURRETmOVE = componentController.LeftX
 
     componentController.Back.whenPressed(ResetCommand())
     componentController.A.toggleWhenPressed(IntakeCommand())

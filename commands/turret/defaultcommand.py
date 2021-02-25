@@ -2,6 +2,8 @@ from commands2 import CommandBase
 
 import robot
 
+logicalaxes.registerAxis("TURRETmOVE")
+
 class DefaultCommand(CommandBase):
 
     def __init__(self,speed=0):
