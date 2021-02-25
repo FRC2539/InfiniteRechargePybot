@@ -29,6 +29,13 @@ class Turret(CougarSystem):
         self.motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0)
 
         self.motor.setSelectedSensorPosition(0, 0, 0)
+        
+        # Constantly updates the turret's status.
+        self.constantlyUpdate('Turret Moving', lambda: self.motor.getMotorOutputPercent() != 0)
+        self.constantlyUpdate('Turret Position', self.getPosition)
+
+    def periodic(self):
+        self.feed()
 
     def move(self, speed):
         if self.positionIsInBounds():
