@@ -43,48 +43,38 @@ class Shooter(CougarSystem):
         self.shooterMotorTwo.follow(self.shooterMotorOne)
 
         # Create state variables.
-        self.shooting = False
         self.atGoal = False
 
         # Set the range of velocities.
         self.maxVel = 5800
         self.minVel = 2800
 
+        # Constantly updates the hood's status.
+        self.constantlyUpdate('Shooter Running', lambda: self.shooterMotorOne.getMotorOutputPercent() != 0)
+        self.constantlyUpdate('Shooter RPM', lambda: float(self.getRPM()))
+        
+    def periodic(self):
+        self.feed()
+
     def setRPM(self, rpm):
-        # Update the state of the subsytem.
-        self.shooting = True
-        # Update the current speed of the motor.
         # With the second motor following the first, no command is needed for the second motor.
         self.shooterMotorOne.set(ControlMode.Velocity, self.rpmToSensor(rpm))
 
     def setPercent(self, val):
-        self.shooting = True
         self.shooterMotorOne.set(ControlMode.PercentOutput, val)
 
     def reverseShooter(self):
-        self.shooting = True
         # Tell the motor to go in reverse (negative percent).
         self.shooterMotorOne.set(ControlMode.PercentOutput, -0.4)
 
     def stopShooter(self):
-        self.shooting = False
         self.shooterMotorOne.stopMotor()
-
-    def updateNetworkTables(self):
-        # Send the current average RPM to network tables.
-        self.table.putNumber("ShooterRPM", round(self.getRPM(), 0))
-
-    def zeroNetworkTables(self):
-        self.table.putNumber("ShooterRPM", 0)
 
     def rpmToSensor(self, rpm):
         return (rpm * 2048) / 600
 
     def sensorToRPM(self, units):
         return (units * 600) / 2048
-
-    def isShooting(self):
-        return self.shooting
 
     def getRPM(self):
         # Return the current average RPM of the motor.

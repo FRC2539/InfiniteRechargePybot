@@ -103,8 +103,14 @@ class CougarSystem(SubsystemBase):
         if not callable(call):
             raise Exception('Please pass a callable! ' + str(call) + ', is not callable!')
         
+        if not self.table.containsKey(valueName):
+            self.put(valueName, call())
+        
         self.updateThese[valueName] = call
          
     def feed(self): # Call in periodic.
         for key, value in self.updateThese.items():
             self.put(key, value())
+            
+    def periodic(self): # If you override this, make sure to call feed()!
+        self.feed()

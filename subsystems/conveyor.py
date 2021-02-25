@@ -10,7 +10,7 @@ class Conveyor(CougarSystem):
     The conveyor is horizontal and preceeds the chamber."""
 
     def __init__(self):
-        super().__init__()
+        super().__init__("Conveyor")
 
         self.motor = WPI_TalonSRX(ports.conveyor.motorID)
 
@@ -21,6 +21,12 @@ class Conveyor(CougarSystem):
         self.speed = 0.6
         self.slowSpeed = 0.2
         # Option: separate into forward and backward speeds
+        
+        # Constantly updates the conveyor's status.
+        self.constantlyUpdate('Conveyor Running', lambda: self.motor.getMotorOutputPercent() != 0)
+
+    def periodic(self):
+        self.feed()
 
     def forward(self):
         self.move(self.speed)
