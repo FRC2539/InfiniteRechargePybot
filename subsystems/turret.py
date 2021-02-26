@@ -38,7 +38,7 @@ class Turret(CougarSystem):
         self.feed()
 
     # if speed is greater than 0 and our position is less than max, move. 
-   
+    
     # me (kieren) and ben argued about this command for like 5 minutes
     def move(self, speed):
         if (speed > 0 and self.getPosition() <= self.minPosition) or (speed < 0 and self.getPosition() >= self.maxPosition) or self.positionIsInBounds():
