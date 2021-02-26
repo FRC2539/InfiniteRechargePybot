@@ -44,8 +44,7 @@ class Turret(CougarSystem):
         if (speed > 0 and self.getPosition() >= self.minPosition) or (speed < 0 and self.getPosition() <= self.maxPosition) or self.positionIsInBounds():
             self.motor.set(speed)
         else:
-            self.motor.stopMotor()
-        
+            self.motor.stopMotor()        
     def positionIsInBounds(self):
         return self.minPosition <= self.getPosition() <= self.maxPosition
 

@@ -28,6 +28,8 @@ from commands.shooter.setrpmcommand import SetRPMCommand
 from commands.hood.raisehoodcommand import RaiseHoodCommand
 from commands.hood.lowerhoodcommand import LowerHoodCommand
 
+from commands.limelight.sudocommandgroup import SudoCommandGroup
+
 
 def init():
     """
@@ -52,6 +54,8 @@ def init():
     driveControllerOne.LeftBottomLeft.whenPressed(ZeroCANCodersCommand())
     driveControllerOne.LeftThumb.toggleWhenPressed(ChamberForwardCommand())
     driveControllerOne.RightThumb.toggleWhenPressed(ChamberBackwardCommand())
+    
+    driveControllerOne.Trigger.whileHeld(SudoCommandGroup())
 
     driveControllerTwo.LeftThumb.toggleWhenPressed(ConveyorForwardCommand())
     driveControllerTwo.RightThumb.toggleWhenPressed(ConveyorBackwardCommand())
@@ -60,7 +64,7 @@ def init():
     driveControllerTwo.LeftTopLeft.whileHeld(RaiseHoodCommand())
     driveControllerTwo.LeftBottomLeft.whileHeld(LowerHoodCommand())
     
-    driveControllerTwo.Trigger.toggleWhenPressed(SetRPMCommand())
+    driveControllerTwo.Trigger.toggleWhenPressed(SetRPMCommand(4000))
 
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(2)

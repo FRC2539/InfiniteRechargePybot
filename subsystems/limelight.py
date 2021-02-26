@@ -12,7 +12,7 @@ class Limelight(CougarSystem):
     """Subsystem for interacting with the limelight."""
 
     def __init__(self):
-        super().__init__()
+        super().__init__('Limelight')
 
         self.nt = NetworkTables.getTable("limelight")
         self.tv = Config("limelight/tv", 0)
