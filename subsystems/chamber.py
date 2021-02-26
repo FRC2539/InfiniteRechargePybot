@@ -10,7 +10,7 @@ class Chamber(CougarSystem):
     The chamber moves the balls vertically and preceeds the shooter."""
 
     def __init__(self):
-        super().__init__()
+        super().__init__('Chamber')
 
         self.motor = WPI_TalonSRX(ports.chamber.motorID)
 
@@ -21,6 +21,12 @@ class Chamber(CougarSystem):
         self.speed = 1.0  # 0.8
         self.slowSpeed = 0.2
         # Option: separate into forward and backward speeds
+
+        # Constantly updates the chamber's status.
+        self.constantlyUpdate('Chamber Running', lambda: self.motor.getMotorOutputPercent() != 0)
+
+    def periodic(self):
+        self.feed()
 
     def forward(self):
         self.move(self.speed)

@@ -41,8 +41,10 @@ class Turret(CougarSystem):
     
     # me (kieren) and ben argued about this command for like 5 minutes
     def move(self, speed):
-        if (speed > 0 and self.getPosition() <= self.minPosition) or (speed < 0 and self.getPosition() >= self.maxPosition) or self.positionIsInBounds():
+        if (speed > 0 and self.getPosition() >= self.minPosition) or (speed < 0 and self.getPosition() <= self.maxPosition) or self.positionIsInBounds():
             self.motor.set(speed)
+        else:
+            self.motor.stopMotor()
         
     def positionIsInBounds(self):
         return self.minPosition <= self.getPosition() <= self.maxPosition

@@ -16,6 +16,9 @@ class Intake(CougarSystem):
                 
         self.constantlyUpdate('Intake Running', (lambda: self.motor.get() != 0))
         
+    def periodic(self):
+        self.feed()
+        
     def intakeBalls(self):
         self.motor.set(0.5)
 

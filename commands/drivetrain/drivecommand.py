@@ -39,4 +39,4 @@ class DriveCommand(CommandBase):
             if abs(y) > abs(self.lastY):
                 self.lastY = y
 
-        robot.drivetrain.move(logicalaxes.strafe.get(), y, logicalaxes.rotate.get())
+        robot.drivetrain.move(logicalaxes.strafe.get(), y, logicalaxes.rotate.get() * 0.9)
