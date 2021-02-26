@@ -134,11 +134,11 @@ def generateCommand():
         if inherits.isdigit():
             inherits = bases[int(inherits)]
 
-        if inherits == "Command" or inherits == "CommandGroup":
-            inherits += "Base"
-
         if not inherits in bases:
             error("Unknown base class %s" % inherits)
+            
+        if inherits == "Command" or inherits == "CommandGroup":
+            inherits += "Base"
 
     if inherits == "CommandGroup":
         inherits = "fc.CommandFlow"

@@ -13,4 +13,3 @@ class ResetGyroCommand(InstantCommand):
 
     def initialize(self):
         robot.drivetrain.resetGyro()
-
