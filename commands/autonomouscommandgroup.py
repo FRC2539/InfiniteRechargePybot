@@ -6,6 +6,8 @@ from commands.drivetrain.curvecommand import CurveCommand
 
 from commands.intake.intakecommand import IntakeCommand
 
+from commands.limelight.automatedshootcommand import AutomatedShootCommand
+
 import robot
 
 class AutonomousCommandGroup(SequentialCommandGroup):
@@ -19,7 +21,11 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
         self.stopIntake = InstantCommand(robot.intake.dontIntakeBalls, [robot.intake])
         self.moveBack = MoveCommand(-204)
+        
+        self.sudo = AutomatedShootCommand()
 
         self.addCommands(self.toRun,
-                         #self.moveBack.beforeStarting(self.stopIntake, [robot.intake])
+                         self.stopIntake,
+                         self.moveBack,
+                         self.sudo,
                          )
