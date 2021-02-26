@@ -11,6 +11,10 @@ from commands.drivetrain.togglefieldorientationcommand import (
 from commands.drivetrain.curvecommand import CurveCommand
 from commands.drivetrain.zerocancoderscommand import ZeroCANCodersCommand
 
+from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
+
+from commands.drivetrain.pathcommand import PathCommand
+
 from commands.resetcommand import ResetCommand
 
 from commands.intake.intakecommand import IntakeCommand
@@ -52,10 +56,14 @@ def init():
     logicalaxes.rotate = driveControllerTwo.X
 
     driveControllerOne.LeftBottomLeft.whenPressed(ZeroCANCodersCommand())
+    
     driveControllerOne.LeftThumb.toggleWhenPressed(ChamberForwardCommand())
     driveControllerOne.RightThumb.toggleWhenPressed(ChamberBackwardCommand())
+    driveControllerOne.BottomThumb.whenPressed(ZeroGyroCommand())
     
     driveControllerOne.Trigger.whileHeld(SudoCommandGroup())
+    
+    driveControllerOne.LeftBottomRight.whileHeld(PathCommand())
 
     driveControllerTwo.LeftThumb.toggleWhenPressed(ConveyorForwardCommand())
     driveControllerTwo.RightThumb.toggleWhenPressed(ConveyorBackwardCommand())

@@ -25,22 +25,23 @@ class PathCommand(CommandBase):
 
         for lPosition, cPosition in zip(self.lastPositions, currentPositions):
             displacements.append(cPosition - lPosition)
-
+            print(str(displacements[0]))
+            
         for i, (d, m) in enumerate(zip(displacements, self.lastSlope)):
-            if m == 0:
-                self.totalDisplacements[i] += d
-            else:
-                self.totalDisplacements[i] += d * 1 / m
+            print(str (m))
+            self.totalDisplacements[i] += d * math.cos(math.tan(m))
 
         self.lastSlope = []
         angle = []
+        self.lastPositions = currentPositions
 
         for dx in self.totalDisplacements:
-            angle.append(math.atan(2 * dx))
-            self.lastSlope.append(2 * dx)
+            print('dx '+ str(dx))
+            angle.append(math.atan(1/3600 * dx))
+            self.lastSlope.append(1/3600 * dx)
 
         avg = sum(angle) / len(angle)
-        robot.drivetrain.setModuleAngles(avg)
+        robot.drivetrain.setUniformModuleAngle(avg)
         robot.drivetrain.setSpeeds(self.speeds)
 
         """
@@ -49,4 +50,4 @@ class PathCommand(CommandBase):
         """
 
     def end(self, interrupted):
-        pass
+        robot.drivetrain.stop()

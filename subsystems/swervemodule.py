@@ -193,6 +193,10 @@ class SwerveModule:
                 speed * self.speedLimit * 0.5
             ),  # Set half of the normal speed temporarily.
         )
+            
+    #def setWheelPercentSpeed(self, speed):
+        #"""
+        
 
     def getModulePosition(self, inInches=True):
         """
