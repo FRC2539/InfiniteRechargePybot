@@ -13,7 +13,7 @@ from commands.limelight.automatedshootcommand import AutomatedShootCommand
 
 from wpilib.controller import PIDController, ProfiledPIDControllerRadians
 
-from wpilib.trajectory import TrapezoidProfileRadians
+from wpimath.trajectory import TrapezoidProfileRadians
 
 import robot
 
