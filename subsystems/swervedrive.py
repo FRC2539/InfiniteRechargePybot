@@ -67,7 +67,7 @@ class SwerveDrive(BaseDrive):
             ),
         ]
             
-        self.swerveKinematics = SwerveDrive4Kinematics(
+        self.swerveKinematics = SwerveDrive4Kinematics( # X and Y components of center offsets.
             Translation2d(-36.4, 36.4), # Front left module
             Translation2d(36.4, 36.4), # Front right module
             Translation2d(-36.4, -36.4), # Back left module
@@ -75,7 +75,7 @@ class SwerveDrive(BaseDrive):
         )
         
         self.swerveOdometry = SwerveDrive4Odometry(self.swerveKinematics,
-                                                   Rotation2d(0),
+                                                   self.navX.getRotation2d(),
                                                    Pose2d(0, 0, Rotation2d(0))
                                                    )
         
@@ -90,9 +90,7 @@ class SwerveDrive(BaseDrive):
             states.append(SwerveModuleState(s, a))
         
         self.swerveOdometry.update(
-            Rotation2d(
-                math.radians(self.getAngle()) - math.pi
-                ),
+            self.navX.getRotation2d(),
             states[0],
             states[1],
             states[2],
@@ -103,17 +101,21 @@ class SwerveDrive(BaseDrive):
         """
         Set the states of the modules. Used by trajectory stuff.
         """
-        if len(moduleStates) != 4: # TODO: temporary lol
-            raise Exception('Length of arguments error. Is: ' + str(len(moduleStates)))
         
         for module, state in zip(self.modules, moduleStates):
-            self.module.setState(state)
+            module.setState(state)
             
     def getSwervePose(self):
         """
         Get the odometry's idea of the position
         """
         return self.swerveOdometry.getPose()
+    
+    def resetOdometry(self, pose):
+        """
+        Resets the odometry to a given position, typically the one used when starting a trajectory. 
+        """
+        self.swerveOdometry.resetPosition(pose, self.navX.getRotation2d())
 
     def _configureMotors(self):
         """

@@ -11,13 +11,14 @@ class GenerateTrajectoryCommand(InstantCommand):
 
     def __init__(self, movements_: list, endPose: list, startingPose: list = [0, 0, 0]):
         super().__init__()
-
+        
         self.addRequirements(robot.drivetrain)
 
         config = TrajectoryConfig(
             4, # Max meters per second
-            2 # Max meters per second squared
+            2, # Max meters per second squared
         )
+        #config.setKinematics(robot.drivetrain.swerveKinematics) BUG: Type not clarified for acceptance.
                 
         initialPosition = Pose2d(
             startingPose[0],
@@ -46,4 +47,6 @@ class GenerateTrajectoryCommand(InstantCommand):
         )
 
     def getTrajectory(self):
+        robot.drivetrain.resetOdometry(self.trajectory.initialPose())
+        
         return self.trajectory

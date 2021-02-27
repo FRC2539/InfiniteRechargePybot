@@ -1,6 +1,4 @@
-from commands2 import SequentialCommandGroup, ParallelCommandGroup, CommandBase, InstantCommand
-
-from commands2 import Swerve4ControllerCommand
+from commands2 import SequentialCommandGroup, ParallelCommandGroup, CommandBase, InstantCommand, Swerve4ControllerCommand
 
 from commands.drivetrain.turncommand import TurnCommand
 from commands.drivetrain.movecommand import MoveCommand
@@ -36,21 +34,4 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                          #self.moveBack,
                          #self.sudo,
                          #)
-        
-        self.addCommands(
-            Swerve4ControllerCommand(
-                GenerateTrajectoryCommand(
-                    [[1, 1], [2, -1]], [3, 0, 0]
-                    ).getTrajectory(),
-                robot.drivetrain.getSwervePose,
-                robot.drivetrain.swerveKinematics,
-                PIDController(0.1, 0, 0), # X-controller
-                PIDController(0.1, 0, 0), # Y-controller
-                ProfiledPIDControllerRadians(0.1, 0, 0, 
-                    TrapezoidProfileRadians.Constraints(4, 2)
-                                            ), # Theta-controller
-                lambda: 0,
-                robot.drivetrain.setModuleStates,
-                [robot.drivetrain]
-            )
-        )
+                         

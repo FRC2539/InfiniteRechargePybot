@@ -44,11 +44,13 @@ class KryptonBot(TimedCommandRobot):
     def autonomousInit(self):
         """This function is called each time autonomous mode starts."""
 
+        from commands.drivetrain.pathfollowercommand import PathFollowerCommand
+
         # Send field data to the dashboard
         driverhud.showField()
 
         # Schedule the autonomous command
-        auton = driverhud.getAutonomousProgram()
+        auton = PathFollowerCommand.get()# driverhud.getAutonomousProgram()
         auton.schedule()
         driverhud.showInfo("Starting %s" % auton)
 
