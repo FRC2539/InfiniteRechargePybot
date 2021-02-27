@@ -10,7 +10,7 @@ from commands.drivetrain.togglefieldorientationcommand import (
 )
 from commands.drivetrain.curvecommand import CurveCommand
 from commands.drivetrain.zerocancoderscommand import ZeroCANCodersCommand
-from commands.drivetrain.pathfollowercommand import PathFollowerCommand
+
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 
 from commands.drivetrain.pathcommand import PathCommand
