@@ -32,7 +32,7 @@ from commands.shooter.setrpmcommand import SetRPMCommand
 from commands.hood.raisehoodcommand import RaiseHoodCommand
 from commands.hood.lowerhoodcommand import LowerHoodCommand
 
-from commands.limelight.sudocommandgroup import SudoCommandGroup
+from commands.limelight.automatedshootcommand import AutomatedShootCommand
 
 
 def init():
@@ -61,7 +61,7 @@ def init():
     driveControllerOne.RightThumb.toggleWhenPressed(ChamberBackwardCommand())
     driveControllerOne.BottomThumb.whenPressed(ZeroGyroCommand())
     
-    driveControllerOne.Trigger.whileHeld(SudoCommandGroup())
+    driveControllerOne.Trigger.whileHeld(AutomatedShootCommand())
     
     driveControllerOne.LeftBottomRight.whileHeld(PathCommand())
 

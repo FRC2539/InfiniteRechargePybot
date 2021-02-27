@@ -292,6 +292,20 @@ class SwerveModule:
             self.turnMotor.selectProfileSlot(profile, 0)
         if drive:
             self.driveMotor.selectProfileSlot(profile, 0)
+            
+    def setDriveCruiseVelocity(self, slow):
+        """
+        Sets the motion magic cruise control max speed for the drive motor
+        """
+        
+        if slow:
+            self.driveMotor.configMotionCruiseVelocity(
+                constants.drivetrain.slowDriveMotionCruiseVelocity, 0
+            )
+        else:
+            self.driveMotor.configMotionCruiseVelocity(
+                constants.drivetrain.driveMotionCruiseVelocity, 0
+            )
 
     def setPID(self):
         """

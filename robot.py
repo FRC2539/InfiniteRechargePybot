@@ -50,13 +50,16 @@ class KryptonBot(TimedCommandRobot):
         driverhud.showField()
 
         # Schedule the autonomous command
-        auton = PathFollowerCommand.get()# driverhud.getAutonomousProgram()
-        auton.schedule()
-        driverhud.showInfo("Starting %s" % auton)
+        self.auton = driverhud.getAutonomousProgram()
+        self.auton.schedule()
+        driverhud.showInfo("Starting %s" % self.auton)
 
     def disabledInit(self):
-        pass
-
+        try:
+            self.auton.disable()
+        except(AttributeError):
+            pass
+        
     def disabledPeriodic(self):
         pass
 

@@ -32,8 +32,8 @@ class Shooter(CougarSystem):
         self.shooterMotorTwo.setNeutralMode(NeutralMode.Coast)
 
         # Set the PID configuration.
-        self.shooterMotorOne.config_kF(0, 0.055, 0)
-        self.shooterMotorOne.config_kP(0, 0.6, 0)
+        self.shooterMotorOne.config_kF(0, 1.2, 0)
+        self.shooterMotorOne.config_kP(0, 5, 0)
         self.shooterMotorOne.config_kI(0, 0, 0)
         self.shooterMotorOne.config_kD(0, 0.0001, 0)
         self.shooterMotorOne.config_IntegralZone(0, 0, 0)
@@ -55,6 +55,8 @@ class Shooter(CougarSystem):
         
     def periodic(self):
         self.feed()
+        
+        print(self.getRPM())
 
     def setRPM(self, rpm):
         # With the second motor following the first, no command is needed for the second motor.

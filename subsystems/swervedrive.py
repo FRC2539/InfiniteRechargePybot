@@ -22,6 +22,8 @@ class SwerveDrive(BaseDrive):
         [front left, front right, back left, back right]
         """
 
+        #TODO: Add docstrings.
+
         self.isFieldOriented = True
 
         self.wheelBase = (
@@ -296,6 +298,13 @@ class SwerveDrive(BaseDrive):
     ):  # Remember, provide these in inches. It will go forward/back x many inches.
         for module, position in zip(self.modules, positions):
             module.setModulePosition(position)
+            
+    def setCruiseVelocity(self, slow=False):
+        """
+        Changes the motion magic's max cruise velocity.
+        """
+        for module in self.modules:
+            module.setDriveCruiseVelocity(slow)
 
     def setModuleProfiles(self, id_=0, drive=True, turn=True):
         for module in self.modules:

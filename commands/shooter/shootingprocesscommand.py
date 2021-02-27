@@ -14,7 +14,7 @@ class ShootingProcessCommand(CommandBase):
 
         self.isAtTargetRPM = False
 
-        self.addRequirements([robot.shooter, robot.conveyor, robot.chamber])
+        self.addRequirements([robot.conveyor, robot.chamber])
 
     def initialize(self):
         robot.shooter.setRPM(self.targetRPM)

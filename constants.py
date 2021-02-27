@@ -41,6 +41,7 @@ drivetrain.turnMotorGearRatio = 12.8
 
 drivetrain.driveMotionAcceleration = 10000
 drivetrain.driveMotionCruiseVelocity = 16000
+drivetrain.slowDriveMotionCruiseVelocity = 11000
 
 drivetrain.turnMotionAcceleration = 1000
 drivetrain.turnMotionCruiseVelocity = 800

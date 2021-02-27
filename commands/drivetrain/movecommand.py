@@ -5,7 +5,7 @@ import robot
 
 
 class MoveCommand(CommandBase):
-    def __init__(self, distance, angle=0, tolerance=10, name=None):
+    def __init__(self, distance, angle=0, tolerance=10, slow=False, name=None):
         """
         Takes a distance in inches and stores it for later. We allow overriding
         name so that other autonomous driving commands can extend this class.
@@ -19,11 +19,15 @@ class MoveCommand(CommandBase):
         self.distance = -distance
         self.angle = angle
         self.tol = tolerance  # Angle tolerance in degrees.
+        self.isSlow = slow
 
         self.moveSet = False
         self.addRequirements(robot.drivetrain)
 
     def initialize(self):
+        if self.isSlow:
+            robot.drivetrain.setCruiseVelocity(True)
+            
         robot.drivetrain.setModuleProfiles(1, turn=False)
 
         self.count = 0
@@ -57,9 +61,10 @@ class MoveCommand(CommandBase):
     def isFinished(self):
         count = 0
         for position, start in zip(robot.drivetrain.getPositions(), self.startPos):
-            if abs(position - (start + self.distance)) < 1:
+            if abs(position - (start + self.distance)) < 4:
                 count += 1
             else:
+                print('f')
                 return False
 
         if count == 4:
@@ -68,5 +73,6 @@ class MoveCommand(CommandBase):
     def end(self, interrupted):
         print('WHAT')
         robot.drivetrain.stop()
+        robot.drivetrain.setCruiseVelocity()
         robot.drivetrain.setModuleProfiles(0, turn=False)
         self.moveSet = False
