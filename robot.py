@@ -50,7 +50,7 @@ class KryptonBot(TimedCommandRobot):
         driverhud.showField()
 
         # Schedule the autonomous command
-        self.auton = driverhud.getAutonomousProgram()
+        self.auton = PathFollowerCommand().get()#driverhud.getAutonomousProgram()
         self.auton.schedule()
         driverhud.showInfo("Starting %s" % self.auton)
 

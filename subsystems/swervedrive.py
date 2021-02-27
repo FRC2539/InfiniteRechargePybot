@@ -98,6 +98,8 @@ class SwerveDrive(BaseDrive):
             states[2],
             states[3],
         )
+        
+        print(self.swerveOdometry.getPose())
             
     def setModuleStates(self, moduleStates):
         """
