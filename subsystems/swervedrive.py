@@ -1,3 +1,6 @@
+from wpimath.kinematics import SwerveDrive4Odometry, SwerveDrive4Kinematics, SwerveModuleState
+from wpimath.geometry import Translation2d, Rotation2d, Pose2d
+
 from .cougarsystem import *
 from .basedrive import BaseDrive
 from .swervemodule import SwerveModule
@@ -63,7 +66,41 @@ class SwerveDrive(BaseDrive):
                 invertedDrive=True,  # Invert for some reason. Ezra's going nuts lol.
             ),
         ]
-
+            
+        self.swerveKinematics = SwerveDrive4Kinematics(
+            Translation2d(-36.4, 36.4), # Front left module
+            Translation2d(36.4, 36.4), # Front right module
+            Translation2d(-36.4, -36.4), # Back left module
+            Translation2d(36.4, -36.4) # Back right module
+        )
+        
+        self.swerveOdometry = SwerveDrive4Odometry(self.swerveKinematics,
+                                                   Rotation2d(0),
+                                                   Pose2d(0, 0, Rotation2d(0))
+                                                   )
+        
+    def periodic(self):
+        # Feed the nt controller.
+        self.feed()
+        
+        states = []
+        for module in self.modules:
+            s = module.getWheelSpeed() * 2.54 / 100
+            a = Rotation2d(math.radians(module.getWheelAngle()))
+            states.append(SwerveModuleState(s, a))
+        
+        self.swerveOdometry.update(
+            Rotation2d(
+                math.radians(self.getAngle())
+                ),
+            states[0],
+            states[1],
+            states[2],
+            states[3],
+        )
+            
+    def getSwervePose(self):
+        return self.swerveOdometry.getPose()
 
     def _configureMotors(self):
         """

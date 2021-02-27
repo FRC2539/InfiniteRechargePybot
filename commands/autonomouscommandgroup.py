@@ -1,12 +1,17 @@
 from commands2 import SequentialCommandGroup, ParallelCommandGroup, CommandBase, InstantCommand
 
+from commands2 import Swerve4ControllerCommand
+
 from commands.drivetrain.turncommand import TurnCommand
 from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.curvecommand import CurveCommand
+from commands.drivetrain.generatetrajectorycommand import GenerateTrajectoryCommand
 
 from commands.intake.intakecommand import IntakeCommand
 
 from commands.limelight.automatedshootcommand import AutomatedShootCommand
+
+from wpilib.controller import PIDController, ProfiledPIDControllerRadians
 
 import robot
 
@@ -14,18 +19,30 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     def __init__(self):
         super().__init__()
 
-        self.intake = IntakeCommand()
-        self.move = MoveCommand(204)
+        #self.intake = IntakeCommand()
+        #self.move = MoveCommand(204)
 
-        self.toRun = self.move.alongWith(self.intake)
+        #self.toRun = self.move.alongWith(self.intake)
 
-        self.stopIntake = InstantCommand(robot.intake.dontIntakeBalls, [robot.intake])
-        self.moveBack = MoveCommand(-204)
+        #self.stopIntake = InstantCommand(robot.intake.dontIntakeBalls, [robot.intake])
+        #self.moveBack = MoveCommand(-204)
         
-        self.sudo = AutomatedShootCommand()
+        #self.sudo = AutomatedShootCommand()
 
-        self.addCommands(self.toRun,
-                         self.stopIntake,
-                         self.moveBack,
-                         self.sudo,
-                         )
+        #self.addCommands(self.toRun,
+                         #self.stopIntake,
+                         #self.moveBack,
+                         #self.sudo,
+                         #)
+                         
+        Swerve4ControllerCommand(
+            GenerateTrajectoryCommand(
+                [0, 0, 0], [[1, 1], [2, -1]], [3, 0, 0]
+                ).getTrajectory(),
+            robot.drivetrain.getSwervePose,
+            robot.drivetrain.swerveKinematics,
+            PIDController(0.1, 0, 0), # X-controller
+            PIDController(0.1, 0, 0), # Y-controller
+            ProfiledPIDControllerRadians(0.1, 0, 0, ) # Theta-controller
+            )
+            
