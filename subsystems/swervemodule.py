@@ -122,6 +122,17 @@ class SwerveModule:
         self.setPID()  # Sets the PID slots to values from the constants file.
         self.setModuleProfile(0)  # Sets the PID profile for the module to follow.
 
+    def setState(self, state):
+        """
+        Set the "state" of the module. Used in the trajectory stuff.
+        """
+        
+        self.setWheelAngle((state.angle).degrees()) # Sets the angle using the Rotation2d object of the module state.
+        
+        self.speedLimit = state.speed_fps * 12 # Multiply by twelve to make it inches per second.
+        
+        self.setWheelSpeed(1) # Sets to the max velocity, which is set above. 
+
     def updateCANCoder(self, val):
         """
         Updates the value of the CANCoder. This is how we "zero" the entire swerve.
@@ -190,7 +201,7 @@ class SwerveModule:
         self.driveMotor.set(
             TalonFXControlMode.Velocity,
             self.inchesPerSecondToTicksPerTenth(
-                speed * self.speedLimit * 0.5
+                speed * self.speedLimit
             ),  # Set half of the normal speed temporarily.
         )
             

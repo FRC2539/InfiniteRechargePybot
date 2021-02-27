@@ -13,6 +13,8 @@ from commands.limelight.automatedshootcommand import AutomatedShootCommand
 
 from wpilib.controller import PIDController, ProfiledPIDControllerRadians
 
+from wpilib.trajectory import TrapezoidProfileRadians
+
 import robot
 
 class AutonomousCommandGroup(SequentialCommandGroup):
@@ -34,15 +36,21 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                          #self.moveBack,
                          #self.sudo,
                          #)
-                         
-        Swerve4ControllerCommand(
-            GenerateTrajectoryCommand(
-                [0, 0, 0], [[1, 1], [2, -1]], [3, 0, 0]
-                ).getTrajectory(),
-            robot.drivetrain.getSwervePose,
-            robot.drivetrain.swerveKinematics,
-            PIDController(0.1, 0, 0), # X-controller
-            PIDController(0.1, 0, 0), # Y-controller
-            ProfiledPIDControllerRadians(0.1, 0, 0, ) # Theta-controller
+        
+        self.addCommands(
+            Swerve4ControllerCommand(
+                GenerateTrajectoryCommand(
+                    [[1, 1], [2, -1]], [3, 0, 0]
+                    ).getTrajectory(),
+                robot.drivetrain.getSwervePose,
+                robot.drivetrain.swerveKinematics,
+                PIDController(0.1, 0, 0), # X-controller
+                PIDController(0.1, 0, 0), # Y-controller
+                ProfiledPIDControllerRadians(0.1, 0, 0, 
+                    TrapezoidProfileRadians.Constraints(4, 2)
+                                            ), # Theta-controller
+                lambda: 0,
+                robot.drivetrain.setModuleStates,
+                [robot.drivetrain]
             )
-            
+        )

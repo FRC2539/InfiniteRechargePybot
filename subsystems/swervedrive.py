@@ -86,12 +86,12 @@ class SwerveDrive(BaseDrive):
         states = []
         for module in self.modules:
             s = module.getWheelSpeed() * 2.54 / 100
-            a = Rotation2d(math.radians(module.getWheelAngle()))
+            a = Rotation2d(math.radians(module.getWheelAngle()) - math.pi)
             states.append(SwerveModuleState(s, a))
         
         self.swerveOdometry.update(
             Rotation2d(
-                math.radians(self.getAngle())
+                math.radians(self.getAngle()) - math.pi
                 ),
             states[0],
             states[1],
@@ -99,7 +99,20 @@ class SwerveDrive(BaseDrive):
             states[3],
         )
             
+    def setModuleStates(self, moduleStates):
+        """
+        Set the states of the modules. Used by trajectory stuff.
+        """
+        if len(moduleStates) != 4: # TODO: temporary lol
+            raise Exception('Length of arguments error. Is: ' + str(len(moduleStates)))
+        
+        for module, state in zip(self.modules, moduleStates):
+            self.module.setState(state)
+            
     def getSwervePose(self):
+        """
+        Get the odometry's idea of the position
+        """
         return self.swerveOdometry.getPose()
 
     def _configureMotors(self):

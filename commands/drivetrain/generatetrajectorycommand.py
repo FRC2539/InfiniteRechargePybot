@@ -19,7 +19,7 @@ class GenerateTrajectoryCommand(InstantCommand):
             2 # Max meters per second squared
         )
                 
-        intialPosition = Pose2d(
+        initialPosition = Pose2d(
             startingPose[0],
             startingPose[1],
             Rotation2d(startingPose[2])
@@ -30,7 +30,7 @@ class GenerateTrajectoryCommand(InstantCommand):
             try:
                 movements.append(Translation2d(point[0], point[1]))
             except(TypeError):
-                raise Exception('Give lists in the movements_ list consisting of your x and y coordinates.')
+                raise Exception('Give lists in the movements_ list consisting of your x and y coordinates. You gave: ' + str(movements_))
 
         finalPosition = Pose2d(
             endPose[0],

@@ -1,10 +1,12 @@
 from commands2 import CommandBase
 
+import constants
 import robot
 from controller import logicalaxes
 from custom.config import Config, MissingConfigError
 from custom import driverhud
 import math
+
 
 logicalaxes.registerAxis("forward")
 logicalaxes.registerAxis("strafe")
@@ -20,6 +22,8 @@ class DriveCommand(CommandBase):
     def initialize(self):
         robot.drivetrain.stop()
         robot.drivetrain.setProfile(0)
+        robot.drivetrain.speedLimit = constants.drivetrain.speedLimit
+        
         self.lastY = None
         self.slowed = False
 
