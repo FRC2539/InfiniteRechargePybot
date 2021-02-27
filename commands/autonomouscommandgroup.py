@@ -19,6 +19,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.conveyor = InstantCommand(robot.conveyor.forward, [robot.conveyor])
     
         self.turnBack = TurnCommand(20)
+        self.realign = TurnCommand(-10)
 
         self.intake = InstantCommand(robot.intake.intakeBalls, [robot.intake])
         self.moveSide = MoveCommand(7.071, angle=45, slow=True)
@@ -26,9 +27,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.moveForward = MoveCommand(199, slow=True)
         
         self.stopIntake = InstantCommand(robot.intake.dontIntakeBalls, [robot.intake])
-        self.moveBack = MoveCommand(-120, angle=10)
+        self.moveBack = MoveCommand(-120, angle=14)
         
-        self.sudo = AutomatedShootCommand(2800).withTimeout(4)
+        self.sudo = AutomatedShootCommand(3000).withTimeout(4)
         self.sudoNT = AutomatedShootCommand()
         
         self.goBack = self.moveBack.alongWith(self.sudoNT)
@@ -40,6 +41,13 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                          self.intake,
                          self.moveSide,
                          self.moveForward,
+                         self.realign,
                          self.goBack,
                          )  
+        
+    def interrupted(self):
+        robot.intake.dontIntakeBalls()
+        robot.chamber.stop()
+        robot.conveyor.stop()
+        robot.shooter.stopShooter()
                          

@@ -11,7 +11,7 @@ import math
 class TurnCommand(CommandBase):
     """Allows autonomous turning using the drive base encoders."""
 
-    def __init__(self, degrees, tolerance=10):
+    def __init__(self, degrees, tolerance=5):
 
         super().__init__()
 

@@ -18,7 +18,7 @@ class Conveyor(CougarSystem):
         self.motor.setInverted(True)
 
         # INFO: Percentages are from 0 - 1, 1 being 100%
-        self.speed = 0.6
+        self.speed = 0.8
         self.slowSpeed = 0.2
         # Option: separate into forward and backward speeds
         
