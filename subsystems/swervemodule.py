@@ -126,12 +126,16 @@ class SwerveModule:
         """
         Set the "state" of the module. Used in the trajectory stuff.
         """
-        
-        self.setWheelAngle((state.angle).degrees()) # Sets the angle using the Rotation2d object of the module state.
-        
-        self.speedLimit = state.speed_fps * 12 # Multiply by twelve to make it inches per second.
-        
-        self.setWheelSpeed(1) # Sets to the max velocity, which is set above. 
+
+        self.setWheelAngle(
+            (state.angle).degrees()
+        )  # Sets the angle using the Rotation2d object of the module state.
+
+        self.speedLimit = (
+            state.speed_fps * 12
+        )  # Multiply by twelve to make it inches per second.
+
+        self.setWheelSpeed(1)  # Sets to the max velocity, which is set above.
 
     def updateCANCoder(self, val):
         """
@@ -204,10 +208,9 @@ class SwerveModule:
                 speed * self.speedLimit
             ),  # Set half of the normal speed temporarily.
         )
-            
-    #def setWheelPercentSpeed(self, speed):
-        #"""
-        
+
+    # def setWheelPercentSpeed(self, speed):
+    # """
 
     def getModulePosition(self, inInches=True):
         """
@@ -292,12 +295,12 @@ class SwerveModule:
             self.turnMotor.selectProfileSlot(profile, 0)
         if drive:
             self.driveMotor.selectProfileSlot(profile, 0)
-            
+
     def setDriveCruiseVelocity(self, slow):
         """
         Sets the motion magic cruise control max speed for the drive motor
         """
-        
+
         if slow:
             self.driveMotor.configMotionCruiseVelocity(
                 constants.drivetrain.slowDriveMotionCruiseVelocity, 0

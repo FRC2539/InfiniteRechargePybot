@@ -5,8 +5,8 @@ import robot
 
 logicalaxes.registerAxis("TURRETmOVE")
 
-class DefaultCommand(CommandBase):
 
+class DefaultCommand(CommandBase):
     def __init__(self):
         super().__init__()
 

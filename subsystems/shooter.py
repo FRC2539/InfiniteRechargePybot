@@ -50,12 +50,14 @@ class Shooter(CougarSystem):
         self.minVel = 2800
 
         # Constantly updates the hood's status.
-        self.constantlyUpdate('Shooter Running', lambda: self.shooterMotorOne.getMotorOutputPercent() != 0)
-        self.constantlyUpdate('Shooter RPM', lambda: float(self.getRPM()))
-        
+        self.constantlyUpdate(
+            "Shooter Running", lambda: self.shooterMotorOne.getMotorOutputPercent() != 0
+        )
+        self.constantlyUpdate("Shooter RPM", lambda: float(self.getRPM()))
+
     def periodic(self):
         self.feed()
-        
+
     def setRPM(self, rpm):
         # With the second motor following the first, no command is needed for the second motor.
         self.shooterMotorOne.set(ControlMode.Velocity, self.rpmToSensor(rpm))

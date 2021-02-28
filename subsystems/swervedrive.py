@@ -1,4 +1,8 @@
-from wpimath.kinematics import SwerveDrive4Odometry, SwerveDrive4Kinematics, SwerveModuleState
+from wpimath.kinematics import (
+    SwerveDrive4Odometry,
+    SwerveDrive4Kinematics,
+    SwerveModuleState,
+)
 from wpimath.geometry import Translation2d, Rotation2d, Pose2d
 
 from .cougarsystem import *
@@ -22,7 +26,7 @@ class SwerveDrive(BaseDrive):
         [front left, front right, back left, back right]
         """
 
-        #TODO: Add docstrings.
+        # TODO: Add docstrings.
 
         self.isFieldOriented = True
 
@@ -68,29 +72,32 @@ class SwerveDrive(BaseDrive):
                 invertedDrive=True,  # Invert for some reason. Ezra's going nuts lol.
             ),
         ]
-            
-        self.swerveKinematics = SwerveDrive4Kinematics( # X and Y components of center offsets.
-            Translation2d(-36.4, 36.4), # Front left module
-            Translation2d(36.4, 36.4), # Front right module
-            Translation2d(-36.4, -36.4), # Back left module
-            Translation2d(36.4, -36.4) # Back right module
+
+        self.swerveKinematics = (
+            SwerveDrive4Kinematics(  # X and Y components of center offsets.
+                Translation2d(-36.4, 36.4),  # Front left module
+                Translation2d(36.4, 36.4),  # Front right module
+                Translation2d(-36.4, -36.4),  # Back left module
+                Translation2d(36.4, -36.4),  # Back right module
+            )
         )
-        
-        self.swerveOdometry = SwerveDrive4Odometry(self.swerveKinematics,
-                                                   self.navX.getRotation2d(),
-                                                   Pose2d(0, 0, Rotation2d(0))
-                                                   )
-        
+
+        self.swerveOdometry = SwerveDrive4Odometry(
+            self.swerveKinematics,
+            self.navX.getRotation2d(),
+            Pose2d(0, 0, Rotation2d(0)),
+        )
+
     def periodic(self):
         # Feed the nt controller.
         self.feed()
-        
+
         states = []
         for module in self.modules:
             s = module.getWheelSpeed() * 2.54 / 100
             a = Rotation2d(math.radians(module.getWheelAngle()) - math.pi)
             states.append(SwerveModuleState(s, a))
-        
+
         self.swerveOdometry.update(
             self.navX.getRotation2d(),
             states[0],
@@ -98,26 +105,26 @@ class SwerveDrive(BaseDrive):
             states[2],
             states[3],
         )
-        
+
         print(self.swerveOdometry.getPose())
-            
+
     def setModuleStates(self, moduleStates):
         """
         Set the states of the modules. Used by trajectory stuff.
         """
-        
+
         for module, state in zip(self.modules, moduleStates):
             module.setState(state)
-            
+
     def getSwervePose(self):
         """
         Get the odometry's idea of the position
         """
         return self.swerveOdometry.getPose()
-    
+
     def resetOdometry(self, pose):
         """
-        Resets the odometry to a given position, typically the one used when starting a trajectory. 
+        Resets the odometry to a given position, typically the one used when starting a trajectory.
         """
         self.swerveOdometry.resetPosition(pose, self.navX.getRotation2d())
 
@@ -266,9 +273,9 @@ class SwerveDrive(BaseDrive):
         for module, speed in zip(self.modules, speeds):
             module.setWheelSpeed(speed)
 
-    #def setPercentSpeeds(self, speeds: list):
-        #for module, speed in zip(self.modules, speeds):
-            #module.setW
+    # def setPercentSpeeds(self, speeds: list):
+    # for module, speed in zip(self.modules, speeds):
+    # module.setW
 
     def setUniformModuleSpeed(self, speed: float):  # Set a speed in inches per second.
         for module in self.modules:
@@ -300,7 +307,7 @@ class SwerveDrive(BaseDrive):
     ):  # Remember, provide these in inches. It will go forward/back x many inches.
         for module, position in zip(self.modules, positions):
             module.setModulePosition(position)
-            
+
     def setCruiseVelocity(self, slow=False):
         """
         Changes the motion magic's max cruise velocity.

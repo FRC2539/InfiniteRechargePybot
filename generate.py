@@ -136,7 +136,7 @@ def generateCommand():
 
         if not inherits in bases:
             error("Unknown base class %s" % inherits)
-            
+
         if inherits == "Command" or inherits == "CommandGroup":
             inherits += "Base"
 

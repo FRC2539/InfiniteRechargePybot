@@ -27,7 +27,7 @@ class MoveCommand(CommandBase):
     def initialize(self):
         if self.isSlow:
             robot.drivetrain.setCruiseVelocity(True)
-            
+
         robot.drivetrain.setModuleProfiles(1, turn=False)
 
         self.count = 0
@@ -64,14 +64,14 @@ class MoveCommand(CommandBase):
             if abs(position - (start + self.distance)) < 4:
                 count += 1
             else:
-                print('f')
+                print("f")
                 return False
 
         if count == 4:
             return True
 
     def end(self, interrupted):
-        print('WHAT')
+        print("WHAT")
         robot.drivetrain.stop()
         robot.drivetrain.setCruiseVelocity()
         robot.drivetrain.setModuleProfiles(0, turn=False)

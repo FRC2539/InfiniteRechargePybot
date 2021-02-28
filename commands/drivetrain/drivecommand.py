@@ -23,7 +23,7 @@ class DriveCommand(CommandBase):
         robot.drivetrain.stop()
         robot.drivetrain.setProfile(0)
         robot.drivetrain.speedLimit = constants.drivetrain.speedLimit
-        
+
         self.lastY = None
         self.slowed = False
 
@@ -43,4 +43,6 @@ class DriveCommand(CommandBase):
             if abs(y) > abs(self.lastY):
                 self.lastY = y
 
-        robot.drivetrain.move(logicalaxes.strafe.get(), y, logicalaxes.rotate.get() * 0.9)
+        robot.drivetrain.move(
+            logicalaxes.strafe.get(), y, logicalaxes.rotate.get() * 0.9
+        )
