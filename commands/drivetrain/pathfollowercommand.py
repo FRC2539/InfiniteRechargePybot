@@ -18,9 +18,9 @@ class PathFollowerCommand:
     @staticmethod
     def get():
         thetaController = ProfiledPIDControllerRadians(
-            0.001,
-            0,
-            0,
+            0.001, # P
+            0, # I
+            0, # D
             TrapezoidProfileRadians.Constraints(
                 constants.drivetrain.maxMetersPerSecond,
                 constants.drivetrain.maxMetersPerSecondSquared,

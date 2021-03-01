@@ -15,7 +15,7 @@ class GenerateTrajectoryCommand:
             constants.drivetrain.maxMetersPerSecond,  # Max meters per second
             constants.drivetrain.maxMetersPerSecondSquared,  # Max meters per second squared
         )
-        # config.setKinematics(robot.drivetrain.swerveKinematics) BUG: Type not clarified for acceptance.
+        config.setKinematics(robot.drivetrain.swerveKinematics) # BUG: Type not clarified for acceptance.
 
         initialPosition = Pose2d(
             startingPose[0] / -4 * 2.54 / 100,
@@ -31,11 +31,17 @@ class GenerateTrajectoryCommand:
                         point[0] / -4 * 2.54 / 100, point[1] / -4 * 2.54 / 100
                     )
                 )
-            except (TypeError):
-                raise Exception(
-                    "Give lists in the movements_ list consisting of your x and y coordinates. You gave: "
-                    + str(movements_)
-                )
+            except(TypeError, IndexError) as e:
+                if e == TypeError:
+                    raise Exception(
+                        "Give lists in the movements_ list consisting of your x and y coordinates. You gave: "
+                        + str(movements_)
+                    )
+                elif e == IndexError:
+                    raise Exception(
+                        "Uh oh! You got an index error; does each sublist have two numerical values that are separated by a comma? Movements: "
+                        + str(movements_)
+                    )
 
         finalPosition = Pose2d(
             endPose[0] / -4 * 2.54 / 100,
