@@ -36,20 +36,23 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.stopIntake = InstantCommand(robot.intake.dontIntakeBalls, [robot.intake])
         self.moveBack = MoveCommand(-120, angle=14)
 
-        self.sudo = AutomatedShootCommand(3000).withTimeout(4)
+        self.sudo = AutomatedShootCommand(3500).withTimeout(4)
         self.sudoNT = AutomatedShootCommand()
 
         self.goBack = self.moveBack.alongWith(self.sudoNT)
+        
+
+        self.spinUp = InstantCommand(lambda: robot.shooter.setRPM(3500), [robot.shooter])
+        self.grabSetOne = InstantCommand(lambda: robot.intake.intakeBalls, [robot.intake])
+
+        self.moveIn = MoveCommand(116)
+        self.shoot = AutomatedShootCommand(3500).withTimeout(5)
 
         self.addCommands(
-            # self.conveyor,
-            self.sudo,
-            self.turnBack,
-            self.intake,
-            self.moveSide,
-            self.moveForward,
-            self.realign,
-            self.goBack,
+            self.spinUp,
+            self.grabSetOne,
+            self.moveIn,
+            self.shoot
         )
 
     def interrupted(self):
