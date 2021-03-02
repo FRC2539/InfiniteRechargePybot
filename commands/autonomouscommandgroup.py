@@ -16,34 +16,47 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     def __init__(self):
         super().__init__()
 
-        self.conveyor = InstantCommand(robot.conveyor.forward, [robot.conveyor])
+        # self.conveyor = InstantCommand(robot.conveyor.forward, [robot.conveyor])
     
-        self.turnBack = TurnCommand(20)
-        self.realign = TurnCommand(-10)
+        # self.turnBack = TurnCommand(20)
+        # self.realign = TurnCommand(-10)
 
-        self.intake = InstantCommand(robot.intake.intakeBalls, [robot.intake])
-        self.moveSide = MoveCommand(7.071, angle=45, slow=True)
+        # self.intake = InstantCommand(robot.intake.intakeBalls, [robot.intake])
+        # self.moveSide = MoveCommand(7.071, angle=45, slow=True)
         
-        self.moveForward = MoveCommand(199, slow=True)
+        # self.moveForward = MoveCommand(199, slow=True)
         
-        self.stopIntake = InstantCommand(robot.intake.dontIntakeBalls, [robot.intake])
-        self.moveBack = MoveCommand(-120, angle=14)
+        # self.stopIntake = InstantCommand(robot.intake.dontIntakeBalls, [robot.intake])
+        # self.moveBack = MoveCommand(-120, angle=14)
         
-        self.sudo = AutomatedShootCommand(3000).withTimeout(4)
-        self.sudoNT = AutomatedShootCommand()
+        # self.sudo = AutomatedShootCommand(3000).withTimeout(4)
+        # self.sudoNT = AutomatedShootCommand()
         
-        self.goBack = self.moveBack.alongWith(self.sudoNT)
+        # self.goBack = self.moveBack.alongWith(self.sudoNT)
+
+        # self.addCommands(
+        #                  #self.conveyor,
+        #                  self.sudo,
+        #                  self.turnBack,
+        #                  self.intake,
+        #                  self.moveSide,
+        #                  self.moveForward,
+        #                  self.realign,
+        #                  self.goBack,
+        #                  )  
+        
+        self.spinUp = InstantCommand(lambda: robot.shooter.setRPM(3500), [robot.shooter])
+        self.grabSetOne = InstantCommand(lambda: robot.intake.intakeBalls, [robot.intake])
+
+        self.moveIn = MoveCommand(116)
+        self.shoot = AutomatedShootCommand(3500).withTimeout(5)
 
         self.addCommands(
-                         #self.conveyor,
-                         self.sudo,
-                         self.turnBack,
-                         self.intake,
-                         self.moveSide,
-                         self.moveForward,
-                         self.realign,
-                         self.goBack,
-                         )  
+            self.spinUp,
+            self.grabSetOne,
+            self.moveIn,
+            self.shoot
+        )
         
     def interrupted(self):
         robot.intake.dontIntakeBalls()
