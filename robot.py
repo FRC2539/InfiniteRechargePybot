@@ -55,12 +55,12 @@ class KryptonBot(TimedCommandRobot):
 
         # Schedule the autonomous command
         self.auton = PathFollowerCommand().get(
-                [[36,0,0],
+                [#[36,0,0],
                  #[101,5,0],
                  ##[101,-5,0],
                  #[61, -10,0],
                  #[-33, -80,0],
-                [-57,-56,0]]
+                [-57,-56,math.pi]]
             )#driverhud.getAutonomousProgram()#PathFollowerCommand().get()  # driverhud.getAutonomousProgram()
         self.auton.schedule()
         print('running')

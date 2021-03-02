@@ -6,11 +6,12 @@ from wpimath.geometry import Pose2d, Translation2d, Rotation2d
 
 import robot
 import constants
+import math
 
 
 class GenerateTrajectoryCommand:
     @staticmethod
-    def getTrajectory(movements_: list, startingPose: list = [0, 0, 0]):
+    def getTrajectory(movements_: list, startingPose: list = [0, 0, math.pi]):
         config = TrajectoryConfig(
             constants.drivetrain.maxMetersPerSecond,  # Max meters per second
             constants.drivetrain.maxMetersPerSecondSquared,  # Max meters per second squared
