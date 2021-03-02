@@ -26,9 +26,9 @@ class PathCommand(CommandBase):
         for lPosition, cPosition in zip(self.lastPositions, currentPositions):
             displacements.append(cPosition - lPosition)
             print(str(displacements[0]))
-            
+
         for i, (d, m) in enumerate(zip(displacements, self.lastSlope)):
-            print(str (m))
+            print(str(m))
             self.totalDisplacements[i] += d * math.cos(math.tan(m))
 
         self.lastSlope = []
@@ -36,9 +36,9 @@ class PathCommand(CommandBase):
         self.lastPositions = currentPositions
 
         for dx in self.totalDisplacements:
-            print('dx '+ str(dx))
-            angle.append(math.atan(1/3600 * dx))
-            self.lastSlope.append(1/3600 * dx)
+            print("dx " + str(dx))
+            angle.append(math.atan(1 / 3600 * dx))
+            self.lastSlope.append(1 / 3600 * dx)
 
         avg = sum(angle) / len(angle)
         robot.drivetrain.setUniformModuleAngle(avg)

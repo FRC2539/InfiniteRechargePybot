@@ -42,75 +42,79 @@ def enablePrints():
         printsDisabled.remove(str(caller))
     except (ValueError):
         pass
-    
+
 
 class CougarSystem(SubsystemBase):
 
     intialized = False
-    
+
     def __init__(self, subsystemName="Unknown Subsystem"):
-        
+
         super().__init__()
 
         self.tableName = subsystemName
         self.table = NetworkTables.getTable(self.tableName)
-        
+
         self.updateThese = {}
 
         # Need to re-write the nt system.
-                        
+
         if not CougarSystem.intialized:
             self.intializeNTServer()
-            CougarSystem.intialized = True 
-            
+            CougarSystem.intialized = True
+
     def intializeNTServer(self):
         NetworkTables.initialize(server="roborio-2539-frc.local")
-        
+
     def put(self, valueName, value):
         try:
             self.table.putValue(valueName, value)
-            
-        except: # Must be a list or tuple.
-            
+
+        except:  # Must be a list or tuple.
+
             try:
                 if type(value[0]) is bool:
                     self.table.putBooleanArray(valueName, value)
-                    
+
                 if type(value[0]) is str:
                     self.table.putStringArray(valueName, value)
-                    
+
                 else:
                     self.table.putNumberArray(valueName, value)
-                    
-            except(TypeError):
-                raise Exception("Unrecognizable Data Type . . . \nShould be a: boolean, int, float, string, list of bools, \nlist of strings, list of numbers.")
-            
+
+            except (TypeError):
+                raise Exception(
+                    "Unrecognizable Data Type . . . \nShould be a: boolean, int, float, string, list of bools, \nlist of strings, list of numbers."
+                )
+
     def get(self, valueName):
-        return self.table.getValue(valueName, None) # Returns None if it doesn't exist.
+        return self.table.getValue(valueName, None)  # Returns None if it doesn't exist.
 
     def hasChanged(self, valueName, compareTo):
         if compareTo is None:
             return True
         return not self.table.getValue(valueName, None) == compareTo
-    
+
     def delete(self, valueName):
         self.table.delete(valueName)
-        
+
     def constantlyUpdate(self, valueName, call):
-        # The callable should take nothing (or use a lambda), and return the desired, updated value. For example, if 
-        # you wanted RPM: "self.motor.getRPM()", or something of the liking. 
-        
+        # The callable should take nothing (or use a lambda), and return the desired, updated value. For example, if
+        # you wanted RPM: "self.motor.getRPM()", or something of the liking.
+
         if not callable(call):
-            raise Exception('Please pass a callable! ' + str(call) + ', is not callable!')
-        
+            raise Exception(
+                "Please pass a callable! " + str(call) + ", is not callable!"
+            )
+
         if not self.table.containsKey(valueName):
             self.put(valueName, call())
-        
+
         self.updateThese[valueName] = call
-         
-    def feed(self): # Call in periodic.
+
+    def feed(self):  # Call in periodic.
         for key, value in self.updateThese.items():
             self.put(key, value())
-            
-    def periodic(self): # If you override this, make sure to call feed()!
+
+    def periodic(self):  # If you override this, make sure to call feed()!
         self.feed()

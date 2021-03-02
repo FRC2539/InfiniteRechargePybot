@@ -21,9 +21,11 @@ class Conveyor(CougarSystem):
         self.speed = 0.8
         self.slowSpeed = 0.2
         # Option: separate into forward and backward speeds
-        
+
         # Constantly updates the conveyor's status.
-        self.constantlyUpdate('Conveyor Running', lambda: self.motor.getMotorOutputPercent() != 0)
+        self.constantlyUpdate(
+            "Conveyor Running", lambda: self.motor.getMotorOutputPercent() != 0
+        )
 
     def periodic(self):
         self.feed()

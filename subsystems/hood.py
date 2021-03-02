@@ -31,13 +31,13 @@ class Hood(CougarSystem):
         self.controller.setIZone(0, 0)
 
         self.angleMax = 253.00
-        self.angleMin = 220.00 
+        self.angleMin = 220.00
 
         self.speed = 0.1  # 10 Percent
 
         # Constantly updates the hood's status.
-        self.constantlyUpdate('Hood Moving', lambda: self.motor.get() != 0)
-        self.constantlyUpdate('Hood Position', self.getPosition)
+        self.constantlyUpdate("Hood Moving", lambda: self.motor.get() != 0)
+        self.constantlyUpdate("Hood Position", self.getPosition)
 
     def periodic(self):
         self.feed()
