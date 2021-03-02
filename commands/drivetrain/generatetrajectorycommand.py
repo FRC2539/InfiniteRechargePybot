@@ -19,10 +19,10 @@ class GenerateTrajectoryCommand(InstantCommand):
             0.1, # Max meters per second squared
         )
         #config.setKinematics(robot.drivetrain.swerveKinematics) BUG: Type not clarified for acceptance.
-                
+        conversion = -4.2134465
         initialPosition = Pose2d(
-            startingPose[0]/-4*2.54/100,
-            startingPose[1]/-4*2.54/100,
+            startingPose[0]/conversion,
+            startingPose[1]/conversion,
             Rotation2d(startingPose[2])
         )
         
@@ -31,13 +31,13 @@ class GenerateTrajectoryCommand(InstantCommand):
         movements = []
         for point in movements_:
             try:
-                movements.append(Translation2d(point[0]/-4*2.54/100, point[1]/-4*2.54/100))
+                movements.append(Translation2d(point[0]/conversion, point[1]/conversion))
             except(TypeError):
                 raise Exception('Give lists in the movements_ list consisting of your x and y coordinates. You gave: ' + str(movements_))
 
         finalPosition = Pose2d(
-            endPose[0]/-4*2.54/100,
-            endPose[1]/-4*2.54/100,
+            endPose[0]/conversion,
+            endPose[1]/conversion,
             Rotation2d(endPose[2])
         )
         
