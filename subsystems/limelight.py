@@ -12,7 +12,7 @@ class Limelight(CougarSystem):
     """Subsystem for interacting with the limelight."""
 
     def __init__(self):
-        super().__init__('limelight')
+        super().__init__("limelight")
 
         self.nt = NetworkTables.getTable("limelight")
 
@@ -21,7 +21,7 @@ class Limelight(CougarSystem):
         self.setPipeline(1)
 
     def setPipeline(self, pipeline: int):
-        self.put('pipeline', pipeline)
+        self.put("pipeline", pipeline)
 
     def getY(self):
         # Return the x value to correct for the limelight being rotated.

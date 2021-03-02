@@ -5,50 +5,39 @@ from wpimath.trajectory import TrajectoryGenerator, TrajectoryConfig, Trajectory
 from wpimath.geometry import Pose2d, Translation2d, Rotation2d
 
 import robot
+import constants
 
 
-class GenerateTrajectoryCommand(InstantCommand):
-
-    def __init__(self, movements_: list, endPose: list, startingPose: list = [0, 0, 0]):
-        super().__init__()
-        
-        self.addRequirements(robot.drivetrain)
-
+class GenerateTrajectoryCommand:
+    @staticmethod
+    def getTrajectory(movements_: list, startingPose: list = [0, 0, 0]):
         config = TrajectoryConfig(
-            1, # Max meters per second
-            0.1, # Max meters per second squared
+            constants.drivetrain.maxMetersPerSecond,  # Max meters per second
+            constants.drivetrain.maxMetersPerSecondSquared,  # Max meters per second squared
         )
+
         #config.setKinematics(robot.drivetrain.swerveKinematics) BUG: Type not clarified for acceptance.
-        conversion = -4.2134465
+        conversion = -4.2134465 * 100 / 2.54
         initialPosition = Pose2d(
             startingPose[0]/conversion,
             startingPose[1]/conversion,
             Rotation2d(startingPose[2])
         )
-        
-        print(movements_)
-        
+
         movements = []
         for point in movements_:
             try:
-                movements.append(Translation2d(point[0]/conversion, point[1]/conversion))
+                movements.append(Pose2d(point[0]/conversion, point[1]/conversion, Rotation2d(point[2])))
             except(TypeError):
                 raise Exception('Give lists in the movements_ list consisting of your x and y coordinates. You gave: ' + str(movements_))
 
-        finalPosition = Pose2d(
-            endPose[0]/conversion,
-            endPose[1]/conversion,
-            Rotation2d(endPose[2])
-        )
-        
-        self.trajectory = TrajectoryGenerator.generateTrajectory(
-            initialPosition, 
+        movements.insert(0, initialPosition)
+
+        print(movements)
+
+        trajectory = TrajectoryGenerator.generateTrajectory(
             movements,
-            finalPosition,
             config,
         )
 
-    def getTrajectory(self):
-        robot.drivetrain.resetOdometry(self.trajectory.initialPose())
-        
-        return self.trajectory
+        return trajectory

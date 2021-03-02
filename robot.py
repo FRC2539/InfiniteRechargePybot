@@ -22,6 +22,8 @@ from subsystems.hood import Hood as hood
 from subsystems.turret import Turret as turret
 
 
+import math
+
 class KryptonBot(TimedCommandRobot):
     """Implements a Command Based robot design"""
 
@@ -46,20 +48,30 @@ class KryptonBot(TimedCommandRobot):
 
         from commands.drivetrain.pathfollowercommand import PathFollowerCommand
 
+        from commands.autonomouscommandgroup import AutonomousCommandGroup
+
         # Send field data to the dashboard
         driverhud.showField()
 
         # Schedule the autonomous command
-        self.auton = PathFollowerCommand().get()#driverhud.getAutonomousProgram()
+        self.auton = PathFollowerCommand().get(
+                [[36,0,0],
+                 #[101,5,0],
+                 ##[101,-5,0],
+                 #[61, -10,0],
+                 #[-33, -80,0],
+                [-57,-56,0]]
+            )#driverhud.getAutonomousProgram()#PathFollowerCommand().get()  # driverhud.getAutonomousProgram()
         self.auton.schedule()
+        print('running')
         driverhud.showInfo("Starting %s" % self.auton)
 
     def disabledInit(self):
         try:
             self.auton.disable()
-        except(AttributeError):
+        except (AttributeError):
             pass
-        
+
     def disabledPeriodic(self):
         pass
 

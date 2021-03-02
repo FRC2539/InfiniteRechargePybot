@@ -56,27 +56,27 @@ def init():
     logicalaxes.rotate = driveControllerTwo.X
 
     driveControllerOne.LeftBottomLeft.whenPressed(ZeroCANCodersCommand())
-    
+
     driveControllerOne.LeftThumb.toggleWhenPressed(ChamberForwardCommand())
     driveControllerOne.RightThumb.toggleWhenPressed(ChamberBackwardCommand())
     driveControllerOne.BottomThumb.whenPressed(ZeroGyroCommand())
-    
+
     driveControllerOne.Trigger.whileHeld(AutomatedShootCommand())
-    
+
     driveControllerOne.LeftBottomRight.whileHeld(PathCommand())
 
     driveControllerTwo.LeftThumb.toggleWhenPressed(ConveyorForwardCommand())
     driveControllerTwo.RightThumb.toggleWhenPressed(ConveyorBackwardCommand())
     driveControllerTwo.BottomThumb.toggleWhenPressed(IntakeCommand())
-    
+
     driveControllerTwo.LeftTopLeft.whileHeld(RaiseHoodCommand())
     driveControllerTwo.LeftBottomLeft.whileHeld(LowerHoodCommand())
-    
+
     driveControllerTwo.Trigger.toggleWhenPressed(SetRPMCommand(4000))
 
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(2)
-    
+
     logicalaxes.TURRETmOVE = componentController.LeftX
 
     componentController.Back.whenPressed(ResetCommand())

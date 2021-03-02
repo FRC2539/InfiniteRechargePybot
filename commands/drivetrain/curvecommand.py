@@ -125,11 +125,14 @@ class CurveCommand(CommandBase):
     def getSlopeToSet(self, x):
         try:
             return (
-                (math.atan((-x / (math.sqrt(self.radius ** 2 - x ** 2))))) * 180 / math.pi
+                (math.atan((-x / (math.sqrt(self.radius ** 2 - x ** 2)))))
+                * 180
+                / math.pi
             )
             # Return the slope in degrees using first derivative.
-        except(TypeError, ValueError):
+        except (TypeError, ValueError):
             return 0
+
 
 def needRepeat(lists, maxSpeed):
     CurveCommand(lists, maxSpeed)
