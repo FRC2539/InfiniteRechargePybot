@@ -46,8 +46,8 @@ drivetrain.slowDriveMotionCruiseVelocity = 11000
 drivetrain.turnMotionAcceleration = 1000
 drivetrain.turnMotionCruiseVelocity = 800
 
-drivetrain.maxMetersPerSecond = 4  # Velocity for trajectory
-drivetrain.maxMetersPerSecondSquared = 0.25  # Accel for trajectory
+drivetrain.maxMetersPerSecond = 2  # Velocity for trajectory
+drivetrain.maxMetersPerSecondSquared = 0.125  # Accel for trajectory
 
 drivetrain.wheelDiameter = 4
 

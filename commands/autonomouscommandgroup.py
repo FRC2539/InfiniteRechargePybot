@@ -76,7 +76,10 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.stopGrabbing = InstantCommand(lambda: robot.intake.dontIntakeBalls, [robot.intake])
         self.conveyorRun = InstantCommand(lambda: robot.conveyor.forward(), [robot.conveyor])
                 
+        self.print = InstantCommand(lambda: print('\n\nEnd\n\n'))
+                
         self.moveForward = MoveCommand(124, slow=True)
+        self.secondMove = MoveCommand(112)
         self.shoot = AutomatedShootCommand(3500).withTimeout(5)
 
 
@@ -84,18 +87,20 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
         # Schedule the autonomous command
         self.auton = PathFollowerCommand().get(#[[36, 0, rotate], [72, 0, rotate / 2]])
-                [[112, 0], [0, 0], [-124, -58]], [-68, -88, 0]
+                [[-112, -12], [-152, -70]], [-112, -70, math.pi]
             ) # driverhud.getAutonomousProgram()
         
         self.addCommands(
-                        self.spinUp,      # ~
-                        self.grabBalls,   # ~ All total to
-                        self.conveyorRun, # ~ 3 seconds ideally
+                        #self.spinUp,      # ~
+                        #self.grabBalls,   # ~ All total to
+                        #self.conveyorRun, # ~ 3 seconds ideally
                         self.moveForward, # ~ 
-                        self.shoot,       # - These two should total
-                        self.spinUp,      # - about 3 seconds, assuming up to speed.
+                        self.secondMove,
+                        #self.shoot,       # - These two should total
+                        #self.spinUp,      # - about 3 seconds, assuming up to speed.
                         self.auton,       # 5 seconds
-                        self.shoot        # 4 seconds
+                        self.print,
+                        #self.shoot        # 4 seconds
                         ) 
 
     def interrupted(self):
