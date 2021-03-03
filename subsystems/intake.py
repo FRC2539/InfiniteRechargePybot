@@ -21,7 +21,7 @@ class Intake(CougarSystem):
         self.feed()
 
     def intakeBalls(self):
-        self.motor.set(0.9)
+        self.motor.set(0.65)
 
     def fastOut(self):
         self.motor.set(-0.5)

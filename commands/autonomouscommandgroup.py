@@ -62,7 +62,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.intake = InstantCommand(robot.intake.intakeBalls, [robot.intake])
         self.moveSide = MoveCommand(7.071, angle=45, slow=True)
 
-        self.moveForward = MoveCommand(199, slow=True)
+        self.moveForward = MoveCommand(124, slow=True)
 
         self.stopIntake = InstantCommand(robot.intake.dontIntakeBalls, [robot.intake])
         self.moveBack = MoveCommand(-120, angle=14)
@@ -74,27 +74,23 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         
 
         self.spinUp = InstantCommand(lambda: robot.shooter.setRPM(3500), [robot.shooter])
+        self.grabBalls = InstantCommand(lambda: robot.intake.intakeBalls(), [robot.intake])
+        self.stopGrabbing = InstantCommand(lambda: robot.intake.dontIntakeBalls, [robot.intake])
         
         self.moveIn = MoveCommand(124)
+        
         self.shoot = AutomatedShootCommand(3500).withTimeout(5)
 
-        #self.trajectory = PathFollowerCommand.get(
-                #[[36,0,0],
-                 #[101,5,0],
-                 #[101,-5,0],
-                 #[61, -10,0],
-                 #[-33, -80,1.75*math.pi],
-                #[-57,-56,1.75*math.pi]]
-            #)#.beforeStarting(lambda: robot.drivetrain.resetOdometry(), [robot.drivetrain])
+        self.conveyorRun = InstantCommand(lambda: robot.conveyor.forward(), [robot.conveyor])
 
+        rotate = math.pi
 
-        #self.addCommands(
-            ##self.spinUp,
-            ##self.moveIn.beforeStarting(lambda: robot.intake.intakeBalls(), [robot.intake]),
-            ##self.shoot,
-            ##self.trajectory
-        #)
+        # Schedule the autonomous command
+        self.auton = PathFollowerCommand().get(#[[36, 0, rotate], [72, 0, rotate / 2]])
+                [[112, 0], [0, 0], [-124, -58]], [-68, -88, 0]
+            ) # driverhud.getAutonomousProgram()
         
+        self.addCommands(self.grabBalls, self.conveyorRun, self.moveForward, self.auton)
 
     def interrupted(self):
         robot.intake.dontIntakeBalls()

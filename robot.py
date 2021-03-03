@@ -50,20 +50,16 @@ class KryptonBot(TimedCommandRobot):
 
         from commands.autonomouscommandgroup import AutonomousCommandGroup
 
+        from commands.intake.intakecommand import IntakeCommand
+        
+        from commands2 import InstantCommand
+
         # Send field data to the dashboard
         driverhud.showField()
-
+        
         # Schedule the autonomous command
-        self.auton = PathFollowerCommand().get(
-                [#[36,0,0],
-                 #[101,5,0],
-                 ##[101,-5,0],
-                 #[61, -10,0],
-                 #[-33, -80,0],
-                [-57,-56,math.pi]]
-            )#driverhud.getAutonomousProgram()#PathFollowerCommand().get()  # driverhud.getAutonomousProgram()
+        self.auton = driverhud.getAutonomousProgram()#driverhud.getAutonomousProgram()
         self.auton.schedule()
-        print('running')
         driverhud.showInfo("Starting %s" % self.auton)
 
     def disabledInit(self):
