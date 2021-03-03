@@ -70,5 +70,7 @@ class GenerateTrajectoryCommand:
             #movements,
             #config,
         #)
+        
+        robot.drivetrain.resetOdometry(trajectory.initialPose())
 
         return trajectory
