@@ -92,6 +92,8 @@ class SwerveDrive(BaseDrive):
         # Feed the nt controller.
         self.feed()
         
+        print(self.getSwervePose())
+        
         states = []
         for module in self.modules:
             s = module.getWheelSpeed() * 2.54 / 100
