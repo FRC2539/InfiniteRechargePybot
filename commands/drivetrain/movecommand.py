@@ -5,7 +5,7 @@ import robot
 
 
 class MoveCommand(CommandBase):
-    def __init__(self, distance, angle=0, tolerance=10, slow=False, name=None):
+    def __init__(self, distance, angle=0, tolerance=5, slow=False, name=None):
         """
         Takes a distance in inches and stores it for later. We allow overriding
         name so that other autonomous driving commands can extend this class.
