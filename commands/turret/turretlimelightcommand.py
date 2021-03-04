@@ -1,6 +1,7 @@
 from commands2 import CommandBase
 
 import robot
+import math
 
 
 class TurretLimelightCommand(CommandBase):
@@ -12,7 +13,7 @@ class TurretLimelightCommand(CommandBase):
         self.addRequirements(robot.turret)
 
         self.xOffsetP = (
-            35  # A proportion to scale the error to a speed the motor can use.
+            .0850  # A proportion to scale the error to a speed the motor can use.
         )
 
     def initialize(self):
@@ -21,8 +22,11 @@ class TurretLimelightCommand(CommandBase):
     def execute(self):
         xOffset = robot.limelight.getX()  # Returns an angle
 
-        xPercentError = xOffset / self.xOffsetP  # This value is found experimentally
-
+        xPercentError = xOffset * self.xOffsetP  # This value is found experimentally
+        
+        if abs(xPercentError) > .25:
+            xPercentError = math.copysign(.5, xPercentError)
+        
         robot.turret.move(xPercentError)
 
     def end(self, interrupted):

@@ -33,7 +33,7 @@ class Hood(CougarSystem):
         self.angleMax = 253.00
         self.angleMin = 220.00
 
-        self.speed = 0.1  # 10 Percent
+        self.speed = 0.3  # 10 Percent
 
         # Constantly updates the hood's status.
         self.constantlyUpdate("Hood Moving", lambda: self.motor.get() != 0)
@@ -41,7 +41,7 @@ class Hood(CougarSystem):
 
     def periodic(self):
         self.feed()
-
+        
     def getPosition(self):
         return self.encoder.getOutput() * 360
 
@@ -56,6 +56,18 @@ class Hood(CougarSystem):
             self.motor.set(speed)
         else:
             self.stop()
+    
+    def setShootAngle(self, angle):
+        self.targetpos = self.angleMax - 2 * (angle - 8.84)
+        self.error = -1 * (self.getPosition() - self.targetpos)
+        if (self.angleMin < self.targetpos < self.angleMax):
+            if (abs(self.error) < .1):
+                self.stop()
+            else:
+                self.speed = self.error * .01
+                if (abs(self.speed) > .5 ):
+                    self.speed = math.copysign( .5 , self.speed )
+                self.motor.set(self.speed)
 
     def isInAngleBounds(self, speed=0):
         if speed > 0:

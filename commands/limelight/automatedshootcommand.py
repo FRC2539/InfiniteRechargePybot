@@ -9,7 +9,7 @@ from commands.limelight.sudocommandgroup import SudoCommandGroup
 
 
 class AutomatedShootCommand(ParallelCommandGroup):
-    def __init__(self, rpm=4000):
+    def __init__(self, rpm=3800):
         super().__init__()
 
         self.addCommands(

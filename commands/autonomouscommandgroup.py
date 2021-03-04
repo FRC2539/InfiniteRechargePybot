@@ -53,54 +53,44 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         #                  self.realign,
         #                  self.goBack,
         #                  )  
-        
-        self.conveyor = InstantCommand(robot.conveyor.forward, [robot.conveyor])
 
-        self.turnBack = TurnCommand(20)
-        self.realign = TurnCommand(-10)
-
-        self.intake = InstantCommand(robot.intake.intakeBalls, [robot.intake])
-        self.moveSide = MoveCommand(7.071, angle=45, slow=True)
-
-        self.stopIntake = InstantCommand(robot.intake.dontIntakeBalls, [robot.intake])
-        self.moveBack = MoveCommand(-120, angle=14)
-
-        self.sudo = AutomatedShootCommand(3500).withTimeout(4)
-        self.sudoNT = AutomatedShootCommand()
-
-        self.goBack = self.moveBack.alongWith(self.sudoNT)
-        
-
-        self.spinUp = InstantCommand(lambda: robot.shooter.setRPM(3500), [robot.shooter])
+        self.spinUp = InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter])
+        self.spinUpTwo = InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter])
         self.grabBalls = InstantCommand(lambda: robot.intake.intakeBalls(), [robot.intake])
         self.stopGrabbing = InstantCommand(lambda: robot.intake.dontIntakeBalls, [robot.intake])
         self.conveyorRun = InstantCommand(lambda: robot.conveyor.forward(), [robot.conveyor])
                 
         self.print = InstantCommand(lambda: print('\n\nEnd\n\n'))
                 
-        self.moveForward = MoveCommand(124, slow=True)
-        self.secondMove = MoveCommand(112)
-        self.shoot = AutomatedShootCommand(3500).withTimeout(5)
+        self.moveForward = MoveCommand(124)
+        self.secondMove = MoveCommand(112, angle=2)
+        self.moveBack = MoveCommand(-24, angle=-1.5)
+        self.turnToTarget = TurnCommand(-20)
+        
+        self.shoot = AutomatedShootCommand(3800).withTimeout(3.25)
+        self.shootTwo = AutomatedShootCommand(3800)
 
 
         rotate = math.pi
 
         # Schedule the autonomous command
         self.auton = PathFollowerCommand().get(#[[36, 0, rotate], [72, 0, rotate / 2]])
-                [[-112, -12], [-152, -70]], [-112, -70, math.pi]
-            ) # driverhud.getAutonomousProgram()
+                [[-120, -12], [-177, -67]], [-124, -70, math.pi]# *.75]
+            ).withTimeout(3.5) # driverhud.getAutonomousProgram()
         
         self.addCommands(
-                        #self.spinUp,      # ~
-                        #self.grabBalls,   # ~ All total to
-                        #self.conveyorRun, # ~ 3 seconds ideally
+                        self.spinUp,      # ~
+                        self.grabBalls,   # ~ All total to
+                        self.conveyorRun, # ~ 3 seconds ideally
                         self.moveForward, # ~ 
+                        self.shoot,
                         self.secondMove,
-                        #self.shoot,       # - These two should total
-                        #self.spinUp,      # - about 3 seconds, assuming up to speed.
+                        self.spinUpTwo,      # - about 3 seconds, assuming up to speed.
+                        self.conveyorRun,
                         self.auton,       # 5 seconds
-                        self.print,
-                        #self.shoot        # 4 seconds
+                        self.moveBack,
+                        #self.turnToTarget,
+                        self.shootTwo        # 4 seconds
                         ) 
 
     def interrupted(self):

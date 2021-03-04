@@ -19,11 +19,21 @@ class HoodLimelightCommand(CommandBase):
         robot.limelight.setPipeline(0)
 
     def execute(self):
+        
+        #if robot.limelight.getTape():
+            #if robot.limelight.getA() > 1.289:
+                #robot.hood.setShootAngle(1.764918* (robot.limelight.getA()*robot.limelight.getA() + 8 ))
+            #else:
+                #robot.hood.setShootAngle(1.764918* (robot.limelight.getA()*robot.limelight.getA() + 8 ))
+        #else:
+            #robot.hood.stop()
         yOffset = -robot.limelight.getY()  # Returns an angle
 
         yPercentError = yOffset / self.yOffsetP  # This value is found experimentally
 
         robot.hood.move(yPercentError)
+
+        print('yo')
 
     def end(self, iterrupted):
         robot.hood.stop()

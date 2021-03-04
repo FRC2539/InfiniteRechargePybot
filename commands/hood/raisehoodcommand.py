@@ -9,6 +9,7 @@ class RaiseHoodCommand(CommandBase):
         self.addRequirements(robot.hood)
 
     def execute(self):
+        print('raising')
         robot.hood.move(robot.hood.speed)
 
     def end(self, cheese):
