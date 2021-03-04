@@ -17,7 +17,7 @@ class PathFollowerCommand:
 
     @staticmethod
     def get(translations, end):
-        thetaController = ProfiledPIDControllerRadians(.001, 0, 0, TrapezoidProfileRadians.Constraints(math.pi, math.pi/50)) # Theta-controller NOTE: Error with this PID
+        thetaController = ProfiledPIDControllerRadians(.1, 0, 0, TrapezoidProfileRadians.Constraints(2*math.pi, math.pi)) # Theta-controller NOTE: Error with this PID
         thetaController.enableContinuousInput(-math.pi, math.pi)
         
         command = Swerve4ControllerCommand(
@@ -25,8 +25,8 @@ class PathFollowerCommand:
                         translations, end), # [[x,y]], [x,y,theta],
             robot.drivetrain.getSwervePose,
             robot.drivetrain.swerveKinematics,
-            PIDController(.00000000000000000000000000000000000001, 0, 0), # X-controller
-            PIDController(.00000000000000000000000000000000000001, 0, 0), # Y-controller
+            PIDController(.1, 0, 0), # X-controller
+            PIDController(.1, 0, 0), # Y-controller
             thetaController,
             robot.drivetrain.setModuleStates,
             [robot.drivetrain]

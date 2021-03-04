@@ -74,23 +74,26 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         rotate = math.pi
 
         # Schedule the autonomous command
-        self.auton = PathFollowerCommand().get(#[[36, 0, rotate], [72, 0, rotate / 2]])
-                [[-120, -12], [-177, -67]], [-124, -70, math.pi]# *.75]
-            ).withTimeout(3.5) # driverhud.getAutonomousProgram()
+        self.auton = PathFollowerCommand().get(
+                [[1,1]],[0,.5,0]
+            #working 10 ball
+                #[[-120, -12], [-177, -67]], [-124, -70, math.pi]
+            )#.withTimeout(3.5) # driverhud.getAutonomousProgram()
         
         self.addCommands(
-                        self.spinUp,      # ~
-                        self.grabBalls,   # ~ All total to
-                        self.conveyorRun, # ~ 3 seconds ideally
-                        self.moveForward, # ~ 
-                        self.shoot,
-                        self.secondMove,
-                        self.spinUpTwo,      # - about 3 seconds, assuming up to speed.
-                        self.conveyorRun,
+                        #self.spinUp,      # ~
+                       # self.grabBalls,   # ~ All total to
+                       # self.conveyorRun, # ~ 3 seconds ideally
+                       # self.moveForward, # ~ 
+                       # self.shoot,
+                       # self.secondMove,
+                       # self.spinUpTwo,      # - about 3 seconds, assuming up to speed.
+                       # self.conveyorRun,
                         self.auton,       # 5 seconds
-                        self.moveBack,
+                        self.print
+                       # self.moveBack,
                         #self.turnToTarget,
-                        self.shootTwo        # 4 seconds
+                       # self.shootTwo        # 4 seconds
                         ) 
 
     def interrupted(self):

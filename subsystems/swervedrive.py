@@ -75,10 +75,10 @@ class SwerveDrive(BaseDrive):
 
         self.swerveKinematics = (
             SwerveDrive4Kinematics(  # X and Y components of center offsets.
-                Translation2d(36.4, 36.4),  # Front left module
-                Translation2d(36.4, -36.4),  # Front right module
-                Translation2d(-36.4, 36.4),  # Back left module
-                Translation2d(-36.4, -36.4),  # Back right module
+                Translation2d(.427799754, .427799754),  # Front left module
+                Translation2d(.427799754, -.427799754),  # Front right module
+                Translation2d(-.427799754, .427799754),  # Back left module
+                Translation2d(-.427799754, -.427799754),  # Back right module
             )
         )
 
@@ -91,7 +91,7 @@ class SwerveDrive(BaseDrive):
     def periodic(self):
         # Feed the nt controller.
         self.feed()
-                
+        print(self.getSwervePose())
         states = []
         for module in self.modules:
             s = module.getWheelSpeed() * 2.54 / 100

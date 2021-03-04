@@ -19,7 +19,7 @@ class GenerateTrajectoryCommand:
 
         #config.setKinematics(robot.drivetrain.swerveKinematics) BUG: Type not clarified for acceptance.
         
-        conversion = -4.2134465 * 100 / 2.54
+        conversion = -4.2134465#-4.2134465 * 100 / 2.54
         #rotconv = 1 #-1
         #initialPosition = Pose2d(
             
