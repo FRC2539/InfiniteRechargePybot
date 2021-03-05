@@ -11,6 +11,8 @@ import shutil, sys, os, inspect
 
 from commands2 import Subsystem
 
+from commands import autoconfig
+
 from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
 from subsystems.chamber import Chamber as chamber
@@ -38,6 +40,9 @@ class KryptonBot(TimedCommandRobot):
 
         controller.layout.init()
         driverhud.init()
+        autoconfig.init()
+
+        self.selectedAuto = autoconfig.getAutoProgram()
 
         from commands.drivetrain.zerocancoderscommand import ZeroCANCodersCommand
         from commands.startupcommandgroup import StartUpCommandGroup
@@ -67,12 +72,14 @@ class KryptonBot(TimedCommandRobot):
 
     def disabledInit(self):
         try:
-            self.auton.disable()
+            self.auton.disable()  # TODO: Fix this.
         except (AttributeError):
             pass
 
     def disabledPeriodic(self):
-        print(driverhud.getAutonomousProgram())
+        if autoconfig.getAutoProgram() != self.selectedAuto:
+            self.selectedAuto = autoconfig.getAutoProgram()
+            driverhud.init()  # Recreate the auto and its counterparts if the selection changes.
 
     def handleCrash(self, error):
         super().handleCrash()

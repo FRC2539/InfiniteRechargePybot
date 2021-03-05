@@ -24,25 +24,24 @@ from networktables import NetworkTables
 import math
 import robot
 
+from commands import autoconfig
+
 
 class AutonomousCommandGroup(SequentialCommandGroup):
     def __init__(self):
         super().__init__()
-        
-        self.autos = {"Example", "example"}
-        
+
         ds = DriverStation.getInstance()
         msg = ds.getGameSpecificMessage()
-                
-        self.currentAuto = ""
-        
-        def run(name: String):
-            
 
-        
+        self.currentAuto = autoconfig.getAutoProgram()
+
+        eval("self." + self.currentAuto + "()")
+
     def example(self):
-        pass
-        
+        self.addCommands(InstantCommand(lambda: print("I worked!")))
+
+    def something(self):
 
         # self.conveyor = InstantCommand(robot.conveyor.forward, [robot.conveyor])
 

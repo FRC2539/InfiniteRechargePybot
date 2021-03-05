@@ -57,6 +57,7 @@ def getAutonomousProgram():
 
     return autonChooser.getSelected()
 
+
 def showCommand(cmd):
     """Display the given command on the dashboard."""
 

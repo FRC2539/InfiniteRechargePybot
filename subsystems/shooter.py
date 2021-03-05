@@ -58,8 +58,6 @@ class Shooter(CougarSystem):
     def periodic(self):
         self.feed()
 
-        print(self.getRPM())
-
     def setRPM(self, rpm):
         # With the second motor following the first, no command is needed for the second motor.
         self.shooterMotorOne.set(ControlMode.Velocity, self.rpmToSensor(rpm))
