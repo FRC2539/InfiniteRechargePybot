@@ -8,7 +8,7 @@ from networktables import NetworkTables
 
 excludedMethods = [
     "interrupted"
-]  # Methods that aren't from the parents but aren't autos.
+]  # Methods that aren't from the parents but aren't autos. If you want to exclude a program because it might not work, add it here.
 
 table = NetworkTables.getTable("Autonomous")
 autoVars = [var.lower() for var in dir(AutonomousCommandGroup)]
@@ -16,9 +16,13 @@ autoVars = [var.lower() for var in dir(AutonomousCommandGroup)]
 definedAutos = []
 for auto in autoVars:
     if (
-        auto[0] != "_"
-        and auto not in [var.lower() for var in dir(SequentialCommandGroup)]
-        and auto not in excludedMethods
+        auto[0] != "_"  # Make sure it's not one of Python's methods.
+        and auto
+        not in [
+            var.lower() for var in dir(SequentialCommandGroup)
+        ]  # Make sure it's not from the parent.
+        and auto
+        not in excludedMethods  # Other methods to exclude that are in the Auto command group.
     ):
         definedAutos.append(auto)
 

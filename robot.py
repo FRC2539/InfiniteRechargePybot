@@ -43,7 +43,6 @@ class KryptonBot(TimedCommandRobot):
         driverhud.init()
 
         self.selectedAuto = autoconfig.getAutoProgram()
-        print(self.selectedAuto)
 
         from commands.drivetrain.zerocancoderscommand import ZeroCANCodersCommand
         from commands.startupcommandgroup import StartUpCommandGroup
