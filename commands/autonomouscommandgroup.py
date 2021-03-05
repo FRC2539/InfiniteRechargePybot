@@ -35,13 +35,20 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         msg = ds.getGameSpecificMessage()
 
         self.currentAuto = autoconfig.getAutoProgram()
+        toRun = self.currentAuto
 
-        eval("self." + self.currentAuto + "()")
+        for var in dir(self): # Identifies the method to setup.
+            if var.lower() == self.currentAuto:
+                toRun = var
+                break
 
+        eval("self." + toRun + "()") # Setups the method. 
+        
     def example(self):
         self.addCommands(InstantCommand(lambda: print("I worked!")))
 
-    def something(self):
+    def exampleTwo(self):
+        self.addCommands(InstantCommand(lambda: print("Number two worked!")))
 
         # self.conveyor = InstantCommand(robot.conveyor.forward, [robot.conveyor])
 

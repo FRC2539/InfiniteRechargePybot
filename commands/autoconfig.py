@@ -25,7 +25,7 @@ for auto in autoVars:
 
 def init():
     table.putStringArray("autos", [a.lower() for a in definedAutos])
-
+    table.putString("selectedAuto", definedAutos[1].lower())
 
 def getAutoProgram():
     try:

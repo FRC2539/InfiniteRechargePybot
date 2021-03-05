@@ -39,10 +39,11 @@ class KryptonBot(TimedCommandRobot):
         self.subsystems()
 
         controller.layout.init()
-        driverhud.init()
         autoconfig.init()
+        driverhud.init()
 
         self.selectedAuto = autoconfig.getAutoProgram()
+        print(self.selectedAuto)
 
         from commands.drivetrain.zerocancoderscommand import ZeroCANCodersCommand
         from commands.startupcommandgroup import StartUpCommandGroup
