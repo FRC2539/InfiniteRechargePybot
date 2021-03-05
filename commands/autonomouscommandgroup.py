@@ -37,13 +37,13 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.currentAuto = autoconfig.getAutoProgram()
         toRun = self.currentAuto
 
-        for var in dir(self): # Identifies the method to setup.
+        for var in dir(self):  # Identifies the method to setup.
             if var.lower() == self.currentAuto:
                 toRun = var
                 break
 
-        eval("self." + toRun + "()") # Setups the method. 
-        
+        eval("self." + toRun + "()")  # Setups the method.
+
     def example(self):
         self.addCommands(InstantCommand(lambda: print("I worked!")))
 
