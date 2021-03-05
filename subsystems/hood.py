@@ -41,7 +41,7 @@ class Hood(CougarSystem):
 
     def periodic(self):
         self.feed()
-        
+
     def getPosition(self):
         return self.encoder.getOutput() * 360
 
@@ -56,17 +56,17 @@ class Hood(CougarSystem):
             self.motor.set(speed)
         else:
             self.stop()
-    
+
     def setShootAngle(self, angle):
         self.targetpos = self.angleMax - 2 * (angle - 8.84)
         self.error = -1 * (self.getPosition() - self.targetpos)
-        if (self.angleMin < self.targetpos < self.angleMax):
-            if (abs(self.error) < .1):
+        if self.angleMin < self.targetpos < self.angleMax:
+            if abs(self.error) < 0.1:
                 self.stop()
             else:
-                self.speed = self.error * .01
-                if (abs(self.speed) > .5 ):
-                    self.speed = math.copysign( .5 , self.speed )
+                self.speed = self.error * 0.01
+                if abs(self.speed) > 0.5:
+                    self.speed = math.copysign(0.5, self.speed)
                 self.motor.set(self.speed)
 
     def isInAngleBounds(self, speed=0):

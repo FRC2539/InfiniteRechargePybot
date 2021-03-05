@@ -42,7 +42,7 @@ class TurnCommand(CommandBase):
         # 316, 227
 
     def execute(self):
-        print('runnning\n\n\n\n\n\n\n\n\n\n\n\n')
+        print("runnning\n\n\n\n\n\n\n\n\n\n\n\n")
         if self.modulesInPosition and not self.turnSet:
             robot.drivetrain.setPositions(
                 [

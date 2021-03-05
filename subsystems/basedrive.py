@@ -324,18 +324,18 @@ class BaseDrive(CougarSystem):
                 getattr(motor, funcs[key])(1, value, 0)
 
         table.addSubTableListener(updatePID, localNotify=True)
-        
+
     def inchesToMeters(self, num):
         """
         Converts translational units, from inches to meters.
         """
-        return (num * 0.0254)
-    
+        return num * 0.0254
+
     def metersToInches(self, num):
         """
         Convers translational units, from meters to inches.
         """
-        return (num * 39.3701)
+        return num * 39.3701
 
     def _configureMotors(self):
         """

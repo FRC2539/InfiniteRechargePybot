@@ -75,10 +75,10 @@ class SwerveDrive(BaseDrive):
 
         self.swerveKinematics = (
             SwerveDrive4Kinematics(  # X and Y components of center offsets.
-                Translation2d(.427799754, .427799754),  # Front left module
-                Translation2d(.427799754, -.427799754),  # Front right module
-                Translation2d(-.427799754, .427799754),  # Back left module
-                Translation2d(-.427799754, -.427799754),  # Back right module
+                Translation2d(0.427799754, 0.427799754),  # Front left module
+                Translation2d(0.427799754, -0.427799754),  # Front right module
+                Translation2d(-0.427799754, 0.427799754),  # Back left module
+                Translation2d(-0.427799754, -0.427799754),  # Back right module
             )
         )
 
@@ -91,19 +91,19 @@ class SwerveDrive(BaseDrive):
     def periodic(self):
         # Feed the nt controller.
         self.feed()
-        print(self.getSwervePose())
+
         states = []
         for module in self.modules:
             s = module.getWheelSpeed() * 2.54 / 100
-            a = Rotation2d(math.radians(module.getWheelAngle()) -math.pi)
+            a = Rotation2d(math.radians(module.getWheelAngle()) - math.pi)
             states.append(SwerveModuleState(s, a))
 
         self.swerveOdometry.update(
             self.navX.getRotation2d(),
-            states[0],#0
-            states[1],#1
-            states[2],#2
-            states[3],#3
+            states[0],  # 0
+            states[1],  # 1
+            states[2],  # 2
+            states[3],  # 3
         )
 
     def setModuleStates(self, moduleStates):
@@ -120,7 +120,7 @@ class SwerveDrive(BaseDrive):
         """
         return self.swerveOdometry.getPose()
 
-    def resetOdometry(self, pose=Pose2d(0,0,Rotation2d(0))):
+    def resetOdometry(self, pose=Pose2d(0, 0, Rotation2d(0))):
         """
         Resets the odometry to a given position, typically the one used when starting a trajectory.
         """

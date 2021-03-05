@@ -9,7 +9,7 @@ class LowerHoodCommand(CommandBase):
         self.addRequirements(robot.hood)
 
     def execute(self):
-        print('lower')
+        print("lower")
         robot.hood.move(-robot.hood.speed)
 
     def end(self, cheese):

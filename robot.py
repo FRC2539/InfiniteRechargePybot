@@ -24,6 +24,7 @@ from subsystems.turret import Turret as turret
 
 import math
 
+
 class KryptonBot(TimedCommandRobot):
     """Implements a Command Based robot design"""
 
@@ -51,14 +52,16 @@ class KryptonBot(TimedCommandRobot):
         from commands.autonomouscommandgroup import AutonomousCommandGroup
 
         from commands.intake.intakecommand import IntakeCommand
-        
+
         from commands2 import InstantCommand
 
         # Send field data to the dashboard
         driverhud.showField()
-        
+
         # Schedule the autonomous command
-        self.auton = driverhud.getAutonomousProgram()#driverhud.getAutonomousProgram()
+        self.auton = (
+            driverhud.getAutonomousProgram()
+        )  # driverhud.getAutonomousProgram()
         self.auton.schedule()
         driverhud.showInfo("Starting %s" % self.auton)
 
@@ -69,7 +72,7 @@ class KryptonBot(TimedCommandRobot):
             pass
 
     def disabledPeriodic(self):
-        pass
+        print(driverhud.getAutonomousProgram())
 
     def handleCrash(self, error):
         super().handleCrash()

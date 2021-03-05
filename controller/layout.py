@@ -74,7 +74,7 @@ def init():
     driveControllerTwo.LeftTopLeft.whileHeld(RaiseHoodCommand())
     driveControllerTwo.LeftBottomLeft.whileHeld(LowerHoodCommand())
 
-    driveControllerTwo.Trigger.toggleWhenPressed(SetRPMCommand(4000))
+    driveControllerTwo.Trigger.toggleWhenPressed(SetRPMCommand(5000))
 
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(2)
