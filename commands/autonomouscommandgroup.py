@@ -41,13 +41,15 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             if var.lower() == self.currentAuto:
                 toRun = var
                 break
-
-        eval("self." + toRun + "()")  # Setups the method.
+        
+        self.Slalom()
+    
+       # eval("self." + toRun + "()")  # Setups the method.
 
     def example(self):
         self.addCommands(InstantCommand(lambda: print("I worked!")))
 
-    def exampleTwo(self):
+    def tenBall(self):
         self.addCommands(InstantCommand(lambda: print("Number two worked!")))
 
         # self.conveyor = InstantCommand(robot.conveyor.forward, [robot.conveyor])
@@ -109,10 +111,11 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
         # Schedule the autonomous command
         self.auton = PathFollowerCommand().get(
-            # '/home/lvuser/py/Unnamed.wpilib.json'
+            [[3.586, -4.228], [4.519, -3.042], [3.485, -2.159], [2.375, -3.224]],[3.6, -4.228, 0]
+             #'/home/lvuser/py/Slalmon.wpilib.json'
             # working 10 ball
-            [[-120, -12], [-177, -67]],
-            [-124, -70, math.pi],
+            #[[-120, -12], [-177, -67]],
+            #[-124, -70, math.pi],
         )  # .withTimeout(3.5) # driverhud.getAutonomousProgram()
 
         self.addCommands(
@@ -130,7 +133,17 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             # self.turnToTarget,
             # self.shootTwo        # 4 seconds
         )
-
+        
+    def Slalom(self):
+        self.addCommands(
+            #InstantCommand(lambda: robot.drivetrain.setModuleProfiles(1, drive=False), [robot.drivetrain]),
+            InstantCommand(lambda: robot.drivetrain.setSpeeds([.5, .5, .5, .5]), [robot.drivetrain])
+            #PathFollowerCommand().get(
+                #[[3, 0]], [3,3,0]
+                #),
+            #InstantCommand(lambda: robot.drivetrain.setModuleProfiles(0, drive=False), [robot.drivetrain])
+            )
+            
     def interrupted(self):
         robot.intake.dontIntakeBalls()
         robot.chamber.stop()

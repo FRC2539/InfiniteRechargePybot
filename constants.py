@@ -32,9 +32,15 @@ drivetrain.sdIZk = 0
 
 drivetrain.tPk = 20.05
 drivetrain.tIk = 0
-drivetrain.tDk = 0
+drivetrain.tDk = 0.01
 drivetrain.tFFk = 0
 drivetrain.tIZk = 0
+
+drivetrain.stPk = 0.01
+drivetrain.stIk = 0
+drivetrain.stDk = 0
+drivetrain.stFFk = 0
+drivetrain.stIZk = 0
 
 drivetrain.driveMotorGearRatio = 6.86
 drivetrain.turnMotorGearRatio = 12.8
@@ -46,8 +52,8 @@ drivetrain.slowDriveMotionCruiseVelocity = 11000
 drivetrain.turnMotionAcceleration = 1000
 drivetrain.turnMotionCruiseVelocity = 800
 
-drivetrain.maxMetersPerSecond = 4  # Velocity for trajectory
-drivetrain.maxMetersPerSecondSquared = 0.5  # Accel for trajectory
+drivetrain.maxMetersPerSecond = 1  # Velocity for trajectory
+drivetrain.maxMetersPerSecondSquared = 0.1  # Accel for trajectory
 
 drivetrain.wheelDiameter = 4
 

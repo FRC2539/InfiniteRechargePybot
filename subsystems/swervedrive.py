@@ -87,15 +87,17 @@ class SwerveDrive(BaseDrive):
             self.navX.getRotation2d(),
             Pose2d(0, 0, Rotation2d(0)),
         )
+        
+        self.resetOdometry()
 
     def periodic(self):
         # Feed the nt controller.
         self.feed()
-
+            
         states = []
         for module in self.modules:
             s = module.getWheelSpeed() * 2.54 / 100
-            a = Rotation2d(math.radians(module.getWheelAngle()) - math.pi)
+            a = Rotation2d(math.radians(module.getWheelAngle()))
             states.append(SwerveModuleState(s, a))
 
         self.swerveOdometry.update(
@@ -105,12 +107,12 @@ class SwerveDrive(BaseDrive):
             states[2],  # 2
             states[3],  # 3
         )
-
+        
     def setModuleStates(self, moduleStates):
         """
         Set the states of the modules. Used by trajectory stuff.
         """
-
+        
         for module, state in zip(self.modules, moduleStates):
             module.setState(state)
 

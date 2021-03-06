@@ -11,15 +11,15 @@ import math
 
 class GenerateTrajectoryCommand:
     @staticmethod
-    def getTrajectory(movements_: list, endPose: list, startingPose: list = [0, 0, 0]):
+    def getTrajectory(movements_: list, endPose: list, startingPose: list = [0,0,0]):
         config = TrajectoryConfig(
             constants.drivetrain.maxMetersPerSecond,  # Max meters per second
             constants.drivetrain.maxMetersPerSecondSquared,  # Max meters per second squared
         )
 
-        # config.setKinematics(robot.drivetrain.swerveKinematics) BUG: Type not clarified for acceptance.
+        config.setKinematics(robot.drivetrain.swerveKinematics) # BUG: Type not clarified for acceptance.
 
-        conversion = -4.2134465  # -4.2134465 * 100 / 2.54
+        conversion = 1#-4.2134465  # -4.2134465 * 100 / 2.54
         # rotconv = 1 #-1
         # initialPosition = Pose2d(
 
@@ -69,7 +69,5 @@ class GenerateTrajectoryCommand:
         # movements,
         # config,
         # )
-
-        robot.drivetrain.resetOdometry(trajectory.initialPose())
-
+        
         return trajectory

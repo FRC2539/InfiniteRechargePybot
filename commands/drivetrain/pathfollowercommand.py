@@ -18,15 +18,13 @@ class PathFollowerCommand:
     @staticmethod
     def get(translations, end=None):
         thetaController = ProfiledPIDControllerRadians(
-            0.00001, 0, 0, TrapezoidProfileRadians.Constraints(2 * math.pi, math.pi)
+            0.0000001, 0, 0.1, TrapezoidProfileRadians.Constraints(.5*math.pi, .25*math.pi)
         )  # Theta-controller NOTE: Error with this PID
         thetaController.enableContinuousInput(-math.pi, math.pi)
 
         # Do you have a JSON or points?
         if type(translations) is str:
-            trajectory = GenerateTrajectoryCommand().getTrajectory(
-                translations, end
-            )  # TrajectoryUtil.fromPathweaverJson(translations)
+            trajectory = TrajectoryUtil.fromPathweaverJson(translations)
         else:
             trajectory = GenerateTrajectoryCommand().getTrajectory(
                 translations, end
@@ -36,8 +34,8 @@ class PathFollowerCommand:
             trajectory,
             robot.drivetrain.getSwervePose,
             robot.drivetrain.swerveKinematics,
-            PIDController(0.01, 0, 0),  # X-controller
-            PIDController(0.01, 0, 0),  # Y-controller
+            PIDController(0.000000001, 0, 0.2),  # X-controller
+            PIDController(0.000000001, 0, 0.2),  # Y-controller
             thetaController,
             robot.drivetrain.setModuleStates,
             [robot.drivetrain],

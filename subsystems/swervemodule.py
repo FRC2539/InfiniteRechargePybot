@@ -102,6 +102,12 @@ class SwerveModule:
         self.tDk = constants.drivetrain.tDk  # D gain for the turn.
         self.tFk = constants.drivetrain.tFFk  # Feedforward gain for the turn.
         self.tIZk = constants.drivetrain.tIZk  # Integral Zone for the turn.
+        
+        self.stPk = constants.drivetrain.stPk
+        self.stIk = constants.drivetrain.stIk
+        self.stDk = constants.drivetrain.stDk
+        self.stFk = constants.drivetrain.stFFk
+        self.stIZk = constants.drivetrain.stIZk
 
         self.wheelDiameter = (
             constants.drivetrain.wheelDiameter
@@ -310,6 +316,18 @@ class SwerveModule:
                 constants.drivetrain.driveMotionCruiseVelocity, 0
             )
 
+    def inchesToMeters(self, num):
+        """
+        Converts translational units, from inches to meters.
+        """
+        return num * 0.0254
+
+    def metersToInches(self, num):
+        """
+        Convers translational units, from meters to inches.
+        """
+        return num * 39.3701
+
     def setPID(self):
         """
         Set the PID constants for the module.
@@ -331,3 +349,9 @@ class SwerveModule:
         self.turnMotor.config_kD(0, self.tDk, 0)
         self.turnMotor.config_kF(0, self.tFk, 0)
         self.turnMotor.config_IntegralZone(0, self.tIZk, 0)
+
+        self.turnMotor.config_kP(1, self.stPk, 0)
+        self.turnMotor.config_kI(1, self.stIk, 0)
+        self.turnMotor.config_kD(1, self.stDk, 0)
+        self.turnMotor.config_kF(1, self.stFk, 0)
+        self.turnMotor.config_IntegralZone(1, self.stIZk, 0)
