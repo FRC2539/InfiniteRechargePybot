@@ -48,6 +48,8 @@ class KryptonBot(TimedCommandRobot):
         from commands.startupcommandgroup import StartUpCommandGroup
 
         StartUpCommandGroup().schedule()
+        
+        self.preBuild = []
 
     def autonomousInit(self):
         """This function is called each time autonomous mode starts."""
@@ -83,7 +85,7 @@ class KryptonBot(TimedCommandRobot):
 
     def handleCrash(self, error):
         super().handleCrash()
-        driverhud.showAlert("Fatal Error: %s" % error)
+        driverhud.showAlert("Fatal Error: %s" % error)            
 
     @classmethod
     def subsystems(cls):
@@ -98,10 +100,28 @@ class KryptonBot(TimedCommandRobot):
                         raise ValueError(f"Could not instantiate {key}") from e
             except TypeError:
                 pass
-
+            
+def addOutput():
+    """
+    Creates the array of points for CougarCourses. 
+    """
+    
+    import constants
+    
+    from commands.drivetrain.generateccpoints import GenerateCCPoints
+    
+    toWrite = open(os.path.dirname(__file__) + '/trajectorydata.txt', 'w')
+    
+    for l in constants.drivetrain.preBuild:
+        calculatedPoints = GenerateCCPoints(l).allPoints
+        
+        print >> toWrite, calculatedPoints
+        
+    toWrite.close()
 
 if __name__ == "__main__":
-    # if len(sys.argv) > 1 and sys.argv[1] == "deploy":
+    if len(sys.argv) > 1 and sys.argv[1] == "deploy":
+        addOutput()
     # shutil.rmtree("opkg_cache", ignore_errors=True)
     # shutil.rmtree("pip_cache", ignore_errors=True)
     run(KryptonBot)

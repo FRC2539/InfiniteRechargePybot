@@ -72,3 +72,5 @@ drivetrain.encoderConfig.initializationStrategy = (
     SensorInitializationStrategy.BootToAbsolutePosition
 )
 drivetrain.encoderConfig.sensorDirection = False
+
+drivetrain.preBuild = []
