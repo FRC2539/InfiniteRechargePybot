@@ -305,7 +305,37 @@ class SwerveDrive(BaseDrive):
     ):  # Remember, provide these in inches. It will go forward/back x many inches.
         for module, position in zip(self.modules, positions):
             module.setModulePosition(position)
+            
+    def injectPoints(self, startPoint: list, endPoint: list, spacing=1):
+        """
+        Used in CougarCourse. Adds additional points.
+        """
+        
+        pointsInBetween = []
+            
+        x1, y1 = startPoint[0], startPoint[1]
+        x2, y2 = endPoint[0], endPoint[1]
 
+        totalDistance = math.sqrt((x1-x2)**2 + (y1-y2)**2)
+        
+        # Calculate spacing.
+        numOfPoints = math.ceil(totalDistance / spacing) 
+        spacing = totalDistance / numOfPoints
+
+        # Angle diff.
+        theta = math.atan((x2-x1)/(y2-y1))
+        
+        for segment in range(numOfPoints):
+            newX = math.sin(theta) * spacing + x1
+            newY = math.cos(theta) * spacing + y1
+            
+            pointsInBetween.append([newX, newY])
+            
+            x1 = newX # Override for next loop.
+            y1 = newY # Override for next loop.
+            
+        return pointsInBetween
+        
     def setCruiseVelocity(self, slow=False):
         """
         Changes the motion magic's max cruise velocity.
