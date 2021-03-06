@@ -215,8 +215,11 @@ class SwerveModule:
             ),  # Set half of the normal speed temporarily.
         )
 
-    # def setWheelPercentSpeed(self, speed):
-    # """
+    def setWheelPercent(self, speed):
+        """
+        Does just what it sounds like.
+        """
+        self.driveMotor.set(TalonFXControlMode.PercentOutput, speed)
 
     def getModulePosition(self, inInches=True):
         """

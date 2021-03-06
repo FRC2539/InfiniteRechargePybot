@@ -10,8 +10,8 @@ from commands2 import (
 
 from commands.drivetrain.turncommand import TurnCommand
 from commands.drivetrain.movecommand import MoveCommand
-from commands.drivetrain.curvecommand import CurveCommand
 from commands.drivetrain.pathfollowercommand import PathFollowerCommand
+from commands.drivetrain.cougarcoursecommand import CougarCourseCommand
 
 from commands.intake.intakecommand import IntakeCommand
 
@@ -136,12 +136,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         
     def Slalom(self):
         self.addCommands(
-            #InstantCommand(lambda: robot.drivetrain.setModuleProfiles(1, drive=False), [robot.drivetrain]),
-            InstantCommand(lambda: robot.drivetrain.setSpeeds([.5, .5, .5, .5]), [robot.drivetrain])
-            #PathFollowerCommand().get(
-                #[[3, 0]], [3,3,0]
-                #),
-            #InstantCommand(lambda: robot.drivetrain.setModuleProfiles(0, drive=False), [robot.drivetrain])
+            CougarCourseCommand([[0,0,12,12],[12,12,24,12.001], [24,12.001,36,0]])
             )
             
     def interrupted(self):

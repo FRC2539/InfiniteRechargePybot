@@ -273,13 +273,17 @@ class SwerveDrive(BaseDrive):
         for module, speed in zip(self.modules, speeds):
             module.setWheelSpeed(speed)
 
-    # def setPercentSpeeds(self, speeds: list):
-    # for module, speed in zip(self.modules, speeds):
-    # module.setW
+    def setPercents(self, speeds: list):
+        for module, speed in zip(self.modules, speeds):
+            module.setWheelPercent(speed)
 
     def setUniformModuleSpeed(self, speed: float):  # Set a speed in inches per second.
         for module in self.modules:
             module.setWheelSpeed(speed)
+            
+    def setUniformModulePercent(self, speed: float):
+        for module in self.modules:
+            module.setWheelPercent(speed)
 
     def updateCANCoders(self, positions: list):
         for module, position in zip(self.modules, positions):
@@ -308,16 +312,27 @@ class SwerveDrive(BaseDrive):
         for module, position in zip(self.modules, positions):
             module.setModulePosition(position)
             
-    def injectPoints(self, startPoint: list, endPoint: list, spacing=1):
+    def injectBetweenTwoPoints(self, startPoint: list, endPoint: list, spacing=1):
         """
         Used in CougarCourse. Adds additional points.
         """
         
-        pointsInBetween = []
-            
-        x1, y1 = startPoint[0], startPoint[1]
-        x2, y2 = endPoint[0], endPoint[1]
-
+        reverseNessesary = False
+        print(startPoint)
+        print('e ' + str(endPoint))
+                        
+        if startPoint[1] < endPoint[1]:
+            x1, y1 = startPoint[0], startPoint[1]
+            x2, y2 = endPoint[0], endPoint[1]
+        elif startPoint[1] > endPoint[1]:
+            x2, y2 = startPoint[0], startPoint[1]
+            x1, y1 = endPoint[0], endPoint[1]
+            reverseNessesary = True
+        else:
+            raise Exception('Start and end point cannot be the same!')
+        
+        pointsInBetween = [[x1, y1]]
+        
         totalDistance = math.sqrt((x1-x2)**2 + (y1-y2)**2)
         
         # Calculate spacing.
@@ -325,7 +340,7 @@ class SwerveDrive(BaseDrive):
         spacing = totalDistance / numOfPoints
 
         # Angle diff.
-        theta = math.atan((x2-x1)/(y2-y1))
+        theta = math.atan((y2-y1)/(x2-x1))
         
         for segment in range(numOfPoints):
             newX = math.sin(theta) * spacing + x1
@@ -335,8 +350,59 @@ class SwerveDrive(BaseDrive):
             
             x1 = newX # Override for next loop.
             y1 = newY # Override for next loop.
+                    
+        if reverseNessesary:
+            pointsInBetween.reverse()
             
         return pointsInBetween
+        
+    def injectPoints(self, points: list, spacing=2):
+        final = []
+        for point in points:
+            startPoint = [point[0],  point[1]]
+            endPoint = [point[2], point[3]]
+            
+            pointsToInsert = self.injectBetweenTwoPoints(startPoint, endPoint, spacing)
+
+            for point in pointsToInsert:
+                final.append(point)
+
+        return final
+
+    def smoothPoints(self, path: list, weightData=.999, weightSmooth=0.001, tolerance=0.001):
+        """
+        Curves a lot of points. Used in 
+        CougarCourse.
+        """
+        newPath = path.copy()
+        
+        change = tolerance
+        while change >= tolerance: # You touch this, you die.
+            change = 0
+            i = 1
+            while i < len(path) - 1:
+                
+                j = 0
+                while j < len(path[i]):
+                    aux = newPath[i][j]
+                    newPath[i][j] += weightData * (path[i][j] - newPath[i][j]) + weightSmooth * (newPath[i-1][j] + newPath[i+1][j] - (2 * newPath[i][j]))
+                    change += abs(aux - newPath[i][j])
+                    
+                    j+=1
+                    
+                i+=1
+        
+        return newPath
+    
+    
+    def assertDistanceAlongCurve(self, points: list):
+        points[0].append(0)
+        i = 1
+        while i < len(points):
+            points[i].append(points[i-1][2] + math.sqrt((points[i][0]-points[i-1][0])**2 + (points[i][1]-points[i-1][1])**2))
+            i += 1
+            
+        return points
         
     def setCruiseVelocity(self, slow=False):
         """
