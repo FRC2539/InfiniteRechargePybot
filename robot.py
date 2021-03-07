@@ -110,14 +110,21 @@ def addOutput():
     
     from commands.drivetrain.generateccpoints import GenerateCCPoints
     
-    toWrite = open(os.path.dirname(__file__) + '/trajectorydata.txt', 'w')
+    ogOut = sys.stdout
     
-    for l in constants.drivetrain.preBuild:
-        calculatedPoints = GenerateCCPoints(l).allPoints
+    with open(os.path.dirname(__file__) + '/trajectorydata.txt', 'w') as f:
         
-        print >> toWrite, calculatedPoints
+        for l in constants.drivetrain.preBuild: # Only one for now.
+            calculatedPoints = GenerateCCPoints(l).get()
+            
+            sys.stdout = f
+
+            for point in calculatedPoints:
+                print(point)
+                
+            sys.stdout = ogOut
         
-    toWrite.close()
+        f.close()
 
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "deploy":

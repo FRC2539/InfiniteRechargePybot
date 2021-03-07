@@ -93,6 +93,7 @@ class SwerveDrive(BaseDrive):
     def periodic(self):
         # Feed the nt controller.
         self.feed()
+        print(self.getModuleAngles())
             
         states = []
         for module in self.modules:
@@ -369,7 +370,7 @@ class SwerveDrive(BaseDrive):
 
         return final
 
-    def smoothPoints(self, path: list, weightData=.999, weightSmooth=0.001, tolerance=0.001):
+    def smoothPoints(self, path: list, weightData=1, weightSmooth=0.000, tolerance=0.001):
         """
         Curves a lot of points. Used in 
         CougarCourse.

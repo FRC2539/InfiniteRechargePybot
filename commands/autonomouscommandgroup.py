@@ -22,7 +22,7 @@ from wpilib.controller import PIDController, ProfiledPIDControllerRadians
 from networktables import NetworkTables
 
 import math
-import robot
+import robot, constants
 
 from commands import autoconfig
 
@@ -135,8 +135,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         )
         
     def Slalom(self):
+                
         self.addCommands(
-            CougarCourseCommand([[0,0,12,12],[12,12,24,12.001], [24,12.001,36,0]])
+            CougarCourseCommand()
             )
             
     def interrupted(self):
