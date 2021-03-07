@@ -33,6 +33,8 @@ class CougarCourseCommand(CommandBase):
         self.tolerance = tolerance
 
     def initialize(self):
+        robot.drivetrain.setModuleProfiles(0, drive=False)
+        
         robot.drivetrain.resetOdometry()
         self.lastPosX = robot.drivetrain.getSwervePose().X() * 39.3701
         self.lastPosY = robot.drivetrain.getSwervePose().Y() * 39.3701
@@ -85,7 +87,7 @@ class CougarCourseCommand(CommandBase):
         print(theta)
         print(str(self.targetX) + str(self.targetY))
         robot.drivetrain.setUniformModuleAngle(theta + 90)
-        robot.drivetrain.setUniformModulePercent(toTravel * 0.1)
+        robot.drivetrain.setUniformModulePercent(toTravel * .075)
 
     def isFinished(self):
         return self.displacement > self.allPoints[-1][2]

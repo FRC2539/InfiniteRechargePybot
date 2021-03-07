@@ -357,7 +357,7 @@ class SwerveDrive(BaseDrive):
 
         return pointsInBetween
 
-    def injectPoints(self, points: list, spacing=2):
+    def injectPoints(self, points: list, spacing=1):
         final = []
         for point in points:
             startPoint = [point[0], point[1]]
@@ -371,7 +371,7 @@ class SwerveDrive(BaseDrive):
         return final
 
     def smoothPoints(
-        self, path: list, weightData=1, weightSmooth=0.000, tolerance=0.001
+        self, path: list, weightData=.75, weightSmooth=.25, tolerance=0.001
     ):
         """
         Curves a lot of points. Used in

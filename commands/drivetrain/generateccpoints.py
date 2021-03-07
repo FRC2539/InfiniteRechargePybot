@@ -54,7 +54,7 @@ class GenerateCCPoints:
 
         return pointsInBetween
 
-    def injectPoints(self, points: list, spacing=2):
+    def injectPoints(self, points: list, spacing=3):
         final = []
         for point in points:
             startPoint = [point[0], point[1]]
@@ -67,7 +67,7 @@ class GenerateCCPoints:
 
         return final
 
-    def smoothPoints(self, path: list, weightData=1, weightSmooth=0, tolerance=0.001):
+    def smoothPoints(self, path: list, weightData=.99995, weightSmooth=.00005, tolerance=0.001):
         """
         Curves a lot of points. Used in
         CougarCourse.
