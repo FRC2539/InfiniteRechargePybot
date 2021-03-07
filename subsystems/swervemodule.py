@@ -102,7 +102,7 @@ class SwerveModule:
         self.tDk = constants.drivetrain.tDk  # D gain for the turn.
         self.tFk = constants.drivetrain.tFFk  # Feedforward gain for the turn.
         self.tIZk = constants.drivetrain.tIZk  # Integral Zone for the turn.
-        
+
         self.stPk = constants.drivetrain.stPk
         self.stIk = constants.drivetrain.stIk
         self.stDk = constants.drivetrain.stDk

@@ -18,7 +18,10 @@ class PathFollowerCommand:
     @staticmethod
     def get(translations, end=None):
         thetaController = ProfiledPIDControllerRadians(
-            0.0000001, 0, 0.1, TrapezoidProfileRadians.Constraints(.5*math.pi, .25*math.pi)
+            0.0000001,
+            0,
+            0.1,
+            TrapezoidProfileRadians.Constraints(0.5 * math.pi, 0.25 * math.pi),
         )  # Theta-controller NOTE: Error with this PID
         thetaController.enableContinuousInput(-math.pi, math.pi)
 

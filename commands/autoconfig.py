@@ -36,4 +36,4 @@ def getAutoProgram():
     try:
         return table.getString("selectedAuto", (definedAutos[0]).lower())
     except (IndexError):
-        raise Exception('You don\'t have any autos defined!')
+        raise Exception("You don't have any autos defined!")
