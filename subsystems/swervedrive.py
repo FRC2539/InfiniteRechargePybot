@@ -263,6 +263,9 @@ class SwerveDrive(BaseDrive):
     def setProfile(self, profile):
         for module in self.modules:
             module.setModuleProfile(profile)
+            
+    def setSpeedLimit(self, speed):
+        self.speedLimit = speed
 
     def setFieldOriented(self, fieldCentric=True):
         self.isFieldOriented = fieldCentric

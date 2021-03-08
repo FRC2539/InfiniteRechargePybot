@@ -10,6 +10,7 @@ from commands.drivetrain.togglefieldorientationcommand import (
 )
 from commands.drivetrain.curvecommand import CurveCommand
 from commands.drivetrain.zerocancoderscommand import ZeroCANCodersCommand
+from commands.drivetrain.setspeedcommand import SetSpeedCommand
 
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 
@@ -63,7 +64,8 @@ def init():
     driveControllerOne.RightThumb.toggleWhenPressed(ChamberBackwardCommand())
     driveControllerOne.BottomThumb.whenPressed(ZeroGyroCommand())
 
-    driveControllerOne.Trigger.whileHeld(AutomatedShootCommand())
+    driveControllerOne.Trigger.whenPressed(SetSpeedCommand(False)) # slow speed while trigger is held.
+    driveControllerOne.Trigger.whenReleased(SetSpeedCommand())
 
     driveControllerOne.LeftBottomRight.whileHeld(PathCommand())
 
@@ -74,7 +76,7 @@ def init():
     driveControllerTwo.LeftTopLeft.whileHeld(RaiseHoodCommand())
     driveControllerTwo.LeftBottomLeft.whileHeld(LowerHoodCommand())
 
-    driveControllerTwo.Trigger.toggleWhenPressed(SetRPMCommand(5000))
+    driveControllerTwo.Trigger.toggleWhenPressed(AutomatedShootCommand())
 
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(2)
