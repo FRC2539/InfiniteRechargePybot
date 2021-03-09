@@ -37,6 +37,7 @@ class SwerveModule:
           position. At that point, we should be able to use
           the TalonFX and its integrated sensor to
           control the position.
+        - NOTE Reverse rear encoders?
         """
 
         self.driveMotor = WPI_TalonFX(driveMotorID)  # Declare and setup drive motor.
@@ -193,7 +194,7 @@ class SwerveModule:
 
     def getWheelSpeed(self, inIPS=True):
         """
-        Get the speed of this specific module.
+        Get the drive speed of this specific module.
         """
         if inIPS:
             return self.ticksPerTenthToInchesPerSecond(

@@ -2,7 +2,7 @@
 
 from commands2 import TimedCommandRobot
 from wpilib._impl.main import run
-from wpilib import RobotBase
+from wpilib import RobotBase, DriverStation
 
 from custom import driverhud
 import controller.layout
@@ -35,6 +35,8 @@ class KryptonBot(TimedCommandRobot):
 
         if RobotBase.isSimulation():
             import mockdata
+            
+        DriverStation.getInstance().silenceJoystickConnectionWarning(True) # Amen!
 
         self.subsystems()
 
