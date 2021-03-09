@@ -23,10 +23,14 @@ class GenerateCCPoints:
         if startPoint[1] < endPoint[1]:
             x1, y1 = startPoint[0], startPoint[1]
             x2, y2 = endPoint[0], endPoint[1]
+            v0 = startPoint[2]
+            vf = endPoint[2]
         elif startPoint[1] > endPoint[1]:
             x2, y2 = startPoint[0], startPoint[1]
             x1, y1 = endPoint[0], endPoint[1]
             reverseNessesary = True
+            vf = startPoint[2]
+            v0 = endPoint[2]
         else:
             raise Exception("Start and end point cannot be the same!")
         print("\nstart point " + str(x1) + " " + str(y1))
@@ -75,7 +79,7 @@ class GenerateCCPoints:
         return final
 
     def smoothPoints(
-        self, path: list, weightData=0.99995, weightSmooth=0.00005, tolerance=0.001
+        self, path: list, weightData=0.9995, weightSmooth=0.0005, tolerance=0.01
     ):
         """
         Curves a lot of points. Used in
@@ -85,9 +89,11 @@ class GenerateCCPoints:
 
         change = tolerance
         while change >= tolerance:  # You touch this, you die.
+            print(change)
             change = 0
             i = 1
             while i < len(path) - 1:
+                #print(i)
 
                 j = 0
                 while j < len(path[i])-1:
@@ -98,6 +104,7 @@ class GenerateCCPoints:
                         newPath[i - 1][j] + newPath[i + 1][j] - (2 * newPath[i][j])
                     )
                     change += abs(aux - newPath[i][j])
+                    
 
                     j += 1
 
@@ -109,7 +116,6 @@ class GenerateCCPoints:
         points[0].append(0)
         i = 1
         while i < len(points):
-            print(i)
             points[i].append(
                 points[i - 1][3]
                 + math.sqrt(

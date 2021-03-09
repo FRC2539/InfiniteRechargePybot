@@ -137,7 +137,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def Slalom(self):
 
-        self.addCommands(CougarCourseCommand(2))
+        self.addCommands(CougarCourseCommand(1))
 
     def interrupted(self):
         robot.intake.dontIntakeBalls()

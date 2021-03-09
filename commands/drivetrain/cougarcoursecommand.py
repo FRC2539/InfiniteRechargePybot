@@ -26,7 +26,10 @@ class CougarCourseCommand(CommandBase):
                 
                 id_ = f_[index]
                 while id_ != str(points):
-                    id_ = f_[index].strip()
+                    try:
+                        id_ = f_[index].strip()
+                    except(IndexError):
+                        raise Exception('Make sure ID of constants matches the auto ID.')
                     index += 1
                     
                 for line in f_[index:]:
@@ -98,7 +101,7 @@ class CougarCourseCommand(CommandBase):
         #print(theta)
         #print(str(self.targetX) + str(self.targetY))
         robot.drivetrain.setUniformModuleAngle(theta + 90)
-        robot.drivetrain.setUniformModuleSpeeds(self.targetV)
+        robot.drivetrain.setUniformModuleSpeed(self.targetV)
 
 
     def isFinished(self):
