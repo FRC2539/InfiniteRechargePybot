@@ -67,14 +67,21 @@ class GenerateCCPoints:
 
     def injectPoints(self, points: list, spacing=1):
         final = []
-        for point in points:
-            startPoint = [point[0], point[1], point[2]]
-            endPoint = [point[3], point[4], point[5]]
+        
+        counterOne = 0
+        counterTwo = 1
+        
+        while counterTwo < len(points):
+            startPoint = points[counterOne]
+            endPoint = points[counterTwo]
 
             pointsToInsert = self.injectBetweenTwoPoints(startPoint, endPoint, spacing)
 
             for point in pointsToInsert:
                 final.append(point)
+                
+            counterOne += 1
+            counterTwo += 1
 
         return final
 
