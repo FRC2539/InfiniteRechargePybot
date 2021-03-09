@@ -10,7 +10,7 @@ class SetSpeedCommand(InstantCommand):
     def __init__(self, speed=True):
         super().__init__()
         
-        if self.speed: # Sets to normal speed.
+        if speed: # Sets to normal speed.
             self.speed = constants.drivetrain.speedLimit
             
         else: # Sets to slow speed.

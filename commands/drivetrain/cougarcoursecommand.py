@@ -70,13 +70,14 @@ class CougarCourseCommand(CommandBase):
         for point in self.allPoints:
             self.currentX = point[0]
             self.currentY = point[1]
-            if point[2] > self.displacement:
+            if point[3] > self.displacement:
                 break
 
         for point in self.allPoints:
             self.targetX = point[0]
             self.targetY = point[1]
-            if point[2] > self.nextDistance:
+            self.targetV = point[2]
+            if point[3] > self.nextDistance:
                 break
 
         theta = math.degrees(
@@ -84,13 +85,13 @@ class CougarCourseCommand(CommandBase):
         )
 
         toTravel = self.nextDistance - self.displacement
-        print(theta)
-        print(str(self.targetX) + str(self.targetY))
+        #print(theta)
+        #print(str(self.targetX) + str(self.targetY))
         robot.drivetrain.setUniformModuleAngle(theta + 90)
-        robot.drivetrain.setUniformModulePercent(toTravel * .075)
+        robot.drivetrain.setUniformModuleSpeeds(self.targetV)
 
     def isFinished(self):
-        return self.displacement > self.allPoints[-1][2]
+        return self.displacement > self.allPoints[-1][3]
 
     def end(self, interrupted):
         robot.drivetrain.stop()

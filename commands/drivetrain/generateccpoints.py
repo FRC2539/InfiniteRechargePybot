@@ -17,6 +17,8 @@ class GenerateCCPoints:
         """
 
         reverseNessesary = False
+        v0 = startPoint[2]
+        vf = endPoint[2]
 
         if startPoint[1] < endPoint[1]:
             x1, y1 = startPoint[0], startPoint[1]
@@ -29,13 +31,15 @@ class GenerateCCPoints:
             raise Exception("Start and end point cannot be the same!")
         print("\nstart point " + str(x1) + " " + str(y1))
         print("end point " + str(x2) + " " + str(y2))
-        pointsInBetween = [[x1, y1]]
+        pointsInBetween = [[x1, y1, v0]]
 
         totalDistance = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
 
         # Calculate spacing.
         numOfPoints = math.ceil(totalDistance / spacing)
         spacing = totalDistance / numOfPoints
+        deltaV = ( vf - v0 ) / numOfPoints
+        currentV = v0
 
         # Angle diff.
         theta = math.atan2((y2 - y1), (x2 - x1))
@@ -43,8 +47,11 @@ class GenerateCCPoints:
         for segment in range(numOfPoints):
             newX = math.cos(theta) * spacing + x1
             newY = math.sin(theta) * spacing + y1
+            newV = currentV
+            currentV += deltaV
+            
 
-            pointsInBetween.append([newX, newY])
+            pointsInBetween.append([newX, newY, newV])
 
             x1 = newX  # Override for next loop.
             y1 = newY  # Override for next loop.
@@ -54,11 +61,11 @@ class GenerateCCPoints:
 
         return pointsInBetween
 
-    def injectPoints(self, points: list, spacing=3):
+    def injectPoints(self, points: list, spacing=1):
         final = []
         for point in points:
-            startPoint = [point[0], point[1]]
-            endPoint = [point[2], point[3]]
+            startPoint = [point[0], point[1], point[2]]
+            endPoint = [point[3], point[4], point[5]]
 
             pointsToInsert = self.injectBetweenTwoPoints(startPoint, endPoint, spacing)
 
@@ -81,7 +88,7 @@ class GenerateCCPoints:
             while i < len(path) - 1:
 
                 j = 0
-                while j < len(path[i]):
+                while j < len(path[i])-1:
                     aux = newPath[i][j]
                     newPath[i][j] += weightData * (
                         path[i][j] - newPath[i][j]
@@ -100,8 +107,9 @@ class GenerateCCPoints:
         points[0].append(0)
         i = 1
         while i < len(points):
+            print(i)
             points[i].append(
-                points[i - 1][2]
+                points[i - 1][3]
                 + math.sqrt(
                     (points[i][0] - points[i - 1][0]) ** 2
                     + (points[i][1] - points[i - 1][1]) ** 2
