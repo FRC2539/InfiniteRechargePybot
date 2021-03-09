@@ -112,29 +112,33 @@ def addOutput():
     from commands.drivetrain.generateccpoints import GenerateCCPoints
 
     ogOut = sys.stdout
-    
-    print('\n\nNO')
 
     with open(os.path.dirname(__file__) + "/trajectorydata.txt", "w") as f:
 
-        for l in constants.drivetrain.preBuild:  # Only one for now.
-            calculatedPoints = GenerateCCPoints(l).get()
+        for id_, list_ in constants.drivetrain.preBuild.items():  # Only one for now.
+            calculatedPoints = GenerateCCPoints(list_).get()
 
+            calculatedPoints.insert(0, id_)
+            
             sys.stdout = f
 
             for point in calculatedPoints:
                 print(point)
+                
+            print('|||') # Used to signify the end of a set of points.
 
-            sys.stdout = ogOut
+        sys.stdout = ogOut
 
         f.close()
 
 
 if __name__ == "__main__":
+    if len(sys.argv) > 2 and "-g" in sys.argv:
+        addOutput()
+        sys.argv.remove("-g")
+    
     if len(sys.argv) > 1 and sys.argv[1] == "deploy":
-        if len(sys.argv) > 2 and sys.argv[2] == "-g":
-            addOutput()
-            sys.argv.remove('-g')
-    # shutil.rmtree("opkg_cache", ignore_errors=True)
-    # shutil.rmtree("pip_cache", ignore_errors=True)
+        shutil.rmtree("opkg_cache", ignore_errors=True)
+        shutil.rmtree("pip_cache", ignore_errors=True)
+        
     run(KryptonBot)

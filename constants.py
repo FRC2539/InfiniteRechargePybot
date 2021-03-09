@@ -73,8 +73,8 @@ drivetrain.encoderConfig.initializationStrategy = (
 )
 drivetrain.encoderConfig.sensorDirection = False
 
-drivetrain.preBuild = [
-    [
+drivetrain.preBuild = {
+    1: [
         [0, 0, 0, 0, 54, 0.25],
         [0, 54, 0.25, -30, 60, 0.25],
         [-30, 60, 0.25, -60, 66, 0.5],
@@ -89,5 +89,5 @@ drivetrain.preBuild = [
         [0, 66, 0.5, -30, 60, 0.25],
         [-30, 60, 0.25, -60, 54, 0.25],
         [-60, 54, 0.25, -60, 0, 0],
-    ]
-]
+    ],
+}

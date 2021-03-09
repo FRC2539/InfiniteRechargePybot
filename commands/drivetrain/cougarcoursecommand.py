@@ -7,7 +7,7 @@ import robot
 
 
 class CougarCourseCommand(CommandBase):
-    def __init__(self, points=None, tolerance=1):
+    def __init__(self, points, tolerance=1):
         """
         Distance is the distance we should travel in inches, turnOffset
         is the angle displacement of the gyro in degrees.
@@ -16,12 +16,22 @@ class CougarCourseCommand(CommandBase):
         super().__init__()
 
         self.addRequirements([robot.drivetrain])
-        if points is None:
+        if type(points) == int:
             self.allPoints = []
             with open(
                 (os.path.dirname(robot.__file__) + "/trajectorydata.txt"), "r"
             ) as f:
-                for line in f:
+                index = 0
+                f_ = list(f)
+                
+                id_ = f_[index]
+                while id_ != str(points):
+                    id_ = f_[index].strip()
+                    index += 1
+                    
+                for line in f_[index:]:
+                    if str(line).strip() == '|||':
+                        break
                     self.allPoints.append(eval(line))
 
                 f.close()
@@ -31,10 +41,10 @@ class CougarCourseCommand(CommandBase):
             self.allPoints = robot.drivetrain.assertDistanceAlongCurve(self.allPoints)
 
         self.tolerance = tolerance
-
+        
     def initialize(self):
         robot.drivetrain.setModuleProfiles(0, drive=False)
-        
+
         robot.drivetrain.resetOdometry()
         self.lastPosX = robot.drivetrain.getSwervePose().X() * 39.3701
         self.lastPosY = robot.drivetrain.getSwervePose().Y() * 39.3701
@@ -89,6 +99,7 @@ class CougarCourseCommand(CommandBase):
         #print(str(self.targetX) + str(self.targetY))
         robot.drivetrain.setUniformModuleAngle(theta + 90)
         robot.drivetrain.setUniformModuleSpeeds(self.targetV)
+
 
     def isFinished(self):
         return self.displacement > self.allPoints[-1][3]
