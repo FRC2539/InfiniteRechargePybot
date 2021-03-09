@@ -93,12 +93,14 @@ class SwerveDrive(BaseDrive):
     def periodic(self):
         # Feed the nt controller.
         self.feed()
-        print(self.getModuleAngles())
+        
+        print('a ' + str(self.navX.getRotation2d()))
 
         states = []
         for module in self.modules:
-            s = module.getWheelSpeed() * 2.54 / 100
+            s = module.getWheelSpeed() * 2.54 / 100 # In Meters Per Second
             a = Rotation2d(math.radians(module.getWheelAngle()))
+            print('module ' + str(a)) # NOTE: Examine reversal of gyro or encoder?
             states.append(SwerveModuleState(s, a))
 
         self.swerveOdometry.update(

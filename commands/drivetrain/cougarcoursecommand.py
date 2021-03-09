@@ -1,6 +1,6 @@
 from commands2 import CommandBase
 
-from wpilib import Timer
+from wpilib import RobotBase
 
 import math, os, inspect
 import robot
@@ -16,7 +16,10 @@ class CougarCourseCommand(CommandBase):
         super().__init__()
 
         self.addRequirements([robot.drivetrain])
-        if type(points) == int:
+        if RobotBase.isSimulation():
+            pass
+        
+        elif type(points) == int:
             self.allPoints = []
             with open(
                 (os.path.dirname(robot.__file__) + "/trajectorydata.txt"), "r"
