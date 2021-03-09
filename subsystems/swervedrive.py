@@ -263,7 +263,7 @@ class SwerveDrive(BaseDrive):
     def setProfile(self, profile):
         for module in self.modules:
             module.setModuleProfile(profile)
-            
+
     def setSpeedLimit(self, speed):
         self.speedLimit = speed
 
@@ -374,7 +374,7 @@ class SwerveDrive(BaseDrive):
         return final
 
     def smoothPoints(
-        self, path: list, weightData=.75, weightSmooth=.25, tolerance=0.001
+        self, path: list, weightData=0.75, weightSmooth=0.25, tolerance=0.001
     ):
         """
         Curves a lot of points. Used in

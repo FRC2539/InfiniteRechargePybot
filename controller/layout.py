@@ -64,7 +64,9 @@ def init():
     driveControllerOne.RightThumb.toggleWhenPressed(ChamberBackwardCommand())
     driveControllerOne.BottomThumb.whenPressed(ZeroGyroCommand())
 
-    driveControllerOne.Trigger.whenPressed(SetSpeedCommand(False)) # slow speed while trigger is held.
+    driveControllerOne.Trigger.whenPressed(
+        SetSpeedCommand(False)
+    )  # slow speed while trigger is held.
     driveControllerOne.Trigger.whenReleased(SetSpeedCommand())
 
     driveControllerOne.LeftBottomRight.whileHeld(PathCommand())
