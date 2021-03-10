@@ -19,6 +19,8 @@ class DriveCommand(CommandBase):
 
         self.addRequirements(robot.drivetrain)
 
+        robot.drivetrain.resetGyro()
+
     def initialize(self):
         robot.drivetrain.stop()
         robot.drivetrain.setProfile(0)

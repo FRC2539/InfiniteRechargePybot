@@ -35,8 +35,8 @@ class KryptonBot(TimedCommandRobot):
 
         if RobotBase.isSimulation():
             import mockdata
-            
-        DriverStation.getInstance().silenceJoystickConnectionWarning(True) # Amen!
+
+        DriverStation.getInstance().silenceJoystickConnectionWarning(True)  # Amen!
 
         self.subsystems()
 
@@ -121,13 +121,13 @@ def addOutput():
             calculatedPoints = GenerateCCPoints(list_).get()
 
             calculatedPoints.insert(0, id_)
-            
+
             sys.stdout = f
 
             for point in calculatedPoints:
                 print(point)
-                
-            print('|||') # Used to signify the end of a set of points.
+
+            print("|||")  # Used to signify the end of a set of points.
 
         sys.stdout = ogOut
 
@@ -138,9 +138,9 @@ if __name__ == "__main__":
     if len(sys.argv) > 2 and "-g" in sys.argv:
         addOutput()
         sys.argv.remove("-g")
-    
+
     if len(sys.argv) > 1 and sys.argv[1] == "deploy":
         shutil.rmtree("opkg_cache", ignore_errors=True)
         shutil.rmtree("pip_cache", ignore_errors=True)
-        
+
     run(KryptonBot)

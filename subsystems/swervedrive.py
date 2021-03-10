@@ -46,14 +46,14 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.frontLeftTurnID,
                 ports.drivetrain.frontLeftCANCoder,
                 self.speedLimit,
-                -255.85,
+                -255.849609,
             ),
             SwerveModule(  # Front right module.
                 ports.drivetrain.frontRightDriveID,
                 ports.drivetrain.frontRightTurnID,
                 ports.drivetrain.frontRightCANCoder,
                 self.speedLimit,
-                -273.87,
+                -273.8672,
                 invertedDrive=True,  # Invert for some reason?
             ),
             SwerveModule(  # Back left module.
@@ -61,14 +61,14 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.backLeftTurnID,
                 ports.drivetrain.backLeftCANCoder,
                 self.speedLimit,
-                -41.57,
+                -41.484375,
             ),
             SwerveModule(  # Back right module.
                 ports.drivetrain.backRightDriveID,
                 ports.drivetrain.backRightTurnID,
                 ports.drivetrain.backRightCANCoder,
                 self.speedLimit,
-                -129.9,
+                -129.814453,
                 invertedDrive=True,  # Invert for some reason. Ezra's going nuts lol.
             ),
         ]
@@ -89,18 +89,16 @@ class SwerveDrive(BaseDrive):
         )
 
         self.resetOdometry()
+        self.resetGyro()
 
     def periodic(self):
         # Feed the nt controller.
         self.feed()
-        
-        print('a ' + str(self.navX.getRotation2d()))
 
         states = []
         for module in self.modules:
-            s = module.getWheelSpeed() * 2.54 / 100 # In Meters Per Second
+            s = module.getWheelSpeed() * 2.54 / 100  # In Meters Per Second
             a = Rotation2d(math.radians(module.getWheelAngle()))
-            print('module ' + str(a)) # NOTE: Examine reversal of gyro or encoder?
             states.append(SwerveModuleState(s, a))
 
         self.swerveOdometry.update(

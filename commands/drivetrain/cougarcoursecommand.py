@@ -7,7 +7,7 @@ import robot
 
 
 class CougarCourseCommand(CommandBase):
-    def __init__(self, points, tolerance=1):
+    def __init__(self, points, tolerance=1, angleTol=3):
         """
         Distance is the distance we should travel in inches, turnOffset
         is the angle displacement of the gyro in degrees.
@@ -18,7 +18,7 @@ class CougarCourseCommand(CommandBase):
         self.addRequirements([robot.drivetrain])
         if RobotBase.isSimulation():
             pass
-        
+
         elif type(points) == int:
             self.allPoints = []
             with open(
@@ -26,17 +26,19 @@ class CougarCourseCommand(CommandBase):
             ) as f:
                 index = 0
                 f_ = list(f)
-                
+
                 id_ = f_[index]
                 while id_ != str(points):
                     try:
                         id_ = f_[index].strip()
-                    except(IndexError):
-                        raise Exception('Make sure ID of constants matches the auto ID.')
+                    except (IndexError):
+                        raise Exception(
+                            "Make sure ID of constants matches the auto ID."
+                        )
                     index += 1
-                    
+
                 for line in f_[index:]:
-                    if str(line).strip() == '|||':
+                    if str(line).strip() == "|||":
                         break
                     self.allPoints.append(eval(line))
 
@@ -47,8 +49,10 @@ class CougarCourseCommand(CommandBase):
             self.allPoints = robot.drivetrain.assertDistanceAlongCurve(self.allPoints)
 
         self.tolerance = tolerance
-        
+        self.angleTol = angleTol
+
     def initialize(self):
+        self.startAngle = robot.drivetrain.getAngle()
         robot.drivetrain.setModuleProfiles(0, drive=False)
 
         robot.drivetrain.resetOdometry()
@@ -63,6 +67,8 @@ class CougarCourseCommand(CommandBase):
         self.inchesTravelledY = 0
 
         self.lookAheadInches = 6
+
+        self.angleSet = False
 
     def execute(self):
         self.inchesTravelledX = (
@@ -88,6 +94,8 @@ class CougarCourseCommand(CommandBase):
             self.currentY = point[1]
             if point[3] > self.displacement:
                 break
+        # self.currentX = robot.drivetrain.getSwervePose().X() *39.3701
+        # self.currentY = robot.drivetrain.getSwervePose().Y() *39.3701
 
         for point in self.allPoints:
             self.targetX = point[0]
@@ -96,16 +104,61 @@ class CougarCourseCommand(CommandBase):
             if point[3] > self.nextDistance:
                 break
 
-        theta = math.degrees(
-            math.atan2((self.targetY - self.currentY), (self.targetX - self.currentX))
+        theta = (
+            math.degrees(
+                math.atan2(
+                    (self.targetY - self.currentY), (self.targetX - self.currentX)
+                )
+            )
+            + 90
         )
 
-        toTravel = self.nextDistance - self.displacement
-        #print(theta)
-        #print(str(self.targetX) + str(self.targetY))
-        robot.drivetrain.setUniformModuleAngle(theta + 90)
-        robot.drivetrain.setUniformModuleSpeed(self.targetV)
+        self.kP = 0.2
+        gyroOffset = robot.drivetrain.getAngleTo(self.startAngle)
+        print("go " + str(gyroOffset))
 
+        # Populate a matrix corresponding to the desired velocity.
+        speedsMatrix = [[self.targetV, self.targetV], [self.targetV, self.targetV]]
+
+        # Populate a matrix with the wheel angles that need to have their speed increased.
+        # This will be determined by the gyro's offset.
+        idMatrix = [[1, 0], [1, 0]]
+
+        if gyroOffset < 0:
+            idMatrix = [[0, 1], [0, 1]]
+
+        # Rotate the matrix based on the offset.
+        for i in range(round((theta) / 90)):  # (360-theta)/90
+            idMatrix = list(zip(*idMatrix))[::-1]
+
+        # Add p to the id matrix and element-wise multiply the wheel speed matrix by that
+        for i in range(len(speedsMatrix)):
+            for j in range(len(speedsMatrix[i])):
+                speedsMatrix[i][j] += speedsMatrix[i][j] * idMatrix[i][j] * self.kP
+
+        newSpeeds = []
+        speedsMatrix.reverse()
+        for l in speedsMatrix:
+            l.reverse()
+            for speed in l:
+                newSpeeds.append(speed)
+
+        toTravel = self.nextDistance - self.displacement
+
+        robot.drivetrain.setUniformModuleAngle(theta)
+
+        if (
+            not self.angleSet
+            and max(
+                [abs(angle - theta) for angle in robot.drivetrain.getModuleAngles()]
+            )
+            <= self.angleTol
+        ):
+            self.angleSet = True
+
+        elif self.angleSet:
+            robot.drivetrain.setSpeeds(newSpeeds)
+        # robot.drivetrain.move(ErrorX* .1, ErrorY*.1, angleError*-.01)
 
     def isFinished(self):
         return self.displacement > self.allPoints[-1][3]
