@@ -136,6 +136,17 @@ class SwerveDrive(BaseDrive):
 
         return self.swerveKinematics.toChassisSpeeds(self.getModuleStates())
 
+    def getChassisSpeedsData(self):
+        """
+        Basically the same thing as getChassisSpeeds, but this one
+        extracts the data and returns the useful stuff in a list, which
+        looks like this: [vx_fps, vy_fps, omega_dps].
+        """
+
+        speeds = self.swerveKinematics.toChassisSpeeds(self.getModuleStates())
+
+        return [speeds.vx_fps, speeds.vy_fps, speeds.omega_dps]
+
     def _configureMotors(self):
         """
         Configures the motors. Shouldn't need this.
