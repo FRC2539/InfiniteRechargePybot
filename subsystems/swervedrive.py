@@ -92,14 +92,21 @@ class SwerveDrive(BaseDrive):
         self.resetGyro()
 
     def periodic(self):
-        # Feed the nt controller.
-        self.feed()
+        """
+        Loops whenever there is robot code. I recommend
+        feeding networktable values here.
+        """
+        self.feed()  # Update the desired
 
-        states = []
-        for module in self.modules:
-            s = module.getWheelSpeed() * 2.54 / 100  # In Meters Per Second
-            a = Rotation2d(math.radians(module.getWheelAngle()))
-            states.append(SwerveModuleState(s, a))
+        self.updateOdometry()
+
+    def updateOdometry(self):
+        """
+        Updates the WPILib odometry object
+        using the gyro and the module states.
+        """
+
+        states = self.getModuleStates()
 
         self.swerveOdometry.update(
             self.navX.getRotation2d(),
@@ -109,13 +116,11 @@ class SwerveDrive(BaseDrive):
             states[3],  # 3
         )
 
-    def setModuleStates(self, moduleStates):
+    def resetOdometry(self, pose=Pose2d(0, 0, Rotation2d(0))):
         """
-        Set the states of the modules. Used by trajectory stuff.
+        Resets the odometry to a given position, typically the one used when starting a trajectory.
         """
-
-        for module, state in zip(self.modules, moduleStates):
-            module.setState(state)
+        self.swerveOdometry.resetPosition(pose, self.navX.getRotation2d())
 
     def getSwervePose(self):
         """
@@ -123,11 +128,13 @@ class SwerveDrive(BaseDrive):
         """
         return self.swerveOdometry.getPose()
 
-    def resetOdometry(self, pose=Pose2d(0, 0, Rotation2d(0))):
+    def getChassisSpeeds(self):
         """
-        Resets the odometry to a given position, typically the one used when starting a trajectory.
+        Returns the robots velocity and heading, using
+        module states, in the form of a ChassisSpeeds object.
         """
-        self.swerveOdometry.resetPosition(pose, self.navX.getRotation2d())
+
+        return self.swerveKinematics.toChassisSpeeds(self.getModuleStates())
 
     def _configureMotors(self):
         """
@@ -257,64 +264,164 @@ class SwerveDrive(BaseDrive):
                 module.setWheelSpeed(abs(math.sqrt(speed ** 2 + rotate ** 2)))
 
     def stop(self):
+        """
+        Stops the modules.
+        """
         for module in self.modules:
             module.stopModule()
 
     def setProfile(self, profile):
+        """
+        Sets the profile for both drive and turn motors.
+        """
         for module in self.modules:
             module.setModuleProfile(profile)
 
-    def setSpeedLimit(self, speed):
-        self.speedLimit = speed
-
-    def setFieldOriented(self, fieldCentric=True):
-        self.isFieldOriented = fieldCentric
-
-    def getSpeeds(self, inIPS=True):  # Defaults to giving in inches per second.
-        return [module.getWheelSpeed(inIPS) for module in self.modules]
-
-    def setSpeeds(self, speeds: list):  # Set a speed in inches per second.
-        for module, speed in zip(self.modules, speeds):
-            module.setWheelSpeed(speed)
-
-    def setPercents(self, speeds: list):
-        for module, speed in zip(self.modules, speeds):
-            module.setWheelPercent(speed)
-
-    def setUniformModuleSpeed(self, speed: float):  # Set a speed in inches per second.
+    def setModuleProfiles(self, id_=0, drive=True, turn=True):
+        """
+        Sets the PID profiles for each of the modules.
+        This one accepts an optional turn and drive.
+        """
         for module in self.modules:
-            module.setWheelSpeed(speed)
-
-    def setUniformModulePercent(self, speed: float):
-        for module in self.modules:
-            module.setWheelPercent(speed)
+            module.setModuleProfile(id_, drive, turn)
 
     def updateCANCoders(self, positions: list):
+        """
+        Sets the position of the CANCoders. Be careful using
+        this method!
+        """
         for module, position in zip(self.modules, positions):
             module.updateCANCoder(position)
 
+    def setSpeedLimit(self, speed):
+        """
+        Sets the speed limit of the drive motor in
+        inches per second.
+        """
+        self.speedLimit = speed
+
+    def setFieldOriented(self, fieldCentric=True):
+        """
+        Changes the orientation of the robot. It should almost always be
+        field centric on a swerve robot.
+        """
+        self.isFieldOriented = fieldCentric
+
+    def getModuleStates(self):
+        """
+        Returns a list of SwerveModuleState objects.
+        Usefulf for chassis speeds and odometry.
+        """
+
+        states = []
+        for module in self.modules:
+            s = module.getWheelSpeed() * 2.54 / 100  # In Meters Per Second
+            a = Rotation2d(math.radians(module.getWheelAngle()))
+            states.append(SwerveModuleState(s, a))
+
+        return states
+
+    def setModuleStates(self, moduleStates):
+        """
+        Set the states of the modules. Used by trajectory stuff.
+        """
+        for module, state in zip(self.modules, moduleStates):
+            module.setState(state)
+
+    def getSpeeds(self, inIPS=True):  # Defaults to giving in inches per second.
+        """
+        Returns the speeds of the wheel.
+        """
+        return [module.getWheelSpeed(inIPS) for module in self.modules]
+
+    def setSpeeds(self, speeds: list):  # Set a speed in inches per second.
+        """
+        Sets the speeds of the wheels in inches per second.
+        It takes a list. Please use setUniformModuleSpeed if
+        you want to set the same speed amongst all the modules.
+        """
+        for module, speed in zip(self.modules, speeds):
+            module.setWheelSpeed(speed)
+
+    def setUniformModuleSpeed(self, speed: float):  # Set a speed in inches per second.
+        """
+        Sets a uniform speed to eall the drive motors in inches per
+        second. This takes a float because all modules use
+        the same speed. Use the setSpeeds method if you want to pass
+        a list of different speeds.
+        """
+        for module in self.modules:
+            module.setWheelSpeed(speed)
+
+    def setPercents(self, speeds: list):
+        """
+        Sets the percent speed of each module's drive motor.
+        """
+        for module, speed in zip(self.modules, speeds):
+            module.setWheelPercent(speed)
+
+    def setUniformModulePercent(self, speed: float):
+        """
+        Sets a uniform percent to the drive motor
+        of each module.
+        """
+        for module in self.modules:
+            module.setWheelPercent(speed)
+
     def getModuleAngles(self):
+        """
+        Returns the CANCoder's absolute reading.
+        Note, this does take into account the magnet
+        offset which we set at the beginning.
+        I think, 180 is forward, 0 is backwards.
+        """
+
         # Add module in front, not to be confused with gyro! Returns degrees.
         return [module.getWheelAngle() % 360 for module in self.modules]
 
     def setModuleAngles(self, angles: list):  # Set a list of different angles.
+        """
+        Set the angle of the wheel using the turn motor.
+        This method takes a list of angles, 0-360 degrees.
+        """
+
         for module, angle in zip(self.modules, angles):
             module.setWheelAngle(angle)
 
-    def setUniformModuleAngle(
-        self, angle: int
-    ):  # This sets a uniform angle. Overrides the method above.
+    def setUniformModuleAngle(self, angle: int):
+        """
+        Set the angle of the wheel using the turn motor.
+        This method takes a universal angle to set to all
+        modules. The angle should be 0-360 degrees.
+        """
         for module in self.modules:
             module.setWheelAngle(angle)
 
     def getPositions(self, inInches=True):  # Defaults to giving in inches.
+        """
+        Returns the module position in inches (by default).
+        """
         return [module.getModulePosition(inInches) for module in self.modules]
 
-    def setPositions(
-        self, positions: list
-    ):  # Remember, provide these in inches. It will go forward/back x many inches.
+    def setPositions(self, positions: list):
+        """
+        Sets the position of the modules. It will go forward this many inches.
+        I recommend using the setUniformModulePosition however.
+        Remember, provide these in inches. It will go forward/back x many inches.
+        """
         for module, position in zip(self.modules, positions):
             module.setModulePosition(position)
+
+    def setUniformModulePosition(self, distance):
+        """
+        Sets a uniform distance for the drive motor to travel. Note,
+        you should give the distance in inches. The modules will move this
+        much in the direction they are facing.
+        """
+        for module in self.modules:
+            module.setModulePosition(distance)
+
+    # Cougar Course Below.
 
     def injectBetweenTwoPoints(self, startPoint: list, endPoint: list, spacing=1):
         """
@@ -361,6 +468,9 @@ class SwerveDrive(BaseDrive):
         return pointsInBetween
 
     def injectPoints(self, points: list, spacing=1):
+        """
+        Inject points between a series of points. Used in the CougarCourse.
+        """
         final = []
         for point in points:
             startPoint = [point[0], point[1]]
@@ -405,6 +515,10 @@ class SwerveDrive(BaseDrive):
         return newPath
 
     def assertDistanceAlongCurve(self, points: list):
+        """
+        Adds the distance travelled to the points by using
+        the distance formula. Used in CougarCourse.
+        """
         points[0].append(0)
         i = 1
         while i < len(points):
@@ -422,10 +536,7 @@ class SwerveDrive(BaseDrive):
     def setCruiseVelocity(self, slow=False):
         """
         Changes the motion magic's max cruise velocity.
+        Used in CougarCourse.
         """
         for module in self.modules:
             module.setDriveCruiseVelocity(slow)
-
-    def setModuleProfiles(self, id_=0, drive=True, turn=True):
-        for module in self.modules:
-            module.setModuleProfile(id_, drive, turn)

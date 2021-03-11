@@ -24,7 +24,6 @@ class DriveCommand(CommandBase):
     def initialize(self):
         robot.drivetrain.stop()
         robot.drivetrain.setProfile(0)
-        robot.drivetrain.speedLimit = constants.drivetrain.speedLimit
 
         self.lastY = None
         self.slowed = False
