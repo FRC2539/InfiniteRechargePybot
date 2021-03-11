@@ -100,6 +100,8 @@ class SwerveDrive(BaseDrive):
 
         self.updateOdometry()
 
+        print(self.speedLimit)
+
     def updateOdometry(self):
         """
         Updates the WPILib odometry object
@@ -145,7 +147,7 @@ class SwerveDrive(BaseDrive):
 
         speeds = self.swerveKinematics.toChassisSpeeds(self.getModuleStates())
 
-        return [speeds.vx_fps, speeds.vy_fps, speeds.omega_dps]
+        return [speeds.vy_fps, -speeds.vx_fps, speeds.omega_dps]
 
     def _configureMotors(self):
         """
@@ -245,17 +247,11 @@ class SwerveDrive(BaseDrive):
             self.stop()
             return
 
-        if [x, y, rotate] == self.lastInputs:
-            return
-
-        self.lastInputs = [x, y, rotate]
-        # print(str(rotate))
-
         """Prevent drift caused by small input values"""
         x = math.copysign(max(abs(x) - self.deadband, 0), x)
         y = math.copysign(max(abs(y) - self.deadband, 0), y)
         rotate = math.copysign(max(abs(rotate) - (self.deadband + 0.05), 0), rotate)
-        # print('modified'+str(rotate))
+
         speeds, angles = self._calculateSpeeds(x, y, rotate)
 
         if (
@@ -310,6 +306,9 @@ class SwerveDrive(BaseDrive):
         inches per second.
         """
         self.speedLimit = speed
+
+        for module in self.modules:
+            module.speedLimit = speed
 
     def setFieldOriented(self, fieldCentric=True):
         """
