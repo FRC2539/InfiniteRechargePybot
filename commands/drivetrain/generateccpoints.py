@@ -84,7 +84,9 @@ class GenerateCCPoints:
 
         return final
 
-    def smoothPoints(self, path: list, weightData=1, weightSmooth=0, tolerance=0.001):
+    def smoothPoints(
+        self, path: list, weightData=0.9995, weightSmooth=0.0005, tolerance=0.001
+    ):
         """
         Curves a lot of points. Used in
         CougarCourse.
