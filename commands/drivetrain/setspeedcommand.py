@@ -14,7 +14,7 @@ class SetSpeedCommand(InstantCommand):
             self.speed = constants.drivetrain.speedLimit
 
         else:  # Sets to slow speed.
-            self.speed = constants.drivetrain.speedLimit * 0.65
+            self.speed = constants.drivetrain.speedLimit * 0.4
 
     def initialize(self):
         robot.drivetrain.setSpeedLimit(self.speed)

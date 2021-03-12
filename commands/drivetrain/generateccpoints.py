@@ -85,7 +85,7 @@ class GenerateCCPoints:
         return final
 
     def smoothPoints(
-        self, path: list, weightData=0.9995, weightSmooth=0.0005, tolerance=0.001
+        self, path: list, weightData=.85, weightSmooth=0.15, tolerance=.5
     ):
         """
         Curves a lot of points. Used in
@@ -95,6 +95,7 @@ class GenerateCCPoints:
 
         change = tolerance
         while change >= tolerance:  # You touch this, you die.
+            print(change)
             change = 0
             i = 1
             while i < len(path) - 1:
