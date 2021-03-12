@@ -74,8 +74,7 @@ drivetrain.encoderConfig.initializationStrategy = (
 drivetrain.encoderConfig.sensorDirection = False
 
 drivetrain.preBuild = {
-    #non-diagonal distance between points = 30 inches
-    
+    # non-diagonal distance between points = 30 inches
     1: [  # Slalom Path
         [0, 0, 0.15],
         [0, 48, 0.15],
@@ -108,20 +107,20 @@ drivetrain.preBuild = {
         [0,240,.15],
         [0,0,.15],
     ],
-    3: [ # Bounce Path
-        [0,0,.15],
-        [10,50,.15],
-        [60,60,.15],
-        [0,70,.15],
-        [-10,80,.15],
-        [-30,90,.15],
-        [-60,120,.15],
-        [-30,150,.15],
-        [60,150,.15],
-        [-60,150,.15],
-        [-60,240,.15],
-        [60,240,.15],
-        [0,240,.15],
-        [0,310,.15],
-        ]
+    3: [  # Bounce Path
+        [0, 0, 0.15],
+        [10, 50, 0.15],
+        [60, 60, 0.15],
+        [0, 70, 0.15],
+        [-10, 80, 0.15],
+        [-30, 90, 0.15],
+        [-60, 120, 0.15],
+        [-30, 150, 0.15],
+        [60, 150, 0.15],
+        [-60, 150, 0.15],
+        [-60, 240, 0.15],
+        [60, 240, 0.15],
+        [0, 240, 0.15],
+        [0, 310, 0.15],
+    ],
 }

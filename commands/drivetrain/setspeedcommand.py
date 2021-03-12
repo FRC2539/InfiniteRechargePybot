@@ -10,8 +10,6 @@ class SetSpeedCommand(InstantCommand):
     def __init__(self, speed=True):
         super().__init__()
 
-        self.addRequirements([robot.drivetrain])
-
         if speed:  # Sets to normal speed.
             self.speed = constants.drivetrain.speedLimit
 
