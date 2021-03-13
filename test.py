@@ -1,6 +1,37 @@
 import math
 
+def injectCurvedPoints( startPoint: list, endPoint: list, spacing = .1):
+    x0, y0, theta0 = startPoint[0], startPoint[1], startPoint[2]
+    xf, yf, thetaf = endPoint[0], endPoint[1], endPoint[2]
+    
+    deltaTheta = thetaf - theta0
+    d = math.sqrt((xf - x0)**2 + (yf -y0)**2)
+    r = d/(2*math.sin(math.radians(deltaTheta/2)))
+    l = (deltaTheta / 360) *2 * math.pi *r
+    numPoints = math.ceil(l/spacing)
+    spacing = l/numPoints
+    thetas = deltaTheta/numPoints
+    xr = r * math.cos(math.radians(deltaTheta - 90)) + x0
+    yr = r * math.sin(math.radians(deltaTheta - 90)) + y0
+    
+    pointsInBetween =  [[x0, y0, theta0]]
+    newTheta = theta0 + thetas
+    for segment in range(numPoints):
+        
+        newX = -r*math.cos(math.radians(newTheta)) + xr
+        newY = r*math.sin(math.radians(newTheta)) + yr
+        
+        pointsInBetween.append([newX, newY, newTheta])
+        newTheta += thetas
 
+        x1 = newX  
+        y1 = newY
+        theta1 = newTheta
+    
+    return pointsInBetween
+            
+            
+            
 def injectBetweenTwoPoints(startPoint: list, endPoint: list, spacing=1):
     """
     Used in CougarCourse. Adds additional points.
@@ -107,25 +138,7 @@ def assertDistanceAlongCurve(points: list):
     return points
 
 
-points = [
-    [0, 0, 0, 30],
-    [0, 30, -30, 60],
-    [-30, 60, -60, 90],
-    [-60, 90, -60, 210],
-    [-60, 210, -30, 240],
-    [-30, 240, 0, 270],
-    [0, 270, -30, 300],
-    [-30, 300, -60, 270],
-    [-60, 270, -30, 240],
-    [-30, 240, 0, 210],
-    [0, 210, 0, 90],
-    [0, 90, -30, 60],
-    [-30, 60, -60, 30],
-    [-60, 30, -60, 0],
-]
+startPoint = [-math.sqrt(2)/2, math.sqrt(2)/2, 45]
+endPoint = [0, 1, 90]
 
-newPoints = injectPoints(points)
-print("injected " + str(newPoints))
-
-smoothedPoints = assertDistanceAlongCurve(newPoints)
-print("\nass " + str(smoothedPoints))
+print(injectCurvedPoints(startPoint, endPoint))
