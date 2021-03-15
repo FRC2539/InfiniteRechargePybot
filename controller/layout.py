@@ -2,6 +2,8 @@ from .logitechdualshock import LogitechDualShock
 from .thrustmasterjoystick import ThrustmasterJoystick
 from . import logicalaxes
 
+from commands2 import InstantCommand
+
 from custom.config import Config
 
 from commands.drivetrain.drivecommand import DriveCommand
@@ -37,6 +39,7 @@ from commands.hood.lowerhoodcommand import LowerHoodCommand
 
 from commands.limelight.automatedshootcommand import AutomatedShootCommand
 
+import robot
 
 def init():
     """
@@ -72,13 +75,13 @@ def init():
     driveControllerOne.LeftBottomRight.whileHeld(PathCommand())
 
     driveControllerTwo.LeftThumb.toggleWhenPressed(ConveyorForwardCommand())
-    driveControllerTwo.RightThumb.toggleWhenPressed(ConveyorBackwardCommand())
+    driveControllerTwo.RightThumb.whileHeld(ConveyorBackwardCommand())
     driveControllerTwo.BottomThumb.toggleWhenPressed(IntakeCommand())
 
     driveControllerTwo.LeftTopLeft.whileHeld(RaiseHoodCommand())
     driveControllerTwo.LeftBottomLeft.whileHeld(LowerHoodCommand())
-
-    driveControllerTwo.Trigger.toggleWhenPressed(AutomatedShootCommand())
+    
+    driveControllerTwo.Trigger.whileHeld(AutomatedShootCommand(4000))
 
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(2)

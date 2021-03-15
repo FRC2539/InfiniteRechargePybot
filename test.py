@@ -1,6 +1,6 @@
 import math
 
-def injectCurvedPoints( startPoint: list, endPoint: list, spacing = .1):
+def injectCurvedPoints( startPoint: list, endPoint: list, spacing = 6):
     x0, y0, theta0 = startPoint[0], startPoint[1], startPoint[2]
     xf, yf, thetaf = endPoint[0], endPoint[1], endPoint[2]
     
@@ -11,14 +11,21 @@ def injectCurvedPoints( startPoint: list, endPoint: list, spacing = .1):
     numPoints = math.ceil(l/spacing)
     spacing = l/numPoints
     thetas = deltaTheta/numPoints
-    xr = r * math.cos(math.radians(deltaTheta - 90)) + x0
-    yr = r * math.sin(math.radians(deltaTheta - 90)) + y0
+    xr = -r * math.sin(math.radians(deltaTheta)) + x0
+    yr = -r * math.cos(math.radians(deltaTheta)) + y0
+    print(r)
+    print(xr)
+    print(yr)
+    #r = math.abs(r)
+    if r<0:
+        r =r*-1
+    
     
     pointsInBetween =  [[x0, y0, theta0]]
     newTheta = theta0 + thetas
     for segment in range(numPoints):
         
-        newX = -r*math.cos(math.radians(newTheta)) + xr
+        newX = r*math.cos(math.radians(newTheta)) + xr
         newY = r*math.sin(math.radians(newTheta)) + yr
         
         pointsInBetween.append([newX, newY, newTheta])
@@ -65,7 +72,7 @@ def injectBetweenTwoPoints(startPoint: list, endPoint: list, spacing=1):
         newX = math.cos(theta) * spacing + x1
         newY = math.sin(theta) * spacing + y1
 
-        pointsInBetween.append([newX, newY])
+        pointsInBetween.append([newX, newY, 0])
 
         x1 = newX  # Override for next loop.
         y1 = newY  # Override for next loop.
@@ -138,7 +145,7 @@ def assertDistanceAlongCurve(points: list):
     return points
 
 
-startPoint = [-math.sqrt(2)/2, math.sqrt(2)/2, 45]
-endPoint = [0, 1, 90]
+startPoint = [0, 120, 0]
+endPoint = [30, 90, 0]
 
 print(injectCurvedPoints(startPoint, endPoint))

@@ -11,33 +11,6 @@ class GenerateCCPoints:
     def get(self):
         return self.allPoints
     
-    def injectCurvedPoints(self, startPoint: list, endPoint: list, spacing = 1):
-        x0, y0, theta0 = startPoint[0], startPoint[1], startPoint[2]
-        xf, yf, thetaf = endPoint[0], endPoint[1], endPoint[2]
-        
-        deltaTheta = thetaf - theta0
-        d = math.sqrt((xf - x0)**2 + (yf -y0)**2)
-        r = d/(2*math.sin(math.radians(deltaTheta/2)))
-        l = (deltaTheta / 360) *2 * math.pi *r
-        numPoints = math.ceil(l/spacing)
-        spacing = l/numPoints
-        thetas = deltaTheta/numPoints
-        xr = r * math.cos(math.radians(deltaTheta - 90)) + x0
-        yr = r * math.sin(math.radians(deltaTheta - 90)) + y0
-        
-        pointsInBetween =  [x0, y0, theta0]
-        newTheta = theta0 + thetas
-        for segment in range(numOfPoints):
-        
-            newX = r*math.cos(math.radians(newTheta+90)) + xr
-            newY = r*math.sin(math.radians(newTheta+90)) + yr
-            newTheta += thetas
-
-            pointsInBetween.append([newX, newY, newTheta])
-
-            x1 = newX  # Override for next loop.
-            y1 = newY
-            theta1 = newTheta
         
 
     def injectBetweenTwoPoints(self, startPoint: list, endPoint: list, spacing=6):
