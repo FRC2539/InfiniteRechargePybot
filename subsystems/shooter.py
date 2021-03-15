@@ -32,7 +32,7 @@ class Shooter(CougarSystem):
         self.shooterMotorTwo.setNeutralMode(NeutralMode.Coast)
 
         # Set the PID configuration.
-        self.shooterMotorOne.config_kF(0, 0.5, 0)  # Ben, no FF! -Ben
+        self.shooterMotorOne.config_kF(0, 0, 0)  # Ben, no FF! -Ben
         self.shooterMotorOne.config_kP(0, 5, 0)
         self.shooterMotorOne.config_kI(0, 0, 0)
         self.shooterMotorOne.config_kD(0, 1, 0)
