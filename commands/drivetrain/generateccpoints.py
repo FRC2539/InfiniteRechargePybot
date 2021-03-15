@@ -10,8 +10,37 @@ class GenerateCCPoints:
 
     def get(self):
         return self.allPoints
+    
+    def injectCurvedPoints(self, startPoint: list, endPoint: list, spacing = 1):
+        x0, y0, theta0 = startPoint[0], startPoint[1], startPoint[2]
+        xf, yf, thetaf = endPoint[0], endPoint[1], endPoint[2]
+        
+        deltaTheta = thetaf - theta0
+        d = math.sqrt((xf - x0)**2 + (yf -y0)**2)
+        r = d/(2*math.sin(math.radians(deltaTheta/2)))
+        l = (deltaTheta / 360) *2 * math.pi *r
+        numPoints = math.ceil(l/spacing)
+        spacing = l/numPoints
+        thetas = deltaTheta/numPoints
+        xr = r * math.cos(math.radians(deltaTheta - 90)) + x0
+        yr = r * math.sin(math.radians(deltaTheta - 90)) + y0
+        
+        pointsInBetween =  [x0, y0, theta0]
+        newTheta = theta0 + thetas
+        for segment in range(numOfPoints):
+        
+            newX = r*math.cos(math.radians(newTheta+90)) + xr
+            newY = r*math.sin(math.radians(newTheta+90)) + yr
+            newTheta += thetas
 
-    def injectBetweenTwoPoints(self, startPoint: list, endPoint: list, spacing=1):
+            pointsInBetween.append([newX, newY, newTheta])
+
+            x1 = newX  # Override for next loop.
+            y1 = newY
+            theta1 = newTheta
+        
+
+    def injectBetweenTwoPoints(self, startPoint: list, endPoint: list, spacing=6):
         """
         Used in CougarCourse. Adds additional points.
         """
@@ -33,8 +62,8 @@ class GenerateCCPoints:
             v0 = endPoint[2]
         # else:
         # raise Exception("Start and end point cannot be the same!")
-        print("\nstart point " + str(x1) + " " + str(y1))
-        print("end point " + str(x2) + " " + str(y2))
+        #print("\nstart point " + str(x1) + " " + str(y1))
+        #print("end point " + str(x2) + " " + str(y2))
         pointsInBetween = [[x1, y1, v0]]
 
         totalDistance = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
@@ -64,7 +93,7 @@ class GenerateCCPoints:
 
         return pointsInBetween
 
-    def injectPoints(self, points: list, spacing=1):
+    def injectPoints(self, points: list, spacing=6):
         final = []
 
         counterOne = 0
@@ -85,7 +114,7 @@ class GenerateCCPoints:
         return final
 
     def smoothPoints(
-        self, path: list, weightData=.85, weightSmooth=0.15, tolerance=.5
+        self, path: list, weightData=.85, weightSmooth=0.15, tolerance=.001
     ):
         """
         Curves a lot of points. Used in
@@ -95,7 +124,7 @@ class GenerateCCPoints:
 
         change = tolerance
         while change >= tolerance:  # You touch this, you die.
-            print(change)
+            #print(change)
             change = 0
             i = 1
             while i < len(path) - 1:
