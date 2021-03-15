@@ -12,6 +12,7 @@ class StartUpCommandGroup(ParallelCommandGroup):
 
         robot.drivetrain.initDefaultCommand()
         robot.turret.initDefaultCommand()
+        robot.shooter.initDefaultCommand()
 
         self.addCommands(ResetTiltCommand())
 

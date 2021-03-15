@@ -17,6 +17,7 @@ class ShootingProcessCommand(CommandBase):
         self.addRequirements([robot.conveyor, robot.chamber])
 
     def initialize(self):
+        robot.conveyor.forward()
         robot.shooter.setRPM(self.targetRPM)
 
     def execute(self):
@@ -31,6 +32,6 @@ class ShootingProcessCommand(CommandBase):
             self.isAtTargetRPM = True
 
     def end(self, interrupted):
-        robot.conveyor.stop()
+        #robot.conveyor.stop()
         robot.chamber.stop()
-        robot.shooter.stopShooter()
+        #robot.shooter.stopShooter()

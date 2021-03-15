@@ -13,7 +13,7 @@ class TurretLimelightCommand(CommandBase):
         self.addRequirements(robot.turret)
 
         self.xOffsetP = (
-            0.0850  # A proportion to scale the error to a speed the motor can use.
+            0.050  # A proportion to scale the error to a speed the motor can use.
         )
 
     def initialize(self):
