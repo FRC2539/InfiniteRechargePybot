@@ -100,8 +100,6 @@ class SwerveDrive(BaseDrive):
 
         self.updateOdometry()
 
-        print(self.speedLimit)
-
     def updateOdometry(self):
         """
         Updates the WPILib odometry object

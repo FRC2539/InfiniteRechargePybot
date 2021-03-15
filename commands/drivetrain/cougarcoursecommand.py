@@ -16,6 +16,7 @@ class CougarCourseCommand(CommandBase):
         super().__init__()
 
         self.addRequirements([robot.drivetrain])
+        
         if RobotBase.isSimulation():
             pass
 
@@ -44,9 +45,7 @@ class CougarCourseCommand(CommandBase):
 
                 f.close()
         else:
-            additionalPoints = robot.drivetrain.injectPoints(points)
-            self.allPoints = robot.drivetrain.smoothPoints(additionalPoints)
-            self.allPoints = robot.drivetrain.assertDistanceAlongCurve(self.allPoints)
+            self.allPoints = points
 
         self.tolerance = tolerance
         self.angleTol = angleTol
