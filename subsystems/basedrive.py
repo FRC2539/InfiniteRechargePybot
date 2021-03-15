@@ -69,8 +69,6 @@ class BaseDrive(CougarSystem):
         self._publishPID("Speed", 0)
         self._publishPID("Position", 1)
 
-        self.initDefaultCommand()
-
     def initDefaultCommand(self):
         """
         By default, unless another command is running that requires this
