@@ -65,7 +65,7 @@ class CougarCourseCommand(CommandBase):
         self.inchesTravelledX = 0
         self.inchesTravelledY = 0
 
-        self.lookAheadInches = 12
+        self.lookAheadInches = 6
 
         self.angleSet = False
 
@@ -156,7 +156,7 @@ class CougarCourseCommand(CommandBase):
             self.angleSet = True
 
         elif self.angleSet:
-            robot.drivetrain.setSpeeds(self.targetV)#newSpeeds)
+            robot.drivetrain.setSpeeds(newSpeeds)
         # robot.drivetrain.move(ErrorX* .1, ErrorY*.1, angleError*-.01)
 
     def isFinished(self):

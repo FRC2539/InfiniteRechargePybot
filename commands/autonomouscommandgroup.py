@@ -10,6 +10,7 @@ from commands2 import (
 
 from commands.drivetrain.turncommand import TurnCommand
 from commands.drivetrain.movecommand import MoveCommand
+from commands.drivetrain.generatevectors import GenerateVectors
 from commands.drivetrain.pathfollowercommand import PathFollowerCommand
 from commands.drivetrain.cougarcoursecommand import CougarCourseCommand
 
@@ -139,7 +140,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.addCommands(CougarCourseCommand(1))
         
     def BarellRacing(self):
-        self.addCommands(CougarCourseCommand(2))
+        self.addCommands(CougarCourseCommand(GenerateVectors.generate()))
 
     def Bounce(self):
         self.addCommands(CougarCourseCommand(3))
