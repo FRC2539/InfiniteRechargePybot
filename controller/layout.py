@@ -33,6 +33,7 @@ from commands.chamber.chamberbackwardcommand import ChamberBackwardCommand
 from commands.turret.turretlimelightcommand import TurretLimelightCommand
 
 from commands.shooter.setrpmcommand import SetRPMCommand
+from commands.shooter.slowshootingprocesscommand import SlowShootingProcessCommand
 
 from commands.hood.raisehoodcommand import RaiseHoodCommand
 from commands.hood.lowerhoodcommand import LowerHoodCommand
@@ -93,3 +94,5 @@ def init():
 
     componentController.Back.whenPressed(ResetCommand())
     componentController.A.toggleWhenPressed(IntakeCommand())
+
+    componentController.RightTrigger.whileHeld(SlowShootingProcessCommand())
