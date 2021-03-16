@@ -33,10 +33,17 @@ class Shooter(CougarSystem):
 
         # Set the PID configuration.
         self.shooterMotorOne.config_kF(0, 0, 0)  # Ben, no FF! -Ben
-        self.shooterMotorOne.config_kP(0, 5, 0)
+        self.shooterMotorOne.config_kP(0, 12, 0)
         self.shooterMotorOne.config_kI(0, 0, 0)
         self.shooterMotorOne.config_kD(0, 1, 0)
         self.shooterMotorOne.config_IntegralZone(0, 0, 0)
+        
+        # Set the PID configuration.
+        self.shooterMotorTwo.config_kF(0, 0, 0)  # Ben, no FF! -Ben
+        self.shooterMotorTwo.config_kP(0, 12, 0)
+        self.shooterMotorTwo.config_kI(0, 0, 0)
+        self.shooterMotorTwo.config_kD(0, 1, 0)
+        self.shooterMotorTwo.config_IntegralZone(0, 0, 0)
 
         # Tell the second motor to follow the behavior of the first motor.
         self.shooterMotorOne.setInverted(True)
@@ -57,7 +64,7 @@ class Shooter(CougarSystem):
 
     def periodic(self):
         self.feed()
-
+        
         print(self.getRPM())
 
     def setRPM(self, rpm):

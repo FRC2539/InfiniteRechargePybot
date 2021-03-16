@@ -37,6 +37,7 @@ from commands.shooter.setrpmcommand import SetRPMCommand
 from commands.hood.raisehoodcommand import RaiseHoodCommand
 from commands.hood.lowerhoodcommand import LowerHoodCommand
 
+from commands.limelight.automatedslowshootcommand import AutomatedSlowShootCommand
 from commands.limelight.automatedshootcommand import AutomatedShootCommand
 
 import robot
@@ -71,6 +72,8 @@ def init():
         SetSpeedCommand(False)
     )  # slow speed while trigger is held.
     driveControllerOne.Trigger.whenReleased(SetSpeedCommand())
+    
+    driveControllerOne.Trigger.whileHeld(AutomatedSlowShootCommand(4400))
 
     driveControllerOne.LeftBottomRight.whileHeld(PathCommand())
 
@@ -81,7 +84,7 @@ def init():
     driveControllerTwo.LeftTopLeft.whileHeld(RaiseHoodCommand())
     driveControllerTwo.LeftBottomLeft.whileHeld(LowerHoodCommand())
     
-    driveControllerTwo.Trigger.whileHeld(AutomatedShootCommand(4000))
+    driveControllerTwo.Trigger.whileHeld(AutomatedShootCommand(4400))
 
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(2)

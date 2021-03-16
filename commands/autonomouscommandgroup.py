@@ -43,7 +43,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 toRun = var
                 break
 
-        self.BarellRacing()
+        #self.BarellRacing()
 
     # eval("self." + toRun + "()")  # Setups the method.
 
@@ -136,14 +136,14 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             # self.shootTwo        # 4 seconds
         )
 
-    def Slalom(self):
-        self.addCommands(CougarCourseCommand(1))
+    # def Slalom(self):
+    #     self.addCommands(CougarCourseCommand(1))
         
-    def BarellRacing(self):
-        self.addCommands(CougarCourseCommand(GenerateVectors.generate()))
+    # def BarellRacing(self):
+    #     self.addCommands(CougarCourseCommand(2))#GenerateVectors.generate()))
 
-    def Bounce(self):
-        self.addCommands(CougarCourseCommand(3))
+    # def Bounce(self):
+    #     self.addCommands(CougarCourseCommand(3))
 
     def interrupted(self):
         robot.intake.dontIntakeBalls()

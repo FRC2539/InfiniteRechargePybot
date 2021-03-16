@@ -32,11 +32,7 @@ class KryptonBot(TimedCommandRobot):
 
     def robotInit(self):
         """Set up everything we need for a working robot."""
-        
-        from commands.drivetrain.generatevectors import GenerateVectors
-        
-        GenerateVectors.generate()
-
+                
         if RobotBase.isSimulation():
             import mockdata
 
