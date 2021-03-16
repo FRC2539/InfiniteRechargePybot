@@ -1,5 +1,7 @@
 from .cougarsystem import *
 
+from wpilib import AnalogInput
+
 import ports
 
 from ctre import WPI_TalonSRX, NeutralMode, ControlMode
@@ -21,6 +23,9 @@ class Chamber(CougarSystem):
         self.speed = 1.0  # 0.8
         self.slowSpeed = 0.2
         # Option: separate into forward and backward speeds
+        
+        # The sensor for telling if a ball is present.
+        self.ballSensor = AnalogInput(ports.chamber.sensorPort)
 
         # Constantly updates the chamber's status.
         self.constantlyUpdate(
@@ -47,3 +52,6 @@ class Chamber(CougarSystem):
 
     def stop(self):
         self.motor.stopMotor()
+
+    def isBallPresent(self):
+        return self.ballSensor.getValue() < 50
