@@ -30,30 +30,26 @@ class SlowShootingProcessCommand(CommandBase):
         robot.shooter.setRPM(self.targetRPM)
 
         self.timer.start()
-        self.goal = 4
-        
-        self.spotted = False
+        self.goal = 2.25
 
     def execute(self):
         self.checkRPM()
         
-        
-        
-        # if self.loading and self.goal != 5:
-        #     self.goal = 5
+        if self.loading and self.goal != 2.25:
+            self.goal = 2.25
                         
-        #     robot.chamber.stop()
-        #     robot.conveyor.forward()
+            robot.chamber.stop()
+            robot.conveyor.forward()
 
-        # elif not self.loading and self.goal != 3:
-        #     self.goal = 3
+        elif not self.loading and self.goal != 1.25:
+            self.goal = 1.25
                         
-        #     robot.chamber.forward()
-        #     robot.conveyor.stop()
+            robot.chamber.forward()
+            robot.conveyor.stop()
             
-        # if self.timer.get() > self.goal:
-        #     self.loading = not self.loading
-        #     self.timer.reset()
+        if self.timer.get() > self.goal:
+            self.loading = not self.loading
+            self.timer.reset()
                     
     def checkRPM(self):
         if not self.isAtTargetRPM and abs(robot.shooter.getRPM() - self.targetRPM) <= self.tolerance:

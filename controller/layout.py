@@ -85,7 +85,7 @@ def init():
     driveControllerTwo.LeftTopLeft.whileHeld(RaiseHoodCommand())
     driveControllerTwo.LeftBottomLeft.whileHeld(LowerHoodCommand())
     
-    driveControllerTwo.Trigger.whileHeld(AutomatedShootCommand(4400))
+    driveControllerTwo.Trigger.whileHeld(AutomatedSlowShootCommand(4400))
 
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(2)
