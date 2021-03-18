@@ -111,14 +111,14 @@ def addOutput():
 
     import constants
 
-    from commands.drivetrain.generateccpoints import GenerateCCPoints
+    from commands.drivetrain.generatevectors import GenerateVectors
 
     ogOut = sys.stdout
 
     with open(os.path.dirname(__file__) + "/trajectorydata.txt", "w") as f:
 
-        for id_, list_ in constants.drivetrain.preBuild.items():  # Only one for now.
-            calculatedPoints = GenerateCCPoints(list_).get()
+        for id_, file_ in constants.drivetrain.preBuild.items():
+            calculatedPoints = GenerateVectors().generate(file_)
 
             calculatedPoints.insert(0, id_)
 

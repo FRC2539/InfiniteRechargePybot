@@ -20,20 +20,29 @@ def assertDistanceAlongCurve(points: list):
 class GenerateVectors:
     
     @staticmethod
-    def generate(file="/Unnamed.wpilib.json"):
+    def generate(file="Unnamed.wpilib.json"):
         
-        with open(os.path.dirname(robot.__file__) + file) as f:
+        with open(os.path.dirname(robot.__file__) + '/' + file) as f:
             json = f.read()
             
         l = eval(json)
         
         valuableData = []
         
+        count = 10
+        
         for data in l:
-            valuableData.append([
-                data['pose']['translation']['x'],
-                data['pose']['translation']['y'],
-                data['velocity'], 
-            ])
+            
+            if count == 10:
+                
+                valuableData.append([
+                    data['pose']['translation']['x'], # This is the order we need
+                    data['pose']['translation']['y'],
+                    data['velocity'], 
+                ])
+                
+                count = 0
+            
+            count += 1
                         
         return assertDistanceAlongCurve(valuableData)

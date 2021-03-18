@@ -13,6 +13,7 @@ from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.generatevectors import GenerateVectors
 from commands.drivetrain.pathfollowercommand import PathFollowerCommand
 from commands.drivetrain.cougarcoursecommand import CougarCourseCommand
+from commands.drivetrain.runautocommand import RunAutoCommand
 
 from commands.intake.intakecommand import IntakeCommand
 
@@ -43,7 +44,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 toRun = var
                 break
 
-        #self.BarellRacing()
+        self.BarellRacing()
 
     # eval("self." + toRun + "()")  # Setups the method.
 
@@ -139,8 +140,8 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     # def Slalom(self):
     #     self.addCommands(CougarCourseCommand(1))
         
-    # def BarellRacing(self):
-    #     self.addCommands(CougarCourseCommand(2))#GenerateVectors.generate()))
+    def BarellRacing(self):
+        self.addCommands(CougarCourseCommand(1))
 
     # def Bounce(self):
     #     self.addCommands(CougarCourseCommand(3))
