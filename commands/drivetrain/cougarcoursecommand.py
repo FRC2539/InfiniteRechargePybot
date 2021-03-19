@@ -119,7 +119,7 @@ class CougarCourseCommand(CommandBase):
         #print("go " + str(gyroOffset))
 
         # Populate a matrix corresponding to the desired velocity.
-        speedsMatrix = [[self.targetV/320, self.targetV/320], [self.targetV/320, self.targetV/320]]
+        speedsMatrix = [[self.targetV/80, self.targetV/80], [self.targetV/80, self.targetV/80]]
 
         # Populate a matrix with the wheel angles that need to have their speed increased.
         # This will be determined by the gyro's offset.

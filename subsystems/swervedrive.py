@@ -26,7 +26,7 @@ class SwerveDrive(BaseDrive):
         [front left, front right, back left, back right]
         """
 
-        # TODO: Add docstrings.
+        # TODO: Add docstrings.            
 
         self.isFieldOriented = True
 
@@ -107,6 +107,9 @@ class SwerveDrive(BaseDrive):
         """
 
         states = self.getModuleStates()
+
+        print(self.getSwervePose().Y() * 39.3701)
+        print('y ' + str(-self.getSwervePose().X() * 39.3701))
 
         self.swerveOdometry.update(
             self.navX.getRotation2d(),

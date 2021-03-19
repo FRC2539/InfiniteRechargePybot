@@ -141,7 +141,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     #     self.addCommands(CougarCourseCommand(1))
         
     def BarellRacing(self):
-        self.addCommands(CougarCourseCommand(1))
+        self.addCommands(PathFollowerCommand.get([[2,2]], [4,0,0]))
 
     # def Bounce(self):
     #     self.addCommands(CougarCourseCommand(3))

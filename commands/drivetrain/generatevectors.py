@@ -36,8 +36,8 @@ class GenerateVectors:
             if count == 10:
                 
                 valuableData.append([
-                    data['pose']['translation']['x'], # This is the order we need
-                    data['pose']['translation']['y'],
+                    data['pose']['translation']['x'] * 39.3701, # This is the order we need
+                    data['pose']['translation']['y'] * 39.3701,
                     data['velocity'], 
                 ])
                 

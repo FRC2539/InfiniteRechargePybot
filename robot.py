@@ -51,8 +51,6 @@ class KryptonBot(TimedCommandRobot):
 
         StartUpCommandGroup().schedule()
 
-        self.preBuild = []
-
     def autonomousInit(self):
         """This function is called each time autonomous mode starts."""
 
