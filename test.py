@@ -1,44 +1,43 @@
 import math
 
-def injectCurvedPoints( startPoint: list, endPoint: list, spacing = 6):
+
+def injectCurvedPoints(startPoint: list, endPoint: list, spacing=6):
     x0, y0, theta0 = startPoint[0], startPoint[1], startPoint[2]
     xf, yf, thetaf = endPoint[0], endPoint[1], endPoint[2]
-    
+
     deltaTheta = thetaf - theta0
-    d = math.sqrt((xf - x0)**2 + (yf -y0)**2)
-    r = d/(2*math.sin(math.radians(deltaTheta/2)))
-    l = (deltaTheta / 360) *2 * math.pi *r
-    numPoints = math.ceil(l/spacing)
-    spacing = l/numPoints
-    thetas = deltaTheta/numPoints
+    d = math.sqrt((xf - x0) ** 2 + (yf - y0) ** 2)
+    r = d / (2 * math.sin(math.radians(deltaTheta / 2)))
+    l = (deltaTheta / 360) * 2 * math.pi * r
+    numPoints = math.ceil(l / spacing)
+    spacing = l / numPoints
+    thetas = deltaTheta / numPoints
     xr = -r * math.sin(math.radians(deltaTheta)) + x0
     yr = -r * math.cos(math.radians(deltaTheta)) + y0
     print(r)
     print(xr)
     print(yr)
-    #r = math.abs(r)
-    if r<0:
-        r =r*-1
-    
-    
-    pointsInBetween =  [[x0, y0, theta0]]
+    # r = math.abs(r)
+    if r < 0:
+        r = r * -1
+
+    pointsInBetween = [[x0, y0, theta0]]
     newTheta = theta0 + thetas
     for segment in range(numPoints):
-        
-        newX = r*math.cos(math.radians(newTheta)) + xr
-        newY = r*math.sin(math.radians(newTheta)) + yr
-        
+
+        newX = r * math.cos(math.radians(newTheta)) + xr
+        newY = r * math.sin(math.radians(newTheta)) + yr
+
         pointsInBetween.append([newX, newY, newTheta])
         newTheta += thetas
 
-        x1 = newX  
+        x1 = newX
         y1 = newY
         theta1 = newTheta
-    
+
     return pointsInBetween
-            
-            
-            
+
+
 def injectBetweenTwoPoints(startPoint: list, endPoint: list, spacing=1):
     """
     Used in CougarCourse. Adds additional points.

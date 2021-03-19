@@ -14,6 +14,7 @@ from commands.drivetrain.generatevectors import GenerateVectors
 from commands.drivetrain.pathfollowercommand import PathFollowerCommand
 from commands.drivetrain.cougarcoursecommand import CougarCourseCommand
 from commands.drivetrain.runautocommand import RunAutoCommand
+from commands.drivetrain.segmentfollowercommand import SegmentFollowerCommand
 
 from commands.intake.intakecommand import IntakeCommand
 
@@ -52,36 +53,6 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.addCommands(InstantCommand(lambda: print("I worked!")))
 
     def tenBall(self):
-        self.addCommands(InstantCommand(lambda: print("Number two worked!")))
-
-        # self.conveyor = InstantCommand(robot.conveyor.forward, [robot.conveyor])
-
-        # self.turnBack = TurnCommand(20)
-        # self.realign = TurnCommand(-10)
-
-        # self.intake = InstantCommand(robot.intake.intakeBalls, [robot.intake])
-        # self.moveSide = MoveCommand(7.071, angle=45, slow=True)
-
-        # self.moveForward = MoveCommand(199, slow=True)
-
-        # self.stopIntake = InstantCommand(robot.intake.dontIntakeBalls, [robot.intake])
-        # self.moveBack = MoveCommand(-120, angle=14)
-
-        # self.sudo = AutomatedShootCommand(3000).withTimeout(4)
-        # self.sudoNT = AutomatedShootCommand()
-
-        # self.goBack = self.moveBack.alongWith(self.sudoNT)
-
-        # self.addCommands(
-        #                  #self.conveyor,
-        #                  self.sudo,
-        #                  self.turnBack,
-        #                  self.intake,
-        #                  self.moveSide,
-        #                  self.moveForward,
-        #                  self.realign,
-        #                  self.goBack,
-        #                  )
 
         self.spinUp = InstantCommand(
             lambda: robot.shooter.setRPM(3800), [robot.shooter]
@@ -99,8 +70,6 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             lambda: robot.conveyor.forward(), [robot.conveyor]
         )
 
-        self.print = InstantCommand(lambda: print("\n\nEnd\n\n"))
-
         self.moveForward = MoveCommand(124)
         self.secondMove = MoveCommand(112, angle=2)
         self.moveBack = MoveCommand(-24, angle=-1.5)
@@ -108,8 +77,6 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
         self.shoot = AutomatedShootCommand(3800).withTimeout(3.25)
         self.shootTwo = AutomatedShootCommand(3800)
-
-        rotate = math.pi
 
         # Schedule the autonomous command
         self.auton = PathFollowerCommand().get(
@@ -131,7 +98,6 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             # self.spinUpTwo,      # - about 3 seconds, assuming up to speed.
             # self.conveyorRun,
             self.auton,  # 5 seconds
-            self.print
             # self.moveBack,
             # self.turnToTarget,
             # self.shootTwo        # 4 seconds
@@ -139,9 +105,11 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     # def Slalom(self):
     #     self.addCommands(CougarCourseCommand(1))
-        
+
     def BarellRacing(self):
-        self.addCommands(PathFollowerCommand.get([[2,2]], [4,0,0]))
+        self.addCommands(
+            SegmentFollowerCommand([[2, 3], [6, 3], [6, -1], [3, -3]])
+        )  # PathFollowerCommand.get([[2,2]], [4,0,0]))
 
     # def Bounce(self):
     #     self.addCommands(CougarCourseCommand(3))

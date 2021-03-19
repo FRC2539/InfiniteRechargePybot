@@ -29,7 +29,10 @@ class ShootingProcessCommand(CommandBase):
             robot.chamber.forward()
 
     def checkRPM(self):
-        if not self.isAtTargetRPM and abs(robot.shooter.getRPM() - self.targetRPM) <= self.tolerance:
+        if (
+            not self.isAtTargetRPM
+            and abs(robot.shooter.getRPM() - self.targetRPM) <= self.tolerance
+        ):
             self.isAtTargetRPM = True
 
     def end(self, interrupted):

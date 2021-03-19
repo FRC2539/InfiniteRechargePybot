@@ -13,10 +13,9 @@ import math
 
 
 class PathFollowerCommand:
-
     @staticmethod
-    def get(translations, end):            
-        
+    def get(translations, end):
+
         thetaController = ProfiledPIDControllerRadians(
             0.0000001,
             0,

@@ -45,6 +45,7 @@ from commands.limelight.automatedshootcommand import AutomatedShootCommand
 import constants
 import robot
 
+
 def init():
     """
     Declare all controllers, assign axes to logical axes, and trigger
@@ -77,7 +78,7 @@ def init():
             SetSpeedCommand(False)
         )  # slow speed while trigger is held.
         driveControllerOne.Trigger.whenReleased(SetSpeedCommand())
-        
+
         driveControllerOne.LeftBottomRight.whileHeld(PathCommand())
 
         driveControllerTwo.LeftThumb.toggleWhenPressed(ConveyorForwardCommand())
@@ -86,7 +87,7 @@ def init():
 
         driveControllerTwo.LeftTopLeft.whileHeld(RaiseHoodCommand())
         driveControllerTwo.LeftBottomLeft.whileHeld(LowerHoodCommand())
-        
+
         # The controller for non-driving subsystems of the robot
         componentController = LogitechDualShock(2)
 
@@ -96,7 +97,7 @@ def init():
         componentController.A.toggleWhenPressed(IntakeCommand())
 
         componentController.RightTrigger.whileHeld(SlowShootingProcessCommand())
-        
+
     else:
         # The controller for driving the robot
         driveControllerOne = LogitechDualShock(0)  # The driver controller
@@ -104,4 +105,4 @@ def init():
         logicalaxes.forward = driveControllerOne.LeftY
         logicalaxes.strafe = driveControllerOne.LeftX
 
-        logicalaxes.rotate = driveControllerTwo.RightX
+        logicalaxes.rotate = driveControllerOne.RightX

@@ -21,6 +21,11 @@ class DriveCommand(CommandBase):
 
         robot.drivetrain.resetGyro()
 
+        if constants.drivetrain.swerveStyle:
+            self.execute = self.swerveExecute
+        else:
+            self.execute = self.tankExecute
+
     def initialize(self):
         robot.drivetrain.stop()
         robot.drivetrain.setProfile(0)
@@ -28,7 +33,7 @@ class DriveCommand(CommandBase):
         self.lastY = None
         self.slowed = False
 
-    def execute(self):
+    def swerveExecute(self):
         # Avoid quick changes in direction
         y = logicalaxes.forward.get()
         if self.lastY is None:
@@ -47,3 +52,21 @@ class DriveCommand(CommandBase):
         robot.drivetrain.move(
             logicalaxes.strafe.get(), y, logicalaxes.rotate.get() * 0.9
         )
+
+    def tankExecute(self):
+        # Avoid quick changes in direction
+        y = logicalaxes.forward.get()
+        if self.lastY is None:
+            self.lastY = y
+        else:
+            cooldown = 0.05
+            self.lastY -= math.copysign(cooldown, self.lastY)
+
+            # If the sign has changed, don't move
+            if self.lastY * y < 0:
+                y = 0
+
+            if abs(y) > abs(self.lastY):
+                self.lastY = y
+
+        robot.drivetrain.move(y, logicalaxes.rotate.get() * 0.7)

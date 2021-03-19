@@ -26,7 +26,9 @@ class SwerveDrive(BaseDrive):
         [front left, front right, back left, back right]
         """
 
-        # TODO: Add docstrings.            
+        if not constants.drivetrain.swerveStyle:
+            self.move = self.tankMove
+            self._calculateSpeeds = self.tankCalculateSpeeds
 
         self.isFieldOriented = True
 
@@ -109,7 +111,7 @@ class SwerveDrive(BaseDrive):
         states = self.getModuleStates()
 
         print(self.getSwervePose().Y() * 39.3701)
-        print('y ' + str(-self.getSwervePose().X() * 39.3701))
+        print("y " + str(-self.getSwervePose().X() * 39.3701))
 
         self.swerveOdometry.update(
             self.navX.getRotation2d(),
@@ -270,26 +272,26 @@ class SwerveDrive(BaseDrive):
             ):  # You're going to need encoders, so only focus here.
                 module.setWheelAngle(angle)
                 module.setWheelSpeed(abs(math.sqrt(speed ** 2 + rotate ** 2)))
-                
+
     def tankMove(self, y, rotate):
         if [y, rotate] == self.lastInputs:
             return
 
         self.lastInputs = [y, rotate]
 
-        '''Prevent drift caused by small input values'''
+        """Prevent drift caused by small input values"""
         if self.useEncoders:
             y = math.copysign(max(abs(y) - self.deadband, 0), y)
             rotate = math.copysign(max(abs(rotate) - self.deadband, 0), rotate)
 
         speeds = self.tankCalculateSpeeds(y, rotate)
-        
+
         for module, speed in zip(self.modules, speeds):
             module.setWheelAngle(0)
             module.setWheelSpeed(speed)
-    
+
     def tankCalculateSpeeds(self, y, rotate):
-        return [y + rotate, -y + rotate, y + rotate, -y + rotate] # FL, FR, BL, BR
+        return [y + rotate, -y + rotate, y + rotate, -y + rotate]  # FL, FR, BL, BR
 
     def stop(self):
         """

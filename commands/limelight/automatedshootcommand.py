@@ -11,6 +11,4 @@ class AutomatedShootCommand(ParallelCommandGroup):
     def __init__(self, rpm=3800):
         super().__init__()
 
-        self.addCommands(
-            SudoCommandGroup(), ShootingProcessCommand(rpm)
-        )
+        self.addCommands(SudoCommandGroup(), ShootingProcessCommand(rpm))

@@ -64,7 +64,6 @@ class MoveCommand(CommandBase):
             if abs(position - (start + self.distance)) < 4:
                 count += 1
             else:
-                print("f")
                 return False
 
         if count == 4:

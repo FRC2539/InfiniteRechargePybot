@@ -29,17 +29,17 @@ class RecordAutoCommand(CommandBase):
 
         self.lastY = None
         self.slowed = False
-        
+
         with open(os.path.dirname(robot.__file__) + "/trajectorydata.txt", "w") as f:
-            
+
             sys.stdout = f
-            
-            #print(self.num)
-            
+
+            # print(self.num)
+
             f.close()
-        
+
         self.standardOut = sys.stdout
-        
+
     def execute(self):
         # Avoid quick changes in direction
         y = logicalaxes.forward.get()
@@ -59,22 +59,22 @@ class RecordAutoCommand(CommandBase):
         robot.drivetrain.move(
             logicalaxes.strafe.get(), y, logicalaxes.rotate.get() * 0.9
         )
-        
+
         with open(os.path.dirname(robot.__file__) + "/trajectorydata.txt", "w") as f:
-            
+
             sys.stdout = f
-            
+
             print([robot.drivetrain.getSpeeds(), robot.drivetrain.getModuleAngles()])
-            
+
             f.close()
-            
+
     def end(self, interrupted):
         with open(os.path.dirname(robot.__file__) + "/trajectorydata.txt", "w") as f:
-            
+
             sys.stdout = f
-            
-            print('|||')
-            
+
+            print("|||")
+
             f.close()
-        
+
         sys.stdout = self.standardOut

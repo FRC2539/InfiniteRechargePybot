@@ -16,7 +16,7 @@ class CougarCourseCommand(CommandBase):
         super().__init__()
 
         self.addRequirements([robot.drivetrain])
-        
+
         if RobotBase.isSimulation():
             pass
 
@@ -46,7 +46,7 @@ class CougarCourseCommand(CommandBase):
                 f.close()
         else:
             self.allPoints = points
-            
+
         print(self.allPoints)
 
         self.tolerance = tolerance
@@ -116,10 +116,13 @@ class CougarCourseCommand(CommandBase):
 
         self.kP = 0.2
         gyroOffset = robot.drivetrain.getAngleTo(self.startAngle)
-        #print("go " + str(gyroOffset))
+        # print("go " + str(gyroOffset))
 
         # Populate a matrix corresponding to the desired velocity.
-        speedsMatrix = [[self.targetV/80, self.targetV/80], [self.targetV/80, self.targetV/80]]
+        speedsMatrix = [
+            [self.targetV / 80, self.targetV / 80],
+            [self.targetV / 80, self.targetV / 80],
+        ]
 
         # Populate a matrix with the wheel angles that need to have their speed increased.
         # This will be determined by the gyro's offset.

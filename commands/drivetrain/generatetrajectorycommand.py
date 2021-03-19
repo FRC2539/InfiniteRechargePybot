@@ -10,7 +10,6 @@ import math
 
 
 class GenerateTrajectoryCommand:
-    
     @staticmethod
     def getTrajectory(movements_: list, endPose: list, startingPose: list = [0, 0, 0]):
         config = TrajectoryConfig(
@@ -18,9 +17,7 @@ class GenerateTrajectoryCommand:
             constants.drivetrain.maxMetersPerSecondSquared,  # Max meters per second squared
         )
 
-        config.setKinematics(
-            robot.drivetrain.swerveKinematics
-        )
+        config.setKinematics(robot.drivetrain.swerveKinematics)
 
         initialPosition = Pose2d(
             startingPose[0],
@@ -31,15 +28,11 @@ class GenerateTrajectoryCommand:
         movements = []
         for point in movements_:
             try:
-                movements.append(
-                    Translation2d(point[0], point[1])
-                )
+                movements.append(Translation2d(point[0], point[1]))
             except (TypeError):
                 raise Exception("Type Error Occurred.")
 
-        endPosition = Pose2d(
-            endPose[0], endPose[1], Rotation2d(endPose[2])
-        )
+        endPosition = Pose2d(endPose[0], endPose[1], Rotation2d(endPose[2]))
 
         trajectory = TrajectoryGenerator.generateTrajectory(
             initialPosition,

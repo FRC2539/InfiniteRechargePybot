@@ -41,7 +41,7 @@ class Hood(CougarSystem):
 
     def periodic(self):
         self.feed()
-        
+
     def getPosition(self):
         return self.encoder.getOutput() * 360
 

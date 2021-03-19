@@ -16,10 +16,10 @@ class RunAutoCommand(CommandBase):
         super().__init__()
 
         self.addRequirements([robot.drivetrain])
-        
+
         if RobotBase.isSimulation():
             pass
-        
+
         else:
             self.allPoints = []
             with open(
@@ -39,12 +39,14 @@ class RunAutoCommand(CommandBase):
                     index += 1
 
                 for line in f_[index:]:
-                    if str(line).strip() == "|||": # Exit when at the end of the trajectory.
+                    if (
+                        str(line).strip() == "|||"
+                    ):  # Exit when at the end of the trajectory.
                         break
                     self.allPoints.append(eval(line))
 
                 f.close()
-            
+
         self.speeds = self.allPoints[0]
         self.angles = self.allPoints[1]
 
@@ -63,7 +65,9 @@ class RunAutoCommand(CommandBase):
             self.cycleCount += 1
 
     def isFinished(self):
-        return self.cycleCount == len(self.speeds) # It doesn't matter if we use speeds or angles here.
+        return self.cycleCount == len(
+            self.speeds
+        )  # It doesn't matter if we use speeds or angles here.
 
     def end(self, interrupted):
         robot.drivetrain.stop()
