@@ -17,6 +17,8 @@ class SegmentFollowerCommand(CommandBase):
 
         self.tol = angleTolerance
 
+        self.maxSpeed = 0.8
+
         self.distances = []
         self.angles = []
 
@@ -36,6 +38,9 @@ class SegmentFollowerCommand(CommandBase):
             # Find the difference between them.
             finalX = nextPointX - pointX
             finalY = nextPointY - pointY
+            
+            print('x ' + str(finalX))
+            print('y ' + str(finalY))
 
             if finalX == 0 and finalY == 0:  # Same points, continue onto the next pair.
                 continue
@@ -54,10 +59,10 @@ class SegmentFollowerCommand(CommandBase):
 
             else:
                 if finalX > 0: # Going to the right
-                    print('here')
                     theta = ((math.atan2(finalY, finalX) * 180 / math.pi) + 90) % 180
                 else: # Going to the left
-                    theta = -((math.atan2(finalY, finalX) * 180 / math.pi) % 180)
+                    print('THIS ONE')
+                    theta = -((math.atan2(finalX, finalY) * 180 / math.pi) % 180)
                     
             print('THETA ' + str(theta))
 
@@ -73,6 +78,7 @@ class SegmentFollowerCommand(CommandBase):
         robot.drivetrain.setModuleProfiles(1, turn=False)
 
         self.pointTracker = 0
+        self.kP = 1
 
         self.startPos = robot.drivetrain.getPositions()
 
@@ -95,40 +101,19 @@ class SegmentFollowerCommand(CommandBase):
         if self.passed: # Have we gone through the waypoint?
 
             if self.notRanYet:  # Runs once at the waypoint.
-                print(self.pointTracker)
 
-                # try: # If it can't index them, then it's done. 
-                #     self.desiredAngle = self.angles[self.pointTracker]
-                #     self.desiredDistance = self.distances[self.pointTracker]
+                try: # If it can't index them, then it's done.
+                    self.desiredAngle = self.angles[self.pointTracker]
+                    self.desiredDistance = self.distances[self.pointTracker]
 
-                # except(IndexError):
-                #     print('f')
-                #     self.pathFinished = True
-                #     return
+                except(IndexError):
+                    self.pathFinished = True
+                    return
                 
-                # Below is the experimental.
-                
-                offsetDistance = (sum(robot.drivetrain.getPositions()) / 4) - (sum(self.startPos) / 4)
-                
-                nextDistance = self.distances[self.pointTracker]
-                lastDistance = self.distances[self.pointTracker-1]
-                
-                nextAngle = self.angles[self.pointTracker]
-                
-                triangleHeight = nextDistance * math.cos(nextAngle * math.pi / 180)
-                
-                # Awful variable name I know, hard to explain.
-                mainTriangleAngle = math.asin(triangleHeight / lastDistance) * 180 / math.pi
-                
-                finalTriangleAngle = 180 - ((90 - mainTriangleAngle) + nextAngle)
-                
-                distanceToSet=offsetDistance**2+nextDistance**2-2*offsetDistance*nextDistance*math.cos(finalTriangleAngle * math.pi / 180)
-                angleToSet = math.asin((nextDistance * (math.sin(finalTriangleAngle * math.pi / 180))) / distanceToSet)
+                self.pointTracker += 1
                 
                 self.notRanYet = False
-
-                self.pointTracker += 1
-
+                                
             self.count = 0
             if self.count != 4 and not self.moveSet:
                 for currentAngle in robot.drivetrain.getModuleAngles():
@@ -143,7 +128,7 @@ class SegmentFollowerCommand(CommandBase):
             if self.count >= 2:  # All angles aligned.
                 print('wheels aligned')
                 
-                robot.drivetrain.setPercents([0.51, 0.51, 0.5, 0.5]) # A little extra because the dt likes to turn.
+                robot.drivetrain.setUniformModulePercent(self.maxSpeed)
                 self.moveSet = True
                 self.passed = False
 
@@ -151,16 +136,22 @@ class SegmentFollowerCommand(CommandBase):
             self.moveSet = False
             self.notRanYet = True
             
+            print('avg ' + str(self.desiredDistance - abs(abs(sum(robot.drivetrain.getPositions()) / 4 - sum(self.startPos) / 4))))
+            
+            if abs(self.desiredDistance - abs(abs(sum(robot.drivetrain.getPositions()) / 4 - sum(self.startPos) / 4))) <= 18: # Slow down when we are about eighteen inches from the goal.
+                robot.drivetrain.setUniformModulePercent(0.4)
+            elif abs(self.desiredDistance - abs(abs(sum(robot.drivetrain.getPositions()) / 4 - sum(self.startPos) / 4))) <= 36: 
+                robot.drivetrain.setUniformModulePercent(0.6)
+            else:
+                robot.drivetrain.setUniformModulePercent(self.maxSpeed)
             
 
     def atWaypoint(self):
         count = 0
-        print('\n')
         for position, start in zip(robot.drivetrain.getPositions(), self.startPos):
-            print(abs(position - (start + self.desiredDistance)))
             if (
-                abs(position - (start + self.desiredDistance)) < 2
-            ):  # 2 inches is the tolerance.
+                abs(position - (start + self.desiredDistance)) < 1
+            ):  # 1 inch is the tolerance.
                 print('\n\nAt waypoint')
                 return True
         

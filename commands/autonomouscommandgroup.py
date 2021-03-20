@@ -108,28 +108,14 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def BarellRacing(self):
         self.addCommands(
-            # SegmentFollowerCommand([[30, 30], [60, 0]]), # PathFollowerCommand.get([[-2,-2]], [0,-4,0])
+            #SegmentFollowerCommand([[30, 30], [60, 0]]),
             SegmentFollowerCommand(
                 [
-                    [0, 105],
-                    [15, 120],
-                    [30, 135],
-                    [45, 120],
-                    [60, 105],
-                    [45, 90],
-                    [30, 75],
-                    [15, 90],
-                    [0, 105],
-                    [0, 180],
-                    [-30, 210],
-                    [-60, 180],
-                    [-30, 150],
-                    [0, 180],
-                    [60, 210],
-                    [60, 240],
-                    [30, 270],
-                    [0, 240],
-                    [0, 0],
+                    [0, 140],
+                    [60, 140], # Right
+                    [60, 95], # Down
+                    [-5, 90], # Left
+                    [-15, 220] # Forward and left
                 ]
             )
         )
