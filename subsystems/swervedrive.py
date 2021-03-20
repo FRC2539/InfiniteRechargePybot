@@ -110,9 +110,6 @@ class SwerveDrive(BaseDrive):
 
         states = self.getModuleStates()
 
-        print(self.getSwervePose().Y() * 39.3701)
-        print("y " + str(-self.getSwervePose().X() * 39.3701))
-
         self.swerveOdometry.update(
             self.navX.getRotation2d(),
             states[0],  # 0

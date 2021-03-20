@@ -18,24 +18,28 @@ IDs for the CANbus, sensors, PWM, and the liking.
 
 drivetrain = Constants()
 
+# Drive Velocity Control
 drivetrain.dPk = 0.0085
 drivetrain.dIk = 0
 drivetrain.dDk = 0
 drivetrain.dFFk = 0.25  # 1?
 drivetrain.dIZk = 0
 
-drivetrain.sdPk = 0.1
+# Drive Position Control
+drivetrain.sdPk = 0.45  # 0.1
 drivetrain.sdIk = 0
 drivetrain.sdDk = 0
-drivetrain.sdFFk = 0
+drivetrain.sdFFk = 0.1
 drivetrain.sdIZk = 0
 
-drivetrain.tPk = 20.05
+# Turn Position Control
+drivetrain.tPk = 23
 drivetrain.tIk = 0
 drivetrain.tDk = 0.01
 drivetrain.tFFk = 0
 drivetrain.tIZk = 0
 
+# Turn Secondary Position Control
 drivetrain.stPk = 0.01
 drivetrain.stIk = 0
 drivetrain.stDk = 0
@@ -46,7 +50,7 @@ drivetrain.driveMotorGearRatio = 6.86
 drivetrain.turnMotorGearRatio = 12.8
 
 drivetrain.driveMotionAcceleration = 12500
-drivetrain.driveMotionCruiseVelocity = 14500
+drivetrain.driveMotionCruiseVelocity = 18500
 drivetrain.slowDriveMotionCruiseVelocity = 11000
 
 drivetrain.turnMotionAcceleration = 1000
@@ -62,7 +66,7 @@ drivetrain.trackWidth = 23.5
 
 drivetrain.robotRadius = 16.84251
 
-drivetrain.swerveStyle = False
+drivetrain.swerveStyle = True
 
 drivetrain.speedLimit = (
     100.0  # in inches per second (if you have feet per second, multiply by 12!)

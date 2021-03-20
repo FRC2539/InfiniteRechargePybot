@@ -37,7 +37,7 @@ class PathFollowerCommand:
             robot.drivetrain.getSwervePose,
             robot.drivetrain.swerveKinematics,
             PIDController(0.000000001, 0, 0.2),  # X-controller
-            PIDController(0.000000001, 0, 0.2),  # Y-controller
+            PIDController(0.000000000000000000001, 0, 0.2),  # Y-controller
             thetaController,
             lambda: Rotation2d(0),
             robot.drivetrain.setModuleStates,

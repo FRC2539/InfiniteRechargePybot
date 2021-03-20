@@ -20,6 +20,7 @@ class DriveCommand(CommandBase):
         self.addRequirements(robot.drivetrain)
 
         robot.drivetrain.resetGyro()
+        robot.drivetrain.resetOdometry()
 
         if constants.drivetrain.swerveStyle:
             self.execute = self.swerveExecute
