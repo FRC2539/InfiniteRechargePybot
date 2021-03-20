@@ -215,6 +215,12 @@ class SwerveModule:
                 speed * self.speedLimit
             ),  # Set half of the normal speed temporarily.
         )
+        
+    def getWheelPercent(self):
+        """
+        Returns the drive motor's output in a percent form.
+        """
+        return self.driveMotor.getMotorOutputPercent()
 
     def setWheelPercent(self, speed):
         """

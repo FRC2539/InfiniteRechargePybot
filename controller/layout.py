@@ -14,6 +14,8 @@ from commands.drivetrain.curvecommand import CurveCommand
 from commands.drivetrain.zerocancoderscommand import ZeroCANCodersCommand
 from commands.drivetrain.setspeedcommand import SetSpeedCommand
 from commands.drivetrain.recordautocommand import RecordAutoCommand
+from commands.drivetrain.runautocommand import RunAutoCommand
+from commands.drivetrain.dosadocommand import DosadoCommand
 
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 
@@ -68,6 +70,9 @@ def init():
 
         logicalaxes.rotate = driveControllerTwo.X
 
+        driveControllerOne.RightBottomRight.toggleWhenPressed(RecordAutoCommand())
+        driveControllerOne.RightBottomMiddle.toggleWhenPressed(RunAutoCommand())
+
         driveControllerOne.LeftBottomLeft.whenPressed(ZeroCANCodersCommand())
 
         driveControllerOne.LeftThumb.toggleWhenPressed(ChamberForwardCommand())
@@ -84,6 +89,8 @@ def init():
         driveControllerTwo.LeftThumb.toggleWhenPressed(ConveyorForwardCommand())
         driveControllerTwo.RightThumb.whileHeld(ConveyorBackwardCommand())
         driveControllerTwo.BottomThumb.toggleWhenPressed(IntakeCommand())
+
+        driveControllerTwo.Trigger.whenHeld(DosadoCommand(36))
 
         driveControllerTwo.LeftTopLeft.whileHeld(RaiseHoodCommand())
         driveControllerTwo.LeftBottomLeft.whileHeld(LowerHoodCommand())

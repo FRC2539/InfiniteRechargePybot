@@ -56,7 +56,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.frontRightCANCoder,
                 self.speedLimit,
                 -273.8672,
-                invertedDrive=True,  # Invert for some reason?
+                invertedDrive=constants.drivetrain.swerveStyle,  # Invert for some reason?
             ),
             SwerveModule(  # Back left module.
                 ports.drivetrain.backLeftDriveID,
@@ -71,7 +71,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.backRightCANCoder,
                 self.speedLimit,
                 -129.814453,
-                invertedDrive=True,  # Invert for some reason. Ezra's going nuts lol.
+                invertedDrive=constants.drivetrain.swerveStyle,  # Invert for some reason. Ezra's going nuts lol.
             ),
         ]
 
@@ -234,7 +234,6 @@ class SwerveDrive(BaseDrive):
         speeds[:] = [
             speed * magnitude for speed in speeds
         ]  # Ensures that the speeds of the motors are relevant to the joystick input.
-
         return newSpeeds, angles  # Return the calculated speed and angles.
 
     def move(self, x, y, rotate):
@@ -282,6 +281,8 @@ class SwerveDrive(BaseDrive):
             rotate = math.copysign(max(abs(rotate) - self.deadband, 0), rotate)
 
         speeds = self.tankCalculateSpeeds(y, rotate)
+
+        print('s ' + str(speeds))
 
         for module, speed in zip(self.modules, speeds):
             module.setWheelAngle(0)
@@ -382,6 +383,12 @@ class SwerveDrive(BaseDrive):
         """
         for module in self.modules:
             module.setWheelSpeed(speed)
+            
+    def getPercents(self):
+        """
+        Returns the percent outputs of each drive motor.
+        """
+        return [module.getWheelPercent() for module in self.modules]
 
     def setPercents(self, speeds: list):
         """

@@ -33,7 +33,7 @@ drivetrain.sdFFk = 0.1
 drivetrain.sdIZk = 0
 
 # Turn Position Control
-drivetrain.tPk = 23
+drivetrain.tPk = 21
 drivetrain.tIk = 0
 drivetrain.tDk = 0.01
 drivetrain.tFFk = 0
@@ -78,6 +78,8 @@ drivetrain.encoderConfig.initializationStrategy = (
     SensorInitializationStrategy.BootToAbsolutePosition
 )
 drivetrain.encoderConfig.sensorDirection = False
+
+drivetrain.mostRecentPath = [] # Updated in record auto.
 
 drivetrain.preBuild = {1: ".barrelracing.json"}
 # non-diagonal distance between points = 30 inches

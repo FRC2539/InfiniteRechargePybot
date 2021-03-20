@@ -70,4 +70,4 @@ class DriveCommand(CommandBase):
             if abs(y) > abs(self.lastY):
                 self.lastY = y
 
-        robot.drivetrain.move(y, logicalaxes.rotate.get() * 0.7)
+        robot.drivetrain.move(-y, logicalaxes.rotate.get() * -0.7)

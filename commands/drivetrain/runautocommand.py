@@ -1,73 +1,49 @@
 from commands2 import CommandBase
 
-from wpilib import RobotBase
+from robotpy_ext.misc import NotifierDelay
 
 import math, os, inspect
-import robot
+import robot, constants
 
 
 class RunAutoCommand(CommandBase):
-    def __init__(self, points: int = 1, tolerance=1, angleTol=3):
+    def __init__(self, points: list = []):
         """
         Distance is the distance we should travel in inches, turnOffset
-        is the angle displacement of the gyro in degrees.
+        is the angle displacement of the gyro in degrees. Get points
+        from the RecordAutoCommand. I recommend running 'black' on the container file
+        afterwards format the list if you copy and paste from the terminal.
         """
 
         super().__init__()
 
         self.addRequirements([robot.drivetrain])
 
-        if RobotBase.isSimulation():
-            pass
-
-        else:
-            self.allPoints = []
-            with open(
-                (os.path.dirname(robot.__file__) + "/trajectorydata.txt"), "r"
-            ) as f:
-                index = 0
-                f_ = list(f)
-
-                id_ = f_[index]
-                while id_ != str(points):
-                    try:
-                        id_ = f_[index].strip()
-                    except (IndexError):
-                        raise Exception(
-                            "Make sure ID of constants matches the auto ID."
-                        )
-                    index += 1
-
-                for line in f_[index:]:
-                    if (
-                        str(line).strip() == "|||"
-                    ):  # Exit when at the end of the trajectory.
-                        break
-                    self.allPoints.append(eval(line))
-
-                f.close()
-
-        self.speeds = self.allPoints[0]
-        self.angles = self.allPoints[1]
-
-        self.tolerance = tolerance
-        self.angleTol = angleTol
-
+        self.points = points
+        
     def initialize(self):
+        if self.points == []:
+            self.points = constants.drivetrain.mostRecentPath
+        
         robot.drivetrain.setModuleProfiles(0, drive=False)
 
         self.cycleCount = 0
+        self.done = False
 
     def execute(self):
-        for speed, angle in zip(self.speeds, self.angles):
-            robot.drivetrain.setModuleAngles(angle)
-            robot.drivetrain.setModuleSpeed(speed)
+        with NotifierDelay(0.01) as delay:
+            try:
+                robot.drivetrain.setPercents(self.points[self.cycleCount][0])
+                print('angles ' + str(self.points[self.cycleCount][1]))
+                robot.drivetrain.setModuleAngles(self.points[self.cycleCount][1])
+            except(IndexError):
+                self.done = True
             self.cycleCount += 1
+            delay.wait()
 
     def isFinished(self):
-        return self.cycleCount == len(
-            self.speeds
-        )  # It doesn't matter if we use speeds or angles here.
+        return self.done
 
     def end(self, interrupted):
+        print('\n\nEnd\n\n')
         robot.drivetrain.stop()

@@ -15,6 +15,7 @@ from commands.drivetrain.pathfollowercommand import PathFollowerCommand
 from commands.drivetrain.cougarcoursecommand import CougarCourseCommand
 from commands.drivetrain.runautocommand import RunAutoCommand
 from commands.drivetrain.segmentfollowercommand import SegmentFollowerCommand
+from commands.drivetrain.dosadocommand import DosadoCommand
 
 from commands.intake.intakecommand import IntakeCommand
 
@@ -108,16 +109,17 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def BarellRacing(self):
         self.addCommands(
+            DosadoCommand(36)
             #SegmentFollowerCommand([[30, 30], [60, 0]]),
-            SegmentFollowerCommand(
-                [
-                    [0, 140],
-                    [60, 140], # Right
-                    [60, 95], # Down
-                    [-5, 90], # Left
-                    [-15, 220] # Forward and left
-                ]
-            )
+            # SegmentFollowerCommand(
+            #     [
+            #         [0, 140],
+            #         [60, 140], # Right
+            #         [60, 95], # Down
+            #         [-5, 90], # Left
+            #         [-15, 220] # Forward and left
+            #     ]
+            # )
         )
 
     # def Bounce(self):
