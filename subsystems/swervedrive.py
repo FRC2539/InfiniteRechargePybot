@@ -410,7 +410,8 @@ class SwerveDrive(BaseDrive):
         Returns the CANCoder's absolute reading.
         Note, this does take into account the magnet
         offset which we set at the beginning.
-        I think, 180 is forward, 0 is backwards.
+        I think, 180 is forward, 0 is backwards. It
+        returns between 0 and 360.
         """
 
         # Add module in front, not to be confused with gyro! Returns degrees.

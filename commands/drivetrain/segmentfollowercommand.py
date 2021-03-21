@@ -5,9 +5,11 @@ import math
 import robot
 
 class SegmentFollowerCommand(CommandBase):
-    def __init__(self, waypoints: list, angleTolerance=5, deccelerate=False):
+    def __init__(self, waypoints: list, angleTolerance=5, maxSpeed=1, deccelerate=False, speedOffset=0):
         """
-        You start at [0, 0].
+        You start at [0, 0]. speedOffset is applied
+        to the left hand side of the drivetrain! Note,
+        this is not exactly accurate, but it is pretty consistent!
         """
         super().__init__()
 
@@ -17,8 +19,9 @@ class SegmentFollowerCommand(CommandBase):
 
         self.tol = angleTolerance
         self.deccelerate = deccelerate
+        self.speedOffset = speedOffset
 
-        self.maxSpeed = 0.8
+        self.maxSpeed = maxSpeed
 
         self.distances = []
         self.angles = []
@@ -120,7 +123,7 @@ class SegmentFollowerCommand(CommandBase):
             if self.count >= 2:  # All angles aligned.                
                 # Add extra speed because the robot can't follow a damn straight line. My need Weaver's heading
                 # algo. 
-                robot.drivetrain.setSpeeds([self.maxSpeed + 0.04, self.maxSpeed, self.maxSpeed + 0.04, self.maxSpeed])
+                robot.drivetrain.setSpeeds([self.maxSpeed + self.speedOffset, self.maxSpeed, self.maxSpeed + self.speedOffset, self.maxSpeed])
                 self.moveSet = True
                 self.passed = False
 
@@ -134,10 +137,11 @@ class SegmentFollowerCommand(CommandBase):
                 elif abs(self.desiredDistance - abs(abs(sum(robot.drivetrain.getPositions()) / 4 - sum(self.startPos) / 4))) <= 36: 
                     robot.drivetrain.setUniformModulePercent(0.5)
                 else:
-                    robot.drivetrain.setUniformModulePercent(self.maxSpeed)
+                    robot.drivetrain.setSpeeds([self.maxSpeed + self.speedOffset, self.maxSpeed, self.maxSpeed + self.speedOffset, self.maxSpeed])
             
             else:
-                robot.drivetrain.setUniformModulePercent(self.maxSpeed)
+                
+                robot.drivetrain.setSpeeds([self.maxSpeed + self.speedOffset, self.maxSpeed, self.maxSpeed + self.speedOffset, self.maxSpeed])
 
     def atWaypoint(self):
         count = 0

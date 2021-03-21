@@ -109,10 +109,13 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def BarellRacing(self):
         self.addCommands(
-            # SegmentFollowerCommand([[0, 132], [40, 150]], deccelerate=True),
-            # DosadoCommand(36, angleToTravel=270),
-            DosadoCommand(36,startAngle=-90,angleToTravel=-180, velocity=0.6, reverse=True)
-            # SegmentFollowerCommand([[-15, 123]]),
+            SegmentFollowerCommand([[0, 139], [40, 156]], deccelerate=True),
+            DosadoCommand(36, angleToTravel=270),
+            SegmentFollowerCommand([[0, 98]], deccelerate=True, speedOffset=-0.075),
+            DosadoCommand(38, startAngle=180, angleToTravel=-270, reverseStrafe=True),
+            SegmentFollowerCommand([[32, 0], [71, 82]], deccelerate=True, speedOffset=-0.04),
+            DosadoCommand(38, startAngle=90, angleToTravel=270, waitForAlign=True, reverseForward=True),
+            SegmentFollowerCommand([[10, -276]], deccelerate=True)
         )
 
     # def Bounce(self):
