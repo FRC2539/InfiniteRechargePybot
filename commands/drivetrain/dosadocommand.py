@@ -7,7 +7,7 @@ import robot, constants
 import math
 
 class DosadoCommand(CommandBase):
-    def __init__(self, radius, startAngle=90, angleToTravel=180, velocity=0.3):
+    def __init__(self, radius, startAngle=90, angleToTravel=180, velocity=0.8):
         """
         Note that startAngle is the module angles. The default is 90,
         which would be to the right of the robot's orientation. The angle
@@ -33,6 +33,7 @@ class DosadoCommand(CommandBase):
         self.revPerSecond = (self.linearVelocity / self.radius)
             
     def initialize(self):
+        robot.drivetrain.setModuleProfiles(1, drive=False) # Use the secondary PIDs for the turn motor.
         self.startPos = robot.drivetrain.getPositions()[self.idToIndex]
         self.done = False
         
@@ -54,10 +55,13 @@ class DosadoCommand(CommandBase):
             angles = [a - self.angle for a in angles]
             
             print('a ' + str(angles))
-            print('speeds ' + str(speeds))
+            print('actual angle ' + str(robot.drivetrain.getModuleAngles()))
             
             robot.drivetrain.setSpeeds(speeds)
             robot.drivetrain.setModuleAngles(angles)
             
     def isFinished(self):
         return self.done
+    
+    def end(self, interrupted):
+        robot.drivetrain.setModuleProfiles(0, drive=False)

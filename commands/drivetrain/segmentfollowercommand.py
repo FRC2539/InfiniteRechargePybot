@@ -39,9 +39,6 @@ class SegmentFollowerCommand(CommandBase):
             # Find the difference between them.
             finalX = nextPointX - pointX
             finalY = nextPointY - pointY
-            
-            print('x ' + str(finalX))
-            print('y ' + str(finalY))
 
             if finalX == 0 and finalY == 0:  # Same points, continue onto the next pair.
                 continue
@@ -62,18 +59,12 @@ class SegmentFollowerCommand(CommandBase):
                 if finalX > 0: # Going to the right
                     theta = ((math.atan2(finalY, finalX) * 180 / math.pi) + 90) % 180
                 else: # Going to the left
-                    print('THIS ONE')
                     theta = -((math.atan2(finalX, finalY) * 180 / math.pi) % 180)
                     
-            print('THETA ' + str(theta))
-
             distance = math.sqrt(finalX ** 2 + finalY ** 2)
 
             self.distances.append(distance)
             self.angles.append(theta)
-        
-        print(self.distances)
-        print(self.angles)
 
     def initialize(self):
         robot.drivetrain.setModuleProfiles(1, turn=False)
@@ -126,24 +117,22 @@ class SegmentFollowerCommand(CommandBase):
                     else:
                         continue
 
-            if self.count >= 2:  # All angles aligned.
-                print('wheels aligned')
-                
-                robot.drivetrain.setUniformModulePercent(self.maxSpeed)
+            if self.count >= 2:  # All angles aligned.                
+                # Add extra speed because the robot can't follow a damn straight line. My need Weaver's heading
+                # algo. 
+                robot.drivetrain.setSpeeds([self.maxSpeed + 0.04, self.maxSpeed, self.maxSpeed + 0.04, self.maxSpeed])
                 self.moveSet = True
                 self.passed = False
 
         else:
             self.moveSet = False
             self.notRanYet = True
-            
-            print('avg ' + str(self.desiredDistance - abs(abs(sum(robot.drivetrain.getPositions()) / 4 - sum(self.startPos) / 4))))
-            
+                        
             if self.deccelerate:
                 if abs(self.desiredDistance - abs(abs(sum(robot.drivetrain.getPositions()) / 4 - sum(self.startPos) / 4))) <= 18: # Slow down when we are about eighteen inches from the goal.
-                    robot.drivetrain.setUniformModulePercent(0.4)
+                    robot.drivetrain.setUniformModulePercent(0.25)
                 elif abs(self.desiredDistance - abs(abs(sum(robot.drivetrain.getPositions()) / 4 - sum(self.startPos) / 4))) <= 36: 
-                    robot.drivetrain.setUniformModulePercent(0.6)
+                    robot.drivetrain.setUniformModulePercent(0.5)
                 else:
                     robot.drivetrain.setUniformModulePercent(self.maxSpeed)
             

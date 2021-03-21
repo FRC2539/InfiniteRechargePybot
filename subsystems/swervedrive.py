@@ -48,7 +48,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.frontLeftTurnID,
                 ports.drivetrain.frontLeftCANCoder,
                 self.speedLimit,
-                -255.849609,
+                -255.761719,
             ),
             SwerveModule(  # Front right module.
                 ports.drivetrain.frontRightDriveID,
@@ -70,7 +70,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.backRightTurnID,
                 ports.drivetrain.backRightCANCoder,
                 self.speedLimit,
-                -129.814453,
+                -129.726563,
                 invertedDrive=constants.drivetrain.swerveStyle,  # Invert for some reason. Ezra's going nuts lol.
             ),
         ]
