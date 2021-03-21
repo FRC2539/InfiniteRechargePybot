@@ -111,7 +111,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.addCommands(
             # SegmentFollowerCommand([[0, 132], [40, 150]], deccelerate=True),
             # DosadoCommand(36, angleToTravel=270),
-            DosadoCommand(36,startAngle=90,angleToTravel=-180, velocity=0.6)
+            DosadoCommand(36,startAngle=-90,angleToTravel=-180, velocity=0.6, reverse=True)
             # SegmentFollowerCommand([[-15, 123]]),
         )
 
