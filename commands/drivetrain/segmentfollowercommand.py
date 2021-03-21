@@ -5,7 +5,7 @@ import math
 import robot
 
 class SegmentFollowerCommand(CommandBase):
-    def __init__(self, waypoints: list, angleTolerance=5):
+    def __init__(self, waypoints: list, angleTolerance=5, deccelerate=False):
         """
         You start at [0, 0].
         """
@@ -16,6 +16,7 @@ class SegmentFollowerCommand(CommandBase):
         self.addRequirements(robot.drivetrain)
 
         self.tol = angleTolerance
+        self.deccelerate = deccelerate
 
         self.maxSpeed = 0.8
 
@@ -138,13 +139,16 @@ class SegmentFollowerCommand(CommandBase):
             
             print('avg ' + str(self.desiredDistance - abs(abs(sum(robot.drivetrain.getPositions()) / 4 - sum(self.startPos) / 4))))
             
-            if abs(self.desiredDistance - abs(abs(sum(robot.drivetrain.getPositions()) / 4 - sum(self.startPos) / 4))) <= 18: # Slow down when we are about eighteen inches from the goal.
-                robot.drivetrain.setUniformModulePercent(0.4)
-            elif abs(self.desiredDistance - abs(abs(sum(robot.drivetrain.getPositions()) / 4 - sum(self.startPos) / 4))) <= 36: 
-                robot.drivetrain.setUniformModulePercent(0.6)
+            if self.deccelerate:
+                if abs(self.desiredDistance - abs(abs(sum(robot.drivetrain.getPositions()) / 4 - sum(self.startPos) / 4))) <= 18: # Slow down when we are about eighteen inches from the goal.
+                    robot.drivetrain.setUniformModulePercent(0.4)
+                elif abs(self.desiredDistance - abs(abs(sum(robot.drivetrain.getPositions()) / 4 - sum(self.startPos) / 4))) <= 36: 
+                    robot.drivetrain.setUniformModulePercent(0.6)
+                else:
+                    robot.drivetrain.setUniformModulePercent(self.maxSpeed)
+            
             else:
                 robot.drivetrain.setUniformModulePercent(self.maxSpeed)
-            
 
     def atWaypoint(self):
         count = 0
