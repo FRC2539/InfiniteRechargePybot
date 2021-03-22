@@ -3,6 +3,7 @@ from commands2 import InstantCommand, Swerve4ControllerCommand
 from wpilib.controller import PIDController, ProfiledPIDControllerRadians
 
 from wpimath.trajectory import TrapezoidProfileRadians, TrajectoryUtil
+from wpimath.geometry import Rotation2d
 
 from .generatetrajectorycommand import GenerateTrajectoryCommand
 
@@ -12,17 +13,15 @@ import math
 
 
 class PathFollowerCommand:
-    def __init__(self):
-        pass
-
     @staticmethod
-    def get(translations, end=None):
+    def get(translations, end):
+
         thetaController = ProfiledPIDControllerRadians(
             0.0000001,
             0,
             0.1,
             TrapezoidProfileRadians.Constraints(0.5 * math.pi, 0.25 * math.pi),
-        )  # Theta-controller NOTE: Error with this PID
+        )
         thetaController.enableContinuousInput(-math.pi, math.pi)
 
         # Do you have a JSON or points?
@@ -38,8 +37,9 @@ class PathFollowerCommand:
             robot.drivetrain.getSwervePose,
             robot.drivetrain.swerveKinematics,
             PIDController(0.000000001, 0, 0.2),  # X-controller
-            PIDController(0.000000001, 0, 0.2),  # Y-controller
+            PIDController(0.000000000000000000001, 0, 0.2),  # Y-controller
             thetaController,
+            lambda: Rotation2d(0),
             robot.drivetrain.setModuleStates,
             [robot.drivetrain],
         )

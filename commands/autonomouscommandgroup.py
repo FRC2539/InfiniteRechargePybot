@@ -13,6 +13,9 @@ from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.generatevectors import GenerateVectors
 from commands.drivetrain.pathfollowercommand import PathFollowerCommand
 from commands.drivetrain.cougarcoursecommand import CougarCourseCommand
+from commands.drivetrain.runautocommand import RunAutoCommand
+from commands.drivetrain.segmentfollowercommand import SegmentFollowerCommand
+from commands.drivetrain.dosadocommand import DosadoCommand
 
 from commands.intake.intakecommand import IntakeCommand
 
@@ -43,7 +46,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 toRun = var
                 break
 
-        #self.BarellRacing()
+        self.Slalom()
 
     # eval("self." + toRun + "()")  # Setups the method.
 
@@ -51,36 +54,6 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.addCommands(InstantCommand(lambda: print("I worked!")))
 
     def tenBall(self):
-        self.addCommands(InstantCommand(lambda: print("Number two worked!")))
-
-        # self.conveyor = InstantCommand(robot.conveyor.forward, [robot.conveyor])
-
-        # self.turnBack = TurnCommand(20)
-        # self.realign = TurnCommand(-10)
-
-        # self.intake = InstantCommand(robot.intake.intakeBalls, [robot.intake])
-        # self.moveSide = MoveCommand(7.071, angle=45, slow=True)
-
-        # self.moveForward = MoveCommand(199, slow=True)
-
-        # self.stopIntake = InstantCommand(robot.intake.dontIntakeBalls, [robot.intake])
-        # self.moveBack = MoveCommand(-120, angle=14)
-
-        # self.sudo = AutomatedShootCommand(3000).withTimeout(4)
-        # self.sudoNT = AutomatedShootCommand()
-
-        # self.goBack = self.moveBack.alongWith(self.sudoNT)
-
-        # self.addCommands(
-        #                  #self.conveyor,
-        #                  self.sudo,
-        #                  self.turnBack,
-        #                  self.intake,
-        #                  self.moveSide,
-        #                  self.moveForward,
-        #                  self.realign,
-        #                  self.goBack,
-        #                  )
 
         self.spinUp = InstantCommand(
             lambda: robot.shooter.setRPM(3800), [robot.shooter]
@@ -98,8 +71,6 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             lambda: robot.conveyor.forward(), [robot.conveyor]
         )
 
-        self.print = InstantCommand(lambda: print("\n\nEnd\n\n"))
-
         self.moveForward = MoveCommand(124)
         self.secondMove = MoveCommand(112, angle=2)
         self.moveBack = MoveCommand(-24, angle=-1.5)
@@ -107,8 +78,6 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
         self.shoot = AutomatedShootCommand(3800).withTimeout(3.25)
         self.shootTwo = AutomatedShootCommand(3800)
-
-        rotate = math.pi
 
         # Schedule the autonomous command
         self.auton = PathFollowerCommand().get(
@@ -130,17 +99,24 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             # self.spinUpTwo,      # - about 3 seconds, assuming up to speed.
             # self.conveyorRun,
             self.auton,  # 5 seconds
-            self.print
             # self.moveBack,
             # self.turnToTarget,
             # self.shootTwo        # 4 seconds
         )
 
-    # def Slalom(self):
-    #     self.addCommands(CougarCourseCommand(1))
-        
-    # def BarellRacing(self):
-    #     self.addCommands(CougarCourseCommand(2))#GenerateVectors.generate()))
+    def Slalom(self):
+        self.addCommands(SegmentFollowerCommand([[0,30],[-20,50],[-40,50],[-60,20],[-60,180]], maxSpeed=0.6))
+
+    def BarellRacing(self):
+        self.addCommands(
+            SegmentFollowerCommand([[0, 139], [40, 156]], deccelerate=True),
+            DosadoCommand(36, angleToTravel=270),
+            SegmentFollowerCommand([[0, 95]], maxSpeed=1.1, deccelerate=True, speedOffset=-0.075),
+            DosadoCommand(38, startAngle=180, angleToTravel=-270, reverseStrafe=True),
+            SegmentFollowerCommand([[32, 0], [71, 85]], maxSpeed=1.1, deccelerate=True, speedOffset=-0.04),
+            DosadoCommand(38, startAngle=90, angleToTravel=270, waitForAlign=True, reverseForward=True),
+            SegmentFollowerCommand([[26, -276]], maxSpeed=1.5, deccelerate=True)
+        )
 
     # def Bounce(self):
     #     self.addCommands(CougarCourseCommand(3))

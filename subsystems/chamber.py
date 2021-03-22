@@ -23,7 +23,7 @@ class Chamber(CougarSystem):
         self.speed = 1.0  # 0.8
         self.slowSpeed = 0.2
         # Option: separate into forward and backward speeds
-        
+
         # The sensor for telling if a ball is present.
         self.ballSensor = AnalogInput(ports.chamber.sensorPort)
 

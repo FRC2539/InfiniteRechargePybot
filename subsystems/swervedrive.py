@@ -26,7 +26,9 @@ class SwerveDrive(BaseDrive):
         [front left, front right, back left, back right]
         """
 
-        # TODO: Add docstrings.
+        if not constants.drivetrain.swerveStyle:
+            self.move = self.tankMove
+            self._calculateSpeeds = self.tankCalculateSpeeds
 
         self.isFieldOriented = True
 
@@ -46,7 +48,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.frontLeftTurnID,
                 ports.drivetrain.frontLeftCANCoder,
                 self.speedLimit,
-                -255.849609,
+                -255.761719,
             ),
             SwerveModule(  # Front right module.
                 ports.drivetrain.frontRightDriveID,
@@ -54,7 +56,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.frontRightCANCoder,
                 self.speedLimit,
                 -273.8672,
-                invertedDrive=True,  # Invert for some reason?
+                invertedDrive=constants.drivetrain.swerveStyle,  # Invert for some reason?
             ),
             SwerveModule(  # Back left module.
                 ports.drivetrain.backLeftDriveID,
@@ -68,8 +70,8 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.backRightTurnID,
                 ports.drivetrain.backRightCANCoder,
                 self.speedLimit,
-                -129.814453,
-                invertedDrive=True,  # Invert for some reason. Ezra's going nuts lol.
+                -129.726563,
+                invertedDrive=constants.drivetrain.swerveStyle,  # Invert for some reason. Ezra's going nuts lol.
             ),
         ]
 
@@ -232,7 +234,6 @@ class SwerveDrive(BaseDrive):
         speeds[:] = [
             speed * magnitude for speed in speeds
         ]  # Ensures that the speeds of the motors are relevant to the joystick input.
-
         return newSpeeds, angles  # Return the calculated speed and angles.
 
     def move(self, x, y, rotate):
@@ -267,6 +268,28 @@ class SwerveDrive(BaseDrive):
             ):  # You're going to need encoders, so only focus here.
                 module.setWheelAngle(angle)
                 module.setWheelSpeed(abs(math.sqrt(speed ** 2 + rotate ** 2)))
+
+    def tankMove(self, y, rotate):
+        if [y, rotate] == self.lastInputs:
+            return
+
+        self.lastInputs = [y, rotate]
+
+        """Prevent drift caused by small input values"""
+        if self.useEncoders:
+            y = math.copysign(max(abs(y) - self.deadband, 0), y)
+            rotate = math.copysign(max(abs(rotate) - self.deadband, 0), rotate)
+
+        speeds = self.tankCalculateSpeeds(y, rotate)
+
+        print('s ' + str(speeds))
+
+        for module, speed in zip(self.modules, speeds):
+            module.setWheelAngle(0)
+            module.setWheelSpeed(speed)
+
+    def tankCalculateSpeeds(self, y, rotate):
+        return [y + rotate, -y + rotate, y + rotate, -y + rotate]  # FL, FR, BL, BR
 
     def stop(self):
         """
@@ -360,6 +383,12 @@ class SwerveDrive(BaseDrive):
         """
         for module in self.modules:
             module.setWheelSpeed(speed)
+            
+    def getPercents(self):
+        """
+        Returns the percent outputs of each drive motor.
+        """
+        return [module.getWheelPercent() for module in self.modules]
 
     def setPercents(self, speeds: list):
         """
@@ -381,7 +410,8 @@ class SwerveDrive(BaseDrive):
         Returns the CANCoder's absolute reading.
         Note, this does take into account the magnet
         offset which we set at the beginning.
-        I think, 180 is forward, 0 is backwards.
+        I think, 180 is forward, 0 is backwards. It
+        returns between 0 and 360.
         """
 
         # Add module in front, not to be confused with gyro! Returns degrees.

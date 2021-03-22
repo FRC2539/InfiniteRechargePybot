@@ -37,7 +37,7 @@ class Shooter(CougarSystem):
         self.shooterMotorOne.config_kI(0, 0, 0)
         self.shooterMotorOne.config_kD(0, 1, 0)
         self.shooterMotorOne.config_IntegralZone(0, 0, 0)
-        
+
         # Set the PID configuration.
         self.shooterMotorTwo.config_kF(0, 0, 0)  # Ben, no FF! -Ben
         self.shooterMotorTwo.config_kP(0, 5, 0)
@@ -64,8 +64,6 @@ class Shooter(CougarSystem):
 
     def periodic(self):
         self.feed()
-        
-        print(self.getRPM())
 
     def setRPM(self, rpm):
         # With the second motor following the first, no command is needed for the second motor.
@@ -90,7 +88,6 @@ class Shooter(CougarSystem):
     def getRPM(self):
         # Return the current average RPM of the motor.
         return self.sensorToRPM(self.shooterMotorOne.getSelectedSensorVelocity())
-
 
     def initDefaultCommand(self):
         from commands.shooter.defaultcommand import DefaultCommand
