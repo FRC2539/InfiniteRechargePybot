@@ -7,7 +7,7 @@ import robot, constants
 import math
 
 class DosadoCommand(CommandBase):
-    def __init__(self, radius, startAngle=90, angleToTravel=180, velocity=0.8, reverseStrafe=False, reverseForward=False, waitForAlign=False):
+    def __init__(self, radius, startAngle=90, angleToTravel=180, velocity=0.9, reverseStrafe=False, reverseForward=False, waitForAlign=False):
         """
         Note that startAngle is the module angles. The default is 90,
         which would be to the right of the robot's orientation. The angle
