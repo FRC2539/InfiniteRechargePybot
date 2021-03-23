@@ -5,14 +5,17 @@ import math
 import robot
 
 class SegmentFollowerCommand(CommandBase):
-    def __init__(self, waypoints: list, angleTolerance=5, maxSpeed=1, deccelerate=False, speedOffset=0, kP=0.0325, startingAngle=None, stopWhenDone=True):
+    def __init__(self, waypoints: list, angleTolerance=5, maxSpeed=1, slowSpeed=0.6, deccelerate=False, speedOffset=0, kP=0.0325, startingAngle=None, stopWhenDone=True):
         """
         You start at [0, 0]. speedOffset is applied
         to the left hand side of the drivetrain! Note,
         this is not exactly accurate, but it is pretty consistent!
         If you don't wanna correct the heading, leave kP as 0. If 
         you want to correct it relative to zero (instead of the captured 
-        starting angle) leave startingAngle as None.s
+        starting angle) leave startingAngle as None. Please 
+        note that a "True" in the brackets next to the 
+        points will mark the next segment, starting at the 
+        point you entered as "True", will follow the slow speed!
         """
         super().__init__()
 
@@ -44,7 +47,13 @@ class SegmentFollowerCommand(CommandBase):
             # Get each point's components.
             pointX, nextPointX = point[0], nextPoint[0]
             pointY, nextPointY = point[1], nextPoint[1]
-
+            
+            # Slow down for this segment?
+            try:
+                slow = point[2]
+            except(IndexError):
+                slow = False
+                
             # Find the difference between them.
             finalX = nextPointX - pointX
             finalY = nextPointY - pointY

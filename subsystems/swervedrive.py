@@ -121,8 +121,6 @@ class SwerveDrive(BaseDrive):
         self.PosX += VectorX
         self.PosY += VectorY
 
-        print("x = " + str(self.PosX) + " y = " + str(self.PosY))
-
         self.LastPositions = self.getPositions()
 
     def GenerateRobotVector(self):
