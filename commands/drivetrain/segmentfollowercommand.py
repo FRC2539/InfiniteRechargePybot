@@ -5,11 +5,14 @@ import math
 import robot
 
 class SegmentFollowerCommand(CommandBase):
-    def __init__(self, waypoints: list, angleTolerance=5, maxSpeed=1, deccelerate=False, speedOffset=0):
+    def __init__(self, waypoints: list, angleTolerance=5, maxSpeed=1, deccelerate=False, speedOffset=0, kP=-0.0125, startingAngle=None):
         """
         You start at [0, 0]. speedOffset is applied
         to the left hand side of the drivetrain! Note,
         this is not exactly accurate, but it is pretty consistent!
+        If you don't wanna correct the heading, leave kP as 0. If 
+        you want to correct it relative to zero (instead of the captured 
+        starting angle) leave startingAngle as None.s
         """
         super().__init__()
 
@@ -20,6 +23,8 @@ class SegmentFollowerCommand(CommandBase):
         self.tol = angleTolerance
         self.deccelerate = deccelerate
         self.speedOffset = speedOffset
+        self.kP = kP
+        self.startingAngle = startingAngle
 
         self.maxSpeed = maxSpeed
 
@@ -73,7 +78,11 @@ class SegmentFollowerCommand(CommandBase):
         robot.drivetrain.setModuleProfiles(1, turn=False)
 
         self.pointTracker = 0
-        self.kP = 1
+        
+        if self.startingAngle is None:
+            self.startingAngle = 0
+        else:
+            self.startingAngle = robot.drivetrain.getAngle()
 
         self.startPos = robot.drivetrain.getPositions()
 
@@ -130,18 +139,20 @@ class SegmentFollowerCommand(CommandBase):
         else:
             self.moveSet = False
             self.notRanYet = True
-                        
+            
+            speedOffset = robot.drivetrain.getAngleTo(self.startingAngle)*self.kP
+            
             if self.deccelerate:
                 if abs(self.desiredDistance - abs(abs(sum(robot.drivetrain.getPositions()) / 4 - sum(self.startPos) / 4))) <= 18: # Slow down when we are about eighteen inches from the goal.
                     robot.drivetrain.setUniformModulePercent(0.25)
                 elif abs(self.desiredDistance - abs(abs(sum(robot.drivetrain.getPositions()) / 4 - sum(self.startPos) / 4))) <= 36: 
                     robot.drivetrain.setUniformModulePercent(0.5)
                 else:
-                    robot.drivetrain.setSpeeds([self.maxSpeed + self.speedOffset, self.maxSpeed, self.maxSpeed + self.speedOffset, self.maxSpeed])
+                    robot.drivetrain.setSpeeds([self.maxSpeed + speedOffset, self.maxSpeed, self.maxSpeed + speedOffset, self.maxSpeed])
             
             else:
                 
-                robot.drivetrain.setSpeeds([self.maxSpeed + self.speedOffset, self.maxSpeed, self.maxSpeed + self.speedOffset, self.maxSpeed])
+                robot.drivetrain.setSpeeds([self.maxSpeed + speedOffset, self.maxSpeed, self.maxSpeed + speedOffset, self.maxSpeed])
 
     def atWaypoint(self):
         count = 0
