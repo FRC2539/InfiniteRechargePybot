@@ -105,7 +105,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         )
 
     def Slalom(self):
-        self.addCommands(SegmentFollowerCommand([[0,30],[-20,50],[-40,50],[-60,20],[-60,180]], maxSpeed=0.6))
+        self.addCommands(SegmentFollowerCommand([[0,30],[-20,50],[-50,50],[-82,70],[-82,236],[-54, 242], [-24,242]], maxSpeed=1.3))
 
     def BarellRacing(self):
         self.addCommands(

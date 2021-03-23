@@ -5,7 +5,7 @@ import math
 import robot
 
 class SegmentFollowerCommand(CommandBase):
-    def __init__(self, waypoints: list, angleTolerance=5, maxSpeed=1, deccelerate=False, speedOffset=0, kP=-0.0125, startingAngle=None):
+    def __init__(self, waypoints: list, angleTolerance=5, maxSpeed=1, deccelerate=False, speedOffset=0, kP=0.0325, startingAngle=None, stopWhenDone=True):
         """
         You start at [0, 0]. speedOffset is applied
         to the left hand side of the drivetrain! Note,
@@ -25,6 +25,7 @@ class SegmentFollowerCommand(CommandBase):
         self.speedOffset = speedOffset
         self.kP = kP
         self.startingAngle = startingAngle
+        self.stopWhenDone = stopWhenDone
 
         self.maxSpeed = maxSpeed
 
@@ -73,6 +74,9 @@ class SegmentFollowerCommand(CommandBase):
 
             self.distances.append(distance)
             self.angles.append(theta)
+            
+        print('d ' + str(self.distances))
+        print('a ' + str(self.angles))
 
     def initialize(self):
         robot.drivetrain.setModuleProfiles(1, turn=False)
@@ -88,6 +92,8 @@ class SegmentFollowerCommand(CommandBase):
 
         self.desiredAngle = self.angles[0]
         self.desiredDistance = self.distances[0]
+        
+        self.lastDisplacement = self.desiredDistance
 
         self.pathFinished = False
         self.notRanYet = True
@@ -109,6 +115,8 @@ class SegmentFollowerCommand(CommandBase):
                 try: # If it can't index them, then it's done.
                     self.desiredAngle = self.angles[self.pointTracker]
                     self.desiredDistance = self.distances[self.pointTracker]
+                    
+                    self.lastDisplacement = self.desiredDistance
 
                 except(IndexError):
                     self.pathFinished = True
@@ -142,6 +150,8 @@ class SegmentFollowerCommand(CommandBase):
             
             speedOffset = robot.drivetrain.getAngleTo(self.startingAngle)*self.kP
             
+            print('so ' + str(speedOffset))
+            
             if self.deccelerate:
                 if abs(self.desiredDistance - abs(abs(sum(robot.drivetrain.getPositions()) / 4 - sum(self.startPos) / 4))) <= 18: # Slow down when we are about eighteen inches from the goal.
                     robot.drivetrain.setUniformModulePercent(0.25)
@@ -158,15 +168,19 @@ class SegmentFollowerCommand(CommandBase):
         count = 0
         for position, start in zip(robot.drivetrain.getPositions(), self.startPos):
             if (
-                abs(position - (start + self.desiredDistance)) < 1
-            ):  # 1 inch is the tolerance.
-                print('\n\nAt waypoint')
+                abs(position - (start + self.desiredDistance)) < 1 or abs((position - (start + self.desiredDistance))) > abs(self.lastDisplacement)
+            ):  # 1 inch is the tolerance, or have we passed it?
+                print('l ' + str(self.lastDisplacement))
+                print(' current ' + str(abs(position - (start + self.desiredDistance))))
+                print('\n\nAt waypoint') # NOTE: It's distance remaining.
                 return True
         
+        self.lastDisplacement = abs(position - (start + self.desiredDistance))
         return False
 
     def isFinished(self):
         return self.pathFinished
 
     def end(self, interrupted):
-        robot.drivetrain.stop()
+        if self.stopWhenDone:
+            robot.drivetrain.stop()
