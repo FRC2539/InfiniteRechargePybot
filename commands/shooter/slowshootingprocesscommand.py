@@ -16,65 +16,64 @@ class SlowShootingProcessCommand(CommandBase):
         self.tolerance = tolerance
 
         self.timer = Timer()
-        
+
         self.movingPhase = 0
         self.lastWait = 0
 
         self.isAtTargetRPM = False
 
         self.addRequirements([robot.conveyor, robot.chamber])
-        
+
     def checkRPM(self):
         return abs(robot.shooter.getRPM() - self.targetRPM) <= self.tolerance
-        
+
     def initialize(self):
         self.timer.stop()
         self.timer.reset()
-        
+
         robot.shooter.setRPM(self.targetRPM)
-        
+
         self.timer.start()
-        
+
     def the(self):
         robot.chamber.stop()
         robot.conveyor.forward()
-    
+
     def execute(self):
         if self.movingPhase == 0:
-            if self.timer.get() > 1.5 and self.timer.get() > self.lastWait+.5:
+            if self.timer.get() > 1.5 and self.timer.get() > self.lastWait + 0.5:
                 self.lastWait = self.timer.get()
                 atTarget = self.checkRPM()
-                
+
                 if atTarget:
                     robot.chamber.forward()
                     robot.conveyor.stop()
                     self.movingPhase = 1
-                    
+
                 else:
                     self.the()
-                    
+
             else:
                 self.the()
-                
+
         elif self.movingPhase == 1:
             if robot.chamber.isBallPresent() == True:
                 self.movingPhase = 2
-                
+
         elif self.movingPhase == 2:
             if robot.chamber.isBallPresent() != True:
                 self.movingPhase = 0
                 self.the()
-        
-    
-    def end(self,interrupted):
+
+    def end(self, interrupted):
         robot.conveyor.stop()
         robot.chamber.stop()
         robot.shooter.stopShooter()
-        
+
         self.timer.stop()
-        
-        
-'''
+
+
+"""
     def initialize(self):  
 =======
     def initialize(self):
@@ -121,4 +120,4 @@ class SlowShootingProcessCommand(CommandBase):
         robot.shooter.stopShooter()
 
         self.timer.stop()
-'''
+"""

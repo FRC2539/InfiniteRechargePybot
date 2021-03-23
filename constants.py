@@ -79,7 +79,7 @@ drivetrain.encoderConfig.initializationStrategy = (
 )
 drivetrain.encoderConfig.sensorDirection = False
 
-drivetrain.mostRecentPath = [] # Updated in record auto.
+drivetrain.mostRecentPath = []  # Updated in record auto.
 
 drivetrain.preBuild = {1: ".barrelracing.json"}
 # non-diagonal distance between points = 30 inches

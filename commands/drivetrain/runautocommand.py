@@ -20,11 +20,11 @@ class RunAutoCommand(CommandBase):
         self.addRequirements([robot.drivetrain])
 
         self.points = points
-        
+
     def initialize(self):
         if self.points == []:
             self.points = constants.drivetrain.mostRecentPath
-        
+
         robot.drivetrain.setModuleProfiles(0, drive=False)
 
         self.cycleCount = 0
@@ -34,9 +34,9 @@ class RunAutoCommand(CommandBase):
         with NotifierDelay(0.01) as delay:
             try:
                 robot.drivetrain.setPercents(self.points[self.cycleCount][0])
-                print('angles ' + str(self.points[self.cycleCount][1]))
+                print("angles " + str(self.points[self.cycleCount][1]))
                 robot.drivetrain.setModuleAngles(self.points[self.cycleCount][1])
-            except(IndexError):
+            except (IndexError):
                 self.done = True
             self.cycleCount += 1
             delay.wait()
@@ -45,5 +45,5 @@ class RunAutoCommand(CommandBase):
         return self.done
 
     def end(self, interrupted):
-        print('\n\nEnd\n\n')
+        print("\n\nEnd\n\n")
         robot.drivetrain.stop()

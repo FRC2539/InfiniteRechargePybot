@@ -101,12 +101,11 @@ class SwerveDrive(BaseDrive):
         Loops whenever there is robot code. I recommend
         feeding networktable values here.
         """
-        
+
         self.feed()  # Update the desired
 
         self.updateOdometry()
-        
-        
+
         Angles = self.getModuleAngles()
         Distance = []
         Positions = self.getPositions()
@@ -121,9 +120,9 @@ class SwerveDrive(BaseDrive):
         VectorY = VectorY / 4
         self.PosX += VectorX
         self.PosY += VectorY
-        
+
         print("x = " + str(self.PosX) + " y = " + str(self.PosY))
-        
+
         self.LastPositions = self.getPositions()
 
     def GenerateRobotVector(self):
@@ -137,7 +136,7 @@ class SwerveDrive(BaseDrive):
         VectorX = VectorX / 4
         VectorY = VectorY / 4
         return VectorX, VectorY
-    
+
     def updateOdometry(self):
         """
         Updates the WPILib odometry object
@@ -318,7 +317,7 @@ class SwerveDrive(BaseDrive):
 
         speeds = self.tankCalculateSpeeds(y, rotate)
 
-        print('s ' + str(speeds))
+        print("s " + str(speeds))
 
         for module, speed in zip(self.modules, speeds):
             module.setWheelAngle(0)
@@ -382,8 +381,8 @@ class SwerveDrive(BaseDrive):
 
         states = []
         for module in self.modules:
-            s = module.getWheelSpeed() / 39.3701 # In Meters Per Second
-            a = Rotation2d(math.radians(module.getWheelAngle()-180))
+            s = module.getWheelSpeed() / 39.3701  # In Meters Per Second
+            a = Rotation2d(math.radians(module.getWheelAngle() - 180))
             states.append(SwerveModuleState(s, a))
 
         return states
@@ -419,7 +418,7 @@ class SwerveDrive(BaseDrive):
         """
         for module in self.modules:
             module.setWheelSpeed(speed)
-            
+
     def getPercents(self):
         """
         Returns the percent outputs of each drive motor.

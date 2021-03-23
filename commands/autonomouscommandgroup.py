@@ -105,17 +105,40 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         )
 
     def Slalom(self):
-        self.addCommands(SegmentFollowerCommand([[0,30],[-20,50],[-50,50],[-82,70],[-82,236],[-54, 242], [-24,242]], maxSpeed=1.3))
+        self.addCommands(
+            SegmentFollowerCommand(
+                [
+                    [0, 30],
+                    [-20, 50],
+                    [-50, 50],
+                    [-82, 70],
+                    [-82, 236],
+                    [-54, 242],
+                    [-24, 242],
+                ],
+                maxSpeed=1.3,
+            )
+        )
 
     def BarellRacing(self):
         self.addCommands(
             SegmentFollowerCommand([[0, 139], [40, 156]], deccelerate=True),
             DosadoCommand(36, angleToTravel=270),
-            SegmentFollowerCommand([[0, 95]], maxSpeed=1.1, deccelerate=True, speedOffset=-0.075),
+            SegmentFollowerCommand(
+                [[0, 95]], maxSpeed=1.1, deccelerate=True, speedOffset=-0.075
+            ),
             DosadoCommand(38, startAngle=180, angleToTravel=-270, reverseStrafe=True),
-            SegmentFollowerCommand([[32, 0], [71, 85]], maxSpeed=1.1, deccelerate=True, speedOffset=-0.04),
-            DosadoCommand(38, startAngle=90, angleToTravel=270, waitForAlign=True, reverseForward=True),
-            SegmentFollowerCommand([[26, -276]], maxSpeed=1.5, deccelerate=True)
+            SegmentFollowerCommand(
+                [[32, 0], [71, 85]], maxSpeed=1.1, deccelerate=True, speedOffset=-0.04
+            ),
+            DosadoCommand(
+                38,
+                startAngle=90,
+                angleToTravel=270,
+                waitForAlign=True,
+                reverseForward=True,
+            ),
+            SegmentFollowerCommand([[26, -276]], maxSpeed=1.5, deccelerate=True),
         )
 
     # def Bounce(self):
