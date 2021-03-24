@@ -222,7 +222,7 @@ class SegmentFollowerCommand(CommandBase):
     def atWaypoint(self):
         for position, start in zip(robot.drivetrain.getPositions(), self.startPos):
             
-            print('diff ' + str(abs(abs(position - start) - self.desiredDistance)))
+            print('diff ' + str(self.desiredDistance + start) - position))
             print('dd ' + str(self.desiredDistance))
             
             #if abs(abs(position - start) - self.desiredDistance) < 1:  # 1 inch is the tolerance, or have we passed it?
