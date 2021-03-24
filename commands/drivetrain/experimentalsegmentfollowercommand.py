@@ -105,7 +105,6 @@ class ExperimentalSegmentFollowerCommand(CommandBase):
                 distance *= -1
 
             self.distances.append([distance, curveData])
-                
             self.angles.append(theta)
 
     def initialize(self):
@@ -147,29 +146,30 @@ class ExperimentalSegmentFollowerCommand(CommandBase):
             
         if self.passed: # Have we gone through the waypoint?
 
-            print('here once')
-
             if self.notRanYet:  # Runs once at the waypoint.
+                self.maxSpeed = self.ogMaxSpeed
                 
                 try: # If it can't index them, then it's done.
-                    self.maxSpeed = self.ogMaxSpeed
-                    
                     self.desiredAngle = self.angles[self.pointTracker]
-                    
+                    self.endAngle = self.desiredAngle
+                                        
                 except(IndexError):
                     print('\nE')
                     self.pathFinished = True
                     return
                 
                 # Should we adjust with the NavX?
-                try:
-                    self.desiredDistance = self.distances[self.pointTracker][0]
-                    self.disableAdjust = True # Don't reference it, we know it's there.
-                    
-                except(TypeError):
-                    self.desiredDistance = self.distances[self.pointTracker]
+                
+                self.desiredDistance = self.distances[self.pointTracker][0]
+                
+                if self.distances[self.pointTracker][1] is None:
                     self.disableAdjust = False
-                    
+
+                else:
+                    self.curveData = self.distances[self.pointTracker][1]
+                    self.desiredAngle = self.curveData[2] # The entry angle. 
+                    self.endAngle = self.curveData[3] # The exit angle.
+             
                 # Go slow!
                 if self.desiredDistance < 0:
                     self.desiredDistance *= -1 # Make it normal again.
