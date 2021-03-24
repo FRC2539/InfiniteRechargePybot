@@ -111,17 +111,23 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                     [0, 30],
                     [-20, 50],
                     [-50, 50],
-                    [-82, 70],
-                    [-82, 224],
-                    [-4, 242],
-                    [16, 262],
-                    [-4, 282],
-                    [-24, 262],
-                    [-4, 242]
+                    [-74, 70],
+                    [-74, 224],
+                    [6, 224, True],
+                    [40, 248, True],
+                    [40, 288, True],
+                    [21, 300, True],
+                    [-18, 288, True],
+                    [-18, 224, True],
+                    [47, 224],
+                    [47, 30],
+                    [24, 25],
+                    [12, 25],
+                    [12, 6]
                 ],
-                maxSpeed=1.3,
+                maxSpeed=1.35,
+                slowSpeed=1,
             ),
-            #DosadoCommand(34, startAngle=90, angleToTravel=360, waitForAlign=True, velocity=0.5, reverseForward=True)
         )
 
     def BarellRacing(self):
