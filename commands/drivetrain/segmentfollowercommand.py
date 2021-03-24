@@ -220,14 +220,14 @@ class SegmentFollowerCommand(CommandBase):
                 robot.drivetrain.setSpeeds([self.maxSpeed + speedOffset, self.maxSpeed, self.maxSpeed + speedOffset, self.maxSpeed])
 
     def atWaypoint(self):
-        count = 0
         for position, start in zip(robot.drivetrain.getPositions(), self.startPos):
-            count += 1
             
             print('diff ' + str(abs(abs(position - start) - self.desiredDistance)))
             print('dd ' + str(self.desiredDistance))
             
-            if abs(abs(position - start) - self.desiredDistance) < 1:  # 1 inch is the tolerance, or have we passed it?
+            #if abs(abs(position - start) - self.desiredDistance) < 1:  # 1 inch is the tolerance, or have we passed it?
+            # The following works assuming all encoders increase as we move forward.
+            if (self.desiredDistance + start) - position < 1:
                 print('\nAt Waypoint')
                 return True
         
