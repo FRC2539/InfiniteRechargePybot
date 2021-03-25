@@ -92,15 +92,50 @@ class SwerveDrive(BaseDrive):
 
         self.resetOdometry()
         self.resetGyro()
+        self.PosX = 0
+        self.PosY = 0
+        self.LastPositions = self.getPositions()
 
     def periodic(self):
         """
         Loops whenever there is robot code. I recommend
         feeding networktable values here.
         """
+
         self.feed()  # Update the desired
 
         self.updateOdometry()
+
+        Angles = self.getModuleAngles()
+        Distance = []
+        Positions = self.getPositions()
+        for pos, lPos in zip(Positions, self.LastPositions):
+            Distance.append(pos - lPos)
+        VectorX = 0
+        VectorY = 0
+        for angle, distance in zip(Angles, Distance):
+            VectorX += math.cos(math.radians(angle - 180)) * distance
+            VectorY += math.sin(math.radians(angle - 180)) * distance
+        VectorX = VectorX / 4
+        VectorY = VectorY / 4
+        self.PosX += VectorX
+        self.PosY += VectorY
+
+        print(self.getPositions())
+
+        self.LastPositions = self.getPositions()
+
+    def GenerateRobotVector(self):
+        Angles = self.getModuleAngles()
+        Speeds = self.getSpeeds()
+        VectorX = 0
+        VectorY = 0
+        for angle, speed in zip(Angles, Speeds):
+            VectorX += math.cos(math.radians(angle - 180)) * speed
+            VectorY += math.sin(math.radians(angle - 180)) * speed
+        VectorX = VectorX / 4
+        VectorY = VectorY / 4
+        return VectorX, VectorY
 
     def updateOdometry(self):
         """
@@ -282,7 +317,7 @@ class SwerveDrive(BaseDrive):
 
         speeds = self.tankCalculateSpeeds(y, rotate)
 
-        print('s ' + str(speeds))
+        print("s " + str(speeds))
 
         for module, speed in zip(self.modules, speeds):
             module.setWheelAngle(0)
@@ -346,8 +381,8 @@ class SwerveDrive(BaseDrive):
 
         states = []
         for module in self.modules:
-            s = module.getWheelSpeed() * 2.54 / 100  # In Meters Per Second
-            a = Rotation2d(math.radians(module.getWheelAngle()))
+            s = module.getWheelSpeed() / 39.3701  # In Meters Per Second
+            a = Rotation2d(math.radians(module.getWheelAngle() - 180))
             states.append(SwerveModuleState(s, a))
 
         return states
@@ -383,7 +418,7 @@ class SwerveDrive(BaseDrive):
         """
         for module in self.modules:
             module.setWheelSpeed(speed)
-            
+
     def getPercents(self):
         """
         Returns the percent outputs of each drive motor.

@@ -26,7 +26,7 @@ class RecordAutoCommand(CommandBase):
         super().__init__()
 
         self.addRequirements(robot.drivetrain)
-        
+
         self.points = []
 
         robot.drivetrain.resetGyro()
@@ -38,8 +38,8 @@ class RecordAutoCommand(CommandBase):
         self.lastY = None
         self.slowed = False
 
-    def execute(self):   
-        with NotifierDelay(0.01) as delay:     
+    def execute(self):
+        with NotifierDelay(0.01) as delay:
             # Avoid quick changes in direction
             y = logicalaxes.forward.get()
             if self.lastY is None:
@@ -58,22 +58,23 @@ class RecordAutoCommand(CommandBase):
             robot.drivetrain.move(
                 logicalaxes.strafe.get(), y, logicalaxes.rotate.get() * 0.9
             )
-            
+
             print(robot.drivetrain.getSpeeds())
 
-            self.points.append([robot.drivetrain.getPercents(), robot.drivetrain.getModuleAngles()])
+            self.points.append(
+                [robot.drivetrain.getPercents(), robot.drivetrain.getModuleAngles()]
+            )
 
             delay.wait()
 
     def end(self, interrupted):
         robot.drivetrain.stop()
-        
-        print('\n\nPoints: [[flv, frv, blv, brv], [fla, fra, bla, bra]]') # lol
-        print('----------------------------------------------------')
+
+        print("\n\nPoints: [[flv, frv, blv, brv], [fla, fra, bla, bra]]")  # lol
+        print("----------------------------------------------------")
         for line in self.points:
             print(line)
-        print('----------------------------------------------------')
-        print('Compact Form: ' + str(self.points) + '\n')
+        print("----------------------------------------------------")
+        print("Compact Form: " + str(self.points) + "\n")
         constants.drivetrain.mostRecentPath = self.points
-        print('Exported to constants\n\n')
-        
+        print("Exported to constants\n\n")

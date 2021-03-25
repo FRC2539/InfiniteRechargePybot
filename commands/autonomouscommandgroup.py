@@ -46,7 +46,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 toRun = var
                 break
 
-        self.Slalom()
+        self.Bounce()
 
     # eval("self." + toRun + "()")  # Setups the method.
 
@@ -105,22 +105,66 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         )
 
     def Slalom(self):
-        self.addCommands(SegmentFollowerCommand([[0,30],[-20,50],[-40,50],[-60,20],[-60,180]], maxSpeed=0.6))
+        self.addCommands(
+            SegmentFollowerCommand(
+                [
+                    [0, 13],
+                    [-28, 16],
+                    [-71, 26],
+                    [-74, 64],
+                    [-74, 198],
+                    [-10, 206, True],
+                    [28, 214, True],
+                    [48, 235, True],
+                    [48, 274, True],
+                    [8, 286, True],
+                    [-54, 260, True],
+                    [-56, 228, True],
+                    [32, 212],
+                    [32, 30, True],
+                    [-72, 34, True],
+                    [-72, -36, True]
+                ],
+                maxSpeed=1.35,
+                slowSpeed=0.9,
+            ),
+        )
 
     def BarellRacing(self):
         self.addCommands(
             SegmentFollowerCommand([[0, 139], [40, 156]], deccelerate=True),
             DosadoCommand(36, angleToTravel=270),
-            SegmentFollowerCommand([[0, 95]], maxSpeed=1.1, deccelerate=True, speedOffset=-0.075),
+            SegmentFollowerCommand(
+                [[0, 95]], maxSpeed=1.1, deccelerate=True, speedOffset=-0.075
+            ),
             DosadoCommand(38, startAngle=180, angleToTravel=-270, reverseStrafe=True),
-            SegmentFollowerCommand([[32, 0], [71, 85]], maxSpeed=1.1, deccelerate=True, speedOffset=-0.04),
-            DosadoCommand(38, startAngle=90, angleToTravel=270, waitForAlign=True, reverseForward=True),
-            SegmentFollowerCommand([[26, -276]], maxSpeed=1.5, deccelerate=True)
+            SegmentFollowerCommand(
+                [[32, 0], [71, 85]], maxSpeed=1.1, deccelerate=True, speedOffset=-0.04
+            ),
+            DosadoCommand(
+                38,
+                startAngle=90,
+                angleToTravel=270,
+                waitForAlign=True,
+                reverseForward=True,
+            ),
+            SegmentFollowerCommand([[26, -276]], maxSpeed=1.5, deccelerate=True),
         )
 
-    # def Bounce(self):
-    #     self.addCommands(CougarCourseCommand(3))
-
+    def Bounce(self):
+        self.addCommands(
+            SegmentFollowerCommand(
+                [
+                    [0,50,True],
+                    [-36,50,True], # First cone
+                    [0,50,True],
+                    [30,24],
+                ],
+                startPoint=[0,0,True], # Start slow.
+                maxSpeed=1.5,
+                slowSpeed=0.1
+            )
+        )
     def interrupted(self):
         robot.intake.dontIntakeBalls()
         robot.chamber.stop()

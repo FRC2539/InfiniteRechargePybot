@@ -40,7 +40,7 @@ drivetrain.tFFk = 0
 drivetrain.tIZk = 0
 
 # Turn Secondary Position Control
-drivetrain.stPk = 9
+drivetrain.stPk = 8
 drivetrain.stIk = 0
 drivetrain.stDk = 0
 drivetrain.stFFk = 0
@@ -79,7 +79,7 @@ drivetrain.encoderConfig.initializationStrategy = (
 )
 drivetrain.encoderConfig.sensorDirection = False
 
-drivetrain.mostRecentPath = [] # Updated in record auto.
+drivetrain.mostRecentPath = []  # Updated in record auto.
 
 drivetrain.preBuild = {1: ".barrelracing.json"}
 # non-diagonal distance between points = 30 inches
