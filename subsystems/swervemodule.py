@@ -254,6 +254,12 @@ class SwerveModule:
             TalonFXControlMode.MotionMagic,
             self.getModulePosition(False) + self.inchesToDriveTicks(distance),
         )
+        
+    def resetDriveEncoders(self,anArgument=0):
+        """
+        Resets the drive encoders to 0 by default.
+        """
+        self.driveMotor.configSetSelectedSensorPosition(anArgument,0,0)
 
     def stopModule(self):
         """

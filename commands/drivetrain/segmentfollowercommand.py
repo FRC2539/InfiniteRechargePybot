@@ -105,6 +105,7 @@ class SegmentFollowerCommand(CommandBase):
 
     def initialize(self):
         robot.drivetrain.setModuleProfiles(1, turn=False)
+        robot.drivetrain.resetEncoders()
 
         self.pointTracker = 0
         

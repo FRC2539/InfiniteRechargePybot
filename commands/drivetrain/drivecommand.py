@@ -30,6 +30,7 @@ class DriveCommand(CommandBase):
     def initialize(self):
         robot.drivetrain.stop()
         robot.drivetrain.setProfile(0)
+        robot.drivetrain.resetEncoders()
 
         self.lastY = None
         self.slowed = False

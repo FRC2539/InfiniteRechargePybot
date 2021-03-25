@@ -332,6 +332,13 @@ class SwerveDrive(BaseDrive):
         """
         for module in self.modules:
             module.stopModule()
+            
+    def resetEncoders(self,anArgumentAsWell=0):
+        """
+        Resets all drive encoders to 0 by default.
+        """
+        for module in self.modules:
+            module.resetDriveEncoders(anArgumentAsWell)
 
     def setProfile(self, profile):
         """
