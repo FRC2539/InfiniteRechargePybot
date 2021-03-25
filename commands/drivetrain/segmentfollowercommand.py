@@ -101,7 +101,6 @@ class SegmentFollowerCommand(CommandBase):
                                 
             self.angles.append(theta)
             
-        print(self.angles)
 
     def initialize(self):
         robot.drivetrain.setModuleProfiles(1, turn=False)
@@ -166,6 +165,8 @@ class SegmentFollowerCommand(CommandBase):
 
                 self.maxSpeed = self.ogMaxSpeed
                 
+                self.pointTracker += 1
+                
                 try: # If it can't index them, then it's done.
                     
                     self.desiredAngle = self.angles[self.pointTracker]
@@ -182,6 +183,7 @@ class SegmentFollowerCommand(CommandBase):
                     
                 except(TypeError, IndexError):
                     self.desiredDistance = self.distances[self.pointTracker]
+                    print('next ' + str(self.desiredDistance))
                     self.isSlow = False
                     self.disableAdjust = False
                     
@@ -189,9 +191,7 @@ class SegmentFollowerCommand(CommandBase):
                 if self.isSlow:
                     self.maxSpeed = self.slowSpeed
                                 
-                self.startPos = robot.drivetrain.getPositions()
-                
-                self.pointTracker += 1
+                self.startPos = robot.drivetrain.getPositions()                
                 
                 self.moveSet = False
                 self.notRanYet = False
@@ -244,7 +244,6 @@ class SegmentFollowerCommand(CommandBase):
 
     def atWaypoint(self):
         for position, start in zip(robot.drivetrain.getPositions(), self.startPos):
-            #if abs(abs(position - start) - self.desiredDistance) < 1:  # 1 inch is the tolerance, or have we passed it?
             # The following works assuming all encoders increase as we move forward.
             print('pos ' + str(position) + ' start ' + str(start) + ' dd ' + str(self.desiredDistance))
             if (self.desiredDistance + start) - position < 1:

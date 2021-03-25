@@ -155,14 +155,14 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.addCommands(
             SegmentFollowerCommand(
                 [
-                    [0,50,True],
-                    [-36,50,True], # First cone
-                    [0,50,True],
-                    [30,24],
+                    [0,60,True],
+                    #[-36,50,True], # First cone
+                    #[0,50,True],
+                    #[30,24],
                 ],
                 startPoint=[0,0,True], # Start slow.
                 maxSpeed=1.5,
-                slowSpeed=0.1
+                slowSpeed=0.2
             )
         )
     def interrupted(self):
