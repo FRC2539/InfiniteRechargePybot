@@ -13,8 +13,8 @@ class SegmentFollowerCommand(CommandBase):
         angleTolerance=5,
         maxSpeed=1,
         deccelerate=False,
-        speedOffset=0,
         kP=0.0275,
+        rearBonus=0,
         startingAngle=None,
         stopWhenDone=True,
     ):
@@ -37,8 +37,8 @@ class SegmentFollowerCommand(CommandBase):
 
         self.tol = angleTolerance
         self.deccelerate = deccelerate
-        self.speedOffset = speedOffset
         self.kP = kP
+        self.rearBonus = rearBonus
         self.startingAngle = startingAngle
         self.stopWhenDone = stopWhenDone
 
@@ -205,9 +205,9 @@ class SegmentFollowerCommand(CommandBase):
                 # algo.
                 robot.drivetrain.setSpeeds(
                     [
-                        self.maxSpeed + self.speedOffset,
                         self.maxSpeed,
-                        self.maxSpeed + self.speedOffset,
+                        self.maxSpeed,
+                        self.maxSpeed,
                         self.maxSpeed,
                     ]
                 )
@@ -257,9 +257,9 @@ class SegmentFollowerCommand(CommandBase):
                     robot.drivetrain.setSpeeds(
                         [
                             self.maxSpeed + speedOffset,
-                            self.maxSpeed,
-                            self.maxSpeed + speedOffset,
-                            self.maxSpeed,
+                            self.maxSpeed - speedOffset,
+                            self.maxSpeed + speedOffset + self.rearBonus,
+                            self.maxSpeed - speedOffset + self.rearBonus,
                         ]
                     )
             else:
@@ -267,8 +267,8 @@ class SegmentFollowerCommand(CommandBase):
                     [
                         self.maxSpeed + speedOffset,
                         self.maxSpeed - speedOffset,
-                        self.maxSpeed + speedOffset,
-                        self.maxSpeed - speedOffset,
+                        self.maxSpeed + speedOffset + self.rearBonus,
+                        self.maxSpeed - speedOffset + self.rearBonus,
                     ]
                 )
 

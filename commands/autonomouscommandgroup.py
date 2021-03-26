@@ -163,21 +163,30 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 reverseStrafe=True,
                 stopWhenDone=False,
             ),
-            SegmentFollowerCommand([[-30, 0]], maxSpeed=1.2),
+            SegmentFollowerCommand([[-30, 0]], maxSpeed=1),
             InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
+            InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
             SegmentFollowerCommand(
                 [
-                    [26, -2, {"speed": 0.6}],
-                    [18, 14, {"speed": 1.1}],
-                    [80, 22, {"speed": 1.1}], # Maybe try the dosado after this? Yes. DO IT.
-                    [110, 78, {"speed": 1.1}],
-                    [50, 96, {"speed": 1.2}],
-                    [-10, 96, {"speed": 1.2}],
+                    [32, -2, {"speed": 0.6}],
+                    [36, 14, {"speed": 1.1}],
+                    [70, 20, {"speed": 1.1}],
                 ],
                 kP=0.0325,
                 startPoint=[0, 0, {"speed": 0.6}],
+                stopWhenDone=False
             ),
+            DosadoCommand(34, startAngle=90, angleToTravel=190, endAngle=-90, reverseForward=True, stopWhenDone=True, maxSpeed=1.25),
+            SegmentFollowerCommand([[-65, -2]], maxSpeed=1.3, rearBonus=-0.15),
             InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
+            InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
+            SegmentFollowerCommand([[65, -2]], maxSpeed=1.3, rearBonus=0.15, stopWhenDone=False),
+            DosadoCommand(50, startAngle=90, angleToTravel=190, endAngle=-90, reverseForward=True, stopWhenDone=True, maxSpeed=1.3),
+            InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
+            SegmentFollowerCommand([[-64, 2]], maxSpeed=1.3, rearBonus=-0.15),
+            InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
+            InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
+            SegmentFollowerCommand([[30, 2], [38, 24]], maxSpeed=1.3)
         )
 
     def interrupted(self):

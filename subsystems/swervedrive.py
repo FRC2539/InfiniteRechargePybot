@@ -134,6 +134,14 @@ class SwerveDrive(BaseDrive):
         VectorX = VectorX / 4
         VectorY = VectorY / 4
         return VectorX, VectorY
+    
+    def waitForRoll(self):
+        """
+        Forces the robot to wait until
+        it's not tipping.
+        """
+        while abs(self.navX.getRoll()) > 5:
+            pass
 
     def updateOdometry(self):
         """
