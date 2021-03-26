@@ -59,24 +59,24 @@ class DosadoCommand(CommandBase):
         self.done = False
 
         robot.drivetrain.setUniformModuleAngle(self.angle)
-        
+
         if self.waitForAlign:
             self.align(self.angle)
-                
+
     def align(self, angle):
         count = 0
         for a in robot.drivetrain.getModuleAngles():
             if abs(abs(a) - abs(angle)) < 5:
                 count += 1
 
-        if count >= 2: 
+        if count >= 2:
             return
-        
+
         self.align(angle)
 
     def execute(self):
-        print('goto ' + str(self.angle))
-        print('at ' + str(robot.drivetrain.getModuleAngles()))
+        print("goto " + str(self.angle))
+        print("at " + str(robot.drivetrain.getModuleAngles()))
         currentDistAlongArc = abs(
             robot.drivetrain.getPositions()[self.idToIndex] - self.startPos
         )
@@ -109,7 +109,7 @@ class DosadoCommand(CommandBase):
             speeds = [math.copysign(self.velPercent, speed) for speed in speeds]
             angles = [a - self.angle for a in angles]
 
-            print('setting ' + str(speeds))
+            print("setting " + str(speeds))
 
             robot.drivetrain.setSpeeds(speeds)
             robot.drivetrain.setModuleAngles(angles)

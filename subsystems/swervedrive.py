@@ -330,7 +330,7 @@ class SwerveDrive(BaseDrive):
         """
         for module in self.modules:
             module.stopModule()
-            
+
     def longStop(self):
         """
         Returns true when all wheel speeds
@@ -339,8 +339,8 @@ class SwerveDrive(BaseDrive):
         self.stop()
         while self.getSpeeds().count(0) < 3:
             pass
-            
-    def resetEncoders(self,anArgumentAsWell=0):
+
+    def resetEncoders(self, anArgumentAsWell=0):
         """
         Resets all drive encoders to 0 by default.
         """

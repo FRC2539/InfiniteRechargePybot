@@ -123,7 +123,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                     [32, 212],
                     [32, 30, True],
                     [-72, 34, True],
-                    [-72, -36, True]
+                    [-72, -36, True],
                 ],
                 maxSpeed=1.35,
                 slowSpeed=0.9,
@@ -153,15 +153,34 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def Bounce(self):
         self.addCommands(
-            SegmentFollowerCommand([[0,4]], maxSpeed=1, stopWhenDone=False),
-            DosadoCommand(30, angleToTravel=95, startAngle=180, maxSpeed=1.2, waitForAlign=True, reverseStrafe=True, stopWhenDone=False),
-            SegmentFollowerCommand([[-30,0]], maxSpeed=1.2),
+            SegmentFollowerCommand([[0, 4]], maxSpeed=1, stopWhenDone=False),
+            DosadoCommand(
+                30,
+                angleToTravel=95,
+                startAngle=180,
+                maxSpeed=1.2,
+                waitForAlign=True,
+                reverseStrafe=True,
+                stopWhenDone=False,
+            ),
+            SegmentFollowerCommand([[-30, 0]], maxSpeed=1.2),
             InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
-            SegmentFollowerCommand([[26, -2, {'speed':0.6}], [18,14,{'speed':1.1}], [80,22,{'speed':1.1}], [110, 78, {'speed':1.1}], [50, 96, {'speed':1.2}], [-10, 96, {'speed':1.2}]], kP=0.0325, startPoint=[0,0,{'speed':0.6}])
-            #SegmentFollowerCommand([[-82,-4, {'disableAdjust':True}]], maxSpeed=1.4, startingAngle=-90), 
-            #InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
-            #SegmentFollowerCommand([[82, 0]], maxSpeed=1.4)
+            SegmentFollowerCommand(
+                [
+                    [26, -2, {"speed": 0.6}],
+                    [18, 14, {"speed": 1.1}],
+                    [80, 22, {"speed": 1.1}],
+                    [110, 78, {"speed": 1.1}],
+                    [50, 96, {"speed": 1.2}],
+                    [-10, 96, {"speed": 1.2}],
+                ],
+                kP=0.0325,
+                startPoint=[0, 0, {"speed": 0.6}],
+            ),
+            InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
+            SegmentFollowerCommand([[60, 0, {"speed": 1.2}]]),
         )
+
     def interrupted(self):
         robot.intake.dontIntakeBalls()
         robot.chamber.stop()
