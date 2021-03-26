@@ -5,7 +5,7 @@ import math
 import robot
 
 class SegmentFollowerCommand(CommandBase):
-    def __init__(self, waypoints: list, startPoint=[0,0], angleTolerance=5, maxSpeed=1, slowSpeed=0.7, deccelerate=False, speedOffset=0, kP=0.0275, startingAngle=None, stopWhenDone=True):
+    def __init__(self, waypoints: list, startPoint=[0,0], angleTolerance=5, maxSpeed=1, deccelerate=False, speedOffset=0, kP=0.0275, startingAngle=None, stopWhenDone=True):
         """
         You start at [0, 0] by default. speedOffset is applied
         to the left hand side of the drivetrain! Note,
@@ -33,8 +33,6 @@ class SegmentFollowerCommand(CommandBase):
         self.maxSpeed = maxSpeed
         self.ogMaxSpeed = maxSpeed
         
-        self.slowSpeed = slowSpeed
-
         self.distances = []
         self.angles = []
 
@@ -53,22 +51,22 @@ class SegmentFollowerCommand(CommandBase):
             
             # Slow down for this segment?
             try:
-                slow = point[2]
+                optionalList = point[2]
             except(IndexError):
-                slow = False
+                optionalList = {}
                 
-            # Disable the navX offset control?
-            try:
-                disableAdjust = point[3]
-            except(IndexError):
-                disableAdjust = False
+            customSpeed = self.maxSpeed
+            disableNavXAdjust = False
+                
+            for key, val in optionalList.items():
+                if key == 'speed':
+                    customSpeed = val
+                elif key == 'disableAdjust':
+                    disableNavXAdjust = val
                 
             # Find the difference between them.
             finalX = nextPointX - pointX
             finalY = nextPointY - pointY
-
-            if finalX == 0 and finalY == 0:  # Same points, continue onto the next pair.
-                continue
 
             if finalX == 0:
                 if nextPointY > pointY:
@@ -90,21 +88,16 @@ class SegmentFollowerCommand(CommandBase):
                     
             distance = math.sqrt(finalX ** 2 + finalY ** 2)
 
-            if slow and disableAdjust:
-                self.distances.append([distance, True, True]) # dist, speed, adjust
-            elif slow:
-                self.distances.append([distance, True, False])
-            elif disableAdjust:
-                self.distances.append([distance, False, True])
-            else:
-                self.distances.append(distance)
-                                
+            self.distances.append([distance, [customSpeed, disableNavXAdjust]])
+            
             self.angles.append(theta)
             
-
+        print(self.angles)
+        
     def initialize(self):
         robot.drivetrain.setModuleProfiles(1, turn=False)
-        robot.drivetrain.resetEncoders()
+        for i in range(10):
+            robot.drivetrain.resetEncoders()
 
         self.pointTracker = 0
         
@@ -115,20 +108,12 @@ class SegmentFollowerCommand(CommandBase):
 
         self.desiredAngle = self.angles[0]
         
-        try:
-            self.desiredDistance = self.distances[0][0]
-            self.isSlow = self.distances[0][1]
-        except(TypeError):
-            self.desiredDistance = self.distances[0]
-            self.isSlow = False
-            
-        if self.isSlow:
-            self.maxSpeed = self.slowSpeed
+        self.desiredDistance = self.distances[0][0]
+        print(self.distances)
+        self.maxSpeed = self.distances[0][1][0]
             
         self.disableAdjust = False
         
-        self.lastDisplacement = self.desiredDistance
-
         self.pathFinished = False
         self.notRanYet = True
         self.moveSet = False
@@ -136,25 +121,30 @@ class SegmentFollowerCommand(CommandBase):
 
         robot.drivetrain.setUniformModuleAngle(self.desiredAngle)
         
+        self.align(self.desiredAngle)
+        
+    def align(self, angle):
         count = 0
-        while count < 4: # Wait for all modules to angle.
-            count = 0
-            for angle in robot.drivetrain.getModuleAngles():
-                
-                if (
-                    abs(angle - self.desiredAngle) < self.tol
-                    or abs(angle - self.desiredAngle - 360) < self.tol
-                ):
-                    count += 1
-                else:
-                    continue
+        print('ang ' + str(angle))
+        if angle < 0:
+            angle += 360
+        for a in robot.drivetrain.getModuleAngles():
+            print('at ' + str(a))
+            if abs(a - angle) < 5:
+                count += 1
 
+        if count >= 3: 
+            return
+        
+        self.align(angle)
+        
     def execute(self):
         
         robot.drivetrain.setUniformModuleAngle(self.desiredAngle)
                         
-        if self.atWaypoint(): # Watches to see if we pass the desired waypoint.
+        if self.atWaypoint() and not self.passed: # Watches to see if we pass the desired waypoint, runs once.
             self.passed = True
+            self.startPos = robot.drivetrain.getPositions()
             
         else:
             self.passed = False
@@ -175,23 +165,9 @@ class SegmentFollowerCommand(CommandBase):
                     self.pathFinished = True
                     return
                 
-                # Should we adjust with the NavX?
-                try:
-                    self.desiredDistance = self.distances[self.pointTracker][0]
-                    self.isSlow = self.distances[self.pointTracker][1]
-                    self.disableAdjust = self.distances[self.pointTracker][2]
-                    
-                except(TypeError, IndexError):
-                    self.desiredDistance = self.distances[self.pointTracker]
-                    print('next ' + str(self.desiredDistance))
-                    self.isSlow = False
-                    self.disableAdjust = False
-                    
-                # Go slow!
-                if self.isSlow:
-                    self.maxSpeed = self.slowSpeed
-                                
-                self.startPos = robot.drivetrain.getPositions()                
+                self.desiredDistance = self.distances[self.pointTracker][0]
+                self.maxSpeed = self.distances[self.pointTracker][1][0]
+                self.disableAdjust = self.distances[self.pointTracker][1][1]
                 
                 self.moveSet = False
                 self.notRanYet = False
@@ -237,17 +213,20 @@ class SegmentFollowerCommand(CommandBase):
                     robot.drivetrain.setUniformModulePercent(0.5)
                 else:
                     robot.drivetrain.setSpeeds([self.maxSpeed + speedOffset, self.maxSpeed, self.maxSpeed + speedOffset, self.maxSpeed])
-            
             else:
-                
                 robot.drivetrain.setSpeeds([self.maxSpeed + speedOffset, self.maxSpeed - speedOffset, self.maxSpeed + speedOffset, self.maxSpeed - speedOffset])
 
     def atWaypoint(self):
-        for position, start in zip(robot.drivetrain.getPositions(), self.startPos):
+        count = 0
+
+        for position, start in zip(robot.drivetrain.getPositions()[-2:], self.startPos[-2:]):
             # The following works assuming all encoders increase as we move forward.
             print('pos ' + str(position) + ' start ' + str(start) + ' dd ' + str(self.desiredDistance))
-            if (self.desiredDistance + start) - position < 1:
-                return True
+            if (self.desiredDistance + start) - position < 3:
+                count += 1
+        
+        if count == 2:
+            return True
         
         return False
 

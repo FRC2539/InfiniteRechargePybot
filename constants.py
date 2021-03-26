@@ -40,7 +40,7 @@ drivetrain.tFFk = 0
 drivetrain.tIZk = 0
 
 # Turn Secondary Position Control
-drivetrain.stPk = 8
+drivetrain.stPk = 8.5
 drivetrain.stIk = 0
 drivetrain.stDk = 0
 drivetrain.stFFk = 0

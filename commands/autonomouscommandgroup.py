@@ -153,17 +153,14 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def Bounce(self):
         self.addCommands(
-            SegmentFollowerCommand(
-                [
-                    [0,60,True],
-                    #[-36,50,True], # First cone
-                    #[0,50,True],
-                    #[30,24],
-                ],
-                startPoint=[0,0,True], # Start slow.
-                maxSpeed=1.5,
-                slowSpeed=0.2
-            )
+            SegmentFollowerCommand([[0,4]], maxSpeed=1, stopWhenDone=False),
+            DosadoCommand(30, angleToTravel=95, startAngle=180, maxSpeed=1.2, waitForAlign=True, reverseStrafe=True, stopWhenDone=False),
+            SegmentFollowerCommand([[-30,0]], maxSpeed=1.2),
+            InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
+            SegmentFollowerCommand([[26, -2, {'speed':0.6}], [18,14,{'speed':1.1}], [80,22,{'speed':1.1}], [110, 78, {'speed':1.1}], [50, 96, {'speed':1.2}], [-10, 96, {'speed':1.2}]], kP=0.0325, startPoint=[0,0,{'speed':0.6}])
+            #SegmentFollowerCommand([[-82,-4, {'disableAdjust':True}]], maxSpeed=1.4, startingAngle=-90), 
+            #InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
+            #SegmentFollowerCommand([[82, 0]], maxSpeed=1.4)
         )
     def interrupted(self):
         robot.intake.dontIntakeBalls()

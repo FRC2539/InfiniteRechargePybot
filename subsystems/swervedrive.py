@@ -121,8 +121,6 @@ class SwerveDrive(BaseDrive):
         self.PosX += VectorX
         self.PosY += VectorY
 
-        print(self.getPositions())
-
         self.LastPositions = self.getPositions()
 
     def GenerateRobotVector(self):
@@ -332,6 +330,15 @@ class SwerveDrive(BaseDrive):
         """
         for module in self.modules:
             module.stopModule()
+            
+    def longStop(self):
+        """
+        Returns true when all wheel speeds
+        are zero.
+        """
+        self.stop()
+        while self.getSpeeds().count(0) < 3:
+            pass
             
     def resetEncoders(self,anArgumentAsWell=0):
         """

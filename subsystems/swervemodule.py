@@ -259,8 +259,7 @@ class SwerveModule:
         """
         Resets the drive encoders to 0 by default.
         """
-        print('reset\n\n')
-        self.driveMotor.setSelectedSensorPosition(anArgument,0,0)
+        self.driveMotor.setSelectedSensorPosition(anArgument,1,0)
 
     def stopModule(self):
         """
