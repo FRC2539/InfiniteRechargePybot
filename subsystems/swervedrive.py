@@ -118,9 +118,18 @@ class SwerveDrive(BaseDrive):
             VectorY += math.sin(math.radians(angle - 180)) * distance
         VectorX = VectorX / 4
         VectorY = VectorY / 4
+        PolarR = math.sqrt(VectorX**2 + VectorY **2)
+        PolarTheta = math.degrees(math.atan2(VectorY,VectorX))
+        
+        #print("degree without navx = " + str(PolarTheta) )
+        PolarTheta -=  self.getAngle()
+        VectorX = math.cos(math.radians(PolarTheta + 90)) * PolarR
+        VectorY = math.sin(math.radians(PolarTheta + 90)) * PolarR
+        #print("Magnitude = " + str(PolarR) + " degree = " + str(PolarTheta))
+        
         self.PosX += VectorX
         self.PosY += VectorY
-
+        print("posx = " + str(self.PosX) + " posy = " + str(self.PosY))
         self.LastPositions = self.getPositions()
 
     def GenerateRobotVector(self):
