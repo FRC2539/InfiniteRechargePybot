@@ -176,17 +176,17 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 startPoint=[0, 0, {"speed": 0.6}],
                 stopWhenDone=False
             ),
-            DosadoCommand(34, startAngle=90, angleToTravel=190, endAngle=-90, reverseForward=True, stopWhenDone=True, maxSpeed=1.25),
-            SegmentFollowerCommand([[-65, -2]], maxSpeed=1.3, rearBonus=-0.15),
+            DosadoCommand(33, startAngle=90, angleToTravel=190, endAngle=-90, reverseForward=True, stopWhenDone=True, maxSpeed=1.25),
+            SegmentFollowerCommand([[-76, -2]], maxSpeed=1.3, rearBonus=-0.15),
             InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
             InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
-            SegmentFollowerCommand([[65, -2]], maxSpeed=1.3, rearBonus=0.15, stopWhenDone=False),
-            DosadoCommand(50, startAngle=90, angleToTravel=190, endAngle=-90, reverseForward=True, stopWhenDone=True, maxSpeed=1.3),
+            SegmentFollowerCommand([[78, -2]], maxSpeed=1.3, rearBonus=0.165, stopWhenDone=False),
+            DosadoCommand(52, startAngle=90, angleToTravel=190, endAngle=-90, reverseForward=True, stopWhenDone=True, maxSpeed=1.3),
             InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
-            SegmentFollowerCommand([[-64, 2]], maxSpeed=1.3, rearBonus=-0.15),
+            SegmentFollowerCommand([[-78, 2]], maxSpeed=1.3, rearBonus=-0.15),
             InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
             InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
-            SegmentFollowerCommand([[30, 2], [38, 24]], maxSpeed=1.3)
+            SegmentFollowerCommand([[29, 3], [29, 40]], maxSpeed=1.3)
         )
 
     def interrupted(self):
