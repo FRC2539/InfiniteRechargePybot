@@ -169,7 +169,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 [
                     [26, -2, {"speed": 0.6}],
                     [18, 14, {"speed": 1.1}],
-                    [80, 22, {"speed": 1.1}],
+                    [80, 22, {"speed": 1.1}], # Maybe try the dosado after this? Yes. DO IT.
                     [110, 78, {"speed": 1.1}],
                     [50, 96, {"speed": 1.2}],
                     [-10, 96, {"speed": 1.2}],
@@ -178,7 +178,6 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 startPoint=[0, 0, {"speed": 0.6}],
             ),
             InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
-            SegmentFollowerCommand([[60, 0, {"speed": 1.2}]]),
         )
 
     def interrupted(self):
