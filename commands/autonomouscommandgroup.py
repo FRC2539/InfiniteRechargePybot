@@ -172,33 +172,70 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 ],
                 kP=0.0325,
                 startPoint=[0, 0, {"speed": 0.6}],
-                stopWhenDone=False
+                stopWhenDone=False,
             ),
-            DosadoCommand(33, startAngle=90, angleToTravel=190, endAngle=-90, reverseForward=True, stopWhenDone=True, maxSpeed=1.25),
+            DosadoCommand(
+                33,
+                startAngle=90,
+                angleToTravel=190,
+                endAngle=-90,
+                reverseForward=True,
+                stopWhenDone=True,
+                maxSpeed=1.25,
+            ),
             SegmentFollowerCommand([[-76, -2]], maxSpeed=1.3, rearBonus=-0.15),
             InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
             InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
-            SegmentFollowerCommand([[78, -2]], maxSpeed=1.3, rearBonus=0.165, stopWhenDone=False),
-            DosadoCommand(52, startAngle=90, angleToTravel=190, endAngle=-90, reverseForward=True, stopWhenDone=True, maxSpeed=1.3),
+            SegmentFollowerCommand(
+                [[78, -2]], maxSpeed=1.3, rearBonus=0.165, stopWhenDone=False
+            ),
+            DosadoCommand(
+                52,
+                startAngle=90,
+                angleToTravel=190,
+                endAngle=-90,
+                reverseForward=True,
+                stopWhenDone=True,
+                maxSpeed=1.3,
+            ),
             InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
             SegmentFollowerCommand([[-78, 2]], maxSpeed=1.3, rearBonus=-0.15),
             InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
             InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
-            SegmentFollowerCommand([[29, 3], [29, 40]], maxSpeed=1.3)
+            SegmentFollowerCommand([[29, 3], [29, 40]], maxSpeed=1.3),
         )
-                
+
     def GalacticSearchRedA(self):
         self.addCommands(
             InstantCommand(lambda: robot.intake.intakeBalls(0.9), [robot.intake]),
             WaitCommand(0.4),
-            SegmentFollowerCommand([[0, 5, {'speed':0.25}], [0, 10, {'speed':0.9}], [25, 55, {'speed':0.9}], [-80, 60, {'speed':1.1}], [-80, 70, {'speed':1.6}], [-60, 300]], maxSpeed=1.4)
-            )
-        
+            SegmentFollowerCommand(
+                [
+                    [0, 5, {"speed": 0.25}],
+                    [0, 10, {"speed": 0.9}],
+                    [30, 52, {"speed": 0.9}],
+                    [-87, 56, {"speed": 1.1}],
+                    [-87, 70, {"speed": 2.5}],
+                    [-60, 300],
+                ],
+                maxSpeed=1.4,
+            ),
+        )
+
     def GalacticSearchRedB(self):
         self.addCommands(
             InstantCommand(lambda: robot.intake.intakeBalls(0.9), [robot.intake]),
             WaitCommand(0.4),
-            SegmentFollowerCommand([[0, 5, {'speed':0.25}], [0, 10, {'speed':0.9}].)
+            SegmentFollowerCommand(
+                [
+                    [0, 5, {"speed": 0.25}], 
+                    [0, 10, {"speed": 1}],
+                    [50, 60, {"speed": 0.9}],
+                    [-50, 130, {"speed":1.7}],
+                    [-25, 430]
+                ]
+            ),
+        )
 
     def interrupted(self):
         robot.intake.dontIntakeBalls()

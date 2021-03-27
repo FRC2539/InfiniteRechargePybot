@@ -25,6 +25,7 @@ class ShootingProcessCommand(CommandBase):
         self.checkRPM()
 
         if self.isAtTargetRPM:
+            print('at target')
             robot.conveyor.forward()
             robot.chamber.forward()
 
@@ -34,6 +35,9 @@ class ShootingProcessCommand(CommandBase):
             and abs(robot.shooter.getRPM() - self.targetRPM) <= self.tolerance
         ):
             self.isAtTargetRPM = True
+            
+    def isFinished(self):
+        return False
 
     def end(self, interrupted):
         robot.conveyor.stop()

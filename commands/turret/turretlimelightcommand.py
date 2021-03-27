@@ -27,6 +27,8 @@ class TurretLimelightCommand(CommandBase):
         if abs(xPercentError) > 0.25:
             xPercentError = math.copysign(0.5, xPercentError)
 
+        print('moving ' + str(xPercentError))
+
         robot.turret.move(xPercentError)
 
     def end(self, interrupted):

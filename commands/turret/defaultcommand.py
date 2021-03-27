@@ -14,6 +14,7 @@ class DefaultCommand(CommandBase):
 
     def execute(self):
         speed = logicalaxes.TURRETmOVE.get() * -0.3
+        print('moving')
         robot.turret.move(speed)
 
     def end(self, cheeseball):
