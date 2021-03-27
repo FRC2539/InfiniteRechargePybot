@@ -5,6 +5,7 @@ from commands2 import (
     ParallelCommandGroup,
     CommandBase,
     InstantCommand,
+    WaitCommand,
     Swerve4ControllerCommand,
 )
 
@@ -46,12 +47,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 toRun = var
                 break
 
-        self.Bounce()
+        self.GalacticSearchRedA()
 
     # eval("self." + toRun + "()")  # Setups the method.
-
-    def example(self):
-        self.addCommands(InstantCommand(lambda: print("I worked!")))
 
     def tenBall(self):
 
@@ -188,6 +186,19 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
             SegmentFollowerCommand([[29, 3], [29, 40]], maxSpeed=1.3)
         )
+                
+    def GalacticSearchRedA(self):
+        self.addCommands(
+            InstantCommand(lambda: robot.intake.intakeBalls(0.9), [robot.intake]),
+            WaitCommand(0.4),
+            SegmentFollowerCommand([[0, 5, {'speed':0.25}], [0, 10, {'speed':0.9}], [25, 55, {'speed':0.9}], [-80, 60, {'speed':1.1}], [-80, 70, {'speed':1.6}], [-60, 300]], maxSpeed=1.4)
+            )
+        
+    def GalacticSearchRedB(self):
+        self.addCommands(
+            InstantCommand(lambda: robot.intake.intakeBalls(0.9), [robot.intake]),
+            WaitCommand(0.4),
+            SegmentFollowerCommand([[0, 5, {'speed':0.25}], [0, 10, {'speed':0.9}].)
 
     def interrupted(self):
         robot.intake.dontIntakeBalls()
