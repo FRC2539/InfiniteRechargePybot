@@ -128,7 +128,7 @@ class SwerveDrive(BaseDrive):
         self.PosX += VectorX
         self.PosY += VectorY
         self.LastPositions = self.getPositions()
-
+        
     def GenerateRobotVector(self):
         Angles = self.getModuleAngles()
         Speeds = self.getSpeeds()
@@ -521,6 +521,79 @@ class SwerveDrive(BaseDrive):
         """
         for module in self.modules:
             module.setModulePosition(distance)
+            
+    def getBezierPosition(self, p: list, t):
+        """
+        Returns the position in the Bezier curve, given
+        the control points and the percentage through the 
+        curve. See https://math.stackexchange.com/questions/1360891/find-quadratic-bezier-curve-equation-based-on-its-control-points.
+        """
+        
+        # Returns (x, y) @ % = t
+        return (
+            ((1 - t)**2 * p[0][0] + 2 * t * (1 - t) * p[1][0] + t**2 * p[2][0]), 
+            ((1 - t)**2 * p[0][1] + 2 * t * (1 - t) * p[1][1] + t**2 * p[2][1])
+        )
+        
+    def getBezierSlope(self, p: list, t):
+        """
+        Returns the slope of the current position along
+        a quadratic bezier curve, defined by three given control points. 
+        """
+        
+        # Define the given points.
+        x0 = p[0][0]; y0 = p[0][1]
+        x1 = p[1][0]; y1 = p[2][1]
+        x2 = p[2][0]; y2 = p[2][1]
+        
+        # 'a' is the x, 'b' is the y
+        a0 = x0 - (x0 - x1) * t
+        b0 = y0 - (y0 - y1) * t
+        
+        a1 = x1 - (x1 - x2) * t
+        b1 = y1 - (y1 - y2) * t
+        
+        # Return the slope of the two points we just calculated.
+        return (b1 - b0) / (a1 - a0)
+    
+    def getBezierLength(self, p: list):
+        """
+        Returns the length of a Quadratic Bezier
+        curve given via control points. Source:
+        https://gist.github.com/tunght13488/6744e77c242cc7a94859.
+        """
+        positions = self.createPositionObjects(p)
+        
+        if len(positions) != 3:
+            raise Exception('Bruh this is a quadratic. Three points!')
+        
+        pointOne, pointTwo, pointThree = positions[0], positions[1], positions[2]
+        
+        aX = pointOne.x - 2 * pointTwo.x + pointThree.x
+        aY = pointOne.y - 2 * pointTwo.y + pointThree.y
+        
+        bX = 2 * pointTwo.x - 2 * pointOne.x
+        bY = 2 * pointOne.y - 2 * pointTwo.y
+        
+        A = 4 * (aX**2 + aY**2)
+        B = 4 * (aX * bX + aY * bY)
+        C = bX**2 + bY**2
+        
+        SABC = 2 * math.sqrt(A+B+C)
+        A2 = math.sqrt(A)
+        A32 = 2 * A  * A2
+        C2 = 2 * math.sqrt(C)
+        BA = B / A2
+        
+        return (A32 * SABC + A2 * B * (SABC - C2) + (4 * C * A - B * B) * math.log((2 * A2 + BA + SABC) / (BA + C2))) / (4 * A32)
+        
+    def createPositionObjects(self, points: list):
+        """
+        Creates Position objects using a given list
+        of Xs and Ys. Returns that new list.
+        """
+        return [Position(coord[0], coord[1]) for coord in points]
+            
 
     # Cougar Course Below.
 
@@ -641,3 +714,12 @@ class SwerveDrive(BaseDrive):
         """
         for module in self.modules:
             module.setDriveCruiseVelocity(slow)
+
+class Position:
+    """
+    No, not that garbage by Ariane Grande. Stores
+    An X and Y value for convenience. 
+    """
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
