@@ -17,6 +17,7 @@ from commands.drivetrain.cougarcoursecommand import CougarCourseCommand
 from commands.drivetrain.runautocommand import RunAutoCommand
 from commands.drivetrain.segmentfollowercommand import SegmentFollowerCommand
 from commands.drivetrain.dosadocommand import DosadoCommand
+from commands.drivetrain.bezierpathcommand import BezierPathCommand
 
 from commands.intake.intakecommand import IntakeCommand
 
@@ -47,7 +48,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 toRun = var
                 break
 
-        self.GalacticSearchRedA()
+        self.Test()
 
     # eval("self." + toRun + "()")  # Setups the method.
 
@@ -100,6 +101,11 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             # self.moveBack,
             # self.turnToTarget,
             # self.shootTwo        # 4 seconds
+        )
+        
+    def Test(self):
+        self.addCommands(
+            BezierPathCommand([[20,-10], [-10,-10], [10,10]])
         )
 
     def Slalom(self):

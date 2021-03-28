@@ -124,7 +124,8 @@ class SwerveDrive(BaseDrive):
         PolarTheta -= self.getAngle()
         VectorX = math.cos(math.radians(PolarTheta + 90)) * PolarR
         VectorY = math.sin(math.radians(PolarTheta + 90)) * PolarR
-
+        
+        
         self.PosX += VectorX
         self.PosY += VectorY
         self.LastPositions = self.getPositions()
@@ -328,8 +329,6 @@ class SwerveDrive(BaseDrive):
             rotate = math.copysign(max(abs(rotate) - self.deadband, 0), rotate)
 
         speeds = self.tankCalculateSpeeds(y, rotate)
-
-        print("s " + str(speeds))
 
         for module, speed in zip(self.modules, speeds):
             module.setWheelAngle(0)
@@ -535,7 +534,7 @@ class SwerveDrive(BaseDrive):
             ((1 - t)**2 * p[0][1] + 2 * t * (1 - t) * p[1][1] + t**2 * p[2][1])
         )
         
-    def getCubicBezierPosition(self, p: list, t):
+    def getCubicBezierPosition(self, p: list, t: float):
         """
         Returns the position in the cubic Bezier curve, given
         the control points and the percentage through the 
@@ -544,8 +543,8 @@ class SwerveDrive(BaseDrive):
         
         # Returns (x, y) @ % = t
         return (
-            ((1 - t)**3 * p[0][0] + 3(1 - t)**2 * p[1][0] + 3 * (1 - t)**2 * p[2][0] + t**3 * p[3][0]),
-            ((1 - t)**3 * p[0][1] + 3(1 - t)**2 * p[1][1] + 3 * (1 - t)**2 * p[2][1] + t**3 * p[3][1]),
+            ((1 - t)**3 * p[0][0] + 3 * (1 - t)**2 * p[1][0] + 3 * (1 - t)**2 * p[2][0] + t**3 * p[3][0]),
+            ((1 - t)**3 * p[0][1] + 3 * (1 - t)**2 * p[1][1] + 3 * (1 - t)**2 * p[2][1] + t**3 * p[3][1])
         )
         
     def getQuadraticBezierSlope(self, p: list, t):
@@ -556,7 +555,7 @@ class SwerveDrive(BaseDrive):
         
         # Define the given points.
         x0 = p[0][0]; y0 = p[0][1]
-        x1 = p[1][0]; y1 = p[2][1]
+        x1 = p[1][0]; y1 = p[1][1]
         x2 = p[2][0]; y2 = p[2][1]
         
         # 'a' is the x, 'b' is the y
@@ -566,11 +565,8 @@ class SwerveDrive(BaseDrive):
         a1 = x1 - (x1 - x2) * t
         b1 = y1 - (y1 - y2) * t
         
-        # Return the slope of the two points we just calculated.
-        try:
-            return (b1 - b0) / (a1 - a0)
-        except(ZeroDivisionError): # NOTE: It will confuse forwards and backwards this way...
-            return 'v'
+        # Return the slope as (y, x) of the two points we just calculated.
+        return ((b1 - b0), (a1 - a0))
         
     def getCubicBezierSlope(self, p: list, t):
         """
@@ -580,7 +576,7 @@ class SwerveDrive(BaseDrive):
         
         # Define the given points.
         x0 = p[0][0]; y0 = p[0][1]
-        x1 = p[1][0]; y1 = p[2][1]
+        x1 = p[1][0]; y1 = p[1][1]
         x2 = p[2][0]; y2 = p[2][1]
         x3 = p[3][0]; y3 = p[3][1]
         
@@ -599,12 +595,9 @@ class SwerveDrive(BaseDrive):
         
         c1 = a1 - (a1 - a2) * t
         d1 = b1 - (b1 - b2) * t
-        
+                
         # Return the slope calculated using the previous points
-        try:
-            return (d1 - d0) / (c1 - c0)
-        except(ZeroDivisionError):
-            return 'v'
+        return ((d1 - d0), (c1 - c0))
         
     def getQuadraticBezierLength(self, p: list):
         """
