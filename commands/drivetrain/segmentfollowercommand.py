@@ -112,9 +112,8 @@ class SegmentFollowerCommand(CommandBase):
         self.pointTracker = 0
 
         # imagine using if/else statements
-        self.startingAngle = (
-            (self.startingAngle is None) and 0 or robot.drivetrain.getAngle()
-        )
+        if self.startingAngle is None:
+            self.startingAngle = 0
 
         self.startPos = robot.drivetrain.getPositions()
 

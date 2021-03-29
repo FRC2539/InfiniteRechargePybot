@@ -48,7 +48,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 toRun = var
                 break
 
-        self.Test()
+        self.BarellRacing()
 
     # eval("self." + toRun + "()")  # Setups the method.
 
@@ -136,23 +136,24 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def BarellRacing(self):
         self.addCommands(
-            SegmentFollowerCommand([[0, 139], [40, 156]], deccelerate=True),
-            DosadoCommand(36, angleToTravel=270),
+            SegmentFollowerCommand([[0, 116]], maxSpeed=1.3, stopWhenDone=True),
+            SegmentFollowerCommand([[24, 0]], maxSpeed=1.3, stopWhenDone=False),
+            DosadoCommand(36, startAngle=90, angleToTravel=280, maxSpeed=1, stopWhenDone=False, waitForAlign=True),
             SegmentFollowerCommand(
-                [[0, 95]], maxSpeed=1.1, deccelerate=True, speedOffset=-0.075
+                [[0, 76]], maxSpeed=1.3, stopWhenDone=False, kP=0.04, 
             ),
-            DosadoCommand(38, startAngle=180, angleToTravel=-270, reverseStrafe=True),
+            DosadoCommand(36, startAngle=180, angleToTravel=-270, reverseStrafe=True, stopWhenDone=False),
             SegmentFollowerCommand(
-                [[32, 0], [71, 85]], maxSpeed=1.1, deccelerate=True, speedOffset=-0.04
+                [[36, 0], [74, 100], [74, 112]], maxSpeed=1.2, 
             ),
             DosadoCommand(
-                38,
-                startAngle=90,
-                angleToTravel=270,
-                waitForAlign=True,
-                reverseForward=True,
+                44,
+                startAngle=180,
+                angleToTravel=180,
+                reverseStrafe=True,
+                waitForAlign=True
             ),
-            SegmentFollowerCommand([[26, -276]], maxSpeed=1.5, deccelerate=True),
+            SegmentFollowerCommand([[-14, -246]], maxSpeed=1.5),
         )
 
     def Bounce(self):
