@@ -17,7 +17,7 @@ class ShootingProcessCommand(CommandBase):
 
         self.addRequirements([robot.conveyor, robot.chamber])
 
-    def initialize(self):
+    def initialize(self):        
         robot.conveyor.forward()
         robot.shooter.setRPM(self.targetRPM)
 
@@ -35,6 +35,8 @@ class ShootingProcessCommand(CommandBase):
             and abs(robot.shooter.getRPM() - self.targetRPM) <= self.tolerance
         ):
             self.isAtTargetRPM = True
+        else:
+            self.isAtTargetRPM = False
             
     def isFinished(self):
         return False

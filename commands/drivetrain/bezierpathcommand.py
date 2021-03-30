@@ -84,7 +84,7 @@ class BezierPathCommand(CommandBase):
     
     def execute(self):
         # 'self.t' is the percent of the curve which we have traversed. We use it to calculate our heading.
-        self.t = 0.01#abs((robot.drivetrain.getPositions()[2] - self.startPos) / self.curveLength)
+        self.t = abs((robot.drivetrain.getPositions()[2] - self.startPos) / self.curveLength)
     
         # Calculate and set the angle.
         slopeComponents = self.getSlope(self.points, self.t)
