@@ -7,6 +7,7 @@ from networktables import NetworkTables as nt
 import ports
 import constants
 
+
 class Shooter(CougarSystem):
     """Controls the robot's shooter."""
 

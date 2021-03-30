@@ -97,7 +97,7 @@ class SegmentFollowerCommand(CommandBase):
                     theta = ((math.atan2(finalY, finalX) * 180 / math.pi) + 90) % 180
                 else:  # Going to the left
                     theta = -((math.atan2(finalX, finalY) * 180 / math.pi) % 180)
-                    
+
             distance = math.sqrt(finalX ** 2 + finalY ** 2)
 
             self.distances.append([distance, [customSpeed, disableNavXAdjust]])

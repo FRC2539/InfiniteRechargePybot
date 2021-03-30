@@ -79,11 +79,15 @@ def init():
         driveControllerOne.RightThumb.toggleWhenPressed(ChamberBackwardCommand())
         driveControllerOne.BottomThumb.whenPressed(ZeroGyroCommand())
 
-        driveControllerOne.Trigger.whileHeld(DosadoCommand(26, startAngle=90, angleToTravel=360, maxSpeed=1.5, stopWhenDone=False))
-        #driveControllerOne.Trigger.whenPressed(
-            #SetSpeedCommand(False)
-        #)  # slow speed while trigger is held.
-        #driveControllerOne.Trigger.whenReleased(SetSpeedCommand())
+        driveControllerOne.Trigger.whileHeld(
+            DosadoCommand(
+                26, startAngle=90, angleToTravel=360, maxSpeed=1.5, stopWhenDone=False
+            )
+        )
+        # driveControllerOne.Trigger.whenPressed(
+        # SetSpeedCommand(False)
+        # )  # slow speed while trigger is held.
+        # driveControllerOne.Trigger.whenReleased(SetSpeedCommand())
 
         driveControllerOne.LeftBottomRight.whileHeld(PathCommand())
 

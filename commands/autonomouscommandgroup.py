@@ -102,10 +102,10 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             # self.turnToTarget,
             # self.shootTwo        # 4 seconds
         )
-        
+
     def Test(self):
         self.addCommands(
-            BezierPathCommand([[40,-40], [-40,-40], [-40,40]], speed=0.5)
+            BezierPathCommand([[40, -40], [-40, -40], [-40, 40]], speed=0.5)
         )
 
     def Slalom(self):
@@ -138,20 +138,37 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.addCommands(
             SegmentFollowerCommand([[0, 116]], maxSpeed=1.3, stopWhenDone=True),
             SegmentFollowerCommand([[24, 0]], maxSpeed=1.3, stopWhenDone=False),
-            DosadoCommand(36, startAngle=90, angleToTravel=280, maxSpeed=1, stopWhenDone=False, waitForAlign=True),
-            SegmentFollowerCommand(
-                [[0, 76]], maxSpeed=1.3, stopWhenDone=False, kP=0.04, 
+            DosadoCommand(
+                36,
+                startAngle=90,
+                angleToTravel=280,
+                maxSpeed=1,
+                stopWhenDone=False,
+                waitForAlign=True,
             ),
-            DosadoCommand(36, startAngle=180, angleToTravel=-270, reverseStrafe=True, stopWhenDone=False),
             SegmentFollowerCommand(
-                [[36, 0], [74, 100], [74, 112]], maxSpeed=1.2, 
+                [[0, 76]],
+                maxSpeed=1.3,
+                stopWhenDone=False,
+                kP=0.04,
+            ),
+            DosadoCommand(
+                36,
+                startAngle=180,
+                angleToTravel=-270,
+                reverseStrafe=True,
+                stopWhenDone=False,
+            ),
+            SegmentFollowerCommand(
+                [[36, 0], [74, 100], [74, 112]],
+                maxSpeed=1.2,
             ),
             DosadoCommand(
                 44,
                 startAngle=180,
                 angleToTravel=180,
                 reverseStrafe=True,
-                waitForAlign=True
+                waitForAlign=True,
             ),
             SegmentFollowerCommand([[-14, -246]], maxSpeed=1.5),
         )
@@ -235,11 +252,11 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             WaitCommand(0.4),
             SegmentFollowerCommand(
                 [
-                    [0, 5, {"speed": 0.25}], 
+                    [0, 5, {"speed": 0.25}],
                     [0, 10, {"speed": 1}],
                     [50, 60, {"speed": 0.9}],
-                    [-50, 130, {"speed":1.7}],
-                    [-25, 430]
+                    [-50, 130, {"speed": 1.7}],
+                    [-25, 430],
                 ]
             ),
         )

@@ -27,52 +27,50 @@ class SlowShootingProcessCommand(CommandBase):
     def checkRPM(self):
         return abs(robot.shooter.getRPM() - self.targetRPM) <= self.tolerance
 
-    #def initialize(self):
-        #self.timer.stop()
-        #self.timer.reset()
+    # def initialize(self):
+    # self.timer.stop()
+    # self.timer.reset()
 
-        #robot.shooter.setRPM(self.targetRPM)
+    # robot.shooter.setRPM(self.targetRPM)
 
-        #self.timer.start()
+    # self.timer.start()
 
-    #def the(self):
-        #robot.chamber.stop()
-        #robot.conveyor.forward()
+    # def the(self):
+    # robot.chamber.stop()
+    # robot.conveyor.forward()
 
-    #def execute(self):
-        #if self.movingPhase == 0:
-            #if self.timer.get() > 1.5 and self.timer.get() > self.lastWait + 0.5:
-                #self.lastWait = self.timer.get()
-                #atTarget = self.checkRPM()
+    # def execute(self):
+    # if self.movingPhase == 0:
+    # if self.timer.get() > 1.5 and self.timer.get() > self.lastWait + 0.5:
+    # self.lastWait = self.timer.get()
+    # atTarget = self.checkRPM()
 
-                #if atTarget:
-                    #robot.chamber.forward()
-                    #robot.conveyor.stop()
-                    #self.movingPhase = 1
+    # if atTarget:
+    # robot.chamber.forward()
+    # robot.conveyor.stop()
+    # self.movingPhase = 1
 
-                #else:
-                    #self.the()
+    # else:
+    # self.the()
 
-            #else:
-                #self.the()
+    # else:
+    # self.the()
 
-        #elif self.movingPhase == 1:
-            #if robot.chamber.isBallPresent() == True:
-                #self.movingPhase = 2
+    # elif self.movingPhase == 1:
+    # if robot.chamber.isBallPresent() == True:
+    # self.movingPhase = 2
 
-        #elif self.movingPhase == 2:
-            #if robot.chamber.isBallPresent() != True:
-                #self.movingPhase = 0
-                #self.the()
+    # elif self.movingPhase == 2:
+    # if robot.chamber.isBallPresent() != True:
+    # self.movingPhase = 0
+    # self.the()
 
-    #def end(self, interrupted):
-        #robot.conveyor.stop()
-        #robot.chamber.stop()
-        #robot.shooter.stopShooter()
+    # def end(self, interrupted):
+    # robot.conveyor.stop()
+    # robot.chamber.stop()
+    # robot.shooter.stopShooter()
 
-        #self.timer.stop()
-
-
+    # self.timer.stop()
 
     def initialize(self):
         self.timer.stop()
