@@ -519,7 +519,7 @@ class SwerveDrive(BaseDrive):
         """
         for module in self.modules:
             module.setModulePosition(distance)
-            
+
     def getQuadraticBezierPosition(self, p: list, t):
         """
         Returns the position in the quadratic Bezier curve, given
@@ -555,35 +555,37 @@ class SwerveDrive(BaseDrive):
                 + t ** 3 * p[3][1]
             ),
         )
-    
+
     def getHigherBezierPosition(self, p: list, t: float):
         """
         Ok this math is going to kill the robot lol. Look here:
         https://en.wikipedia.org/wiki/B%C3%A9zier_curve#General_definition
-        for the math behind what I'm about to write. Tested, it 
+        for the math behind what I'm about to write. Tested, it
         works! Look at test. Test can be found here:
         https://www.researchgate.net/figure/Quintic-trigonometric-Bezier-curve-with-a-b_fig2_318599090
         """
-        
-        # The for loop will act as our summation.        
-        # Start at one, end at our given number. 
+
+        # The for loop will act as our summation.
+        # Start at one, end at our given number.
         xSum = 0
         ySum = 0
-        
-        # Don't subtrct one here so we can iterate through each point. 
+
+        # Don't subtrct one here so we can iterate through each point.
         for i in range(len(p)):
             x = p[i][0]
             y = p[i][1]
-            
+
             # Binomial coefficient stuff here ('n' is the 'w'):
             # https://math.stackexchange.com/questions/1713706/what-does-2-values-vertically-arranged-in-parenthesis-in-an-equation-mean
             # Remember, 'n' is NOT number of points; instead, it's the degree. This means an 'n' of five has six points.
             n = len(p) - 1
-            binomialCoefficient = math.factorial(n) / (math.factorial(i) * math.factorial(n - i))
-            
-            xSum += binomialCoefficient * (1 - t)**(n-i) * t**i * x
-            ySum += binomialCoefficient * (1 - t)**(n-i) * t**i * y
-            
+            binomialCoefficient = math.factorial(n) / (
+                math.factorial(i) * math.factorial(n - i)
+            )
+
+            xSum += binomialCoefficient * (1 - t) ** (n - i) * t ** i * x
+            ySum += binomialCoefficient * (1 - t) ** (n - i) * t ** i * y
+
         return (xSum, ySum)
 
     def getQuadraticBezierSlope(self, p: list, t):
