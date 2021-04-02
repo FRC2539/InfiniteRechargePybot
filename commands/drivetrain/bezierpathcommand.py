@@ -52,9 +52,9 @@ class BezierPathCommand(CommandBase):
 
         # You didn't give three or four points.
         else:
-            raise Exception(
-                f"Please provide four points for a cubic Bezier curve, or three points for a quadratic Bezier curve. You gave ${len(points)} points!"
-            )
+            self.getSlope = robot.drivetrain.getHigherBezierSlope
+            self.getLength = lambda: True # Temporary till I write the get length.
+            self.getPosition = robot.drivetrain.getHigherBezierPosition
 
         self.points = points
         self.speed = speed
