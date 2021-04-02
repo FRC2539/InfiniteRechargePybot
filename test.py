@@ -1,38 +1,43 @@
 import math
 
-
-def getHigherBezierPosition(p: list, t: float):
-    """
-    Ok this math is going to kill the robot. Look here:
-    https://en.wikipedia.org/wiki/B%C3%A9zier_curve#Robotics
-    for the math behind what I'm about to write.
-    """
-
-    # The for loop will act as our summation.
-    # Start at one, end at our given number.
-    xSum = 0
-    ySum = 0
-
-    # Don't subtrct one here so we can iterate through each point.
-    for i in range(len(p)):
+def getHigherBezierSlope(p: list, t: float):
+    dxDt = 0
+    dyDt = 0 
+    
+    # The for loop will act as our summation again.
+    for i in range(len(p) - 1):
         x = p[i][0]
         y = p[i][1]
-
-        # Binomial coefficient stuff here ('n' is the 'w'):
-        # https://math.stackexchange.com/questions/1713706/what-does-2-values-vertically-arranged-in-parenthesis-in-an-equation-mean
-        # Remember, 'n' is NOT number of points; instead, it's the degree. This means an 'n' of five has six points.
-        n = len(p) - 1
+        
+        nextX = p[i+1][0]
+        nextY = p[i+1][1]
+            
+        # View the position method for binomial coefficient info.
+        n = len(p) - 2
         binomialCoefficient = math.factorial(n) / (
             math.factorial(i) * math.factorial(n - i)
         )
+        
+        # (n + 1) restores 'n's original value, the length of p.
+        qX = (n + 1) * (nextX - x)
+        qY = (n + 1) * (nextY - y)
 
-        xSum += binomialCoefficient * (1 - t) ** (n - i) * t ** i * x
-        ySum += binomialCoefficient * (1 - t) ** (n - i) * t ** i * y
-
-    return (xSum, ySum)
+        dxDt += binomialCoefficient * (1 - t) ** (n - i) * t ** i * qX
+        dyDt += binomialCoefficient * (1 - t) ** (n - i) * t ** i * qY
+    
+    # According to parametric differentiation, we can do the following:
+    dyDx = dyDt / dxDt
+        
+    return (dyDt, dxDt) # NOTE: make this two variables. Prolly can just use dyDt and dxDt.
 
 
 points = [[10, 0], [0, 5], [5, 8], [20, 3], [25, 5], [15, 10]]
-t = 1
+t = 0.25
 
-point = points = getHigherBezierPosition(points, t)
+v = getHigherBezierSlope(points, t)
+
+a = math.atan2(v[0], v[1]) * 180 / math.pi + 90
+
+if a > 180: a -= 360
+
+print(a)
