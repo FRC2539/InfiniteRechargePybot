@@ -81,7 +81,7 @@ def init():
 
         driveControllerOne.Trigger.whileHeld(
             DosadoCommand(
-                26, startAngle=90, angleToTravel=360, maxSpeed=1.5, stopWhenDone=False
+                26, startAngle=90, angleToTravel=360, maxSpeed=0.8, stopWhenDone=False, waitForAlign=True
             )
         )
         # driveControllerOne.Trigger.whenPressed(
