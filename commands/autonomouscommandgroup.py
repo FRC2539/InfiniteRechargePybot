@@ -48,7 +48,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 toRun = var
                 break
 
-        self.Test()
+        self.GalacticSearchRedB()
 
     # eval("self." + toRun + "()")  # Setups the method.
 
@@ -231,16 +231,16 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def GalacticSearchRedA(self):
         self.addCommands(
-            InstantCommand(lambda: robot.intake.intakeBalls(0.9), [robot.intake]),
+            InstantCommand(lambda: robot.intake.intakeBalls(0.8), [robot.intake]),
             WaitCommand(0.4),
             SegmentFollowerCommand(
                 [
                     [0, 5, {"speed": 0.25}],
                     [0, 10, {"speed": 0.9}],
-                    [30, 52, {"speed": 0.9}],
-                    [-87, 56, {"speed": 1.1}],
-                    [-87, 70, {"speed": 2.5}],
-                    [-60, 300],
+                    [30, 62, {"speed": 0.9}],
+                    [-80, 60, {"speed": 1.3}],
+                    [-80, 70, {"speed": 2.8}],
+                    [-50, 300],
                 ],
                 maxSpeed=1.4,
             ),
@@ -249,13 +249,13 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     def GalacticSearchRedB(self):
         self.addCommands(
             InstantCommand(lambda: robot.intake.intakeBalls(0.9), [robot.intake]),
-            WaitCommand(0.4),
+            WaitCommand(0.2),
             SegmentFollowerCommand(
                 [
-                    [0, 5, {"speed": 0.25}],
-                    [0, 10, {"speed": 1}],
-                    [50, 60, {"speed": 0.9}],
-                    [-50, 130, {"speed": 1.7}],
+                    [0, 5, {"speed": 0.45}],
+                    [0, 10, {"speed": 1.1}],
+                    [50, 60, {"speed": 1.2}],
+                    [-50, 130, {"speed": 3}],
                     [-25, 430],
                 ]
             ),

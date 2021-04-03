@@ -89,9 +89,3 @@ class Shooter(CougarSystem):
     def getRPM(self):
         # Return the current average RPM of the motor.
         return self.sensorToRPM(self.shooterMotorOne.getSelectedSensorVelocity())
-
-
-    def initDefaultCommand(self):
-        from commands.shooter.defaultcommand import DefaultCommand
-
-        self.setDefaultCommand(DefaultCommand())
