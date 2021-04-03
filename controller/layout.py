@@ -13,6 +13,9 @@ from commands.drivetrain.togglefieldorientationcommand import (
 from commands.drivetrain.curvecommand import CurveCommand
 from commands.drivetrain.zerocancoderscommand import ZeroCANCodersCommand
 from commands.drivetrain.setspeedcommand import SetSpeedCommand
+from commands.drivetrain.recordautocommand import RecordAutoCommand
+from commands.drivetrain.runautocommand import RunAutoCommand
+from commands.drivetrain.dosadocommand import DosadoCommand
 
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 
@@ -33,13 +36,17 @@ from commands.chamber.chamberbackwardcommand import ChamberBackwardCommand
 from commands.turret.turretlimelightcommand import TurretLimelightCommand
 
 from commands.shooter.setrpmcommand import SetRPMCommand
+from commands.shooter.slowshootingprocesscommand import SlowShootingProcessCommand
 
 from commands.hood.raisehoodcommand import RaiseHoodCommand
 from commands.hood.lowerhoodcommand import LowerHoodCommand
 
+from commands.limelight.automatedslowshootcommand import AutomatedSlowShootCommand
 from commands.limelight.automatedshootcommand import AutomatedShootCommand
 
+import constants
 import robot
+
 
 def init():
     """
@@ -52,41 +59,62 @@ def init():
         - cancelWhenPressed: good for commands started with a different button
     """
 
-    # The controller for driving the robot
-    driveControllerOne = ThrustmasterJoystick(0)  # The left hand controller
-    driveControllerTwo = ThrustmasterJoystick(1)  # The right hand controller
+    if constants.drivetrain.swerveStyle:
 
-    logicalaxes.forward = driveControllerOne.Y
-    logicalaxes.strafe = driveControllerOne.X
+        # The controller for driving the robot
+        driveControllerOne = ThrustmasterJoystick(0)  # The left hand controller
+        driveControllerTwo = ThrustmasterJoystick(1)  # The right hand controller
 
-    logicalaxes.rotate = driveControllerTwo.X
+        logicalaxes.forward = driveControllerOne.Y
+        logicalaxes.strafe = driveControllerOne.X
 
-    driveControllerOne.LeftBottomLeft.whenPressed(ZeroCANCodersCommand())
+        logicalaxes.rotate = driveControllerTwo.X
 
-    driveControllerOne.LeftThumb.toggleWhenPressed(ChamberForwardCommand())
-    driveControllerOne.RightThumb.toggleWhenPressed(ChamberBackwardCommand())
-    driveControllerOne.BottomThumb.whenPressed(ZeroGyroCommand())
+        driveControllerOne.RightBottomRight.toggleWhenPressed(RecordAutoCommand())
+        driveControllerOne.RightBottomMiddle.toggleWhenPressed(RunAutoCommand())
 
-    driveControllerOne.Trigger.whenPressed(
-        SetSpeedCommand(False)
-    )  # slow speed while trigger is held.
-    driveControllerOne.Trigger.whenReleased(SetSpeedCommand())
+        driveControllerOne.LeftBottomLeft.whenPressed(ZeroCANCodersCommand())
 
-    driveControllerOne.LeftBottomRight.whileHeld(PathCommand())
+        driveControllerOne.LeftThumb.toggleWhenPressed(ChamberForwardCommand())
+        driveControllerOne.RightThumb.toggleWhenPressed(ChamberBackwardCommand())
+        driveControllerOne.BottomThumb.whenPressed(ZeroGyroCommand())
 
-    driveControllerTwo.LeftThumb.toggleWhenPressed(ConveyorForwardCommand())
-    driveControllerTwo.RightThumb.whileHeld(ConveyorBackwardCommand())
-    driveControllerTwo.BottomThumb.toggleWhenPressed(IntakeCommand())
+        driveControllerOne.Trigger.whileHeld(
+            DosadoCommand(
+                26, startAngle=90, angleToTravel=360, maxSpeed=0.8, stopWhenDone=False, waitForAlign=True
+            )
+        )
+        # driveControllerOne.Trigger.whenPressed(
+        # SetSpeedCommand(False)
+        # )  # slow speed while trigger is held.
+        # driveControllerOne.Trigger.whenReleased(SetSpeedCommand())
 
-    driveControllerTwo.LeftTopLeft.whileHeld(RaiseHoodCommand())
-    driveControllerTwo.LeftBottomLeft.whileHeld(LowerHoodCommand())
-    
-    driveControllerTwo.Trigger.whileHeld(AutomatedShootCommand(4000))
+        driveControllerOne.LeftBottomRight.whileHeld(PathCommand())
 
-    # The controller for non-driving subsystems of the robot
-    componentController = LogitechDualShock(2)
+        driveControllerTwo.LeftThumb.toggleWhenPressed(ConveyorForwardCommand())
+        driveControllerTwo.RightThumb.whileHeld(ConveyorBackwardCommand())
+        driveControllerTwo.BottomThumb.toggleWhenPressed(IntakeCommand())
 
-    logicalaxes.TURRETmOVE = componentController.LeftX
+        driveControllerTwo.Trigger.whileHeld(AutomatedShootCommand())
 
-    componentController.Back.whenPressed(ResetCommand())
-    componentController.A.toggleWhenPressed(IntakeCommand())
+        driveControllerTwo.LeftTopLeft.whileHeld(RaiseHoodCommand())
+        driveControllerTwo.LeftBottomLeft.whileHeld(LowerHoodCommand())
+
+        # The controller for non-driving subsystems of the robot
+        componentController = LogitechDualShock(2)
+
+        logicalaxes.TURRETmOVE = componentController.LeftX
+
+        componentController.Back.whenPressed(ResetCommand())
+        componentController.A.toggleWhenPressed(IntakeCommand())
+
+        componentController.RightTrigger.whileHeld(SlowShootingProcessCommand())
+
+    else:
+        # The controller for driving the robot
+        driveControllerOne = LogitechDualShock(0)  # The driver controller
+
+        logicalaxes.forward = driveControllerOne.LeftY
+        logicalaxes.strafe = driveControllerOne.LeftX
+
+        logicalaxes.rotate = driveControllerOne.RightX

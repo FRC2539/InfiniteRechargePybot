@@ -104,11 +104,13 @@ class SwerveModule:
         self.tFk = constants.drivetrain.tFFk  # Feedforward gain for the turn.
         self.tIZk = constants.drivetrain.tIZk  # Integral Zone for the turn.
 
-        self.stPk = constants.drivetrain.stPk
-        self.stIk = constants.drivetrain.stIk
-        self.stDk = constants.drivetrain.stDk
-        self.stFk = constants.drivetrain.stFFk
-        self.stIZk = constants.drivetrain.stIZk
+        self.stPk = constants.drivetrain.stPk  # Secondary P gain for the turn.
+        self.stIk = constants.drivetrain.stIk  # Secondary I gain for the turn.
+        self.stDk = constants.drivetrain.stDk  # Seconday D gain for the turn.
+        self.stFk = (
+            constants.drivetrain.stFFk
+        )  # Secondary Feedforward gain for the turn.
+        self.stIZk = constants.drivetrain.stIZk  # Secondary Integral Zone for the turn.
 
         self.wheelDiameter = (
             constants.drivetrain.wheelDiameter
@@ -216,6 +218,12 @@ class SwerveModule:
             ),  # Set half of the normal speed temporarily.
         )
 
+    def getWheelPercent(self):
+        """
+        Returns the drive motor's output in a percent form.
+        """
+        return self.driveMotor.getMotorOutputPercent()
+
     def setWheelPercent(self, speed):
         """
         Does just what it sounds like.
@@ -246,6 +254,12 @@ class SwerveModule:
             TalonFXControlMode.MotionMagic,
             self.getModulePosition(False) + self.inchesToDriveTicks(distance),
         )
+
+    def resetDriveEncoders(self, anArgument=0):
+        """
+        Resets the drive encoders to 0 by default.
+        """
+        self.driveMotor.setSelectedSensorPosition(anArgument, 1, 0)
 
     def stopModule(self):
         """

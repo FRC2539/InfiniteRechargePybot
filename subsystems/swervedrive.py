@@ -26,7 +26,9 @@ class SwerveDrive(BaseDrive):
         [front left, front right, back left, back right]
         """
 
-        # TODO: Add docstrings.
+        if not constants.drivetrain.swerveStyle:
+            self.move = self.tankMove
+            self._calculateSpeeds = self.tankCalculateSpeeds
 
         self.isFieldOriented = True
 
@@ -46,7 +48,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.frontLeftTurnID,
                 ports.drivetrain.frontLeftCANCoder,
                 self.speedLimit,
-                -255.849609,
+                -255.761719,
             ),
             SwerveModule(  # Front right module.
                 ports.drivetrain.frontRightDriveID,
@@ -54,7 +56,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.frontRightCANCoder,
                 self.speedLimit,
                 -273.8672,
-                invertedDrive=True,  # Invert for some reason?
+                invertedDrive=constants.drivetrain.swerveStyle,  # Invert for some reason?
             ),
             SwerveModule(  # Back left module.
                 ports.drivetrain.backLeftDriveID,
@@ -68,8 +70,8 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.backRightTurnID,
                 ports.drivetrain.backRightCANCoder,
                 self.speedLimit,
-                -129.814453,
-                invertedDrive=True,  # Invert for some reason. Ezra's going nuts lol.
+                -129.726563,
+                invertedDrive=constants.drivetrain.swerveStyle,  # Invert for some reason. Ezra's going nuts lol.
             ),
         ]
 
@@ -90,15 +92,62 @@ class SwerveDrive(BaseDrive):
 
         self.resetOdometry()
         self.resetGyro()
+        self.PosX = 0
+        self.PosY = 0
+        self.LastPositions = self.getPositions()
 
     def periodic(self):
         """
         Loops whenever there is robot code. I recommend
         feeding networktable values here.
         """
+
         self.feed()  # Update the desired
 
         self.updateOdometry()
+
+        Angles = self.getModuleAngles()
+        Distance = []
+        Positions = self.getPositions()
+        for pos, lPos in zip(Positions, self.LastPositions):
+            Distance.append(pos - lPos)
+        VectorX = 0
+        VectorY = 0
+        for angle, distance in zip(Angles, Distance):
+            VectorX += math.cos(math.radians(angle - 180)) * distance
+            VectorY += math.sin(math.radians(angle - 180)) * distance
+        VectorX = VectorX / 4
+        VectorY = VectorY / 4
+        PolarR = math.sqrt(VectorX ** 2 + VectorY ** 2)
+        PolarTheta = math.degrees(math.atan2(VectorY, VectorX))
+
+        PolarTheta -= self.getAngle()
+        VectorX = math.cos(math.radians(PolarTheta + 90)) * PolarR
+        VectorY = math.sin(math.radians(PolarTheta + 90)) * PolarR
+
+        self.PosX += VectorX
+        self.PosY += VectorY
+        self.LastPositions = self.getPositions()
+
+    def GenerateRobotVector(self):
+        Angles = self.getModuleAngles()
+        Speeds = self.getSpeeds()
+        VectorX = 0
+        VectorY = 0
+        for angle, speed in zip(Angles, Speeds):
+            VectorX += math.cos(math.radians(angle - 180)) * speed
+            VectorY += math.sin(math.radians(angle - 180)) * speed
+        VectorX = VectorX / 4
+        VectorY = VectorY / 4
+        return VectorX, VectorY
+
+    def waitForRoll(self):
+        """
+        Forces the robot to wait until
+        it's not tipping.
+        """
+        while abs(self.navX.getRoll()) > 5:
+            pass
 
     def updateOdometry(self):
         """
@@ -232,7 +281,6 @@ class SwerveDrive(BaseDrive):
         speeds[:] = [
             speed * magnitude for speed in speeds
         ]  # Ensures that the speeds of the motors are relevant to the joystick input.
-
         return newSpeeds, angles  # Return the calculated speed and angles.
 
     def move(self, x, y, rotate):
@@ -268,12 +316,48 @@ class SwerveDrive(BaseDrive):
                 module.setWheelAngle(angle)
                 module.setWheelSpeed(abs(math.sqrt(speed ** 2 + rotate ** 2)))
 
+    def tankMove(self, y, rotate):
+        if [y, rotate] == self.lastInputs:
+            return
+
+        self.lastInputs = [y, rotate]
+
+        """Prevent drift caused by small input values"""
+        if self.useEncoders:
+            y = math.copysign(max(abs(y) - self.deadband, 0), y)
+            rotate = math.copysign(max(abs(rotate) - self.deadband, 0), rotate)
+
+        speeds = self.tankCalculateSpeeds(y, rotate)
+
+        for module, speed in zip(self.modules, speeds):
+            module.setWheelAngle(0)
+            module.setWheelSpeed(speed)
+
+    def tankCalculateSpeeds(self, y, rotate):
+        return [y + rotate, -y + rotate, y + rotate, -y + rotate]  # FL, FR, BL, BR
+
     def stop(self):
         """
         Stops the modules.
         """
         for module in self.modules:
             module.stopModule()
+
+    def longStop(self):
+        """
+        Returns true when all wheel speeds
+        are zero.
+        """
+        self.stop()
+        while self.getSpeeds().count(0) < 3:
+            pass
+
+    def resetEncoders(self, anArgumentAsWell=0):
+        """
+        Resets all drive encoders to 0 by default.
+        """
+        for module in self.modules:
+            module.resetDriveEncoders(anArgumentAsWell)
 
     def setProfile(self, profile):
         """
@@ -323,8 +407,8 @@ class SwerveDrive(BaseDrive):
 
         states = []
         for module in self.modules:
-            s = module.getWheelSpeed() * 2.54 / 100  # In Meters Per Second
-            a = Rotation2d(math.radians(module.getWheelAngle()))
+            s = module.getWheelSpeed() / 39.3701  # In Meters Per Second
+            a = Rotation2d(math.radians(module.getWheelAngle() - 180))
             states.append(SwerveModuleState(s, a))
 
         return states
@@ -361,6 +445,12 @@ class SwerveDrive(BaseDrive):
         for module in self.modules:
             module.setWheelSpeed(speed)
 
+    def getPercents(self):
+        """
+        Returns the percent outputs of each drive motor.
+        """
+        return [module.getWheelPercent() for module in self.modules]
+
     def setPercents(self, speeds: list):
         """
         Sets the percent speed of each module's drive motor.
@@ -381,7 +471,8 @@ class SwerveDrive(BaseDrive):
         Returns the CANCoder's absolute reading.
         Note, this does take into account the magnet
         offset which we set at the beginning.
-        I think, 180 is forward, 0 is backwards.
+        I think, 180 is forward, 0 is backwards. It
+        returns between 0 and 360.
         """
 
         # Add module in front, not to be confused with gyro! Returns degrees.
@@ -428,6 +519,244 @@ class SwerveDrive(BaseDrive):
         """
         for module in self.modules:
             module.setModulePosition(distance)
+
+    def getQuadraticBezierPosition(self, p: list, t):
+        """
+        Returns the position in the quadratic Bezier curve, given
+        the control points and the percentage through the
+        curve. See https://math.stackexchange.com/questions/1360891/find-quadratic-bezier-curve-equation-based-on-its-control-points.
+        """
+
+        # Returns (x, y) @ % = t
+        return (
+            ((1 - t) ** 2 * p[0][0] + 2 * t * (1 - t) * p[1][0] + t ** 2 * p[2][0]),
+            ((1 - t) ** 2 * p[0][1] + 2 * t * (1 - t) * p[1][1] + t ** 2 * p[2][1]),
+        )
+
+    def getCubicBezierPosition(self, p: list, t: float):
+        """
+        Returns the position in the cubic Bezier curve, given
+        the control points and the percentage through the
+        curve.
+        """
+
+        # Returns (x, y) @ % = t
+        return (
+            (
+                (1 - t) ** 3 * p[0][0]
+                + 3 * (1 - t) ** 2 * p[1][0]
+                + 3 * (1 - t) ** 2 * p[2][0]
+                + t ** 3 * p[3][0]
+            ),
+            (
+                (1 - t) ** 3 * p[0][1]
+                + 3 * (1 - t) ** 2 * p[1][1]
+                + 3 * (1 - t) ** 2 * p[2][1]
+                + t ** 3 * p[3][1]
+            ),
+        )
+
+    def getHigherBezierPosition(self, p: list, t: float):
+        """
+        Ok this math is going to kill the robot lol. Look here:
+        https://en.wikipedia.org/wiki/B%C3%A9zier_curve#General_definition
+        for the math behind what I'm about to write. Tested, it
+        works! Look at test. Test can be found here:
+        https://www.researchgate.net/figure/Quintic-trigonometric-Bezier-curve-with-a-b_fig2_318599090
+        """
+
+        # The for loop will act as our summation.
+        # Start at one, end at our given number.
+        xSum = 0
+        ySum = 0
+
+        # Don't subtrct one here so we can iterate through each point.
+        for i in range(len(p)):
+            x = p[i][0]
+            y = p[i][1]
+
+            # Binomial coefficient stuff here ('n' is the 'w'):
+            # https://math.stackexchange.com/questions/1713706/what-does-2-values-vertically-arranged-in-parenthesis-in-an-equation-mean
+            # Remember, 'n' is NOT number of points; instead, it's the degree. This means an 'n' of five has six points.
+            n = len(p) - 1
+            binomialCoefficient = math.factorial(n) / (
+                math.factorial(i) * math.factorial(n - i)
+            )
+
+            xSum += binomialCoefficient * (1 - t) ** (n - i) * t ** i * x
+            ySum += binomialCoefficient * (1 - t) ** (n - i) * t ** i * y
+
+        return (xSum, ySum)
+
+    def getQuadraticBezierSlope(self, p: list, t):
+        """
+        Returns the slope of the current position along
+        a quadratic bezier curve, defined by three given control points.
+        """
+
+        # Define the given points.
+        x0 = p[0][0]
+        y0 = p[0][1]
+        x1 = p[1][0]
+        y1 = p[1][1]
+        x2 = p[2][0]
+        y2 = p[2][1]
+
+        # 'a' is the x, 'b' is the y
+        a0 = x0 - (x0 - x1) * t
+        b0 = y0 - (y0 - y1) * t
+
+        a1 = x1 - (x1 - x2) * t
+        b1 = y1 - (y1 - y2) * t
+
+        # Return the slope as (y, x) of the two points we just calculated.
+        return ((b1 - b0), (a1 - a0))
+
+    def getCubicBezierSlope(self, p: list, t):
+        """
+        Returns the slope of the current position along
+        a cubic bezier curve, defined by four given control points.
+        """
+
+        # Define the given points.
+        x0 = p[0][0]
+        y0 = p[0][1]
+        x1 = p[1][0]
+        y1 = p[1][1]
+        x2 = p[2][0]
+        y2 = p[2][1]
+        x3 = p[3][0]
+        y3 = p[3][1]
+
+        # 'a' is the x, 'b' is the y
+        a0 = x0 - (x0 - x1) * t
+        b0 = y0 - (y0 - y1) * t
+
+        a1 = x1 - (x1 - x2) * t
+        b1 = y1 - (y1 - y2) * t
+
+        a2 = x2 - (x2 - x3) * t
+        b2 = y2 - (y2 - y3) * t
+
+        c0 = a0 - (a0 - a1) * t
+        d0 = b0 - (b0 - b1) * t
+
+        c1 = a1 - (a1 - a2) * t
+        d1 = b1 - (b1 - b2) * t
+
+        # Return the slope calculated using the previous points
+        return ((d1 - d0), (c1 - c0))
+
+    def getHigherBezierSlope(self, p: list, t):
+        """
+        The derivative of the equation for the points. 
+        Note, it will be in terms of t. To make it in terms of dx/dy, we
+        have to do division; more info here:
+        https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/Bezier/bezier-der.html
+        (lol this page is from my college!)
+        """
+        
+        dxDt = 0
+        dyDt = 0 
+        
+        # The for loop will act as our summation again.
+        for i in range(len(p) - 1):
+            x = p[i][0]
+            y = p[i][1]
+            
+            nextX = p[i+1][0]
+            nextY = p[i+1][1]
+                
+            # View the position method for binomial coefficient info.
+            n = len(p) - 2
+            binomialCoefficient = math.factorial(n) / (
+                math.factorial(i) * math.factorial(n - i)
+            )
+            
+            # (n + 1) restores 'n's original value, the length of p.
+            qX = (n + 1) * (nextX - x)
+            qY = (n + 1) * (nextY - y)
+
+            dxDt += binomialCoefficient * (1 - t) ** (n - i) * t ** i * qX
+            dyDt += binomialCoefficient * (1 - t) ** (n - i) * t ** i * qY
+        
+        # According to parametric differentiation, we can do the following, and get dyDx.            
+        return (dyDt, dxDt)
+
+    def getQuadraticBezierLength(self, p: list):
+        """
+        Returns the length of a Quadratic Bezier
+        curve given via control points. Source:
+        https://gist.github.com/tunght13488/6744e77c242cc7a94859.
+        """
+        positions = self.createPositionObjects(p)
+
+        if len(positions) != 3:
+            raise Exception("Bruh this is a quadratic. Three points!")
+
+        pointOne, pointTwo, pointThree = positions[0], positions[1], positions[2]
+
+        aX = pointOne.x - 2 * pointTwo.x + pointThree.x
+        aY = pointOne.y - 2 * pointTwo.y + pointThree.y
+
+        bX = 2 * pointTwo.x - 2 * pointOne.x
+        bY = 2 * pointOne.y - 2 * pointTwo.y
+
+        A = 4 * (aX ** 2 + aY ** 2)
+        B = 4 * (aX * bX + aY * bY)
+        C = bX ** 2 + bY ** 2
+
+        SABC = 2 * math.sqrt(A + B + C)
+        A2 = math.sqrt(A)
+        A32 = 2 * A * A2
+        C2 = 2 * math.sqrt(C)
+        BA = B / A2
+
+        return (
+            A32 * SABC
+            + A2 * B * (SABC - C2)
+            + (4 * C * A - B * B) * math.log((2 * A2 + BA + SABC) / (BA + C2))
+        ) / (4 * A32)
+
+    def getCubicBezierLength(self, p: list, iterations: int = 10):
+        """
+        Ok. So with cubic bezier, their is no closed-integral
+        definition for the cubic Bezier length. I've done lot's
+        of research, and it appears as there is an approximation.
+        We can approximate it by adding individual line segments together.
+        "iterations" will track how many divisions we make, and thus
+        the precision. Read up here https://www.lemoda.net/maths/bezier-length/index.html.
+        """
+
+        # Establish the total length variable and previous position.
+        length = 0
+        previousX = 0
+        previousY = 0
+
+        # Iterate through each step, taking the length of each sum with Pythagorean Theorem.
+        for i in range(iterations):
+            t = i / iterations
+
+            # "positions" is (x,y).
+            positions = self.getCubicBezierPosition(p, t)
+
+            if i > 0:
+                xDiff = positions[0] - previousX
+                yDiff = positions[1] - previousY
+                length += math.sqrt(xDiff ** 2 + yDiff ** 2)
+
+            previousX = positions[0]
+            previousY = positions[1]
+
+        # Return the sum of the segments.
+        return length
+
+    def createPositionObjects(self, points: list):
+        """
+        Creates Position objects using a given list
+        of Xs and Ys. Returns that new list.
+        """
+        return [Position(coord[0], coord[1]) for coord in points]
 
     # Cougar Course Below.
 
@@ -548,3 +877,14 @@ class SwerveDrive(BaseDrive):
         """
         for module in self.modules:
             module.setDriveCruiseVelocity(slow)
+
+
+class Position:
+    """
+    No, not that garbage by Ariane Grande. Stores
+    An X and Y value for convenience.
+    """
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y

@@ -32,10 +32,6 @@ class KryptonBot(TimedCommandRobot):
 
     def robotInit(self):
         """Set up everything we need for a working robot."""
-        
-        from commands.drivetrain.generatevectors import GenerateVectors
-        
-        GenerateVectors.generate()
 
         if RobotBase.isSimulation():
             import mockdata
@@ -54,8 +50,6 @@ class KryptonBot(TimedCommandRobot):
         from commands.startupcommandgroup import StartUpCommandGroup
 
         StartUpCommandGroup().schedule()
-
-        self.preBuild = []
 
     def autonomousInit(self):
         """This function is called each time autonomous mode starts."""
@@ -115,14 +109,14 @@ def addOutput():
 
     import constants
 
-    from commands.drivetrain.generateccpoints import GenerateCCPoints
+    from commands.drivetrain.generatevectors import GenerateVectors
 
     ogOut = sys.stdout
 
     with open(os.path.dirname(__file__) + "/trajectorydata.txt", "w") as f:
 
-        for id_, list_ in constants.drivetrain.preBuild.items():  # Only one for now.
-            calculatedPoints = GenerateCCPoints(list_).get()
+        for id_, file_ in constants.drivetrain.preBuild.items():
+            calculatedPoints = GenerateVectors().generate(file_)
 
             calculatedPoints.insert(0, id_)
 

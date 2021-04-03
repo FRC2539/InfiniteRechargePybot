@@ -5,13 +5,19 @@ from commands2 import (
     ParallelCommandGroup,
     CommandBase,
     InstantCommand,
+    WaitCommand,
     Swerve4ControllerCommand,
 )
 
 from commands.drivetrain.turncommand import TurnCommand
 from commands.drivetrain.movecommand import MoveCommand
+from commands.drivetrain.generatevectors import GenerateVectors
 from commands.drivetrain.pathfollowercommand import PathFollowerCommand
 from commands.drivetrain.cougarcoursecommand import CougarCourseCommand
+from commands.drivetrain.runautocommand import RunAutoCommand
+from commands.drivetrain.segmentfollowercommand import SegmentFollowerCommand
+from commands.drivetrain.dosadocommand import DosadoCommand
+from commands.drivetrain.bezierpathcommand import BezierPathCommand
 
 from commands.intake.intakecommand import IntakeCommand
 
@@ -42,44 +48,11 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 toRun = var
                 break
 
-        #self.BarellRacing()
+        self.Test()
 
     # eval("self." + toRun + "()")  # Setups the method.
 
-    def example(self):
-        self.addCommands(InstantCommand(lambda: print("I worked!")))
-
     def tenBall(self):
-        self.addCommands(InstantCommand(lambda: print("Number two worked!")))
-
-        # self.conveyor = InstantCommand(robot.conveyor.forward, [robot.conveyor])
-
-        # self.turnBack = TurnCommand(20)
-        # self.realign = TurnCommand(-10)
-
-        # self.intake = InstantCommand(robot.intake.intakeBalls, [robot.intake])
-        # self.moveSide = MoveCommand(7.071, angle=45, slow=True)
-
-        # self.moveForward = MoveCommand(199, slow=True)
-
-        # self.stopIntake = InstantCommand(robot.intake.dontIntakeBalls, [robot.intake])
-        # self.moveBack = MoveCommand(-120, angle=14)
-
-        # self.sudo = AutomatedShootCommand(3000).withTimeout(4)
-        # self.sudoNT = AutomatedShootCommand()
-
-        # self.goBack = self.moveBack.alongWith(self.sudoNT)
-
-        # self.addCommands(
-        #                  #self.conveyor,
-        #                  self.sudo,
-        #                  self.turnBack,
-        #                  self.intake,
-        #                  self.moveSide,
-        #                  self.moveForward,
-        #                  self.realign,
-        #                  self.goBack,
-        #                  )
 
         self.spinUp = InstantCommand(
             lambda: robot.shooter.setRPM(3800), [robot.shooter]
@@ -97,8 +70,6 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             lambda: robot.conveyor.forward(), [robot.conveyor]
         )
 
-        self.print = InstantCommand(lambda: print("\n\nEnd\n\n"))
-
         self.moveForward = MoveCommand(124)
         self.secondMove = MoveCommand(112, angle=2)
         self.moveBack = MoveCommand(-24, angle=-1.5)
@@ -106,8 +77,6 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
         self.shoot = AutomatedShootCommand(3800).withTimeout(3.25)
         self.shootTwo = AutomatedShootCommand(3800)
-
-        rotate = math.pi
 
         # Schedule the autonomous command
         self.auton = PathFollowerCommand().get(
@@ -129,20 +98,168 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             # self.spinUpTwo,      # - about 3 seconds, assuming up to speed.
             # self.conveyorRun,
             self.auton,  # 5 seconds
-            self.print
             # self.moveBack,
             # self.turnToTarget,
             # self.shootTwo        # 4 seconds
         )
 
-    #def Slalom(self):
-        #self.addCommands(CougarCourseCommand(1))
-        
-    #def BarellRacing(self):
-        #self.addCommands(CougarCourseCommand(2))
+    def Test(self):
+        self.addCommands(
+            BezierPathCommand([[40, -40], [-40, -40], [-40, 40]], speed=0.5)
+        )
 
-    #def Bounce(self):
-        #self.addCommands(CougarCourseCommand(3))
+    def Slalom(self):
+        self.addCommands(
+            SegmentFollowerCommand(
+                [
+                    [0, 13],
+                    [-28, 16],
+                    [-71, 26],
+                    [-74, 64],
+                    [-74, 198],
+                    [-10, 206, True],
+                    [28, 214, True],
+                    [48, 235, True],
+                    [48, 274, True],
+                    [8, 286, True],
+                    [-54, 260, True],
+                    [-56, 228, True],
+                    [32, 212],
+                    [32, 30, True],
+                    [-72, 34, True],
+                    [-72, -36, True],
+                ],
+                maxSpeed=1.35,
+                slowSpeed=0.9,
+            ),
+        )
+
+    def BarellRacing(self):
+        self.addCommands(
+            SegmentFollowerCommand([[0, 116]], maxSpeed=1.3, stopWhenDone=True),
+            SegmentFollowerCommand([[24, 0]], maxSpeed=1.3, stopWhenDone=False),
+            DosadoCommand(
+                36,
+                startAngle=90,
+                angleToTravel=280,
+                maxSpeed=1,
+                stopWhenDone=False,
+                waitForAlign=True,
+            ),
+            SegmentFollowerCommand(
+                [[0, 76]],
+                maxSpeed=1.3,
+                stopWhenDone=False,
+                kP=0.04,
+            ),
+            DosadoCommand(
+                36,
+                startAngle=180,
+                angleToTravel=-270,
+                reverseStrafe=True,
+                stopWhenDone=False,
+            ),
+            SegmentFollowerCommand(
+                [[36, 0], [74, 100], [74, 112]],
+                maxSpeed=1.2,
+            ),
+            DosadoCommand(
+                44,
+                startAngle=180,
+                angleToTravel=180,
+                reverseStrafe=True,
+                waitForAlign=True,
+            ),
+            SegmentFollowerCommand([[-14, -246]], maxSpeed=1.5),
+        )
+
+    def Bounce(self):
+        self.addCommands(
+            SegmentFollowerCommand([[0, 4]], maxSpeed=1, stopWhenDone=False),
+            DosadoCommand(
+                30,
+                angleToTravel=95,
+                startAngle=180,
+                maxSpeed=1.2,
+                waitForAlign=True,
+                reverseStrafe=True,
+                stopWhenDone=False,
+            ),
+            SegmentFollowerCommand([[-30, 0]], maxSpeed=1),
+            InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
+            InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
+            SegmentFollowerCommand(
+                [
+                    [32, -2, {"speed": 0.6}],
+                    [36, 14, {"speed": 1.1}],
+                    [70, 20, {"speed": 1.1}],
+                ],
+                kP=0.0325,
+                startPoint=[0, 0, {"speed": 0.6}],
+                stopWhenDone=False,
+            ),
+            DosadoCommand(
+                33,
+                startAngle=90,
+                angleToTravel=190,
+                endAngle=-90,
+                reverseForward=True,
+                stopWhenDone=True,
+                maxSpeed=1.25,
+            ),
+            SegmentFollowerCommand([[-76, -2]], maxSpeed=1.3, rearBonus=-0.15),
+            InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
+            InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
+            SegmentFollowerCommand(
+                [[78, -2]], maxSpeed=1.3, rearBonus=0.165, stopWhenDone=False
+            ),
+            DosadoCommand(
+                52,
+                startAngle=90,
+                angleToTravel=190,
+                endAngle=-90,
+                reverseForward=True,
+                stopWhenDone=True,
+                maxSpeed=1.3,
+            ),
+            InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
+            SegmentFollowerCommand([[-78, 2]], maxSpeed=1.3, rearBonus=-0.15),
+            InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
+            InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
+            SegmentFollowerCommand([[29, 3], [29, 40]], maxSpeed=1.3),
+        )
+
+    def GalacticSearchRedA(self):
+        self.addCommands(
+            InstantCommand(lambda: robot.intake.intakeBalls(0.9), [robot.intake]),
+            WaitCommand(0.4),
+            SegmentFollowerCommand(
+                [
+                    [0, 5, {"speed": 0.25}],
+                    [0, 10, {"speed": 0.9}],
+                    [30, 52, {"speed": 0.9}],
+                    [-87, 56, {"speed": 1.1}],
+                    [-87, 70, {"speed": 2.5}],
+                    [-60, 300],
+                ],
+                maxSpeed=1.4,
+            ),
+        )
+
+    def GalacticSearchRedB(self):
+        self.addCommands(
+            InstantCommand(lambda: robot.intake.intakeBalls(0.9), [robot.intake]),
+            WaitCommand(0.4),
+            SegmentFollowerCommand(
+                [
+                    [0, 5, {"speed": 0.25}],
+                    [0, 10, {"speed": 1}],
+                    [50, 60, {"speed": 0.9}],
+                    [-50, 130, {"speed": 1.7}],
+                    [-25, 430],
+                ]
+            ),
+        )
 
     def interrupted(self):
         robot.intake.dontIntakeBalls()

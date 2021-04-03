@@ -8,8 +8,13 @@ class DefaultCommand(CommandBase):
     def __init__(self):
         super().__init__()
 
-        self.addRequirements(robot.shooter, robot.conveyor)
+        self.addRequirements(robot.shooter)
+        self.addRequirements(robot.conveyor)
 
     def execute(self):
-        robot.shooter.setRPM(4000)
+        robot.shooter.setRPM(4600)
         robot.conveyor.forward()
+
+    def end(self, interrupted):
+        robot.shooter.stopShooter()
+        robot.conveyor.stop()

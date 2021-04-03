@@ -5,6 +5,7 @@ from ctre import WPI_TalonFX, FeedbackDevice, ControlMode, NeutralMode
 from networktables import NetworkTables as nt
 
 import ports
+import constants
 
 
 class Shooter(CougarSystem):
@@ -32,11 +33,18 @@ class Shooter(CougarSystem):
         self.shooterMotorTwo.setNeutralMode(NeutralMode.Coast)
 
         # Set the PID configuration.
-        self.shooterMotorOne.config_kF(0, 0.5, 0)  # Ben, no FF! -Ben
-        self.shooterMotorOne.config_kP(0, 5, 0)
-        self.shooterMotorOne.config_kI(0, 0, 0)
-        self.shooterMotorOne.config_kD(0, 1, 0)
-        self.shooterMotorOne.config_IntegralZone(0, 0, 0)
+        self.shooterMotorOne.config_kF(0, constants.shooter.kF, 0)  # Ben, no FF! -Ben
+        self.shooterMotorOne.config_kP(0, constants.shooter.kP, 0)
+        self.shooterMotorOne.config_kI(0, constants.shooter.kI, 0)
+        self.shooterMotorOne.config_kD(0, constants.shooter.kD, 0)
+        self.shooterMotorOne.config_IntegralZone(0, constants.shooter.IZone, 0)
+
+        # Set the PID configuration.
+        self.shooterMotorTwo.config_kF(0, constants.shooter.kF, 0)  # Ben, no FF! -Ben
+        self.shooterMotorTwo.config_kP(0, constants.shooter.kP, 0)
+        self.shooterMotorTwo.config_kI(0, constants.shooter.kI, 0)
+        self.shooterMotorTwo.config_kD(0, constants.shooter.kD, 0)
+        self.shooterMotorTwo.config_IntegralZone(0, constants.shooter.IZone, 0)
 
         # Tell the second motor to follow the behavior of the first motor.
         self.shooterMotorOne.setInverted(True)
@@ -57,8 +65,6 @@ class Shooter(CougarSystem):
 
     def periodic(self):
         self.feed()
-
-        print(self.getRPM())
 
     def setRPM(self, rpm):
         # With the second motor following the first, no command is needed for the second motor.

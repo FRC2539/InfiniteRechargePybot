@@ -10,8 +10,6 @@ class GenerateCCPoints:
 
     def get(self):
         return self.allPoints
-    
-        
 
     def injectBetweenTwoPoints(self, startPoint: list, endPoint: list, spacing=6):
         """
@@ -35,8 +33,8 @@ class GenerateCCPoints:
             v0 = endPoint[2]
         # else:
         # raise Exception("Start and end point cannot be the same!")
-        #print("\nstart point " + str(x1) + " " + str(y1))
-        #print("end point " + str(x2) + " " + str(y2))
+        # print("\nstart point " + str(x1) + " " + str(y1))
+        # print("end point " + str(x2) + " " + str(y2))
         pointsInBetween = [[x1, y1, v0]]
 
         totalDistance = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
@@ -87,7 +85,7 @@ class GenerateCCPoints:
         return final
 
     def smoothPoints(
-        self, path: list, weightData=.85, weightSmooth=0.15, tolerance=.001
+        self, path: list, weightData=0.85, weightSmooth=0.15, tolerance=0.001
     ):
         """
         Curves a lot of points. Used in
@@ -97,7 +95,7 @@ class GenerateCCPoints:
 
         change = tolerance
         while change >= tolerance:  # You touch this, you die.
-            #print(change)
+            # print(change)
             change = 0
             i = 1
             while i < len(path) - 1:

@@ -1,9 +1,10 @@
 from commands2 import ParallelCommandGroup
+
+from commands.drivetrain.resettiltcommand import ResetTiltCommand
+
 import commandbased.flowcontrol as fc
 
 import robot
-
-from .drivetrain.resettiltcommand import ResetTiltCommand
 
 
 class StartUpCommandGroup(ParallelCommandGroup):

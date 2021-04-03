@@ -31,7 +31,7 @@ class Hood(CougarSystem):
         self.controller.setIZone(0, 0)
 
         self.angleMax = 253.00
-        self.angleMin = 220.00
+        self.angleMin = 185.00
 
         self.speed = 0.3  # 10 Percent
 
