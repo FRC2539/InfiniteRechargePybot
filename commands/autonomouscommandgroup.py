@@ -48,7 +48,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 toRun = var
                 break
 
-        self.GalacticSearchRedB()
+        self.Slalom()
 
     # eval("self." + toRun + "()")  # Setups the method.
 
@@ -113,24 +113,23 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             SegmentFollowerCommand(
                 [
                     [0, 13],
-                    [-28, 16],
-                    [-71, 26],
-                    [-74, 64],
-                    [-74, 198],
-                    [-10, 206, True],
-                    [28, 214, True],
-                    [48, 235, True],
-                    [48, 274, True],
-                    [8, 286, True],
-                    [-54, 260, True],
-                    [-56, 228, True],
-                    [32, 212],
-                    [32, 30, True],
-                    [-72, 34, True],
-                    [-72, -36, True],
+                    [-28, 14],
+                    [-64, 26],
+                    [-64, 64],
+                    [-63, 180],
+                    [-10, 188, {'speed':0.9}],
+                    [42, 192, {'speed':0.9}],
+                    [49, 218, {'speed':0.9}],
+                    [48, 258, {'speed':0.9}],
+                    [8, 274, {'speed':0.9}],
+                    [-40, 233, {'speed':0.9}],
+                    [-40, 197, {'speed':0.9}],
+                    [32, 194],
+                    [32, 26, {'speed':0.9}],
+                    [-64, 30, {'speed':0.9}],
+                    [-66, -45, {'speed':0.9}],
                 ],
-                maxSpeed=1.35,
-                slowSpeed=0.9,
+                maxSpeed=1.6,
             ),
         )
 
