@@ -63,6 +63,8 @@ class BezierPathCommand(CommandBase):
 
         self.curveLength = self.getLength(self.points)
 
+        print(self.curveLength)
+    
     def initialize(self):
         # Reset out variables.
         self.t = 0

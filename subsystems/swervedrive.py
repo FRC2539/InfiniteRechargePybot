@@ -689,6 +689,30 @@ class SwerveDrive(BaseDrive):
         curve given via control points. Source:
         https://gist.github.com/tunght13488/6744e77c242cc7a94859.
         """
+        
+        # Divide the points into invidual lists of x's and y's.
+        xs, ys = map(list, zip(*p))
+        
+        # Are all of the x's the same?
+        if len(xs) == xs.count(xs[0]):
+            length = 0
+            initial = 0
+            for y in list(enumerate(ys)):
+                length += abs(y[1] - initial)
+                initial = ys[y[0]]
+                
+            return length
+        
+        # Are all of the y's the same?
+        elif len(ys) == ys.count(ys[0]):
+            length = 0
+            initial = 0
+            for x in list(enumerate(xs)):
+                length += abs(x[1] - initial)
+                initial = xs[x[0]]
+                
+            return length
+        
         positions = self.createPositionObjects(p)
 
         if len(positions) != 3:
