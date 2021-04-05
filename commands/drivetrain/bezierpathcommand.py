@@ -17,10 +17,10 @@ def align(angle):
     if angle < 0:
         angle += 360
     for a in robot.drivetrain.getModuleAngles():
-        if abs(a - angle) < 5:
+        if abs(a - angle) < 3:
             count += 1
 
-    if count >= 3 or loopCount > 50:  # TODO: Tune the max loop count.
+    if count >= 3:  # TODO: Tune the max loop count.
         return
 
     align(angle)
@@ -62,8 +62,6 @@ class BezierPathCommand(CommandBase):
         self.t = 0
 
         self.curveLength = self.getLength(self.points)
-
-        print(self.curveLength)
     
     def initialize(self):
         # Reset out variables.
@@ -79,9 +77,14 @@ class BezierPathCommand(CommandBase):
         if angle > 180:
             angle -= 360
 
+        print(angle)
+
         # Set and wait for the module angles to go to the right position.
         robot.drivetrain.setUniformModuleAngle(angle)
         align(angle)
+        
+        print('fuck u')
+        print(robot.drivetrain.getModuleAngles())
 
         # Set the drive speed.
         robot.drivetrain.setUniformModuleSpeed(self.speed)

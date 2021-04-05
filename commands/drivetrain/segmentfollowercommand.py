@@ -16,6 +16,7 @@ class SegmentFollowerCommand(CommandBase):
         kP=0.0275,
         rearBonus=0,
         startingAngle=None,
+        sideWaysAdjust=False,
         stopWhenDone=True,
     ):
         """
@@ -41,6 +42,7 @@ class SegmentFollowerCommand(CommandBase):
         self.rearBonus = rearBonus
         self.startingAngle = startingAngle
         self.stopWhenDone = stopWhenDone
+        self.sideWaysAdjust = sideWaysAdjust
 
         self.maxSpeed = maxSpeed
         self.ogMaxSpeed = maxSpeed
@@ -141,7 +143,7 @@ class SegmentFollowerCommand(CommandBase):
             angle += 360
         for a in robot.drivetrain.getModuleAngles():
             print("at " + str(a))
-            if abs(a - angle) < 5:
+            if abs(a - angle) < 3:
                 count += 1
 
         if count >= 3:
@@ -215,7 +217,7 @@ class SegmentFollowerCommand(CommandBase):
             self.moveSet = False
             self.notRanYet = True
 
-            if not self.disableAdjust:
+            if not self.disableAdjust and not self.sideWaysAdjust:
                 if abs(self.desiredAngle) < 90:
                     speedOffset = (
                         robot.drivetrain.getAngleTo(self.startingAngle) * -self.kP
@@ -224,48 +226,44 @@ class SegmentFollowerCommand(CommandBase):
                     speedOffset = (
                         robot.drivetrain.getAngleTo(self.startingAngle) * self.kP
                     )
-            else:
-                speedOffset = 0
-
-            if self.deccelerate:
-                if (
-                    abs(
-                        self.desiredDistance
-                        - abs(
-                            sum(robot.drivetrain.getPositions()) / 4
-                            - sum(self.startPos) / 4
-                        )
-                    )
-                    <= 18
-                ):  # Slow down when we are about eighteen inches from the goal.
-                    robot.drivetrain.setUniformModulePercent(0.25)
-                elif (
-                    abs(
-                        self.desiredDistance
-                        - abs(
-                            sum(robot.drivetrain.getPositions()) / 4
-                            - sum(self.startPos) / 4
-                        )
-                    )
-                    <= 36
-                ):
-                    robot.drivetrain.setUniformModulePercent(0.5)
-                else:
-                    robot.drivetrain.setSpeeds(
-                        [
-                            self.maxSpeed + speedOffset,
-                            self.maxSpeed - speedOffset,
-                            self.maxSpeed + speedOffset + self.rearBonus,
-                            self.maxSpeed - speedOffset + self.rearBonus,
-                        ]
-                    )
-            else:
+                    
                 robot.drivetrain.setSpeeds(
                     [
                         self.maxSpeed + speedOffset,
                         self.maxSpeed - speedOffset,
                         self.maxSpeed + speedOffset + self.rearBonus,
                         self.maxSpeed - speedOffset + self.rearBonus,
+                    ]
+                )
+            
+            elif not self.disableAdjust:
+                # Go to the left.
+                if self.desiredAngle < 0:
+                    speedOffset = (
+                        robot.drivetrain.getAngleTo(self.startingAngle) * self.kP
+                    )
+                    
+                else:
+                    speedOffset = (
+                        robot.drivetrain.getAngleTo(self.startingAngle) * -self.kP
+                    )
+                    
+                robot.drivetrain.setSpeeds(
+                    [
+                        self.maxSpeed - speedOffset,
+                        self.maxSpeed - speedOffset,
+                        self.maxSpeed + speedOffset + self.rearBonus,
+                        self.maxSpeed + speedOffset + self.rearBonus,
+                    ]
+                )
+            
+            else:
+                robot.drivetrain.setSpeeds(
+                    [
+                        self.maxSpeed,
+                        self.maxSpeed,
+                        self.maxSpeed + self.rearBonus,
+                        self.maxSpeed + self.rearBonus,
                     ]
                 )
 

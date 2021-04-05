@@ -48,7 +48,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 toRun = var
                 break
 
-        self.Test()
+        self.Bounce()
 
     # eval("self." + toRun + "()")  # Setups the method.
 
@@ -174,31 +174,15 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def Bounce(self):
         self.addCommands(
-            SegmentFollowerCommand([[0, 4]], maxSpeed=1, stopWhenDone=False),
-            DosadoCommand(
-                30,
-                angleToTravel=95,
-                startAngle=180,
-                maxSpeed=1.2,
-                waitForAlign=True,
-                reverseStrafe=True,
-                stopWhenDone=False,
-            ),
-            SegmentFollowerCommand([[-30, 0]], maxSpeed=1),
+            SegmentFollowerCommand([[0, 38]], maxSpeed=1, stopWhenDone=True),
+            SegmentFollowerCommand([[-44, 0]], maxSpeed=1, stopWhenDone=True),
+            SegmentFollowerCommand([[52, 0]], maxSpeed=0.8, stopWhenDone=True),
+            SegmentFollowerCommand([[0, 25]], maxSpeed=0.8, stopWhenDone=True),
             InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
             InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
-            SegmentFollowerCommand(
-                [
-                    [32, -2, {"speed": 0.6}],
-                    [36, 14, {"speed": 1.1}],
-                    [70, 20, {"speed": 1.1}],
-                ],
-                kP=0.0325,
-                startPoint=[0, 0, {"speed": 0.6}],
-                stopWhenDone=False,
-            ),
+            SegmentFollowerCommand([[18, 0]], maxSpeed=1, sideWaysAdjust=True, stopWhenDone=False),
             DosadoCommand(
-                33,
+                35,
                 startAngle=90,
                 angleToTravel=190,
                 endAngle=-90,
@@ -206,11 +190,11 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 stopWhenDone=True,
                 maxSpeed=1.25,
             ),
-            SegmentFollowerCommand([[-76, -2]], maxSpeed=1.3, rearBonus=-0.15),
+            SegmentFollowerCommand([[-82, -2]], maxSpeed=1.3, kP=0.03, sideWaysAdjust=True, stopWhenDone=True),
             InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
             InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
             SegmentFollowerCommand(
-                [[78, -2]], maxSpeed=1.3, rearBonus=0.165, stopWhenDone=False
+                [[87, -2]], maxSpeed=1.4, kP=0.03, sideWaysAdjust=True, stopWhenDone=True
             ),
             DosadoCommand(
                 52,
@@ -219,13 +203,12 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 endAngle=-90,
                 reverseForward=True,
                 stopWhenDone=True,
-                maxSpeed=1.3,
+                maxSpeed=1.35,
             ),
-            InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
-            SegmentFollowerCommand([[-78, 2]], maxSpeed=1.3, rearBonus=-0.15),
+            SegmentFollowerCommand([[-85, 1]], maxSpeed=1.45, rearBonus=-0.2),
             InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
             InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
-            SegmentFollowerCommand([[29, 3], [29, 40]], maxSpeed=1.3),
+            SegmentFollowerCommand([[30, -1], [30, 40]], maxSpeed=1.5),
         )
 
     def GalacticSearchRedA(self):
