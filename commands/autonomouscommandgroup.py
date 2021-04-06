@@ -48,7 +48,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 toRun = var
                 break
 
-        self.Test()
+        self.Bounce()
 
     # eval("self." + toRun + "()")  # Setups the method.
 
@@ -105,7 +105,8 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def Test(self):
         self.addCommands(
-            BezierPathCommand([[0,60],[0,30],[30,30],[30,0]], speed=0.5)
+            BezierPathCommand([[0, 0], [30, 0], [30, 20]], speed=0.9),
+            BezierPathCommand([[0, 65], [0, -20], [30, 30], [30, 0]], speed=0.9),
         )
 
     def Slalom(self):
@@ -117,17 +118,17 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                     [-64, 26],
                     [-64, 64],
                     [-63, 180],
-                    [-10, 188, {'speed':0.9}],
-                    [42, 192, {'speed':0.9}],
-                    [49, 218, {'speed':0.9}],
-                    [48, 258, {'speed':0.9}],
-                    [8, 274, {'speed':0.9}],
-                    [-40, 233, {'speed':0.9}],
-                    [-40, 197, {'speed':0.9}],
+                    [-10, 188, {"speed": 0.9}],
+                    [42, 192, {"speed": 0.9}],
+                    [49, 218, {"speed": 0.9}],
+                    [48, 258, {"speed": 0.9}],
+                    [8, 274, {"speed": 0.9}],
+                    [-40, 233, {"speed": 0.9}],
+                    [-40, 197, {"speed": 0.9}],
                     [32, 194],
-                    [32, 26, {'speed':0.9}],
-                    [-64, 30, {'speed':0.9}],
-                    [-66, -45, {'speed':0.9}],
+                    [32, 26, {"speed": 0.9}],
+                    [-64, 30, {"speed": 0.9}],
+                    [-66, -45, {"speed": 0.9}],
                 ],
                 maxSpeed=1.6,
             ),
@@ -174,41 +175,20 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def Bounce(self):
         self.addCommands(
-            SegmentFollowerCommand([[0, 38]], maxSpeed=1, stopWhenDone=True),
-            SegmentFollowerCommand([[-44, 0]], maxSpeed=1, stopWhenDone=True),
-            SegmentFollowerCommand([[52, 0]], maxSpeed=0.8, stopWhenDone=True),
-            SegmentFollowerCommand([[0, 25]], maxSpeed=0.8, stopWhenDone=True),
+            BezierPathCommand([[0, 0], [40, 0], [38, 45]], speed=1),
             InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
             InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
-            SegmentFollowerCommand([[18, 0]], maxSpeed=1, sideWaysAdjust=True, stopWhenDone=False),
-            DosadoCommand(
-                35,
-                startAngle=90,
-                angleToTravel=190,
-                endAngle=-90,
-                reverseForward=True,
-                stopWhenDone=True,
-                maxSpeed=1.25,
-            ),
-            SegmentFollowerCommand([[-82, -2]], maxSpeed=1.3, kP=0.03, sideWaysAdjust=True, stopWhenDone=True),
+            BezierPathCommand([[0, 100], [0, 0], [20, 40], [20, 0]], speed=1, stopWhenDone=False),
+            BezierPathCommand([[0, 90], [0,50], [56,50], [56,90]], speed=1, stopWhenDone=False),
+            BezierPathCommand([[0, 0], [0, 90], [0,90]], speed=1),
             InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
             InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
-            SegmentFollowerCommand(
-                [[87, -2]], maxSpeed=1.4, kP=0.03, sideWaysAdjust=True, stopWhenDone=True
-            ),
-            DosadoCommand(
-                52,
-                startAngle=90,
-                angleToTravel=190,
-                endAngle=-90,
-                reverseForward=True,
-                stopWhenDone=True,
-                maxSpeed=1.35,
-            ),
-            SegmentFollowerCommand([[-85, 1]], maxSpeed=1.45, rearBonus=-0.2),
+            BezierPathCommand([[0, 90], [0, 0]], speed=1, stopWhenDone=False),
+            BezierPathCommand([[0,54], [0,0], [103,0], [103,54]], speed=1, stopWhenDone=False),
+            BezierPathCommand([[0, 0], [0, 78], [0,78]], speed=1),
             InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
             InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
-            SegmentFollowerCommand([[30, -1], [30, 40]], maxSpeed=1.5),
+            BezierPathCommand([[0, 30], [0,0], [15,0]], speed=1)
         )
 
     def GalacticSearchRedA(self):

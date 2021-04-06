@@ -1,12 +1,11 @@
 from commands2 import CommandBase
 
-import math
+import math, os, signal
 
 import robot
 
 # Counts how many iterations we've done in align().
 loopCount = 0
-
 
 def align(angle):
     global loopCount
@@ -17,17 +16,16 @@ def align(angle):
     if angle < 0:
         angle += 360
     for a in robot.drivetrain.getModuleAngles():
-        if abs(a - angle) < 3:
+        if abs(a - angle) < 3 or (a > 357 and abs(angle) < 2): # The 'or' is a temporary fix. 
             count += 1
-
+    
     if count >= 3:  # TODO: Tune the max loop count.
-        return
-
-    align(angle)
-
+        return True
+    
+    return False
 
 class BezierPathCommand(CommandBase):
-    def __init__(self, points: list, speed=1):
+    def __init__(self, points: list, speed=1, stopWhenDone=True):
         """
         This command will make the robot follow a quadratic or cubic Bezier
         curve. NOTE: Give the code four points for a cubic, or three for a
@@ -37,7 +35,7 @@ class BezierPathCommand(CommandBase):
         super().__init__()
 
         self.addRequirements(robot.drivetrain)
-        
+
         self.getPosition = robot.drivetrain.getHigherBezierPosition
 
         # Use a quadratic Bezier.
@@ -58,13 +56,15 @@ class BezierPathCommand(CommandBase):
         # Define our variables.
         self.points = points
         self.speed = speed
+        self.stopWhenDone = stopWhenDone
+        self.kP = 0.0275
 
-        # Set the 't' of the parametric function. 
-        self.t = 0
+        # Set the 't' of the parametric function.
+        self.t = 0.2
 
         # Calculate/estimate the curve length.
         self.curveLength = self.getLength(self.points)
-        
+
     def initialize(self):
         # Reset out variables.
         self.t = 0
@@ -81,7 +81,9 @@ class BezierPathCommand(CommandBase):
 
         # Set and wait for the module angles to go to the right position.
         robot.drivetrain.setUniformModuleAngle(angle)
-        align(angle)
+        
+        while not align(angle):
+            pass
 
         # Set the drive speed.
         robot.drivetrain.setUniformModuleSpeed(self.speed)
@@ -101,6 +103,27 @@ class BezierPathCommand(CommandBase):
 
         if self.t != 1:
             robot.drivetrain.setUniformModuleAngle(angle)
+            
+        # Adjust for angle.         
+        if abs(angle) < 90:
+            speedOffset = (
+                robot.drivetrain.getAngleTo(0) * -self.kP
+            )
+        else:
+            speedOffset = (
+                robot.drivetrain.getAngleTo(0) * self.kP
+            )
+            
+        robot.drivetrain.setSpeeds(
+            [
+                self.speed + speedOffset,
+                self.speed - speedOffset,
+                self.speed + speedOffset,
+                self.speed - speedOffset,
+            ]
+        )
+            
+        print('a ' + str(angle) + ' at ' + str(robot.drivetrain.getModuleAngles()))
 
     def isFinished(self):
         # We are done when we have travelled 100% of the curve.
@@ -108,4 +131,5 @@ class BezierPathCommand(CommandBase):
 
     def end(self, interrupted):
         # Stop moving when we're done.
-        robot.drivetrain.stop()
+        if self.stopWhenDone:
+            robot.drivetrain.stop()

@@ -226,7 +226,7 @@ class SegmentFollowerCommand(CommandBase):
                     speedOffset = (
                         robot.drivetrain.getAngleTo(self.startingAngle) * self.kP
                     )
-                    
+
                 robot.drivetrain.setSpeeds(
                     [
                         self.maxSpeed + speedOffset,
@@ -235,19 +235,19 @@ class SegmentFollowerCommand(CommandBase):
                         self.maxSpeed - speedOffset + self.rearBonus,
                     ]
                 )
-            
+
             elif not self.disableAdjust:
                 # Go to the left.
                 if self.desiredAngle < 0:
                     speedOffset = (
                         robot.drivetrain.getAngleTo(self.startingAngle) * self.kP
                     )
-                    
+
                 else:
                     speedOffset = (
                         robot.drivetrain.getAngleTo(self.startingAngle) * -self.kP
                     )
-                    
+
                 robot.drivetrain.setSpeeds(
                     [
                         self.maxSpeed - speedOffset,
@@ -256,7 +256,7 @@ class SegmentFollowerCommand(CommandBase):
                         self.maxSpeed + speedOffset + self.rearBonus,
                     ]
                 )
-            
+
             else:
                 robot.drivetrain.setSpeeds(
                     [

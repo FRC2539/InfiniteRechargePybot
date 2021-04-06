@@ -90,7 +90,17 @@ def init():
         driveControllerTwo.RightThumb.whileHeld(ConveyorBackwardCommand())
         driveControllerTwo.BottomThumb.toggleWhenPressed(IntakeCommand())
 
-        driveControllerTwo.Trigger.whileHeld(DosadoCommand(32, startAngle=90, angleToTravel=360, reverseForward=True, endAngle=90, stopWhenDone=False, maxSpeed=1))
+        driveControllerTwo.Trigger.whileHeld(
+            DosadoCommand(
+                32,
+                startAngle=90,
+                angleToTravel=360,
+                reverseForward=True,
+                endAngle=90,
+                stopWhenDone=False,
+                maxSpeed=1,
+            )
+        )
 
         driveControllerTwo.LeftTopLeft.whileHeld(RaiseHoodCommand())
         driveControllerTwo.LeftBottomLeft.whileHeld(LowerHoodCommand())

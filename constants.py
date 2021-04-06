@@ -34,7 +34,7 @@ drivetrain.sdFFk = 0.1
 drivetrain.sdIZk = 0
 
 # Turn Position Control
-drivetrain.tPk = 22
+drivetrain.tPk = 22.5
 drivetrain.tIk = 0
 drivetrain.tDk = 0.01
 drivetrain.tFFk = 0
@@ -50,7 +50,7 @@ drivetrain.stIZk = 0
 drivetrain.driveMotorGearRatio = 6.86
 drivetrain.turnMotorGearRatio = 12.8
 
-drivetrain.driveMotionAcceleration = 12500
+drivetrain.driveMotionAcceleration = 13500
 drivetrain.driveMotionCruiseVelocity = 18500
 drivetrain.slowDriveMotionCruiseVelocity = 11000
 

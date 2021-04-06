@@ -12,6 +12,4 @@ class JustAimCommand(ParallelCommandGroup):
     def __init__(self, rpm=4300):
         super().__init__()
 
-        self.addCommands(
-            SetRPMCommand(rpm), SudoCommandGroup()
-        )
+        self.addCommands(SetRPMCommand(rpm), SudoCommandGroup())

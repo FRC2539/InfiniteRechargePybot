@@ -650,38 +650,38 @@ class SwerveDrive(BaseDrive):
 
     def getHigherBezierSlope(self, p: list, t):
         """
-        The derivative of the equation for the points. 
+        The derivative of the equation for the points.
         Note, it will be in terms of t. To make it in terms of dx/dy, we
         have to do division; more info here:
         https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/Bezier/bezier-der.html
         (lol this page is from my college!)
         """
-        
+
         dxDt = 0
-        dyDt = 0 
-        
+        dyDt = 0
+
         # The for loop will act as our summation again.
         for i in range(len(p) - 1):
             x = p[i][0]
             y = p[i][1]
-            
-            nextX = p[i+1][0]
-            nextY = p[i+1][1]
-                
+
+            nextX = p[i + 1][0]
+            nextY = p[i + 1][1]
+
             # View the position method for binomial coefficient info.
             n = len(p) - 2
             binomialCoefficient = math.factorial(n) / (
                 math.factorial(i) * math.factorial(n - i)
             )
-            
+
             # (n + 1) restores 'n's original value, the length of p.
             qX = (n + 1) * (nextX - x)
             qY = (n + 1) * (nextY - y)
 
             dxDt += binomialCoefficient * (1 - t) ** (n - i) * t ** i * qX
             dyDt += binomialCoefficient * (1 - t) ** (n - i) * t ** i * qY
-        
-        # According to parametric differentiation, we can do the following, and get dyDx.            
+
+        # According to parametric differentiation, we can do the following, and get dyDx.
         return (dyDt, dxDt)
 
     def getQuadraticBezierLength(self, p: list):
@@ -690,10 +690,10 @@ class SwerveDrive(BaseDrive):
         curve given via control points. Source:
         https://gist.github.com/tunght13488/6744e77c242cc7a94859.
         """
-        
+
         # Divide the points into invidual lists of x's and y's.
         xs, ys = map(list, zip(*p))
-        
+
         # Are all of the x's the same?
         if len(xs) == xs.count(xs[0]):
             length = 0
@@ -701,9 +701,9 @@ class SwerveDrive(BaseDrive):
             for y in list(enumerate(ys)):
                 length += abs(y[1] - initial)
                 initial = ys[y[0]]
-                
+
             return length
-        
+
         # Are all of the y's the same?
         elif len(ys) == ys.count(ys[0]):
             length = 0
@@ -711,9 +711,9 @@ class SwerveDrive(BaseDrive):
             for x in list(enumerate(xs)):
                 length += abs(x[1] - initial)
                 initial = xs[x[0]]
-                
+
             return length
-        
+
         positions = self.createPositionObjects(p)
 
         if len(positions) != 3:
@@ -751,7 +751,7 @@ class SwerveDrive(BaseDrive):
         We can approximate it by adding individual line segments together.
         "iterations" will track how many divisions we make, and thus
         the precision. Read up here https://www.lemoda.net/maths/bezier-length/index.html.
-        1000 iterations is pretty good for our purposes. 
+        1000 iterations is pretty good for our purposes.
         """
 
         # Establish the total length variable and previous position.
