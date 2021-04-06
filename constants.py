@@ -34,7 +34,7 @@ drivetrain.sdFFk = 0.1
 drivetrain.sdIZk = 0
 
 # Turn Position Control
-drivetrain.tPk = 21
+drivetrain.tPk = 22
 drivetrain.tIk = 0
 drivetrain.tDk = 0.01
 drivetrain.tFFk = 0
@@ -70,7 +70,7 @@ drivetrain.robotRadius = 16.84251
 drivetrain.swerveStyle = True
 
 drivetrain.speedLimit = (
-    100.0  # in inches per second (if you have feet per second, multiply by 12!)
+    28.0  # in inches per second (if you have feet per second, multiply by 12!)
 )
 
 drivetrain.encoderConfig = CANCoderConfiguration()

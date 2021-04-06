@@ -48,7 +48,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 toRun = var
                 break
 
-        self.Bounce()
+        self.Test()
 
     # eval("self." + toRun + "()")  # Setups the method.
 
@@ -105,7 +105,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def Test(self):
         self.addCommands(
-            BezierPathCommand([[10,0],[0,-30],[0,60]], speed=0.5)
+            BezierPathCommand([[0,60],[0,30],[30,30],[30,0]], speed=0.5)
         )
 
     def Slalom(self):

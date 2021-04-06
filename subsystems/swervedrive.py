@@ -537,7 +537,8 @@ class SwerveDrive(BaseDrive):
         """
         Returns the position in the cubic Bezier curve, given
         the control points and the percentage through the
-        curve.
+        curve. NOTE: Doesn't seem to be working. Please use
+        getHigherBezierPositionInstead instead.
         """
 
         # Returns (x, y) @ % = t
@@ -742,7 +743,7 @@ class SwerveDrive(BaseDrive):
             + (4 * C * A - B * B) * math.log((2 * A2 + BA + SABC) / (BA + C2))
         ) / (4 * A32)
 
-    def getCubicBezierLength(self, p: list, iterations: int = 10):
+    def getHigherBezierLength(self, p: list, iterations: int = 1000):
         """
         Ok. So with cubic bezier, their is no closed-integral
         definition for the cubic Bezier length. I've done lot's
@@ -750,6 +751,7 @@ class SwerveDrive(BaseDrive):
         We can approximate it by adding individual line segments together.
         "iterations" will track how many divisions we make, and thus
         the precision. Read up here https://www.lemoda.net/maths/bezier-length/index.html.
+        1000 iterations is pretty good for our purposes. 
         """
 
         # Establish the total length variable and previous position.
@@ -758,11 +760,11 @@ class SwerveDrive(BaseDrive):
         previousY = 0
 
         # Iterate through each step, taking the length of each sum with Pythagorean Theorem.
-        for i in range(iterations):
+        for i in range(iterations + 1):
             t = i / iterations
 
             # "positions" is (x,y).
-            positions = self.getCubicBezierPosition(p, t)
+            positions = self.getHigherBezierPosition(p, t)
 
             if i > 0:
                 xDiff = positions[0] - previousX

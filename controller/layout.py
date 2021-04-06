@@ -79,15 +79,10 @@ def init():
         driveControllerOne.RightThumb.toggleWhenPressed(ChamberBackwardCommand())
         driveControllerOne.BottomThumb.whenPressed(ZeroGyroCommand())
 
-        driveControllerOne.Trigger.whileHeld(
-            DosadoCommand(
-                26, startAngle=90, angleToTravel=360, maxSpeed=0.8, stopWhenDone=False, waitForAlign=True
-            )
-        )
-        # driveControllerOne.Trigger.whenPressed(
-        # SetSpeedCommand(False)
-        # )  # slow speed while trigger is held.
-        # driveControllerOne.Trigger.whenReleased(SetSpeedCommand())
+        driveControllerOne.Trigger.whenPressed(
+            SetSpeedCommand(False)
+        )  # slow speed while trigger is held.
+        driveControllerOne.Trigger.whenReleased(SetSpeedCommand())
 
         driveControllerOne.LeftBottomRight.whileHeld(PathCommand())
 
@@ -95,7 +90,7 @@ def init():
         driveControllerTwo.RightThumb.whileHeld(ConveyorBackwardCommand())
         driveControllerTwo.BottomThumb.toggleWhenPressed(IntakeCommand())
 
-        driveControllerTwo.Trigger.whileHeld(AutomatedShootCommand())
+        driveControllerTwo.Trigger.whileHeld(DosadoCommand(32, startAngle=90, angleToTravel=360, reverseForward=True, endAngle=90, stopWhenDone=False, maxSpeed=1))
 
         driveControllerTwo.LeftTopLeft.whileHeld(RaiseHoodCommand())
         driveControllerTwo.LeftBottomLeft.whileHeld(LowerHoodCommand())

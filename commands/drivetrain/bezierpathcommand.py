@@ -37,32 +37,34 @@ class BezierPathCommand(CommandBase):
         super().__init__()
 
         self.addRequirements(robot.drivetrain)
+        
+        self.getPosition = robot.drivetrain.getHigherBezierPosition
 
         # Use a quadratic Bezier.
         if len(points) == 3:
             self.getSlope = robot.drivetrain.getQuadraticBezierSlope
             self.getLength = robot.drivetrain.getQuadraticBezierLength
-            self.getPosition = robot.drivetrain.getQuadraticBezierPosition
 
         # Use a cubic Bezier.
         elif len(points) == 4:
             self.getSlope = robot.drivetrain.getCubicBezierSlope
-            self.getLength = robot.drivetrain.getCubicBezierLength
-            self.getPosition = robot.drivetrain.getCubicBezierPosition
+            self.getLength = robot.drivetrain.getHigherBezierLength
 
-        # You didn't give three or four points.
+        # Use a higher Bezier.
         else:
             self.getSlope = robot.drivetrain.getHigherBezierSlope
-            self.getLength = lambda: True # Temporary till I write the get length.
-            self.getPosition = robot.drivetrain.getHigherBezierPosition
+            self.getLength = robot.drivetrain.getHigherBezierLength
 
+        # Define our variables.
         self.points = points
         self.speed = speed
 
+        # Set the 't' of the parametric function. 
         self.t = 0
 
+        # Calculate/estimate the curve length.
         self.curveLength = self.getLength(self.points)
-    
+        
     def initialize(self):
         # Reset out variables.
         self.t = 0
@@ -77,14 +79,9 @@ class BezierPathCommand(CommandBase):
         if angle > 180:
             angle -= 360
 
-        print(angle)
-
         # Set and wait for the module angles to go to the right position.
         robot.drivetrain.setUniformModuleAngle(angle)
         align(angle)
-        
-        print('fuck u')
-        print(robot.drivetrain.getModuleAngles())
 
         # Set the drive speed.
         robot.drivetrain.setUniformModuleSpeed(self.speed)
