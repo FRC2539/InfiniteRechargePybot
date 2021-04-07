@@ -57,7 +57,7 @@ class BezierPathCommand(CommandBase):
         self.points = points
         self.speed = speed
         self.stopWhenDone = stopWhenDone
-        self.kP = 0.0275
+        self.kP = 0.0285
 
         # Set the 't' of the parametric function.
         self.t = 0.2

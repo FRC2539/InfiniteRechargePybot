@@ -48,7 +48,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 toRun = var
                 break
 
-        self.Bounce()
+        self.GalacticSearchRedA()
 
     # eval("self." + toRun + "()")  # Setups the method.
 
@@ -102,13 +102,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             # self.turnToTarget,
             # self.shootTwo        # 4 seconds
         )
-
-    def Test(self):
-        self.addCommands(
-            BezierPathCommand([[0, 0], [30, 0], [30, 20]], speed=0.9),
-            BezierPathCommand([[0, 65], [0, -20], [30, 30], [30, 0]], speed=0.9),
-        )
-
+        
     def Slalom(self):
         self.addCommands(
             SegmentFollowerCommand(
@@ -136,42 +130,14 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def BarellRacing(self):
         self.addCommands(
-            SegmentFollowerCommand([[0, 116]], maxSpeed=1.3, stopWhenDone=True),
-            SegmentFollowerCommand([[24, 0]], maxSpeed=1.3, stopWhenDone=False),
-            DosadoCommand(
-                36,
-                startAngle=90,
-                angleToTravel=280,
-                maxSpeed=1,
-                stopWhenDone=False,
-                waitForAlign=True,
-            ),
-            SegmentFollowerCommand(
-                [[0, 76]],
-                maxSpeed=1.3,
-                stopWhenDone=False,
-                kP=0.04,
-            ),
-            DosadoCommand(
-                36,
-                startAngle=180,
-                angleToTravel=-270,
-                reverseStrafe=True,
-                stopWhenDone=False,
-            ),
-            SegmentFollowerCommand(
-                [[36, 0], [74, 100], [74, 112]],
-                maxSpeed=1.2,
-            ),
-            DosadoCommand(
-                44,
-                startAngle=180,
-                angleToTravel=180,
-                reverseStrafe=True,
-                waitForAlign=True,
-            ),
-            SegmentFollowerCommand([[-14, -246]], maxSpeed=1.5),
-        )
+            BezierPathCommand([[0,0], [70,30], [75,0]], speed=1.4, stopWhenDone=False),
+            BezierPathCommand([[90,70], [90,0], [10,0], [10,70]], speed=1.2, stopWhenDone=False),
+            BezierPathCommand([[0,20], [10,60], [195, 10], [195, 80]], speed=1.2, stopWhenDone=False),
+            BezierPathCommand([[90,10], [90,80], [0,80], [0,10]], speed=1.1, stopWhenDone=False),
+            BezierPathCommand([[0,110], [0,30], [10,0], [70,0]], speed=1.25, stopWhenDone=False),
+            BezierPathCommand([[0,0], [115,0], [115,45], [50,60]], speed=1.25, stopWhenDone=False),
+            BezierPathCommand([[250,0], [210,5], [0,7]], speed=1.5)
+            )
 
     def Bounce(self):
         self.addCommands(
@@ -193,19 +159,11 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def GalacticSearchRedA(self):
         self.addCommands(
-            InstantCommand(lambda: robot.intake.intakeBalls(0.8), [robot.intake]),
-            WaitCommand(0.4),
-            SegmentFollowerCommand(
-                [
-                    [0, 5, {"speed": 0.25}],
-                    [0, 10, {"speed": 0.9}],
-                    [30, 62, {"speed": 0.9}],
-                    [-80, 60, {"speed": 1.3}],
-                    [-80, 70, {"speed": 2.8}],
-                    [-50, 300],
-                ],
-                maxSpeed=1.4,
-            ),
+            InstantCommand(lambda: robot.intake.intakeBalls(0.5), [robot.intake]),
+            WaitCommand(0.2),
+            BezierPathCommand([[200,0], [190,125], [209, 30], [209, 120]], speed=1.3, stopWhenDone=True),
+            BezierPathCommand([[160,50], [7,0], [37,0], [57,140]], speed=1.8, stopWhenDone=False),
+            BezierPathCommand([[0,0], [0,200]], speed=5)
         )
 
     def GalacticSearchRedB(self):
