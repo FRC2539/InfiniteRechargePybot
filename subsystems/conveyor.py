@@ -28,22 +28,48 @@ class Conveyor(CougarSystem):
         )
 
     def periodic(self):
+        """
+        Loops when nothing else is running in
+        this subsystem. Do not call this!
+        """
         self.feed()
 
     def forward(self):
+        """
+        Run the conveyor so the balls move
+        forwards.
+        """
         self.move(self.speed)
 
     def backward(self):
+        """
+        Reverse the conveyor so the balls
+        move backwards.
+        """
         self.move(-self.speed)
 
     def slowForward(self):
+        """
+        Run the conveyor slowly so the balls
+        move forward.
+        """
         self.move(self.slowSpeed)
 
     def slowBackward(self):
+        """
+        Run the conveyor slowly so the balls
+        move backwards.
+        """
         self.move(-self.slowSpeed)
 
     def move(self, speed):
+        """
+        Basic move method to set custom speed to the motor.
+        """
         self.motor.set(ControlMode.PercentOutput, speed)
 
     def stop(self):
+        """
+        Stops the conveyor motor.
+        """
         self.motor.stopMotor()

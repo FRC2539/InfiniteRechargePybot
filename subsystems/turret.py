@@ -10,7 +10,7 @@ import math
 
 
 class Turret(CougarSystem):
-    """Controls the turret."""
+    """Controls the robot's turret."""
 
     def __init__(self):
         super().__init__("Turret")
@@ -37,12 +37,17 @@ class Turret(CougarSystem):
         self.constantlyUpdate("Turret Position", self.getPosition)
 
     def periodic(self):
+        """
+        Loops when nothing else is running in
+        this subsystem. Do not call this!
+        """
         self.feed()
 
-    # if speed is greater than 0 and our position is less than max, move.
-
-    # me (kieren) and ben argued about this command for like 5 minutes
     def move(self, speed):
+        """
+        Safely move the turret. By safely,
+        I mean it will not overrdrive by a large margin.
+        """
         if (
             (speed > 0 and self.getPosition() >= self.minPosition)
             or (speed < 0 and self.getPosition() <= self.maxPosition)
@@ -53,15 +58,30 @@ class Turret(CougarSystem):
             self.motor.stopMotor()
 
     def positionIsInBounds(self):
+        """
+        Is the turret in between the min and max position?
+        Uses the encoder to check.
+        """
         return self.minPosition <= self.getPosition() <= self.maxPosition
 
     def getPosition(self):
+        """
+        Returns the position of the turret's encoder in ticks.
+        """
         return self.motor.getSelectedSensorPosition(0)
 
     def stop(self):
+        """
+        Stops the turret motor.
+        """
         self.motor.stopMotor()
 
     def initDefaultCommand(self):
+        """
+        Establishes the default command to run. In this case,
+        it is a command that allows us to turn the turret at anytime,
+        assuming the turret is not in use elsewhere.
+        """
         from commands.turret.defaultcommand import DefaultCommand
 
         self.setDefaultCommand(DefaultCommand())

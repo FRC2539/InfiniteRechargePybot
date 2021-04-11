@@ -64,28 +64,54 @@ class Shooter(CougarSystem):
         self.constantlyUpdate("Shooter RPM", lambda: float(self.getRPM()))
 
     def periodic(self):
+        """
+        Loops when nothing else is running in
+        this subsystem. Do not call this!
+        """
         self.feed()
 
     def setRPM(self, rpm):
-        # With the second motor following the first, no command is needed for the second motor.
+        """
+        Sets the two shooting motors to a given RPM.
+        With the second motor following the first,
+        no command is needed for the second motor.
+        """
         self.shooterMotorOne.set(ControlMode.Velocity, self.rpmToSensor(rpm))
 
     def setPercent(self, val):
+        """
+        Sets the two shooter motors to a
+        given percent output.
+        """
         self.shooterMotorOne.set(ControlMode.PercentOutput, val)
 
-    def reverseShooter(self):
-        # Tell the motor to go in reverse (negative percent).
-        self.shooterMotorOne.set(ControlMode.PercentOutput, -0.4)
-
     def stopShooter(self):
+        """
+        Stops both shooter motors.
+        """
         self.shooterMotorOne.stopMotor()
 
     def rpmToSensor(self, rpm):
+        """
+        Convert a standard output RPM into
+        a tick units for the robot. Please note,
+        this is before the gear ratio on the
+        shooter, which is not a 1:1.
+        """
         return (rpm * 2048) / 600
 
     def sensorToRPM(self, units):
+        """
+        Convert a value in tick units into
+        a human-comprehendible RPM. Please note,
+        this is before the gear ratio on the
+        shooter, which is not a 1:1.
+        """
         return (units * 600) / 2048
 
     def getRPM(self):
-        # Return the current average RPM of the motor.
+        """
+        Returns the current RPM of the lead motor,
+        motorOne.
+        """
         return self.sensorToRPM(self.shooterMotorOne.getSelectedSensorVelocity())

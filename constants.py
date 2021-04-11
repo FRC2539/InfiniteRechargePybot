@@ -6,6 +6,10 @@ from ctre import (
 
 
 class Constants:
+    """
+    Dummy class for robot constants.
+    """
+
     pass
 
 
@@ -47,9 +51,11 @@ drivetrain.stDk = 0
 drivetrain.stFFk = 0
 drivetrain.stIZk = 0
 
+# Gear ratios on the drivetrain.
 drivetrain.driveMotorGearRatio = 6.86
 drivetrain.turnMotorGearRatio = 12.8
 
+# Motion magic velocities and accelerations
 drivetrain.driveMotionAcceleration = 13500
 drivetrain.driveMotionCruiseVelocity = 18500
 drivetrain.slowDriveMotionCruiseVelocity = 11000
@@ -57,17 +63,19 @@ drivetrain.slowDriveMotionCruiseVelocity = 11000
 drivetrain.turnMotionAcceleration = 1000
 drivetrain.turnMotionCruiseVelocity = 800
 
+# Trajectory constraints.
 drivetrain.maxMetersPerSecond = 1  # Velocity for trajectory
 drivetrain.maxMetersPerSecondSquared = 0.1  # Accel for trajectory
 
+# Diameter of the wheel in inches.
 drivetrain.wheelDiameter = 4
 
+# Distance between adjacent wheels.
 drivetrain.wheelBase = 23.5
 drivetrain.trackWidth = 23.5
 
+# Center of the robot to the center of a wheel in inches.
 drivetrain.robotRadius = 16.84251
-
-drivetrain.swerveStyle = True
 
 drivetrain.speedLimit = (
     28.0  # in inches per second (if you have feet per second, multiply by 12!)
