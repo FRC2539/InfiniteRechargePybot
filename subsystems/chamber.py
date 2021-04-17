@@ -8,8 +8,10 @@ from ctre import WPI_TalonSRX, NeutralMode, ControlMode
 
 
 class Chamber(CougarSystem):
-    """Controls the chamber in the ball system.
-    The chamber moves the balls vertically and preceeds the shooter."""
+    """
+    Controls the chamber in the ball system.
+    The chamber moves the balls vertically and preceeds the shooter.
+    """
 
     def __init__(self):
         super().__init__("Chamber")
@@ -33,25 +35,54 @@ class Chamber(CougarSystem):
         )
 
     def periodic(self):
+        """
+        Loops when nothing else is running in
+        this subsystem. Do not call this!
+        """
         self.feed()
 
     def forward(self):
+        """
+        Run the chamber so the balls move
+        forwards.
+        """
         self.move(self.speed)
 
     def backward(self):
+        """
+        Reverse the chamber so the balls
+        move backwards.
+        """
         self.move(-self.speed)
 
     def slowForward(self):
+        """
+        Run the chamber slowly so the balls
+        move forward.
+        """
         self.move(self.slowSpeed)
 
     def slowBackward(self):
+        """
+        Run the chamber slowly so the balls
+        move backwards.
+        """
         self.move(-self.slowSpeed)
 
     def move(self, speed):
+        """
+        Basic move method to set custom speed to the motor.
+        """
         self.motor.set(ControlMode.PercentOutput, speed)
 
     def stop(self):
+        """
+        Stops the chamber motor.
+        """
         self.motor.stopMotor()
 
     def isBallPresent(self):
+        """
+        Does the ball sensor see a ball?
+        """
         return self.ballSensor.getValue() < 50

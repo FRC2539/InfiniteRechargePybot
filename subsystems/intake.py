@@ -5,7 +5,9 @@ from .cougarsystem import *
 
 
 class Intake(CougarSystem):
-    """Describe what this subsystem does."""
+    """Manages the intake of the robot."""
+
+    # TODO: Program this subsystem so it is similar to the chamber's layout (younger kid)!
 
     def __init__(self):
         super().__init__("Intake")
@@ -18,22 +20,41 @@ class Intake(CougarSystem):
         self.constantlyUpdate("Intake Running", (lambda: self.motor.get() != 0))
 
     def periodic(self):
+        """
+        Loops when nothing else is running in
+        this subsystem. Do not call this!
+        """
         self.feed()
 
     def intakeBalls(self, speed=0.65):
+        """
+        Runs the intake so that it intakes balls.
+        """
         self.motor.set(speed)
 
     def fastOut(self):
+        """
+        Reverses the intake so it spits balls back out
+        rather quickly.
+        """
         self.motor.set(-0.5)
 
     def slowIn(self):
+        """
+        Intake balls slowly.
+        """
         self.motor.set(0.4)
 
     def slowOut(self):
+        """
+        Reverses the intake motor so it slowly returns
+        balls.
+        """
         self.motor.set(-0.25)
 
     def dontIntakeBalls(self):
+        """
+        Kieren's way of naming the stop intake motor
+        method lol.
+        """
         self.motor.stopMotor()
-
-    def periodic(self):
-        self.feed()  # Required for the constant update.

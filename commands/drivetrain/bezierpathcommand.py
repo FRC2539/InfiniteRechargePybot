@@ -7,6 +7,7 @@ import robot
 # Counts how many iterations we've done in align().
 loopCount = 0
 
+
 def align(angle):
     global loopCount
 
@@ -16,13 +17,16 @@ def align(angle):
     if angle < 0:
         angle += 360
     for a in robot.drivetrain.getModuleAngles():
-        if abs(a - angle) < 3 or (a > 357 and abs(angle) < 2): # The 'or' is a temporary fix. 
+        if abs(a - angle) < 3 or (
+            a > 357 and abs(angle) < 2
+        ):  # The 'or' is a temporary fix.
             count += 1
-    
+
     if count >= 3:  # TODO: Tune the max loop count.
         return True
-    
+
     return False
+
 
 class BezierPathCommand(CommandBase):
     def __init__(self, points: list, speed=1, stopWhenDone=True):
@@ -81,7 +85,7 @@ class BezierPathCommand(CommandBase):
 
         # Set and wait for the module angles to go to the right position.
         robot.drivetrain.setUniformModuleAngle(angle)
-        
+
         while not align(angle):
             pass
 
@@ -103,17 +107,13 @@ class BezierPathCommand(CommandBase):
 
         if self.t != 1:
             robot.drivetrain.setUniformModuleAngle(angle)
-            
-        # Adjust for angle.         
+
+        # Adjust for angle.
         if abs(angle) < 90:
-            speedOffset = (
-                robot.drivetrain.getAngleTo(0) * -self.kP
-            )
+            speedOffset = robot.drivetrain.getAngleTo(0) * -self.kP
         else:
-            speedOffset = (
-                robot.drivetrain.getAngleTo(0) * self.kP
-            )
-            
+            speedOffset = robot.drivetrain.getAngleTo(0) * self.kP
+
         robot.drivetrain.setSpeeds(
             [
                 self.speed + speedOffset,
@@ -122,8 +122,8 @@ class BezierPathCommand(CommandBase):
                 self.speed - speedOffset,
             ]
         )
-            
-        print('a ' + str(angle) + ' at ' + str(robot.drivetrain.getModuleAngles()))
+
+        print("a " + str(angle) + " at " + str(robot.drivetrain.getModuleAngles()))
 
     def isFinished(self):
         # We are done when we have travelled 100% of the curve.

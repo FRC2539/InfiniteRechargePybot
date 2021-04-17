@@ -102,8 +102,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             # self.turnToTarget,
             # self.shootTwo        # 4 seconds
         )
-        
+
     def Slalom(self):
+        # Auto-Nav Path
         self.addCommands(
             SegmentFollowerCommand(
                 [
@@ -129,41 +130,67 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         )
 
     def BarellRacing(self):
+        # Auto-Nav Path
         self.addCommands(
-            BezierPathCommand([[0,0], [70,30], [75,0]], speed=1.4, stopWhenDone=False),
-            BezierPathCommand([[90,70], [90,0], [10,0], [10,70]], speed=1.2, stopWhenDone=False),
-            BezierPathCommand([[0,20], [10,60], [195, 10], [195, 80]], speed=1.2, stopWhenDone=False),
-            BezierPathCommand([[90,10], [90,80], [0,80], [0,10]], speed=1.1, stopWhenDone=False),
-            BezierPathCommand([[0,110], [0,30], [10,0], [70,0]], speed=1.25, stopWhenDone=False),
-            BezierPathCommand([[0,0], [115,0], [115,45], [50,60]], speed=1.25, stopWhenDone=False),
-            BezierPathCommand([[250,0], [210,5], [0,7]], speed=1.5)
-            )
+            BezierPathCommand(
+                [[0, 0], [70, 30], [75, 0]], speed=1.4, stopWhenDone=False
+            ),
+            BezierPathCommand(
+                [[90, 70], [90, 0], [10, 0], [10, 70]], speed=1.2, stopWhenDone=False
+            ),
+            BezierPathCommand(
+                [[0, 20], [10, 60], [195, 10], [195, 80]], speed=1.2, stopWhenDone=False
+            ),
+            BezierPathCommand(
+                [[90, 10], [90, 80], [0, 80], [0, 10]], speed=1.1, stopWhenDone=False
+            ),
+            BezierPathCommand(
+                [[0, 110], [0, 30], [10, 0], [70, 0]], speed=1.25, stopWhenDone=False
+            ),
+            BezierPathCommand(
+                [[0, 0], [115, 0], [115, 45], [50, 60]], speed=1.25, stopWhenDone=False
+            ),
+            BezierPathCommand([[250, 0], [210, 5], [0, 7]], speed=1.5),
+        )
 
     def Bounce(self):
+        # Auto-Nav Path
         self.addCommands(
             BezierPathCommand([[0, 0], [40, 0], [38, 45]], speed=1),
             InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
             InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
-            BezierPathCommand([[0, 100], [0, 0], [20, 40], [20, 0]], speed=1, stopWhenDone=False),
-            BezierPathCommand([[0, 90], [0,50], [56,50], [56,90]], speed=1, stopWhenDone=False),
-            BezierPathCommand([[0, 0], [0, 90], [0,90]], speed=1),
+            BezierPathCommand(
+                [[0, 100], [0, 0], [20, 40], [20, 0]], speed=1, stopWhenDone=False
+            ),
+            BezierPathCommand(
+                [[0, 90], [0, 50], [56, 50], [56, 90]], speed=1, stopWhenDone=False
+            ),
+            BezierPathCommand([[0, 0], [0, 90], [0, 90]], speed=1),
             InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
             InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
             BezierPathCommand([[0, 90], [0, 0]], speed=1, stopWhenDone=False),
-            BezierPathCommand([[0,54], [0,0], [103,0], [103,54]], speed=1, stopWhenDone=False),
-            BezierPathCommand([[0, 0], [0, 78], [0,78]], speed=1),
+            BezierPathCommand(
+                [[0, 54], [0, 0], [103, 0], [103, 54]], speed=1, stopWhenDone=False
+            ),
+            BezierPathCommand([[0, 0], [0, 78], [0, 78]], speed=1),
             InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
             InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
-            BezierPathCommand([[0, 30], [0,0], [15,0]], speed=1)
+            BezierPathCommand([[0, 30], [0, 0], [15, 0]], speed=1),
         )
 
     def GalacticSearchRedA(self):
         self.addCommands(
             InstantCommand(lambda: robot.intake.intakeBalls(0.5), [robot.intake]),
             WaitCommand(0.2),
-            BezierPathCommand([[200,0], [190,125], [209, 30], [209, 120]], speed=1.3, stopWhenDone=True),
-            BezierPathCommand([[160,50], [7,0], [37,0], [57,140]], speed=1.8, stopWhenDone=False),
-            BezierPathCommand([[0,0], [0,200]], speed=5)
+            BezierPathCommand(
+                [[200, 0], [190, 125], [209, 30], [209, 120]],
+                speed=1.3,
+                stopWhenDone=True,
+            ),
+            BezierPathCommand(
+                [[160, 50], [7, 0], [37, 0], [57, 140]], speed=1.8, stopWhenDone=False
+            ),
+            BezierPathCommand([[0, 0], [0, 200]], speed=5),
         )
 
     def GalacticSearchRedB(self):

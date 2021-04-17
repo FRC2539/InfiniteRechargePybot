@@ -16,15 +16,21 @@ import math
 
 
 class SwerveDrive(BaseDrive):
-    def __init__(self):
-        super().__init__()
+    """
+    "Rollers? Where we're going, we don't need 'rollers'." - Ben Bistline, 2021
 
+    A drivetrain class for swerve drive.
+    """
+
+    # TODO: Program our own odometry class (Steven or younger kid).
+
+    def __init__(self):
         """
-        "Rollers? Where we're going, we don't need 'rollers'." - Ben Bistline, 2021
-        
         The constructor for the class. When returning lists, it should follow like:
         [front left, front right, back left, back right]
         """
+
+        super().__init__()
 
         if not constants.drivetrain.swerveStyle:
             self.move = self.tankMove
@@ -42,6 +48,7 @@ class SwerveDrive(BaseDrive):
             constants.drivetrain.speedLimit
         )  # Override the basedrive without editing the file.
 
+        # Creates a list of swerve modules.
         self.modules = [
             SwerveModule(  # Front left module.
                 ports.drivetrain.frontLeftDriveID,
@@ -102,8 +109,9 @@ class SwerveDrive(BaseDrive):
         feeding networktable values here.
         """
 
-        self.feed()  # Update the desired
+        self.feed()
 
+        # Update's the robot's odometry.
         self.updateOdometry()
 
         Angles = self.getModuleAngles()
@@ -130,6 +138,11 @@ class SwerveDrive(BaseDrive):
         self.LastPositions = self.getPositions()
 
     def GenerateRobotVector(self):
+        """
+        Creates vectors for each module depending
+        on that module's speed and direction. Used to
+        calculate our odometry.
+        """
         Angles = self.getModuleAngles()
         Speeds = self.getSpeeds()
         VectorX = 0
@@ -208,7 +221,8 @@ class SwerveDrive(BaseDrive):
     def _calculateSpeeds(self, x, y, rotate):
         """
         Gonna take this nice and slow. Declaring variables to be simple,
-        should try to walk through while coding.
+        should try to walk through while coding. Resources located here:
+        https://www.chiefdelphi.com/t/paper-4-wheel-independent-drive-independent-steering-swerve/107383
         """
 
         """
@@ -252,7 +266,7 @@ class SwerveDrive(BaseDrive):
         speeds = [ws2, ws1, ws4, ws3]  # It is in order (FL, FR, BL, BR).
         angles = [wa2, wa1, wa4, wa3]  # It is in order (FL, FR, BL, BR).
 
-        newSpeeds = speeds  # Do NOT delete! This IS used!
+        newSpeeds = speeds
         newAngles = angles
 
         maxSpeed = max(speeds)  # Find the largest speed.
@@ -317,6 +331,10 @@ class SwerveDrive(BaseDrive):
                 module.setWheelSpeed(abs(math.sqrt(speed ** 2 + rotate ** 2)))
 
     def tankMove(self, y, rotate):
+        """
+        Drive the robot in a tank style. This does not work however because
+        of physical constraints. The code works however.
+        """
         if [y, rotate] == self.lastInputs:
             return
 
@@ -334,11 +352,15 @@ class SwerveDrive(BaseDrive):
             module.setWheelSpeed(speed)
 
     def tankCalculateSpeeds(self, y, rotate):
+        """
+        Calculate the wheel speeds for the drivetrain when acting as a
+        tank drivetrain. Again, does not work because of physical constraints.
+        """
         return [y + rotate, -y + rotate, y + rotate, -y + rotate]  # FL, FR, BL, BR
 
     def stop(self):
         """
-        Stops the modules.
+        Stops both motors of each of the modules.
         """
         for module in self.modules:
             module.stopModule()

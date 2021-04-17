@@ -59,57 +59,46 @@ def init():
         - cancelWhenPressed: good for commands started with a different button
     """
 
-    if constants.drivetrain.swerveStyle:
+    # The controller for driving the robot
+    driveControllerOne = ThrustmasterJoystick(0)  # The left hand controller
+    driveControllerTwo = ThrustmasterJoystick(1)  # The right hand controller
 
-        # The controller for driving the robot
-        driveControllerOne = ThrustmasterJoystick(0)  # The left hand controller
-        driveControllerTwo = ThrustmasterJoystick(1)  # The right hand controller
+    logicalaxes.forward = driveControllerOne.Y
+    logicalaxes.strafe = driveControllerOne.X
 
-        logicalaxes.forward = driveControllerOne.Y
-        logicalaxes.strafe = driveControllerOne.X
+    logicalaxes.rotate = driveControllerTwo.X
 
-        logicalaxes.rotate = driveControllerTwo.X
+    driveControllerOne.RightBottomRight.toggleWhenPressed(RecordAutoCommand())
+    driveControllerOne.RightBottomMiddle.toggleWhenPressed(RunAutoCommand())
 
-        driveControllerOne.RightBottomRight.toggleWhenPressed(RecordAutoCommand())
-        driveControllerOne.RightBottomMiddle.toggleWhenPressed(RunAutoCommand())
+    driveControllerOne.LeftBottomLeft.whenPressed(ZeroCANCodersCommand())
 
-        driveControllerOne.LeftBottomLeft.whenPressed(ZeroCANCodersCommand())
+    driveControllerOne.LeftThumb.toggleWhenPressed(ChamberForwardCommand())
+    driveControllerOne.RightThumb.toggleWhenPressed(ChamberBackwardCommand())
+    driveControllerOne.BottomThumb.whenPressed(ZeroGyroCommand())
 
-        driveControllerOne.LeftThumb.toggleWhenPressed(ChamberForwardCommand())
-        driveControllerOne.RightThumb.toggleWhenPressed(ChamberBackwardCommand())
-        driveControllerOne.BottomThumb.whenPressed(ZeroGyroCommand())
+    driveControllerOne.Trigger.whenPressed(
+        SetSpeedCommand(False)
+    )  # slow speed while trigger is held.
+    driveControllerOne.Trigger.whenReleased(SetSpeedCommand())
 
-        driveControllerOne.Trigger.whenPressed(
-            SetSpeedCommand(False)
-        )  # slow speed while trigger is held.
-        driveControllerOne.Trigger.whenReleased(SetSpeedCommand())
+    driveControllerOne.LeftBottomRight.whileHeld(PathCommand())
 
-        driveControllerOne.LeftBottomRight.whileHeld(PathCommand())
+    driveControllerTwo.LeftThumb.toggleWhenPressed(ConveyorForwardCommand())
+    driveControllerTwo.RightThumb.whileHeld(ConveyorBackwardCommand())
+    driveControllerTwo.BottomThumb.toggleWhenPressed(IntakeCommand())
 
-        driveControllerTwo.LeftThumb.toggleWhenPressed(ConveyorForwardCommand())
-        driveControllerTwo.RightThumb.whileHeld(ConveyorBackwardCommand())
-        driveControllerTwo.BottomThumb.toggleWhenPressed(IntakeCommand())
+    driveControllerTwo.Trigger.whileHeld(AutomatedShootCommand())
 
-        driveControllerTwo.LeftTopLeft.whileHeld(RaiseHoodCommand())
-        driveControllerTwo.LeftBottomLeft.whileHeld(LowerHoodCommand())
+    driveControllerTwo.LeftTopLeft.whileHeld(RaiseHoodCommand())
+    driveControllerTwo.LeftBottomLeft.whileHeld(LowerHoodCommand())
 
-        driveControllerTwo.Trigger.whileHeld(AutomatedShootCommand())
+    # The controller for non-driving subsystems of the robot
+    componentController = LogitechDualShock(2)
 
-        # The controller for non-driving subsystems of the robot
-        componentController = LogitechDualShock(2)
+    logicalaxes.TURRETmOVE = componentController.LeftX
 
-        logicalaxes.TURRETmOVE = componentController.LeftX
+    componentController.Back.whenPressed(ResetCommand())
+    componentController.A.toggleWhenPressed(IntakeCommand())
 
-        componentController.Back.whenPressed(ResetCommand())
-        componentController.A.toggleWhenPressed(IntakeCommand())
-
-        componentController.RightTrigger.whileHeld(SlowShootingProcessCommand())
-
-    else:
-        # The controller for driving the robot
-        driveControllerOne = LogitechDualShock(0)  # The driver controller
-
-        logicalaxes.forward = driveControllerOne.LeftY
-        logicalaxes.strafe = driveControllerOne.LeftX
-
-        logicalaxes.rotate = driveControllerOne.RightX
+    componentController.RightTrigger.whileHeld(SlowShootingProcessCommand())
