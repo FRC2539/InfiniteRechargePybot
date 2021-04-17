@@ -70,7 +70,7 @@ drivetrain.robotRadius = 16.84251
 drivetrain.swerveStyle = True
 
 drivetrain.speedLimit = (
-    28.0  # in inches per second (if you have feet per second, multiply by 12!)
+    30.0  # in inches per second (if you have feet per second, multiply by 12!)
 )
 
 drivetrain.encoderConfig = CANCoderConfiguration()
