@@ -85,7 +85,7 @@ def init():
     driveControllerTwo.LeftThumb.toggleWhenPressed(ConveyorForwardCommand())
     driveControllerTwo.RightThumb.whileHeld(ConveyorBackwardCommand())
     driveControllerTwo.BottomThumb.toggleWhenPressed(IntakeCommand())
-    
+
     driveControllerTwo.RightBottomLeft.toggleWhenPressed(OuttakeCommand())
 
     driveControllerTwo.Trigger.whileHeld(AutomatedShootCommand())
