@@ -82,11 +82,11 @@ def init():
     )  # slow speed while trigger is held.
     driveControllerOne.Trigger.whenReleased(SetSpeedCommand())
 
-    driveControllerOne.LeftBottomRight.whileHeld(PathCommand())
-
     driveControllerTwo.LeftThumb.toggleWhenPressed(ConveyorForwardCommand())
     driveControllerTwo.RightThumb.whileHeld(ConveyorBackwardCommand())
     driveControllerTwo.BottomThumb.toggleWhenPressed(IntakeCommand())
+    
+    driveControllerTwo.RightBottomLeft.toggleWhenPressed(OuttakeCommand())
 
     driveControllerTwo.Trigger.whileHeld(AutomatedShootCommand())
 
