@@ -49,7 +49,6 @@ class Hood(CougarSystem):
         this subsystem. Do not call this!
         """
         self.feed()
-        print(self.getPosition())
 
     def getPosition(self):
         """

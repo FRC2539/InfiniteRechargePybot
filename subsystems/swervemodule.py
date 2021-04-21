@@ -76,6 +76,14 @@ class SwerveModule:
             constants.drivetrain.sdIZk
         )  # Secondary Integral Zone for the drive.
 
+        # Declare and setup the remote encoder.
+        self.cancoder = CANCoder(canCoderID)
+        self.cancoder.configAllSettings(constants.drivetrain.encoderConfig)
+
+        # Set's the magnet offset of the CANCoder. This can be determined through the Pheonix Tuner.
+        if offset is not None:
+            self.cancoder.configMagnetOffset(offset)
+
         # Declare and setup the turn motor of this module.
         self.turnMotor = WPI_TalonFX(turnMotorID)
 
@@ -112,14 +120,6 @@ class SwerveModule:
             constants.drivetrain.stFFk
         )  # Secondary Feedforward gain for the turn.
         self.stIZk = constants.drivetrain.stIZk  # Secondary Integral Zone for the turn.
-
-        # Declare and setup the remote encoder.
-        self.cancoder = CANCoder(canCoderID)
-        self.cancoder.configAllSettings(constants.drivetrain.encoderConfig)
-
-        # Set's the magnet offset of the CANCoder. This can be determined through the Pheonix Tuner.
-        if offset is not None:
-            self.cancoder.configMagnetOffset(offset)
 
         self.wheelDiameter = (
             constants.drivetrain.wheelDiameter
@@ -320,6 +320,18 @@ class SwerveModule:
         return ((degrees % 360) / 360) * (2048 * self.turnMotorGearRatio)
         # Take a position, makes it a percent, and then multiplies it by the
         # total number of ticks (motor units) in one full wheel rotation.
+
+    def getDriveMotor(self):
+        """
+        Returns the drive motor of the module.
+        """
+        return self.driveMotor
+
+    def getTurnMotor(self):
+        """
+        Returns the turn motor of the module.
+        """
+        return self.turnMotor
 
     def setModuleProfile(self, profile, drive=True, turn=True):
         """

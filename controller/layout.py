@@ -16,6 +16,7 @@ from commands.drivetrain.setspeedcommand import SetSpeedCommand
 from commands.drivetrain.recordautocommand import RecordAutoCommand
 from commands.drivetrain.runautocommand import RunAutoCommand
 from commands.drivetrain.dosadocommand import DosadoCommand
+from commands.drivetrain.playsongcommand import PlaySongCommand
 
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 
@@ -85,7 +86,7 @@ def init():
     driveControllerTwo.LeftThumb.toggleWhenPressed(ConveyorForwardCommand())
     driveControllerTwo.RightThumb.whileHeld(ConveyorBackwardCommand())
     driveControllerTwo.BottomThumb.toggleWhenPressed(IntakeCommand())
-    
+
     driveControllerTwo.RightBottomLeft.toggleWhenPressed(OuttakeCommand())
 
     driveControllerTwo.Trigger.whileHeld(AutomatedShootCommand())
@@ -102,3 +103,5 @@ def init():
     componentController.A.toggleWhenPressed(IntakeCommand())
 
     componentController.RightTrigger.whileHeld(SlowShootingProcessCommand())
+
+    componentController.B.toggleWhenPressed(PlaySongCommand("thriller.chrp"))

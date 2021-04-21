@@ -5,6 +5,8 @@ from wpimath.kinematics import (
 )
 from wpimath.geometry import Translation2d, Rotation2d, Pose2d
 
+from ctre import Orchestra
+
 from .cougarsystem import *
 from .basedrive import BaseDrive
 from .swervemodule import SwerveModule
@@ -31,10 +33,6 @@ class SwerveDrive(BaseDrive):
         """
 
         super().__init__()
-
-        if not constants.drivetrain.swerveStyle:
-            self.move = self.tankMove
-            self._calculateSpeeds = self.tankCalculateSpeeds
 
         self.isFieldOriented = True
 
@@ -63,7 +61,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.frontRightCANCoder,
                 self.speedLimit,
                 -273.8672,
-                invertedDrive=constants.drivetrain.swerveStyle,  # Invert for some reason?
+                invertedDrive=True,  # Invert for some reason?
             ),
             SwerveModule(  # Back left module.
                 ports.drivetrain.backLeftDriveID,
@@ -78,7 +76,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.backRightCANCoder,
                 self.speedLimit,
                 -129.726563,
-                invertedDrive=constants.drivetrain.swerveStyle,  # Invert for some reason. Ezra's going nuts lol.
+                invertedDrive=True,  # Invert for some reason. Ezra's going nuts lol.
             ),
         ]
 
@@ -90,7 +88,10 @@ class SwerveDrive(BaseDrive):
                 Translation2d(-0.427799754, -0.427799754),  # Back right module
             )
         )
-
+        self.orchestra = Orchestra()
+        for module in self.modules:
+            self.orchestra.addInstrument(module.getDriveMotor())
+            self.orchestra.addInstrument(module.getTurnMotor())
         self.swerveOdometry = SwerveDrive4Odometry(
             self.swerveKinematics,
             self.navX.getRotation2d(),
@@ -925,6 +926,24 @@ class SwerveDrive(BaseDrive):
         """
         for module in self.modules:
             module.setDriveCruiseVelocity(slow)
+
+    def loadSong(self, fileName):
+        """
+        Prepares music file to play.
+        """
+        self.orchestra.loadMusic("/home/lvuser/py/" + fileName)
+
+    def playSong(self):
+        """
+        Play the loaded song.
+        """
+        self.orchestra.play()
+
+    def stopSong(self):
+        """
+        Stop the loaded song.
+        """
+        self.orchestra.stop()
 
 
 class Position:
