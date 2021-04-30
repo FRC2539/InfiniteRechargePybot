@@ -8,6 +8,8 @@ import inspect
 
 from commands2 import SubsystemBase
 
+from ctre import Orchestra
+
 from networktables import NetworkTables
 
 ALLOWPRINTS = True
@@ -55,10 +57,12 @@ class CougarSystem(SubsystemBase):
 
     intialized = False
 
+    orchestra = Orchestra()
+
     def __init__(self, subsystemName="Unknown Subsystem"):
 
         super().__init__()
-
+        
         self.tableName = subsystemName
         self.table = NetworkTables.getTable(self.tableName)
 
@@ -153,7 +157,31 @@ class CougarSystem(SubsystemBase):
         """
         for key, value in self.updateThese.items():
             self.put(key, value())
+           
+    def addOrchestraInstrument(self, motor):
+        """
+        Add a falcon 500 to the robot's orchestra!
+        """
+        CougarSystem.orchestra.addInstrument(motor)
+        
+    def loadSong(self, fileName):
+        """
+        Prepares music file to play.
+        """
+        CougarSystem.orchestra.loadMusic("/home/lvuser/py/" + fileName)
 
+    def playSong(self):
+        """
+        Play the loaded song.
+        """
+        CougarSystem.orchestra.play()
+
+    def stopSong(self):
+        """
+        Stop the loaded song.
+        """
+        CougarSystem.orchestra.stop()
+        
     def periodic(self):
         """
         Please remember to call self.feed if you override this!

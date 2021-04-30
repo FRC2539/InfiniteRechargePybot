@@ -5,8 +5,6 @@ from wpimath.kinematics import (
 )
 from wpimath.geometry import Translation2d, Rotation2d, Pose2d
 
-from ctre import Orchestra
-
 from .cougarsystem import *
 from .basedrive import BaseDrive
 from .swervemodule import SwerveModule
@@ -88,10 +86,11 @@ class SwerveDrive(BaseDrive):
                 Translation2d(-0.427799754, -0.427799754),  # Back right module
             )
         )
-        self.orchestra = Orchestra()
-        for module in self.modules:
-            self.orchestra.addInstrument(module.getDriveMotor())
-            self.orchestra.addInstrument(module.getTurnMotor())
+
+        for module in self.modules: # Add the motors to the robot's orchestra.
+            self.addOrchestraInstrument(module.getDriveMotor())
+            self.addOrchestraInstrument(module.getTurnMotor())
+
         self.swerveOdometry = SwerveDrive4Odometry(
             self.swerveKinematics,
             self.navX.getRotation2d(),
@@ -926,24 +925,6 @@ class SwerveDrive(BaseDrive):
         """
         for module in self.modules:
             module.setDriveCruiseVelocity(slow)
-
-    def loadSong(self, fileName):
-        """
-        Prepares music file to play.
-        """
-        self.orchestra.loadMusic("/home/lvuser/py/" + fileName)
-
-    def playSong(self):
-        """
-        Play the loaded song.
-        """
-        self.orchestra.play()
-
-    def stopSong(self):
-        """
-        Stop the loaded song.
-        """
-        self.orchestra.stop()
 
 
 class Position:

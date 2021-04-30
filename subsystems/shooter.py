@@ -28,6 +28,10 @@ class Shooter(CougarSystem):
             FeedbackDevice.IntegratedSensor, 0, 0
         )
 
+        # Add the motors to the robot's orchestra.
+        self.addOrchestraInstrument(self.shooterMotorOne)
+        self.addOrchestraInstrument(self.shooterMotorTwo)
+
         # Set the behavior for when both motors are in "neutral", or are not being moved.
         self.shooterMotorOne.setNeutralMode(NeutralMode.Coast)
         self.shooterMotorTwo.setNeutralMode(NeutralMode.Coast)

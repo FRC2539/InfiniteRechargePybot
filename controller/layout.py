@@ -100,8 +100,11 @@ def init():
     logicalaxes.TURRETmOVE = componentController.LeftX
 
     componentController.Back.whenPressed(ResetCommand())
-    componentController.A.toggleWhenPressed(IntakeCommand())
 
     componentController.RightTrigger.whileHeld(SlowShootingProcessCommand())
 
+    componentController.Start.toggleWhenPressed(PlaySongCommand("sail.chrp"))
+    componentController.X.toggleWhenPressed(PlaySongCommand("wearethechamps.chrp"))
     componentController.B.toggleWhenPressed(PlaySongCommand("thriller.chrp"))
+    componentController.A.toggleWhenPressed(PlaySongCommand("thunderstruck.chrp"))
+    componentController.Y.toggleWhenPressed(PlaySongCommand("despacito.chrp"))
