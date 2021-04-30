@@ -12,7 +12,6 @@ class TurnCommand(CommandBase):
     """Allows autonomous turning using the drive base encoders."""
 
     def __init__(self, degrees, tolerance=5):
-
         super().__init__()
 
         self.degrees = degrees
@@ -21,6 +20,13 @@ class TurnCommand(CommandBase):
         self.robotCircumference = constants.drivetrain.robotRadius * math.pi * 2
 
         self.addRequirements(robot.drivetrain)
+
+    def calculateDisplacement(self):
+        """Returns the distance (in) for the given degrees.
+        This feeds into the drivetrain's positioning method,
+        where the distance is based on the robot's circumference."""
+        # Angle -> percentage of the robot's circumference
+        return (self.degrees / 360) * self.robotCircumference
 
     def initialize(self):
         """Calculates new positions by offseting the current ones."""
@@ -31,7 +37,6 @@ class TurnCommand(CommandBase):
         self.turnSet = False
 
         self.targetAngles = [135, 45, 225, 315]
-
         self.startAngle = robot.drivetrain.getAngle()
 
         # Rotate the swerve modules to a position where they can rotate in a circle.
@@ -55,16 +60,7 @@ class TurnCommand(CommandBase):
             self.turnSet = True
         else:
             # Compare the degrees within a tolerance of 3 degrees.
-            allAnglesWithinTolerance = True
-
-            for angle, targetAngle in zip(
-                robot.drivetrain.getModuleAngles(), self.targetAngles
-            ):
-                if abs(angle - targetAngle) >= self.tolerance:
-                    allAnglesWithinTolerance = False
-
-            if allAnglesWithinTolerance:
-                self.modulesInPosition = True
+            self.targetDistance = self.calculateDisplacement()
 
     def isFinished(self):
 
@@ -74,10 +70,3 @@ class TurnCommand(CommandBase):
         print("me done")
         robot.drivetrain.stop()
         robot.drivetrain.setModuleProfiles(0, turn=False)
-
-    def _calculateDisplacement(self):
-        """Returns the distance (in) for the given degrees.
-        This feeds into the drivetrain's positioning method,
-        where the distance is based on the robot's circumference."""
-        # Angle -> percentage of the robot's circumference
-        return (self.degrees / 360) * self.robotCircumference

@@ -75,6 +75,7 @@ class Hood(CougarSystem):
         Safely moves the hood with a given
         speed.
         """
+
         if self.isInAngleBounds(speed):
             self.motor.set(speed)
         else:

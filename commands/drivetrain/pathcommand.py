@@ -38,7 +38,7 @@ class PathCommand(CommandBase):
         for dx in self.totalDisplacements:
             print("dx " + str(dx))
             angle.append(math.atan(1 / 3600 * dx))
-            self.lastSlope.append(1 / 3600 * dx)
+            self.lastSlope.append(1 / 3600 * dx)\
 
         avg = sum(angle) / len(angle)
         robot.drivetrain.setUniformModuleAngle(avg)
