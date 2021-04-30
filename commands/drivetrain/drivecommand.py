@@ -17,7 +17,7 @@ class DriveCommand(CommandBase):
     def __init__(self):
         super().__init__()
 
-        self.addRequirements(robot.drivetrain)
+        self.addRequirements([robot.drivetrain])
 
         robot.drivetrain.resetGyro()
         robot.drivetrain.resetOdometry()
