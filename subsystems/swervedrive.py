@@ -87,7 +87,7 @@ class SwerveDrive(BaseDrive):
             )
         )
 
-        for module in self.modules: # Add the motors to the robot's orchestra.
+        for module in self.modules:  # Add the motors to the robot's orchestra.
             self.addOrchestraInstrument(module.getDriveMotor())
             self.addOrchestraInstrument(module.getTurnMotor())
 
