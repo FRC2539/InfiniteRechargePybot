@@ -58,6 +58,10 @@ class CougarSystem(SubsystemBase):
     intialized = False
 
     orchestra = Orchestra()
+    
+    messageSystemTable = NetworkTables.getTable("MessagingSystem")
+    messages = []
+    messageSystemTable.putStringArray('messages', messages)
 
     def __init__(self, subsystemName="Unknown Subsystem"):
 
@@ -148,6 +152,16 @@ class CougarSystem(SubsystemBase):
             self.put(valueName, call())
 
         self.updateThese[valueName] = call
+        
+    def sendMessage(self, message: str):
+        """
+        Sends a message to the driver station
+        via networktables.
+        """
+        if len(CougarSystem.messages) > 99:
+            CougarSystem.messages.pop(0)
+            
+        CougarSystem.messages.append(self.tableName + ': ' + message)
 
     def feed(self):
         """

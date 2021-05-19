@@ -126,3 +126,4 @@ class Hood(CougarSystem):
         Stops the hood motor.
         """
         self.motor.stopMotor()
+        self.sendMessage('Hood Stopped!')
