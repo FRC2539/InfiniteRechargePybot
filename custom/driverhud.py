@@ -34,11 +34,11 @@ def init():
     driver. It is best to choose a command that will not break anything if run
     at the wrong time as the default command.
     """
-    autonChooser = SendableChooser()
-    a = AutonomousCommandGroup()
-    autonChooser.setDefaultOption("Autonomous", a)
+    #autonChooser = SendableChooser()
+    #a = AutonomousCommandGroup()
+    #autonChooser.setDefaultOption("Autonomous", a)
 
-    SmartDashboard.putData("Autonomous Program", autonChooser)
+    #SmartDashboard.putData("Autonomous Program", autonChooser)
 
     # showCommand(ResetTiltCommand())
     # showCommand(ConfigurePIDCommandGroup())
