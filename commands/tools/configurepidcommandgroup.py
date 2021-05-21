@@ -6,7 +6,6 @@ from .resetpidcommand import ResetPIDCommand
 from .calculatemaxspeedcommand import CalculateMaxSpeedCommand
 from .calculateerrorcommand import CalculateErrorCommand
 from commands.drivetrain.setspeedcommand import SetSpeedCommand
-from commands.network.alertcommand import AlertCommand
 
 from custom.config import Config
 
