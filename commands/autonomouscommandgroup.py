@@ -49,7 +49,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 break
 
         eval("self." + toRun + "()")  # Setups the method.
-        
+
     def tenBall(self):
 
         self.spinUp = InstantCommand(
@@ -100,7 +100,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             # self.turnToTarget,
             # self.shootTwo        # 4 seconds
         )
-        
+
     def Slalom(self):
         # Auto-Nav Path
         self.addCommands(

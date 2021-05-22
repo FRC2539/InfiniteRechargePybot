@@ -29,18 +29,6 @@ class SwerveModule:
         The class constructor.
         """
 
-        """
-        TODO:
-        - Organize method definitions into logical order.
-        - Get the position of the motor on startup with CANCoder,
-          then, convert that to IntegratedSensor ticks, and
-          set that as the integrated sensor's current
-          position. At that point, we should be able to use
-          the TalonFX and its integrated sensor to
-          control the position.
-        - NOTE Reverse rear encoders?
-        """
-
         # Create the drive motor of this specific module.
         self.driveMotor = WPI_TalonFX(driveMotorID)  # Declare and setup drive motor.
 
