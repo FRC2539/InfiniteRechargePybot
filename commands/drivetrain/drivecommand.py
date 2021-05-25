@@ -31,7 +31,6 @@ class DriveCommand(CommandBase):
         self.slowed = False
 
     def execute(self):
-        print("executing")
         # Avoid quick changes in direction
         y = logicalaxes.forward.get()
         if self.lastY is None:

@@ -16,8 +16,8 @@ class BaseDrive(CougarSystem):
     without knowing what type of drive system we have should be implemented here.
     """
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, name='Drivetrain'):
+        super().__init__(name)
 
         """
         Create all motors, disable the watchdog, and turn off neutral braking

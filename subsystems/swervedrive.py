@@ -30,7 +30,7 @@ class SwerveDrive(BaseDrive):
         [front left, front right, back left, back right]
         """
 
-        super().__init__()
+        super().__init__('Swerve Drive')
 
         self.isFieldOriented = True
 
@@ -102,6 +102,10 @@ class SwerveDrive(BaseDrive):
         self.PosX = 0
         self.PosY = 0
         self.LastPositions = self.getPositions()
+        
+        self.put('wheelAngles', self.getModuleAngles())
+        self.put('wheelSpeeds', self.getSpeeds())
+        self.put('robotVector', [0, 0])
 
     def periodic(self):
         """
@@ -113,31 +117,19 @@ class SwerveDrive(BaseDrive):
 
         # Update's the robot's odometry.
         self.updateOdometry()
+        
+        # Update networktables.
+        self.put('wheelAngles', self.getModuleAngles())
+        self.put('wheelSpeeds', self.getSpeeds())
+        
+        x, y = self.generateRobotVector()
+        
+        r = abs(math.sqrt(x**2 + y**2)) / 12 # Provides speed in fps.
+        theta = (math.atan2(y, x) * 180 / math.pi) - 180 # Provides angle in degrees.
+                    
+        self.put('robotVector', [r, theta])
 
-        Angles = self.getModuleAngles()
-        Distance = []
-        Positions = self.getPositions()
-        for pos, lPos in zip(Positions, self.LastPositions):
-            Distance.append(pos - lPos)
-        VectorX = 0
-        VectorY = 0
-        for angle, distance in zip(Angles, Distance):
-            VectorX += math.cos(math.radians(angle - 180)) * distance
-            VectorY += math.sin(math.radians(angle - 180)) * distance
-        VectorX = VectorX / 4
-        VectorY = VectorY / 4
-        PolarR = math.sqrt(VectorX ** 2 + VectorY ** 2)
-        PolarTheta = math.degrees(math.atan2(VectorY, VectorX))
-
-        PolarTheta -= self.getAngle()
-        VectorX = math.cos(math.radians(PolarTheta + 90)) * PolarR
-        VectorY = math.sin(math.radians(PolarTheta + 90)) * PolarR
-
-        self.PosX += VectorX
-        self.PosY += VectorY
-        self.LastPositions = self.getPositions()
-
-    def GenerateRobotVector(self):
+    def generateRobotVector(self):
         """
         Creates vectors for each module depending
         on that module's speed and direction. Used to
