@@ -12,7 +12,7 @@ class Hood(CougarSystem):
     """Controls the robot's hood."""
 
     def __init__(self):
-        super().__init__('Hood')
+        super().__init__("Hood")
 
         # Define the motor object.
         self.motor = CANSparkMax(ports.hood.motorID, MotorType.kBrushless)
@@ -126,4 +126,4 @@ class Hood(CougarSystem):
         Stops the hood motor.
         """
         self.motor.stopMotor()
-        self.sendMessage('Hood Stopped!')
+        self.sendMessage("Hood Stopped!")

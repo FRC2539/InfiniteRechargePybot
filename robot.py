@@ -44,8 +44,8 @@ class KryptonBot(TimedCommandRobot):
         controller.layout.init()
         autoconfig.init()
         driverhud.init()
-        
-        print('starting\n\n')
+
+        print("starting\n\n")
 
         self.selectedAuto = autoconfig.getAutoProgram()
         self.auto = AutonomousCommandGroup()
@@ -73,7 +73,7 @@ class KryptonBot(TimedCommandRobot):
 
         # Schedule the autonomous command
         self.auto.schedule()
-        
+
         driverhud.showInfo("Starting %s" % self.auton)
 
     def disabledInit(self):
@@ -86,7 +86,7 @@ class KryptonBot(TimedCommandRobot):
         if autoconfig.getAutoProgram() != self.selectedAuto:
             self.selectedAuto = autoconfig.getAutoProgram()
             self.auto = AutonomousCommandGroup()
-            print('swapped\n\n')
+            print("swapped\n\n")
             # Recreate the auto and its counterparts if the selection changes.
 
     def handleCrash(self, error):
