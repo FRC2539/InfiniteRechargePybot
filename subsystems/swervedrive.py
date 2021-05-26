@@ -5,6 +5,8 @@ from wpimath.kinematics import (
 )
 from wpimath.geometry import Translation2d, Rotation2d, Pose2d
 
+from controller import logicalaxes
+
 from .cougarsystem import *
 from .basedrive import BaseDrive
 from .swervemodule import SwerveModule
@@ -14,6 +16,8 @@ import constants
 
 import math
 
+logicalaxes.registerAxis("forward")
+logicalaxes.registerAxis("strafe")
 
 class SwerveDrive(BaseDrive):
     """
@@ -128,6 +132,11 @@ class SwerveDrive(BaseDrive):
         theta = (math.atan2(y, x) * 180 / math.pi) - 180 # Provides angle in degrees.
                     
         self.put('robotVector', [r, theta])
+
+        controllerR = math.sqrt(logicalaxes.forward.get()**2 + logicalaxes.strafe.get()**2)
+
+        self.put('joystickPercent', controllerR)
+        self.put('wheelPercents', self.getPercents())
 
     def generateRobotVector(self):
         """
