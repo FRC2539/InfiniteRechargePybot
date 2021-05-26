@@ -3,8 +3,6 @@ from commands2 import CommandBase
 import robot
 import constants
 
-from custom.config import Config
-
 import math
 
 
@@ -67,6 +65,5 @@ class TurnCommand(CommandBase):
         return abs(robot.drivetrain.getAngleTo(self.startAngle)) + 3 > abs(self.degrees)
 
     def end(self, interrupted):
-        print("me done")
         robot.drivetrain.stop()
         robot.drivetrain.setModuleProfiles(0, turn=False)

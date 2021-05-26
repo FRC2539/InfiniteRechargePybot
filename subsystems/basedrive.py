@@ -5,7 +5,6 @@ from ctre import ControlMode, NeutralMode, WPI_TalonSRX, FeedbackDevice
 from navx import AHRS
 
 from .cougarsystem import *
-from custom.config import Config
 import ports
 
 
@@ -60,9 +59,9 @@ class BaseDrive(CougarSystem):
         self.lastInputs = None
 
         self.setUseEncoders()
-        self.maxSpeed = Config("DriveTrain/maxSpeed")
-        self.speedLimit = Config("DriveTrain/normalSpeed")
-        self.deadband = Config("DriveTrain/deadband", 0.05)
+        self.maxSpeed = 10#Config("DriveTrain/maxSpeed")
+        self.speedLimit =10# Config("DriveTrain/normalSpeed")
+        self.deadband = 10#Config("DriveTrain/deadband", 0.05)
         self.maxPercentVBus = 1
 
         """Allow changing CAN Talon settings from dashboard"""

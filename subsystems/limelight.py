@@ -4,7 +4,6 @@ import ports
 import robot
 import math
 
-from custom.config import Config
 from networktables import NetworkTables
 
 

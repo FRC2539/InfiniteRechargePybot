@@ -3,7 +3,6 @@ from commands2 import CommandBase
 import constants
 import robot
 from controller import logicalaxes
-from custom.config import Config, MissingConfigError
 from custom import driverhud
 import math
 

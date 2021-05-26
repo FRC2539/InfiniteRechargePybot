@@ -4,8 +4,6 @@ from . import logicalaxes
 
 from commands2 import InstantCommand
 
-from custom.config import Config
-
 from commands.drivetrain.drivecommand import DriveCommand
 from commands.drivetrain.togglefieldorientationcommand import (
     ToggleFieldOrientationCommand,

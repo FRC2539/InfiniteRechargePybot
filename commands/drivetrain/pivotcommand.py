@@ -1,7 +1,6 @@
 from .turncommand import TurnCommand
 
 import robot
-from custom.config import Config
 
 import math
 

@@ -5,7 +5,6 @@ import math
 import ports
 
 from rev import CANSparkMax, MotorType, ControlType, IdleMode
-from custom.config import Config
 
 
 class Hood(CougarSystem):

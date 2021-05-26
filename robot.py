@@ -34,9 +34,6 @@ class KryptonBot(TimedCommandRobot):
     def robotInit(self):
         """Set up everything we need for a working robot."""
 
-        if RobotBase.isSimulation():
-            import mockdata
-
         DriverStation.getInstance().silenceJoystickConnectionWarning(True)  # Amen!
 
         self.subsystems()
@@ -44,8 +41,6 @@ class KryptonBot(TimedCommandRobot):
         controller.layout.init()
         autoconfig.init()
         driverhud.init()
-
-        print("starting\n\n")
 
         self.selectedAuto = autoconfig.getAutoProgram()
         self.auto = AutonomousCommandGroup()

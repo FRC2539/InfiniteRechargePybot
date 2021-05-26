@@ -2,7 +2,6 @@ from commands.drivetrain.movecommand import MoveCommand
 from networktables import NetworkTables
 
 import robot
-from custom.config import Config
 
 
 class CalculateErrorCommand(MoveCommand):
@@ -14,7 +13,6 @@ class CalculateErrorCommand(MoveCommand):
         super().__init__(30 * direction)
 
         self.addRequirements(robot.drivetrain)
-        Config("DriveTrain/wheelDiameter", 8)
         self.table = NetworkTables.getTable("DriveTrain/Speed")
 
     def initialize(self):

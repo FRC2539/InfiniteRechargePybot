@@ -1,6 +1,5 @@
 from commands2 import CommandBase
 from custom import driverhud
-from custom.config import MissingConfigError
 import robot
 
 

@@ -1,13 +1,10 @@
 from commands2 import SequentialCommandGroup, WaitCommand, PrintCommand
 
-from .setuseencoderscommand import SetUseEncodersCommand
 from .moveycommand import MoveYCommand
 from .resetpidcommand import ResetPIDCommand
 from .calculatemaxspeedcommand import CalculateMaxSpeedCommand
 from .calculateerrorcommand import CalculateErrorCommand
 from commands.drivetrain.setspeedcommand import SetSpeedCommand
-
-from custom.config import Config
 
 
 class ConfigurePIDCommandGroup(SequentialCommandGroup):
