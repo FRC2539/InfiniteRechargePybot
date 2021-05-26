@@ -16,7 +16,7 @@ class BaseDrive(CougarSystem):
     without knowing what type of drive system we have should be implemented here.
     """
 
-    def __init__(self, name='Drivetrain'):
+    def __init__(self, name="Drivetrain"):
         super().__init__(name)
 
         """

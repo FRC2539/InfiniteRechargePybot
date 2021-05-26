@@ -19,6 +19,7 @@ import math
 logicalaxes.registerAxis("forward")
 logicalaxes.registerAxis("strafe")
 
+
 class SwerveDrive(BaseDrive):
     """
     "Rollers? Where we're going, we don't need 'rollers'." - Ben Bistline, 2021
@@ -34,7 +35,7 @@ class SwerveDrive(BaseDrive):
         [front left, front right, back left, back right]
         """
 
-        super().__init__('Swerve Drive')
+        super().__init__("Swerve Drive")
 
         self.isFieldOriented = True
 
@@ -106,10 +107,10 @@ class SwerveDrive(BaseDrive):
         self.PosX = 0
         self.PosY = 0
         self.LastPositions = self.getPositions()
-        
-        self.put('wheelAngles', self.getModuleAngles())
-        self.put('wheelSpeeds', self.getSpeeds())
-        self.put('robotVector', [0, 0])
+
+        self.put("wheelAngles", self.getModuleAngles())
+        self.put("wheelSpeeds", self.getSpeeds())
+        self.put("robotVector", [0, 0])
 
     def periodic(self):
         """
@@ -121,22 +122,24 @@ class SwerveDrive(BaseDrive):
 
         # Update's the robot's odometry.
         self.updateOdometry()
-        
+
         # Update networktables.
-        self.put('wheelAngles', self.getModuleAngles())
-        self.put('wheelSpeeds', self.getSpeeds())
-        
+        self.put("wheelAngles", self.getModuleAngles())
+        self.put("wheelSpeeds", self.getSpeeds())
+
         x, y = self.generateRobotVector()
-        
-        r = abs(math.sqrt(x**2 + y**2)) / 12 # Provides speed in fps.
-        theta = (math.atan2(y, x) * 180 / math.pi) - 180 # Provides angle in degrees.
-                    
-        self.put('robotVector', [r, theta])
 
-        controllerR = math.sqrt(logicalaxes.forward.get()**2 + logicalaxes.strafe.get()**2)
+        r = abs(math.sqrt(x ** 2 + y ** 2)) / 12  # Provides speed in fps.
+        theta = (math.atan2(y, x) * 180 / math.pi) - 180  # Provides angle in degrees.
 
-        self.put('joystickPercent', controllerR)
-        self.put('wheelPercents', self.getPercents())
+        self.put("robotVector", [r, theta])
+
+        controllerR = math.sqrt(
+            logicalaxes.forward.get() ** 2 + logicalaxes.strafe.get() ** 2
+        )
+
+        self.put("joystickPercent", controllerR)
+        self.put("wheelPercents", self.getPercents())
 
     def generateRobotVector(self):
         """
