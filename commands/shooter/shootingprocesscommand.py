@@ -15,10 +15,10 @@ class ShootingProcessCommand(CommandBase):
 
         self.isAtTargetRPM = False
 
-        self.addRequirements([robot.conveyor, robot.chamber])
+        self.addRequirements([robot.conveyorintake, robot.chamber])
 
     def initialize(self):
-        robot.conveyor.forward()
+        robot.conveyorintake.intakeBalls()
         robot.shooter.setRPM(self.targetRPM)
 
     def execute(self):
@@ -26,7 +26,7 @@ class ShootingProcessCommand(CommandBase):
 
         if self.isAtTargetRPM:
             print("at target")
-            robot.conveyor.forward()
+            robot.conveyorintake.intakeBalls()
             robot.chamber.forward()
 
     def checkRPM(self):
@@ -42,6 +42,6 @@ class ShootingProcessCommand(CommandBase):
         return False
 
     def end(self, interrupted):
-        robot.conveyor.stop()
+        robot.conveyorintake.stop()
         robot.chamber.stop()
         robot.shooter.stopShooter()

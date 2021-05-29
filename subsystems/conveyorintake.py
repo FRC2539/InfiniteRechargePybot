@@ -5,12 +5,14 @@ import ports
 from ctre import WPI_TalonSRX, NeutralMode, ControlMode
 
 
-class Conveyor(CougarSystem):
-    """Controls the conveyor in the ball system.
-    The conveyor is horizontal and preceeds the chamber."""
+class ConveyorIntake(CougarSystem):
+    """Controls the conveyor in the ball system, as well as the intake.
+    The conveyor is horizontal and preceeds the chamber. The intake is 
+    obvious. Both the motor for the intake and the motor for the conveyor
+    are on the same motor controller."""
 
     def __init__(self):
-        super().__init__("Conveyor")
+        super().__init__("ConveyorIntake")
 
         self.motor = WPI_TalonSRX(ports.conveyor.motorID)
 
@@ -22,9 +24,9 @@ class Conveyor(CougarSystem):
         self.slowSpeed = 0.2
         # Option: separate into forward and backward speeds
 
-        # Constantly updates the conveyor's status.
+        # Constantly updates the conveyor's and intake's status.
         self.constantlyUpdate(
-            "Conveyor Running", lambda: self.motor.getMotorOutputPercent() != 0
+            "ConveyorIntake Running", lambda: self.motor.getMotorOutputPercent() != 0
         )
 
     def periodic(self):
@@ -34,30 +36,30 @@ class Conveyor(CougarSystem):
         """
         self.feed()
 
-    def forward(self):
+    def intakeBalls(self):
         """
-        Run the conveyor so the balls move
+        Run the conveyor and intake so the balls move
         forwards.
         """
         self.move(self.speed)
 
-    def backward(self):
+    def outtakeBalls(self):
         """
-        Reverse the conveyor so the balls
+        Reverse the conveyor and intake so the balls
         move backwards.
         """
         self.move(-self.speed)
 
-    def slowForward(self):
+    def slowIntakeBalls(self):
         """
-        Run the conveyor slowly so the balls
+        Run the conveyor and intake slowly so the balls
         move forward.
         """
         self.move(self.slowSpeed)
 
-    def slowBackward(self):
+    def slowOuttakeBalls(self):
         """
-        Run the conveyor slowly so the balls
+        Run the conveyor and intake slowly so the balls
         move backwards.
         """
         self.move(-self.slowSpeed)
@@ -70,6 +72,6 @@ class Conveyor(CougarSystem):
 
     def stop(self):
         """
-        Stops the conveyor motor.
+        Stops the two motors.
         """
         self.motor.stopMotor()

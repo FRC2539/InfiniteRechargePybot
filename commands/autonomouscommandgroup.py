@@ -19,8 +19,6 @@ from commands.drivetrain.segmentfollowercommand import SegmentFollowerCommand
 from commands.drivetrain.dosadocommand import DosadoCommand
 from commands.drivetrain.bezierpathcommand import BezierPathCommand
 
-from commands.intake.intakecommand import IntakeCommand
-
 from commands.limelight.automatedshootcommand import AutomatedShootCommand
 
 from wpilib.controller import PIDController, ProfiledPIDControllerRadians
@@ -51,55 +49,8 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         eval("self." + toRun + "()")  # Setups the method.
 
     def tenBall(self):
-
-        self.spinUp = InstantCommand(
-            lambda: robot.shooter.setRPM(3800), [robot.shooter]
-        )
-        self.spinUpTwo = InstantCommand(
-            lambda: robot.shooter.setRPM(3800), [robot.shooter]
-        )
-        self.grabBalls = InstantCommand(
-            lambda: robot.intake.intakeBalls(), [robot.intake]
-        )
-        self.stopGrabbing = InstantCommand(
-            lambda: robot.intake.dontIntakeBalls, [robot.intake]
-        )
-        self.conveyorRun = InstantCommand(
-            lambda: robot.conveyor.forward(), [robot.conveyor]
-        )
-
-        self.moveForward = MoveCommand(124)
-        self.secondMove = MoveCommand(112, angle=2)
-        self.moveBack = MoveCommand(-24, angle=-1.5)
-        self.turnToTarget = TurnCommand(-20)
-
-        self.shoot = AutomatedShootCommand(3800).withTimeout(3.25)
-        self.shootTwo = AutomatedShootCommand(3800)
-
-        # Schedule the autonomous command
-        self.auton = PathFollowerCommand().get(
-            [[3.586, -4.228], [4.519, -3.042], [3.485, -2.159], [2.375, -3.224]],
-            [3.6, -4.228, 0]
-            #'/home/lvuser/py/Slalmon.wpilib.json'
-            # working 10 ball
-            # [[-120, -12], [-177, -67]],
-            # [-124, -70, math.pi],
-        )  # .withTimeout(3.5) # driverhud.getAutonomousProgram()
-
-        self.addCommands(
-            # self.spinUp,      # ~
-            # self.grabBalls,   # ~ All total to
-            # self.conveyorRun, # ~ 3 seconds ideally
-            # self.moveForward, # ~
-            # self.shoot,
-            # self.secondMove,
-            # self.spinUpTwo,      # - about 3 seconds, assuming up to speed.
-            # self.conveyorRun,
-            self.auton,  # 5 seconds
-            # self.moveBack,
-            # self.turnToTarget,
-            # self.shootTwo        # 4 seconds
-        )
+        # Needs to be rewritten. If you want to see it, view commits.
+        pass
 
     def Slalom(self):
         # Auto-Nav Path
@@ -178,7 +129,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def GalacticSearchRedA(self):
         self.addCommands(
-            InstantCommand(lambda: robot.intake.intakeBalls(0.5), [robot.intake]),
+            InstantCommand(lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]),
             WaitCommand(0.2),
             BezierPathCommand(
                 [[200, 0], [190, 125], [209, 30], [209, 120]],
@@ -193,7 +144,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def GalacticSearchRedB(self):
         self.addCommands(
-            InstantCommand(lambda: robot.intake.intakeBalls(0.9), [robot.intake]),
+            InstantCommand(lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]),
             WaitCommand(0.2),
             SegmentFollowerCommand(
                 [
@@ -207,7 +158,6 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         )
 
     def interrupted(self):
-        robot.intake.dontIntakeBalls()
+        robot.conveyorintake.stop()
         robot.chamber.stop()
-        robot.conveyor.stop()
         robot.shooter.stopShooter()

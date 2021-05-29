@@ -22,7 +22,7 @@ class SlowShootingProcessCommand(CommandBase):
 
         self.isAtTargetRPM = False
 
-        self.addRequirements([robot.conveyor, robot.chamber])
+        self.addRequirements([robot.conveyorintake, robot.chamber])
 
     def checkRPM(self):
         return abs(robot.shooter.getRPM() - self.targetRPM) <= self.tolerance
@@ -90,13 +90,13 @@ class SlowShootingProcessCommand(CommandBase):
             self.goal = 2.25
 
             robot.chamber.stop()
-            robot.conveyor.forward()
+            robot.conveyorintake.intakeBalls()
 
         elif not self.loading and self.goal != 1.25:
             self.goal = 1.25
 
             robot.chamber.forward()
-            robot.conveyor.stop()
+            robot.conveyorintake.stop()
 
         if self.timer.get() > self.goal:
             self.loading = not self.loading
@@ -110,7 +110,7 @@ class SlowShootingProcessCommand(CommandBase):
             self.isAtTargetRPM = True
 
     def end(self, interrupted):
-        robot.conveyor.stop()
+        robot.conveyorintake.stop()
         robot.chamber.stop()
         robot.shooter.stopShooter()
 

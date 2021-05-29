@@ -17,8 +17,7 @@ from commands.autonomouscommandgroup import AutonomousCommandGroup
 from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
 from subsystems.chamber import Chamber as chamber
-from subsystems.conveyor import Conveyor as conveyor
-from subsystems.intake import Intake as intake
+from subsystems.conveyorintake import ConveyorIntake as conveyorintake
 from subsystems.shooter import Shooter as shooter
 from subsystems.limelight import Limelight as limelight
 from subsystems.hood import Hood as hood
@@ -58,8 +57,6 @@ class KryptonBot(TimedCommandRobot):
         from commands.drivetrain.pathfollowercommand import PathFollowerCommand
 
         from commands.autonomouscommandgroup import AutonomousCommandGroup
-
-        from commands.intake.intakecommand import IntakeCommand
 
         from commands2 import InstantCommand
 

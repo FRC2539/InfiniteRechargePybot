@@ -22,12 +22,8 @@ from commands.drivetrain.pathcommand import PathCommand
 
 from commands.resetcommand import ResetCommand
 
-from commands.intake.intakecommand import IntakeCommand
-from commands.intake.outtakecommand import OuttakeCommand
-from commands.intake.slowouttakecommand import SlowOuttakeCommand
-
-from commands.conveyor.conveyorforwardcommand import ConveyorForwardCommand
-from commands.conveyor.conveyorbackwardcommand import ConveyorBackwardCommand
+from commands.conveyorintake.conveyorintakeforwardcommand import ConveyorIntakeForwardCommand
+from commands.conveyorintake.conveyorintakebackwardcommand import ConveyorIntakeBackwardCommand
 
 from commands.chamber.chamberforwardcommand import ChamberForwardCommand
 from commands.chamber.chamberbackwardcommand import ChamberBackwardCommand
@@ -81,11 +77,8 @@ def init():
     )  # slow speed while trigger is held.
     driveControllerOne.Trigger.whenReleased(SetSpeedCommand())
 
-    driveControllerTwo.LeftThumb.toggleWhenPressed(ConveyorForwardCommand())
-    driveControllerTwo.RightThumb.whileHeld(ConveyorBackwardCommand())
-    driveControllerTwo.BottomThumb.toggleWhenPressed(IntakeCommand())
-
-    driveControllerTwo.RightBottomLeft.toggleWhenPressed(OuttakeCommand())
+    driveControllerTwo.LeftThumb.toggleWhenPressed(ConveyorIntakeForwardCommand())
+    driveControllerTwo.RightThumb.whileHeld(ConveyorIntakeBackwardCommand())
 
     driveControllerTwo.Trigger.whileHeld(AutomatedShootCommand())
 
