@@ -82,7 +82,7 @@ class CougarSystem(SubsystemBase):
         """
         Do not call this please. Only call once in the first CougarSystem init.
         """
-        NetworkTables.initialize(server="roborio-2539-frc.local")
+        NetworkTables.initialize(server="10.25.39.2")
 
     def put(self, valueName, value):
         """
@@ -109,12 +109,12 @@ class CougarSystem(SubsystemBase):
                     "Unrecognizable Data Type . . . \nShould be a: boolean, int, float, string, list of bools, \nlist of strings, list of numbers."
                 )
 
-    def get(self, valueName):
+    def get(self, valueName, default=None):
         """
         Get the value of the key with the
         given name.
         """
-        return self.table.getValue(valueName, None)  # Returns None if it doesn't exist.
+        return self.table.getValue(valueName, default)  # Returns None if it doesn't exist.
 
     def hasChanged(self, valueName, compareTo):
         """
@@ -211,7 +211,5 @@ class CougarSystem(SubsystemBase):
         """
         Please remember to call self.feed if you override this!
         """
-        
-        print(NetworkTables.getTable('DriveTrain'))
-        
+                
         self.feed()
