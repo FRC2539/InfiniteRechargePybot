@@ -211,4 +211,7 @@ class CougarSystem(SubsystemBase):
         """
         Please remember to call self.feed if you override this!
         """
+        
+        print(NetworkTables.getTable('DriveTrain'))
+        
         self.feed()
