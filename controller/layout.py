@@ -22,8 +22,12 @@ from commands.drivetrain.pathcommand import PathCommand
 
 from commands.resetcommand import ResetCommand
 
-from commands.conveyorintake.conveyorintakeforwardcommand import ConveyorIntakeForwardCommand
-from commands.conveyorintake.conveyorintakebackwardcommand import ConveyorIntakeBackwardCommand
+from commands.conveyorintake.conveyorintakeforwardcommand import (
+    ConveyorIntakeForwardCommand,
+)
+from commands.conveyorintake.conveyorintakebackwardcommand import (
+    ConveyorIntakeBackwardCommand,
+)
 
 from commands.chamber.chamberforwardcommand import ChamberForwardCommand
 from commands.chamber.chamberbackwardcommand import ChamberBackwardCommand

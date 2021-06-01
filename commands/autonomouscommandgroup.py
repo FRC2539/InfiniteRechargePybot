@@ -129,7 +129,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def GalacticSearchRedA(self):
         self.addCommands(
-            InstantCommand(lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]),
+            InstantCommand(
+                lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+            ),
             WaitCommand(0.2),
             BezierPathCommand(
                 [[200, 0], [190, 125], [209, 30], [209, 120]],
@@ -144,7 +146,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def GalacticSearchRedB(self):
         self.addCommands(
-            InstantCommand(lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]),
+            InstantCommand(
+                lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+            ),
             WaitCommand(0.2),
             SegmentFollowerCommand(
                 [

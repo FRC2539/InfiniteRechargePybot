@@ -7,7 +7,7 @@ from ctre import WPI_TalonSRX, NeutralMode, ControlMode
 
 class ConveyorIntake(CougarSystem):
     """Controls the conveyor in the ball system, as well as the intake.
-    The conveyor is horizontal and preceeds the chamber. The intake is 
+    The conveyor is horizontal and preceeds the chamber. The intake is
     obvious. Both the motor for the intake and the motor for the conveyor
     are on the same motor controller."""
 
