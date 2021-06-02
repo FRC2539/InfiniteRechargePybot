@@ -114,7 +114,12 @@ class CougarSystem(SubsystemBase):
         Get the value of the key with the
         given name.
         """
-        return self.table.getValue(valueName, default)  # Returns None if it doesn't exist.
+        value = self.table.getValue(valueName, default)
+                
+        if value == default:
+            self.put(valueName, default)
+            
+        return value
 
     def hasChanged(self, valueName, compareTo):
         """
@@ -152,7 +157,7 @@ class CougarSystem(SubsystemBase):
             self.put(valueName, call())
 
         self.updateThese[valueName] = call
-        
+                
     def sendMessage(self, message: str):
         """
         Sends a message to the driver station

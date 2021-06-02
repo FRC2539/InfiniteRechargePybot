@@ -19,11 +19,13 @@ class DriveCommand(CommandBase):
     def initialize(self):
         robot.drivetrain.stop()
         robot.drivetrain.setProfile(0)
+        robot.drivetrain.updateNTConstants()
         
         self.lastY = None
         self.slowed = False
 
-
+        print(robot.drivetrain.deadband)
+    
     def execute(self):
         # Avoid quick changes in direction
         y = logicalaxes.driveY.get()

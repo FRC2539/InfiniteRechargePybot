@@ -59,7 +59,7 @@ class BaseDrive(CougarSystem):
 
         self.speedLimit = self.get('Normal Speed', 45)
         self.deadband = self.get('Deadband', 0.05)
-        
+                        
         self.wheelBase = (
             constants.drivetrain.wheelBase
         )  # These are distances across the robot; horizontal, vertical, diagonal.
@@ -83,7 +83,14 @@ class BaseDrive(CougarSystem):
 
         # Tell the robot to use encoders.
         self.useEncoders = True
-
+    
+    def updateNTConstants(self):
+        '''
+        Updates the speed and deadband with new NT values.
+        '''
+        self.speedLimit = self.get('Normal Speed')
+        self.deadband = self.get('Deadband')
+            
     def initDefaultCommand(self):
         '''
         By default, unless another command is running that requires this

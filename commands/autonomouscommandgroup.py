@@ -25,8 +25,11 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 toRun = var
                 break
                         
-        eval("self." + toRun + "()")  # Runs the method
-
+        try:
+            eval("self." + toRun + "()")  # Runs the method
+        except(AttributeError):
+            print('Uh oh. Some one tried to run an invalid auto!')
+            
     def example(self):
         """
         Define the function using the name of the autonomous program. It should
