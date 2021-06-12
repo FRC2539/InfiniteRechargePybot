@@ -21,10 +21,10 @@ class Pneumatics(CougarSystem):
         )
 
     def extendIntake(self):
-        self.intakeSolenoid.set(Value.kForward)
+        self.intakeSolenoid.set(DoubleSolenoid.Value.kForward)
 
     def retractIntake(self):
-        self.intakeSolenoid.set(Value.kReverse)
+        self.intakeSolenoid.set(DoubleSolenoid.Value.kReverse)
 
     def toggleIntake(self):
         self.intakeSolenoid.toggle()

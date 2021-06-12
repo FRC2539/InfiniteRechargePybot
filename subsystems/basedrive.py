@@ -61,7 +61,7 @@ class BaseDrive(CougarSystem):
         self.setUseEncoders()
         self.maxSpeed = 10  # Config("DriveTrain/maxSpeed")
         self.speedLimit = 10  # Config("DriveTrain/normalSpeed")
-        self.deadband = 10  # Config("DriveTrain/deadband", 0.05)
+        self.deadband = 0.05  # Config("DriveTrain/deadband", 0.05)
         self.maxPercentVBus = 1
 
         """Allow changing CAN Talon settings from dashboard"""
