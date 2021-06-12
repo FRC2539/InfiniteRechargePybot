@@ -67,11 +67,6 @@ def init():
 
     logicalaxes.rotate = driveControllerTwo.X
 
-    driveControllerOne.RightBottomRight.toggleWhenPressed(RecordAutoCommand())
-    driveControllerOne.RightBottomMiddle.toggleWhenPressed(RunAutoCommand())
-
-    driveControllerOne.LeftBottomLeft.whenPressed(ZeroCANCodersCommand())
-
     driveControllerOne.LeftThumb.toggleWhenPressed(ChamberForwardCommand())
     driveControllerOne.RightThumb.toggleWhenPressed(ChamberBackwardCommand())
     driveControllerOne.BottomThumb.whenPressed(ZeroGyroCommand())

@@ -31,17 +31,17 @@ def generateSubsystem():
     with open("subsystems/%s.py" % module, "w") as f:
         f.write(
             """
-from commands2 import Subsystem
+from .cougarsystem import CougarSystem
 
 import ports
 import math
 
 
-class {subsystem}(Subsystem):
+class {subsystem}(CougarSystem):
     \'\'\'Describe what this subsystem does.\'\'\'
 
     def __init__(self):
-        super().__init__()
+        super().__init__('{subsystem}')
 """.lstrip().format(
                 subsystem=subsystem
             )

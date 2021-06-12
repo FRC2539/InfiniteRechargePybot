@@ -10,7 +10,9 @@ class ConveyorIntakeForwardCommand(CommandBase):
         self.addRequirements(robot.conveyorintake)
 
     def initialize(self):
+        robot.pneumatics.extendIntake()
         robot.conveyorintake.intakeBalls()
 
     def end(self, interrupted):
+        robot.pneumatics.retractIntake()
         robot.conveyorintake.stop()
