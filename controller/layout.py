@@ -43,6 +43,8 @@ from commands.hood.lowerhoodcommand import LowerHoodCommand
 from commands.limelight.automatedslowshootcommand import AutomatedSlowShootCommand
 from commands.limelight.automatedshootcommand import AutomatedShootCommand
 
+from commands.pneumatics.toggleintakecommand import ToggleIntakeCommand
+
 import constants
 import robot
 
@@ -71,10 +73,9 @@ def init():
     driveControllerOne.RightThumb.toggleWhenPressed(ChamberBackwardCommand())
     driveControllerOne.BottomThumb.whenPressed(ZeroGyroCommand())
 
-    driveControllerOne.Trigger.whenPressed(
-        SetSpeedCommand(False)
-    )  # slow speed while trigger is held.
     driveControllerOne.Trigger.whenReleased(SetSpeedCommand())
+    
+    driveControllerOne.RightBottomLeft.whenPressed(ToggleIntakeCommand())
 
     driveControllerTwo.LeftThumb.toggleWhenPressed(ConveyorIntakeForwardCommand())
     driveControllerTwo.RightThumb.whileHeld(ConveyorIntakeBackwardCommand())
