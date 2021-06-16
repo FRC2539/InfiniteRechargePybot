@@ -57,7 +57,7 @@ class BaseDrive(CougarSystem):
         '''A record of the last arguments to move()'''
         self.lastInputs = None
 
-        self.speedLimit = self.get('Normal Speed', 45)
+        self.speedLimit = self.get('Normal Speed', 156)
         self.deadband = self.get('Deadband', 0.05)
                         
         self.wheelBase = (
@@ -121,7 +121,7 @@ class BaseDrive(CougarSystem):
             rotate = math.copysign(max(abs(rotate) - self.deadband, 0), rotate)
 
         speeds = self._calculateSpeeds(x, y, rotate)
-
+        
         '''Prevent speeds > 1'''
         maxSpeed = 0
         for speed in speeds:
@@ -132,9 +132,9 @@ class BaseDrive(CougarSystem):
 
         '''Use speeds to feed motor output.'''
         for motor, speed in zip(self.activeMotors, speeds):
-            motor.set(ControlMode.Velocity, speed * self.speedLimit)
+            motor.set(ControlMode.Velocity, self.inchesPerSecondToTicksPerTenth(speed * self.speedLimit))
 
-    def setPositions(self, positions):
+    def setPositions(self, distanceForward):
         '''
         Have the motors move to the given positions. There should be one
         position per active motor. Extra positions will be ignored.
@@ -146,7 +146,7 @@ class BaseDrive(CougarSystem):
         for motor in self.motors: 
             motor.set(
                 TalonFXControlMode.MotionMagic,
-                self.getModulePosition(False) + self.inchesToTicks(distance),
+                self.getModulePosition(False) + self.inchesToTicks(distanceForward),
             )
 
 
@@ -186,7 +186,7 @@ class BaseDrive(CougarSystem):
             motor.configClosedLoopRamp(0, 0)
 
             # Drive PIDs here.
-            motor.config_kP(0, 0, 0)
+            motor.config_kP(0, 0.00001, 0)
             motor.config_kI(0, 0, 0)
             motor.config_kD(0, 0, 0)
             motor.config_kF(0, 0, 0)
@@ -240,7 +240,7 @@ class BaseDrive(CougarSystem):
             inches / self.circ
         )  # Find the number of wheel rotations by dividing the distance into the circumference.
         motorRotations = (
-            wheelRotations * self.gearRatio
+            wheelRotations * self.driveMotorGearRatio
         )  # Find out how many motor rotations this number is.
         return motorRotations * 2048  # 2048 ticks in one Falcon rotation.
 
@@ -249,7 +249,7 @@ class BaseDrive(CougarSystem):
         Convert 'ticks', robot units, to the imperial unit, inches.
         """
         motorRotations = ticks / 2048
-        wheelRotations = motorRotations / self.gearRatio
+        wheelRotations = motorRotations / self.driveMotorGearRatio
         return (
             wheelRotations * self.circ
         )  # Basically just worked backwards from the sister method above.
@@ -258,13 +258,13 @@ class BaseDrive(CougarSystem):
         """
         Convert a common velocity to falcon-interprettable
         """
-        return self.inchesToDriveTicks(inchesPerSecond / 10)
+        return self.inchesToTicks(inchesPerSecond / 10)
 
     def ticksPerTenthToInchesPerSecond(self, ticksPerTenth):
         """
         Convert a robot velocity to a legible one.
         """
-        return self.driveTicksToInches(ticksPerTenth * 10)
+        return self.ticksToInches(ticksPerTenth * 10)
 
     def resetTilt(self):
         self.flatAngle = self.navX.getPitch()
@@ -277,7 +277,7 @@ class BaseDrive(CougarSystem):
     def getAcceleration(self):
         '''Reads acceleration from NavX MXP.'''
         return self.navX.getWorldLinearAccelY()
-
+        
 
     def getSpeeds(self, inInchesPerSecond=True):
         '''Returns the speed of each active motors.'''
@@ -288,7 +288,7 @@ class BaseDrive(CougarSystem):
         
         # Returns ticks per 0.1 seconds (100 mS).
         return [motor.getSelectedSensorVelocity() for motor in self.activeMotors]
-
+        
 
     def getPositions(self, inInches=True):
         '''Returns the position of each active motor.'''

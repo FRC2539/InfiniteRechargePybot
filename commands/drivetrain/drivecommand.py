@@ -27,6 +27,7 @@ class DriveCommand(CommandBase):
         print(robot.drivetrain.deadband)
     
     def execute(self):
+        
         # Avoid quick changes in direction
         y = logicalaxes.driveY.get()
         if self.lastY is None:
