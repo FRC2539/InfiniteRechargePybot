@@ -48,12 +48,13 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
         eval("self." + toRun + "()")  # Setups the method.
 
-    def tenBall(self):
-        # Needs to be rewritten. If you want to see it, view commits.
-        pass
-
     def Slalom(self):
-        # Auto-Nav Path
+        """
+        IR@H Challenge.
+        """
+        
+        # NOTE: Don't write autos like this, for the love of God. 
+        
         self.addCommands(
             SegmentFollowerCommand(
                 [
@@ -79,7 +80,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         )
 
     def BarellRacing(self):
-        # Auto-Nav Path
+        """
+        IR@H Challenge.
+        """
         self.addCommands(
             BezierPathCommand(
                 [[0, 0], [70, 30], [75, 0]], speed=1.4, stopWhenDone=False
@@ -103,7 +106,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         )
 
     def Bounce(self):
-        # Auto-Nav Path
+        """
+        IR@H Challenge.
+        """
         self.addCommands(
             BezierPathCommand([[0, 0], [40, 0], [38, 45]], speed=1),
             InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
@@ -128,6 +133,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         )
 
     def GalacticSearchRedA(self):
+        """
+        IR@H Challenge.
+        """
         self.addCommands(
             InstantCommand(
                 lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
@@ -145,6 +153,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         )
 
     def GalacticSearchRedB(self):
+        """
+        IR@H Challenge.
+        """
         self.addCommands(
             InstantCommand(
                 lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
@@ -160,8 +171,36 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 ]
             ),
         )
+        
+    def fiveBallTrench(self):
+        """
+        Collects two additional balls from the trench, and then shoots all five.
+        """
+        
+        # NOTE: Never tested 6/22/21.
+        
+        self.addCommands(
+            InstantCommand(
+                lambda: robot.shooter.setRPM(5000), [robot.shooter]
+            ),
+            InstantCommand(
+                lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]
+            ),
+            InstantCommand(
+                lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+            ),
+            MoveCommand(120),
+            (AutomatedShootCommand(5000).withTimeout(8))
+        )
+        
+    def tenBall(self):
+        # Needs to be rewritten. If you want to see it, view commits.
+        pass
 
     def interrupted(self):
+        """
+        Not an actual auto program.
+        """
         robot.conveyorintake.stop()
         robot.chamber.stop()
         robot.shooter.stopShooter()
