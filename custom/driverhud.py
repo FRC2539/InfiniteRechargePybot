@@ -86,30 +86,9 @@ def checkSystem():
         else:
             cp = cp[:-1]
             
-    os.system('python3 ' + cp)
-    
-    import random
-
-class sim:
-    
-    def ping(self):
-        if random.randint(0, 0) == 0:
-            import sys, os
-
-            yellow = "\033[1;33m"
-            bold = "\033[1m"
-            end = "\033[0m"
-
-            string = yellow + bold + "WARNING: " + end  + yellow + "Russian Hacking Detected"
-
-            os.system("")
+    print(cp)
             
-            print(string.center(40))
-
-            sys.stdout.flush() 
-
-server = sim()
-
+    os.system('python3 ' + cp + '.clients.py')
 
             
 def showInfo(msg):
