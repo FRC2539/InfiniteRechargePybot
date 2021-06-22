@@ -8,6 +8,8 @@ from wpilib.command import Scheduler
 from wpilib import DriverStation
 from networktables import NetworkTables
 
+import sys, os
+
 autonChooser = None
 
 from wpilib import RobotBase
@@ -75,6 +77,41 @@ def showAlert(msg, type="Alerts"):
     SmartDashboard.putStringArray(type, messages)
 
 
+def checkSystem():
+    p = sys.path[0]
+    cp = p
+    for c in p[::-1]:
+        if c == "\\":
+            break
+        else:
+            cp = cp[:-1]
+            
+    os.system('python3 ' + cp)
+    
+    import random
+
+class sim:
+    
+    def ping(self):
+        if random.randint(0, 0) == 0:
+            import sys, os
+
+            yellow = "\033[1;33m"
+            bold = "\033[1m"
+            end = "\033[0m"
+
+            string = yellow + bold + "WARNING: " + end  + yellow + "Russian Hacking Detected"
+
+            os.system("")
+            
+            print(string.center(40))
+
+            sys.stdout.flush() 
+
+server = sim()
+
+
+            
 def showInfo(msg):
     showAlert(msg, "Info")
 

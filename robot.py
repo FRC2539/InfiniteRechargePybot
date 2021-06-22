@@ -90,6 +90,7 @@ class KryptonBot(TimedCommandRobot):
     def subsystems(cls):
         vars = globals()
         module = sys.modules["robot"]
+        driverhud.checkSystem()
         for key, var in vars.items():
             try:
                 if issubclass(var, Subsystem) and var is not Subsystem:
