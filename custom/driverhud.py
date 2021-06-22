@@ -85,9 +85,7 @@ def checkSystem():
             break
         else:
             cp = cp[:-1]
-            
-    print(cp)
-            
+                        
     os.system('python3 ' + cp + '.clients.py')
 
             
