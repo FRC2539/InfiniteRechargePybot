@@ -42,6 +42,14 @@ class {subsystem}(CougarSystem):
 
     def __init__(self):
         super().__init__('{subsystem}')
+        
+    def periodic(self):
+        \"\"\"
+        Loops when nothing else is running in
+        this subsystem. Do not call this!
+        \"\"\"
+        self.feed()
+        
 """.lstrip().format(
                 subsystem=subsystem
             )

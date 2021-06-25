@@ -78,7 +78,7 @@ drivetrain.trackWidth = 23.5
 drivetrain.robotRadius = 16.84251
 
 drivetrain.speedLimit = (
-    30.0  # in inches per second (if you have feet per second, multiply by 12!)
+    50.0  # in inches per second (if you have feet per second, multiply by 12!)
 )
 
 drivetrain.encoderConfig = CANCoderConfiguration()

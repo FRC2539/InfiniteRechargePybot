@@ -1,6 +1,9 @@
 from .cougarsystem import *
 
+from wpilib import Timer
+
 import ports
+import robot
 
 from ctre import WPI_TalonSRX, NeutralMode, ControlMode
 
@@ -24,6 +27,13 @@ class ConveyorIntake(CougarSystem):
         self.slowSpeed = 0.2
         # Option: separate into forward and backward speeds
 
+        # Timer to monitor the intake retraction time.
+        self.delayTimer = Timer()
+        self.timerWatchdogEnabled = False
+
+        # Delay (in seconds) to pause for after the intake command is stopped.
+        self.retractDelay = 1
+
         # Constantly updates the conveyor's and intake's status.
         self.constantlyUpdate(
             "ConveyorIntake Running", lambda: self.motor.getMotorOutputPercent() != 0
@@ -35,6 +45,23 @@ class ConveyorIntake(CougarSystem):
         this subsystem. Do not call this!
         """
         self.feed()
+
+        if self.timerWatchdogEnabled and self.delayTimer.get() >= self.retractDelay:
+            robot.pneumatics.retractIntake()  # Might work.
+            self.stop()
+
+            self.delayTimer.stop()
+            self.delayTimer.reset()
+
+    def waitToRetract(self):
+        """
+        Waits x in seconds to retract the intake. See conveyorintakeforwardcommand.py
+        and watchTimer. Watchdog for the timer object. Retracts the intake
+        when the time is reached; timer is started by
+        waitToRetract.
+        """
+        self.delayTimer.start()
+        self.timerWatchdogEnabled = True
 
     def intakeBalls(self):
         """

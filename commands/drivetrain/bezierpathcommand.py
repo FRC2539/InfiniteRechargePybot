@@ -31,9 +31,8 @@ def align(angle):
 class BezierPathCommand(CommandBase):
     def __init__(self, points: list, speed=1, stopWhenDone=True):
         """
-        This command will make the robot follow a quadratic or cubic Bezier
-        curve. NOTE: Give the code four points for a cubic, or three for a
-        quadratic! Give the points in inches please!
+        This command will make the robot follow any Bezier
+        curve. Give the points in inches please!
         """
 
         super().__init__()

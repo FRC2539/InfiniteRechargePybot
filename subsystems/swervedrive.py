@@ -252,7 +252,7 @@ class SwerveDrive(BaseDrive):
         The bottom part is the most confusing part, but it basically uses ratios and vectors with the
         pythagorean theorem to calculate the velocities.
         """
-        
+
         A = x - rotate * (self.wheelBase / self.r)  # Use variables to simplify it.
         B = x + rotate * (self.wheelBase / self.r)
         C = y - rotate * (self.trackWidth / self.r)
@@ -270,7 +270,7 @@ class SwerveDrive(BaseDrive):
 
         speeds = [ws2, ws1, ws4, ws3]  # It is in order (FL, FR, BL, BR).
         angles = [wa2, wa1, wa4, wa3]  # It is in order (FL, FR, BL, BR).
-        
+
         newSpeeds = speeds
         newAngles = angles
 
@@ -308,7 +308,7 @@ class SwerveDrive(BaseDrive):
         Short-circuits the rather expensive movement calculations if the
         coordinates have not changed.
         """
-                
+
         if [x, y, rotate] == [0, 0, 0]:
             self.stop()
             return
@@ -319,7 +319,7 @@ class SwerveDrive(BaseDrive):
         rotate = math.copysign(max(abs(rotate) - (self.deadband + 0.05), 0), rotate)
 
         speeds, angles = self._calculateSpeeds(x, y, rotate)
-        
+
         if (
             x == 0 and y == 0 and rotate != 0
         ):  # The robot won't apply power if it's just rotate (fsr?!)

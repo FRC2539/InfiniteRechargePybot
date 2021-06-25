@@ -23,6 +23,7 @@ from subsystems.limelight import Limelight as limelight
 from subsystems.hood import Hood as hood
 from subsystems.turret import Turret as turret
 from subsystems.pneumatics import Pneumatics as pneumatics
+from subsystems.climber import Climber as climber
 
 
 import math

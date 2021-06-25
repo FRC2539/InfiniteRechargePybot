@@ -52,9 +52,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         """
         IR@H Challenge.
         """
-        
-        # NOTE: Don't write autos like this, for the love of God. 
-        
+
+        # NOTE: Don't write autos like this, for the love of God.
+
         self.addCommands(
             SegmentFollowerCommand(
                 [
@@ -171,28 +171,24 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 ]
             ),
         )
-        
+
     def fiveBallTrench(self):
         """
         Collects two additional balls from the trench, and then shoots all five.
         """
-        
+
         # NOTE: Never tested 6/22/21.
-        
+
         self.addCommands(
-            InstantCommand(
-                lambda: robot.shooter.setRPM(5000), [robot.shooter]
-            ),
-            InstantCommand(
-                lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]
-            ),
+            InstantCommand(lambda: robot.shooter.setRPM(5000), [robot.shooter]),
+            InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
             InstantCommand(
                 lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
             ),
             MoveCommand(120),
-            (AutomatedShootCommand(5000).withTimeout(8))
+            (AutomatedShootCommand(5000).withTimeout(8)),
         )
-        
+
     def tenBall(self):
         # Needs to be rewritten. If you want to see it, view commits.
         pass

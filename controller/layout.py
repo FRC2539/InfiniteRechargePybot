@@ -73,11 +73,16 @@ def init():
     driveControllerOne.RightThumb.toggleWhenPressed(ChamberBackwardCommand())
     driveControllerOne.BottomThumb.whenPressed(ZeroGyroCommand())
 
-    driveControllerOne.Trigger.whenReleased(SetSpeedCommand())
-    
+    driveControllerOne.Trigger.whenPressed(
+        SetSpeedCommand(False)
+    )  # Slow speed when pressed.
+    driveControllerOne.Trigger.whenReleased(
+        SetSpeedCommand(True)
+    )  # Fast speed when pressed again.
+
     driveControllerOne.RightBottomLeft.whenPressed(ToggleIntakeCommand())
 
-    driveControllerTwo.LeftThumb.toggleWhenPressed(ConveyorIntakeForwardCommand())
+    driveControllerTwo.LeftThumb.whileHeld(ConveyorIntakeForwardCommand())
     driveControllerTwo.RightThumb.whileHeld(ConveyorIntakeBackwardCommand())
 
     driveControllerTwo.Trigger.whileHeld(AutomatedShootCommand())
@@ -93,6 +98,9 @@ def init():
     componentController.Back.whenPressed(ResetCommand())
 
     componentController.RightTrigger.whileHeld(SlowShootingProcessCommand())
+
+    componentController.LeftTrigger.whileHeld(LowerHoodCommand())
+    componentController.LeftBumper.whileHeld(RaiseHoodCommand())
 
     componentController.Start.toggleWhenPressed(PlaySongCommand("sail.chrp"))
     componentController.X.toggleWhenPressed(PlaySongCommand("wearethechamps.chrp"))

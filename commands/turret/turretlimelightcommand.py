@@ -22,7 +22,12 @@ class TurretLimelightCommand(CommandBase):
     def execute(self):
         xOffset = robot.limelight.getX()  # Returns an angle
 
-        xPercentError = xOffset * self.xOffsetP  # This value is found experimentally
+        try:
+            xPercentError = (
+                xOffset * self.xOffsetP
+            )  # This value is found experimentally
+        except (TypeError):
+            raise Exception("\nERROR: Limelight is broken/unplugged \n")
 
         if abs(xPercentError) > 0.25:
             xPercentError = math.copysign(0.5, xPercentError)

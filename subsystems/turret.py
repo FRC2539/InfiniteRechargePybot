@@ -21,8 +21,8 @@ class Turret(CougarSystem):
         self.motor.config_kD(0, 30, 0)
         self.motor.config_kF(0, 0.07, 0)
 
-        self.maxPosition = 13
-        self.minPosition = -13
+        self.limitAmps = 5.0
+        self.reverseDirection = 0
 
         self.motor.setNeutralMode(NeutralMode.Brake)
 
@@ -43,19 +43,22 @@ class Turret(CougarSystem):
         """
         self.feed()
 
+        print(self.motor.getOutputCurrent())
+
     def move(self, speed):
         """
         Safely move the turret. By safely,
         I mean it will not overrdrive by a large margin.
         """
-        if (
-            (speed > 0 and self.getPosition() >= self.minPosition)
-            or (speed < 0 and self.getPosition() <= self.maxPosition)
-            or self.positionIsInBounds()
+        if not self.isDrawingTooMuch() and (
+            (self.reverseDirection == 0)
+            or (math.copysign(1, speed) == self.reverseDirection)
         ):
             self.motor.set(speed)
+            self.reverseDirection = 0
         else:
             self.motor.stopMotor()
+            self.reverseDirection = -1 * math.copysign(1, speed)
 
     def positionIsInBounds(self):
         """
@@ -75,6 +78,12 @@ class Turret(CougarSystem):
         Stops the turret motor.
         """
         self.motor.stopMotor()
+
+    def isDrawingTooMuch(self):
+        """
+        Returns true if the motor is stalling at an end point.
+        """
+        return self.motor.getOutputCurrent() >= self.limitAmps
 
     def initDefaultCommand(self):
         """

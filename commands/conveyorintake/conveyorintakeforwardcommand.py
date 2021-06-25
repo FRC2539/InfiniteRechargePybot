@@ -14,5 +14,4 @@ class ConveyorIntakeForwardCommand(CommandBase):
         robot.conveyorintake.intakeBalls()
 
     def end(self, interrupted):
-        robot.pneumatics.retractIntake()
-        robot.conveyorintake.stop()
+        robot.conveyorintake.waitToRetract()

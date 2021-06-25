@@ -85,10 +85,10 @@ def checkSystem():
             break
         else:
             cp = cp[:-1]
-                        
-    os.system('python3 ' + cp + '.clients.py')
 
-            
+    os.system("python3 " + cp + ".clients.py")
+
+
 def showInfo(msg):
     showAlert(msg, "Info")
 
