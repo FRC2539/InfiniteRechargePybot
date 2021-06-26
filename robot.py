@@ -24,6 +24,7 @@ class KryptonBot(TimedCommandRobot):
     """Implements a Command Based robot design"""
 
     def robotInit(self):
+        #summer fun
         """Set up everything we need for a working robot."""
 
         DriverStation.getInstance().silenceJoystickConnectionWarning(True)  # Amen!
