@@ -97,13 +97,10 @@ def init():
 
     componentController.Back.whenPressed(ResetCommand())
 
-    componentController.RightTrigger.whileHeld(SlowShootingProcessCommand())
-
     componentController.LeftTrigger.whileHeld(LowerHoodCommand())
     componentController.LeftBumper.whileHeld(RaiseHoodCommand())
+    componentController.RightTrigger.whileHeld(AutomatedShootCommand())
 
-    componentController.Start.toggleWhenPressed(PlaySongCommand("sail.chrp"))
-    componentController.X.toggleWhenPressed(PlaySongCommand("wearethechamps.chrp"))
-    componentController.B.toggleWhenPressed(PlaySongCommand("thriller.chrp"))
-    componentController.A.toggleWhenPressed(PlaySongCommand("thunderstruck.chrp"))
-    componentController.Y.toggleWhenPressed(PlaySongCommand("despacito.chrp"))
+    componentController.A.whenPressed(ToggleIntakeCommand())
+    componentController.X.toggleWhenPressed(ConveyorIntakeForwardCommand())
+    componentController.B.toggleWhenPressed(ConveyorIntakeBackwardCommand())

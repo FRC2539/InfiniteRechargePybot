@@ -4,6 +4,11 @@ from subsystems.cougarsystem import CougarSystem
 
 
 class MessageCommand(InstantCommand):
+    """
+    Sends a general-robot related message, not
+    specific to any one subsystem.
+    """
+
     def __init__(self, msg):
         super().__init__()
 

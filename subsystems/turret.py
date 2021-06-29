@@ -43,8 +43,6 @@ class Turret(CougarSystem):
         """
         self.feed()
 
-        print(self.motor.getOutputCurrent())
-
     def move(self, speed):
         """
         Safely move the turret. By safely,
