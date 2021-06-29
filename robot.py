@@ -47,6 +47,8 @@ class KryptonBot(TimedCommandRobot):
         """This function is called each time autonomous mode starts."""
 
         from commands.autonomouscommandgroup import AutonomousCommandGroup
+        from commands.drivetrain.movecommand import MoveCommand as movecommand
+        self.move = movecommand()
 
         # Send field data to the dashboard
         driverhud.showField()
@@ -55,7 +57,8 @@ class KryptonBot(TimedCommandRobot):
         self.auto.schedule()
 
         driverhud.showInfo("Starting %s" % self.auto)
-
+        
+        self.move.schedule()
     def disabledInit(self):
         try:
             self.auton.disable()  # TODO: Fix this.

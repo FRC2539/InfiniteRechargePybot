@@ -42,6 +42,9 @@ class BaseDrive(CougarSystem):
             motor.setNeutralMode(NeutralMode.Brake)
             motor.setSafetyEnabled(False)
             motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0)
+            motor.setSelectedSensorPosition(0)
+            motor.configMotionCruiseVelocity(constants.drivetrain.driveMotionCruiseVelocity, 0)
+            motor.configMotionAcceleration(constants.drivetrain.driveMotionAcceleration, 0)
 
         '''
         Subclasses should configure motors correctly and populate activeMotors.
@@ -146,7 +149,7 @@ class BaseDrive(CougarSystem):
         for motor in self.motors: 
             motor.set(
                 TalonFXControlMode.MotionMagic,
-                self.getModulePosition(False) + self.inchesToTicks(distanceForward),
+                self.getPositions(False) + self.inchesToTicks(distanceForward),
             )
 
 
@@ -186,14 +189,14 @@ class BaseDrive(CougarSystem):
             motor.configClosedLoopRamp(0, 0)
 
             # Drive PIDs here.
-            motor.config_kP(0, 0.00001, 0)
+            motor.config_kP(0, 0.0001, 0)
             motor.config_kI(0, 0, 0)
             motor.config_kD(0, 0, 0)
             motor.config_kF(0, 0, 0)
             motor.config_IntegralZone(0, 0, 0)
             
             # Position control PIDs here.
-            motor.config_kP(1, 0, 0)
+            motor.config_kP(1, 0.0001, 0)
             motor.config_kI(1, 0, 0)
             motor.config_kD(1, 0, 0)
             motor.config_kF(1, 0, 0)
