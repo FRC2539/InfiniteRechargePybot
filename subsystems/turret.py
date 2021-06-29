@@ -52,6 +52,7 @@ class Turret(CougarSystem):
             (self.reverseDirection == 0)
             or (math.copysign(1, speed) == self.reverseDirection)
         ):
+            print('setting')
             self.motor.set(speed)
             self.reverseDirection = 0
         else:

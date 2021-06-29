@@ -13,7 +13,7 @@ class TurretLimelightCommand(CommandBase):
         self.addRequirements(robot.turret)
 
         self.xOffsetP = (
-            0.050  # A proportion to scale the error to a speed the motor can use.
+            0.11  # A proportion to scale the error to a speed the motor can use.
         )
 
     def initialize(self):
@@ -31,6 +31,8 @@ class TurretLimelightCommand(CommandBase):
 
         if abs(xPercentError) > 0.25:
             xPercentError = math.copysign(0.5, xPercentError)
+
+        print(xPercentError)
 
         robot.turret.move(xPercentError)
 

@@ -80,10 +80,9 @@ def init():
         SetSpeedCommand(True)
     )  # Fast speed when pressed again.
 
-    driveControllerOne.RightBottomLeft.whenPressed(ToggleIntakeCommand())
-
     driveControllerTwo.LeftThumb.whileHeld(ConveyorIntakeForwardCommand())
     driveControllerTwo.RightThumb.whileHeld(ConveyorIntakeBackwardCommand())
+    driveControllerTwo.BottomThumb.whenPressed(ToggleIntakeCommand())
 
     driveControllerTwo.Trigger.whileHeld(AutomatedShootCommand())
 
@@ -102,5 +101,5 @@ def init():
     componentController.RightTrigger.whileHeld(AutomatedShootCommand())
 
     componentController.A.whenPressed(ToggleIntakeCommand())
-    componentController.X.toggleWhenPressed(ConveyorIntakeForwardCommand())
-    componentController.B.toggleWhenPressed(ConveyorIntakeBackwardCommand())
+    componentController.X.whileHeld(ConveyorIntakeForwardCommand())
+    componentController.B.whileHeld(ConveyorIntakeBackwardCommand())
