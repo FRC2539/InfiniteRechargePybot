@@ -50,8 +50,7 @@ class ConveyorIntake(CougarSystem):
             robot.pneumatics.retractIntake()  # Might work.
             self.stop()
 
-            self.delayTimer.stop()
-            self.delayTimer.reset()
+            self.resetWatchdog()
 
     def waitToRetract(self):
         """
@@ -62,6 +61,16 @@ class ConveyorIntake(CougarSystem):
         """
         self.delayTimer.start()
         self.timerWatchdogEnabled = True
+        
+    def resetWatchdog(self):
+        """
+        Resets the watch dog in case it was interrupted or something. 
+        For example, this is used when a teleoperator releases the intake button but
+        then revives the command before the cooldown is over.
+        """
+        self.delayTimer.stop()
+        self.delayTimer.reset()
+        self.timerWatchdogEnabled = False
 
     def intakeBalls(self):
         """

@@ -33,7 +33,7 @@ class Hood(CougarSystem):
 
         # The hood's max and min angle.
         self.angleMax = 140.00
-        self.angleMin = 65.00
+        self.angleMin = 62.00
 
         # The percent to run the hood motor at by default.
         self.speed = 0.3  # 30% percent.
@@ -48,7 +48,7 @@ class Hood(CougarSystem):
         this subsystem. Do not call this!
         """
         self.feed()
-
+        
     def getPosition(self):
         """
         Returns the position of the hood's encoder

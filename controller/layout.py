@@ -88,6 +88,10 @@ def init():
 
     driveControllerTwo.LeftTopLeft.whileHeld(RaiseHoodCommand())
     driveControllerTwo.LeftBottomLeft.whileHeld(LowerHoodCommand())
+    
+    driveControllerTwo.LeftBottomMiddle.whileHeld(SetRPMCommand(4000))
+    driveControllerTwo.LeftTopMiddle.whileHeld(ConveyorIntakeForwardCommand())
+    driveControllerTwo.LeftTopMiddle.whileHeld(ChamberForwardCommand())
 
     # The controller for non-driving subsystems of the robot
     componentController = LogitechDualShock(2)

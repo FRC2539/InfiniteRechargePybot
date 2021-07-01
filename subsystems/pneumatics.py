@@ -2,6 +2,7 @@ from .cougarsystem import CougarSystem
 
 import ports
 import math
+import robot
 from wpilib import Compressor, DoubleSolenoid
 
 
@@ -21,9 +22,11 @@ class Pneumatics(CougarSystem):
         )
 
     def extendIntake(self):
+        robot.conveyorintake.resetWatchdog()
         self.intakeSolenoid.set(DoubleSolenoid.Value.kForward)
 
     def retractIntake(self):
+        robot.conveyorintake.resetWatchdog()
         self.intakeSolenoid.set(DoubleSolenoid.Value.kReverse)
 
     def toggleIntake(self):
