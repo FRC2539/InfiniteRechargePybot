@@ -32,6 +32,9 @@ from commands.conveyorintake.conveyorintakebackwardcommand import (
 from commands.chamber.chamberforwardcommand import ChamberForwardCommand
 from commands.chamber.chamberbackwardcommand import ChamberBackwardCommand
 
+from commands.climber.lowerclimbercommand import LowerClimberCommand
+from commands.climber.raiseclimbercommand import RaiseClimberCommand
+
 from commands.turret.turretlimelightcommand import TurretLimelightCommand
 
 from commands.shooter.setrpmcommand import SetRPMCommand
@@ -79,6 +82,9 @@ def init():
     driveControllerOne.Trigger.whenReleased(
         SetSpeedCommand(True)
     )  # Fast speed when pressed again.
+    
+    driveControllerOne.RightTopLeft.whileHeld(RaiseClimberCommand())
+    driveControllerOne.RightBottomLeft.whileHeld(LowerClimberCommand())
 
     driveControllerTwo.LeftThumb.whileHeld(ConveyorIntakeForwardCommand())
     driveControllerTwo.RightThumb.whileHeld(ConveyorIntakeBackwardCommand())
