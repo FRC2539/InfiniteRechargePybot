@@ -43,13 +43,13 @@ class Turret(CougarSystem):
         """
         self.feed()
 
-    def move(self, speed):
+    def move(self, speed, auto=False):
         """
         Safely move the turret. By safely,
         I mean it will not overrdrive by a large margin.
         """
         if not self.isDrawingTooMuch() and (
-            (self.reverseDirection == 0)
+            (self.reverseDirection == 0) or auto
             or (math.copysign(1, speed) == self.reverseDirection)
         ):
             self.motor.set(speed)

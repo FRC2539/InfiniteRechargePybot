@@ -95,7 +95,7 @@ def init():
     driveControllerTwo.LeftTopLeft.whileHeld(RaiseHoodCommand())
     driveControllerTwo.LeftBottomLeft.whileHeld(LowerHoodCommand())
     
-    driveControllerTwo.LeftBottomMiddle.whileHeld(SetRPMCommand(4000))
+    driveControllerTwo.LeftBottomMiddle.whileHeld(SetRPMCommand(3700))
     driveControllerTwo.LeftTopMiddle.whileHeld(ConveyorIntakeForwardCommand())
     driveControllerTwo.LeftTopMiddle.whileHeld(ChamberForwardCommand())
 

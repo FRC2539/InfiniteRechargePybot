@@ -94,8 +94,8 @@ drivetrain.preBuild = {1: ".barrelracing.json"}
 
 # Constants for the shooter below.
 
-shooter.kP = 1
+shooter.kP = 1.5
 shooter.kI = 0
-shooter.kD = 0.01
-shooter.kF = 0.0495
+shooter.kD = 0.1
+shooter.kF = 0.05
 shooter.IZone = 0

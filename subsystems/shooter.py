@@ -73,6 +73,8 @@ class Shooter(CougarSystem):
         this subsystem. Do not call this!
         """
         self.feed()
+        
+        print(self.getRPM())
 
     def setRPM(self, rpm):
         """

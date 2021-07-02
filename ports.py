@@ -52,9 +52,6 @@ chamber = PortsList()
 chamber.motorID = 13
 chamber.sensorPort = 0
 
-intake = PortsList()
-intake.motorID = 12
-
 shooter = PortsList()
 shooter.motorOneID = 14
 shooter.motorTwoID = 15
@@ -65,4 +62,4 @@ pneumatics.forwardChannel = 0
 pneumatics.reverseChannel = 1
 
 climber = PortsList()
-climber.motorID = 100
+climber.motorID = 12
