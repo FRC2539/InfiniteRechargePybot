@@ -48,7 +48,7 @@ class Hood(CougarSystem):
         this subsystem. Do not call this!
         """
         self.feed()
-        
+
     def getPosition(self):
         """
         Returns the position of the hood's encoder

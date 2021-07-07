@@ -49,7 +49,8 @@ class Turret(CougarSystem):
         I mean it will not overrdrive by a large margin.
         """
         if not self.isDrawingTooMuch() and (
-            (self.reverseDirection == 0) or auto
+            (self.reverseDirection == 0)
+            or auto
             or (math.copysign(1, speed) == self.reverseDirection)
         ):
             self.motor.set(speed)

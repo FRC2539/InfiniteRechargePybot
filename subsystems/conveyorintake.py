@@ -61,10 +61,10 @@ class ConveyorIntake(CougarSystem):
         """
         self.delayTimer.start()
         self.timerWatchdogEnabled = True
-        
+
     def resetWatchdog(self):
         """
-        Resets the watch dog in case it was interrupted or something. 
+        Resets the watch dog in case it was interrupted or something.
         For example, this is used when a teleoperator releases the intake button but
         then revives the command before the cooldown is over.
         """
