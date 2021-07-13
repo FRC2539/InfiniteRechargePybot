@@ -2,7 +2,7 @@
 
 from commands2 import TimedCommandRobot
 from wpilib._impl.main import run
-from wpilib import RobotBase, DriverStation
+from wpilib import RobotBase, DriverStation, CameraServer
 
 from custom import driverhud
 import controller.layout
@@ -42,6 +42,8 @@ class KryptonBot(TimedCommandRobot):
         controller.layout.init()
         autoconfig.init()
         driverhud.init()
+        
+        CameraServer.launch()
 
         self.selectedAuto = autoconfig.getAutoProgram()
         self.auto = AutonomousCommandGroup()
@@ -52,7 +54,7 @@ class KryptonBot(TimedCommandRobot):
         StartUpCommandGroup().schedule()
 
         from commands.drivetrain.drivecommand import DriveCommand
-
+        
     def autonomousInit(self):
         """This function is called each time autonomous mode starts."""
 
