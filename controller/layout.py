@@ -72,8 +72,7 @@ def init():
 
     logicalaxes.rotate = driveControllerTwo.X
 
-    driveControllerOne.LeftThumb.toggleWhenPressed(ChamberForwardCommand())
-    driveControllerOne.RightThumb.toggleWhenPressed(ChamberBackwardCommand())
+    driveControllerOne.RightThumb.whileHeld(ConveyorIntakeBackwardCommand())
     driveControllerOne.BottomThumb.whenPressed(ZeroGyroCommand())
 
     driveControllerOne.Trigger.whenPressed(
@@ -82,19 +81,25 @@ def init():
     driveControllerOne.Trigger.whenReleased(
         SetSpeedCommand(True)
     )  # Fast speed when pressed again.
-    
-    driveControllerOne.RightTopLeft.whileHeld(RaiseClimberCommand())
-    driveControllerOne.RightBottomLeft.whileHeld(LowerClimberCommand())
 
+    # Standard, field orientation intake mode.
     driveControllerTwo.LeftThumb.whileHeld(ConveyorIntakeForwardCommand())
-    driveControllerTwo.RightThumb.whileHeld(ConveyorIntakeBackwardCommand())
+
+    # Intake w/ robot orientation.
+    driveControllerTwo.RightThumb.whileHeld(ConveyorIntakeForwardCommand())
+    driveControllerTwo.RightThumb.whenPressed(ToggleFieldOrientationCommand(False))
+    driveControllerTwo.RightThumb.whenReleased(ToggleFieldOrientationCommand(True))
+
     driveControllerTwo.BottomThumb.whenPressed(ToggleIntakeCommand())
 
-    driveControllerTwo.Trigger.whileHeld(AutomatedShootCommand())
+    driveControllerTwo.Trigger.whileHeld(AutomatedShootCommand(4600))
 
     driveControllerTwo.LeftTopLeft.whileHeld(RaiseHoodCommand())
     driveControllerTwo.LeftBottomLeft.whileHeld(LowerHoodCommand())
-    
+
+    driveControllerOne.RightTopLeft.whileHeld(RaiseClimberCommand())
+    driveControllerOne.RightBottomLeft.whileHeld(LowerClimberCommand())
+
     driveControllerTwo.LeftBottomMiddle.whileHeld(SetRPMCommand(3700))
     driveControllerTwo.LeftTopMiddle.whileHeld(ConveyorIntakeForwardCommand())
     driveControllerTwo.LeftTopMiddle.whileHeld(ChamberForwardCommand())
@@ -108,7 +113,7 @@ def init():
 
     componentController.LeftTrigger.whileHeld(LowerHoodCommand())
     componentController.LeftBumper.whileHeld(RaiseHoodCommand())
-    componentController.RightTrigger.whileHeld(AutomatedShootCommand())
+    componentController.RightTrigger.whileHeld(SetRPMCommand(4600))
 
     componentController.A.whenPressed(ToggleIntakeCommand())
     componentController.X.whileHeld(ConveyorIntakeForwardCommand())

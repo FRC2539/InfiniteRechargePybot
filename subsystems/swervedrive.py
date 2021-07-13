@@ -236,7 +236,7 @@ class SwerveDrive(BaseDrive):
 
         theta = self.getAngleTo(0) * (
             math.pi / 180
-        )  # Gets the offset to zero, -180 to 180.
+        )  # Gets the offset to zero, -pi to pi.
 
         if (
             self.isFieldOriented

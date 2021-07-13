@@ -4,7 +4,6 @@ import robot
 
 
 class LowerClimberCommand(CommandBase):
-
     def __init__(self):
         super().__init__()
 
@@ -12,6 +11,9 @@ class LowerClimberCommand(CommandBase):
 
     def initialize(self):
         robot.climber.lowerClimber()
-    
+
+    def execute(self):
+        robot.climber.lowerClimber()
+
     def end(self, interrupted):
         robot.climber.stopClimber()

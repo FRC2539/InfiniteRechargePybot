@@ -10,7 +10,4 @@ class ExtendIntakeCommand(InstantCommand):
         self.addRequirements(robot.pneumatics)
 
     def initialize(self):
-        pass
-
-    def initialize(self):
         robot.pneumatics.extendIntake()
