@@ -41,6 +41,8 @@ class KryptonBot(TimedCommandRobot):
         controller.layout.init()
         autoconfig.init()
         driverhud.init()
+        
+        CameraServer.launch()
 
         CameraServer.launch()
 
@@ -53,7 +55,7 @@ class KryptonBot(TimedCommandRobot):
         StartUpCommandGroup().schedule()
 
         from commands.drivetrain.drivecommand import DriveCommand
-
+        
     def autonomousInit(self):
         """This function is called each time autonomous mode starts."""
 
