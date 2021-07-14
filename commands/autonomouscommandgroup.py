@@ -180,13 +180,18 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         # NOTE: Never tested 6/22/21.
         
         self.addCommands(
-            # InstantCommand(lambda: robot.shooter.setRPM(5000), [robot.shooter]),
-            # InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
-            # InstantCommand(
-            #     lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
-            # ),
-            # MoveCommand(120),
-            (AutomatedShootCommand(5000, ballCount=3)),
+            InstantCommand(lambda: robot.shooter.setRPM(4600), [robot.shooter]),
+            InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
+            InstantCommand(
+                 lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+            ),
+            MoveCommand(126, torySlow=12500),
+            ((AutomatedShootCommand(4600, ballCount=6)).withTimeout(7)).alongWith(MoveCommand(48, slow=True)),
+            BezierPathCommand([[15,70], [0,0], [75,0]], speed=1, stopWhenDone=True),
+            InstantCommand(
+                 lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+            ),
+            MoveCommand(54, angle=-15, slow=True)
         )
 
     def tenBall(self):

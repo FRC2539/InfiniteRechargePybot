@@ -4,7 +4,7 @@ import robot
 
 
 class MoveCommand(CommandBase):
-    def __init__(self, distance, angle=0, tolerance=5, slow=False, name=None):
+    def __init__(self, distance, angle=0, tolerance=5, slow=False, torySlow=None, name=None):
         """
         Takes a distance in inches and stores it for later. We allow overriding
         name so that other autonomous driving commands can extend this class.
@@ -19,6 +19,7 @@ class MoveCommand(CommandBase):
         self.angle = angle
         self.tol = tolerance  # Angle tolerance in degrees.
         self.isSlow = slow
+        self.torySlow = torySlow
 
         self.moveSet = False
         self.addRequirements(robot.drivetrain)
@@ -26,6 +27,9 @@ class MoveCommand(CommandBase):
     def initialize(self):
         if self.isSlow:
             robot.drivetrain.setCruiseVelocity(True)
+            
+        if self.torySlow != None: # This IF overrides the previous one.
+            robot.drivetrain.setVariableCruiseVelocity(self.torySlow)
 
         robot.drivetrain.setModuleProfiles(1, turn=False)
 
@@ -38,7 +42,6 @@ class MoveCommand(CommandBase):
 
         self.count = 0
         if self.count != 4 and not self.moveSet:
-            print(robot.drivetrain.getModuleAngles())
             for currentAngle in robot.drivetrain.getModuleAngles():
                 if (
                     abs(currentAngle - self.angle) < self.tol
@@ -60,7 +63,7 @@ class MoveCommand(CommandBase):
     def isFinished(self):
         count = 0
         for position, start in zip(robot.drivetrain.getPositions(), self.startPos):
-            if abs(position - (start + self.distance)) < 4:
+            if abs(position - (start + self.distance)) < 3:
                 count += 1
             else:
                 return False
@@ -69,7 +72,6 @@ class MoveCommand(CommandBase):
             return True
 
     def end(self, interrupted):
-        print("WHAT")
         robot.drivetrain.stop()
         robot.drivetrain.setCruiseVelocity()
         robot.drivetrain.setModuleProfiles(0, turn=False)

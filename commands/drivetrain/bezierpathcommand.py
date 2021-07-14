@@ -122,8 +122,6 @@ class BezierPathCommand(CommandBase):
             ]
         )
 
-        print("a " + str(angle) + " at " + str(robot.drivetrain.getModuleAngles()))
-
     def isFinished(self):
         # We are done when we have travelled 100% of the curve.
         return self.t >= 1

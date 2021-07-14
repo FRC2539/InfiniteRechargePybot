@@ -81,7 +81,7 @@ class KryptonBot(TimedCommandRobot):
         if autoconfig.getAutoProgram() != self.selectedAuto:
             self.selectedAuto = autoconfig.getAutoProgram()
             self.auto = AutonomousCommandGroup()
-            print("swapped\n\n")
+            print("\n\nAuto Loaded: " + str(self.selectedAuto) + "\n\n")
             # Recreate the auto and its counterparts if the selection changes.
 
     def handleCrash(self, error):

@@ -7,7 +7,7 @@ import robot
 class ShootingProcessCommand(CommandBase):
     """Gets the shooter up to speed, then moves the ball through the robot and shoot them."""
 
-    def __init__(self, targetRPM=5000, tolerance=50, ballCount=-1, delay=4):
+    def __init__(self, targetRPM=5000, tolerance=50, ballCount=-1, delay=0.5):
 
         super().__init__()
 
@@ -50,10 +50,10 @@ class ShootingProcessCommand(CommandBase):
     def isFinished(self):
         if self.ballCount != -1 and robot.chamber.isBallPresent() and not self.found:
             self.ballCount -= 1
+            print('remaining ' + str(self.ballCount))
             self.found = True
             if self.ballCount == 0:
                 self.enableTimer = True
-                print('done me stupid')
         elif not robot.chamber.isBallPresent():
             self.found = False
         else:

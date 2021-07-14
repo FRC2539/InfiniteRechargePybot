@@ -33,7 +33,5 @@ class HoodLimelightCommand(CommandBase):
 
         robot.hood.move(yPercentError)
 
-        print("yo")
-
     def end(self, iterrupted):
         robot.hood.stop()

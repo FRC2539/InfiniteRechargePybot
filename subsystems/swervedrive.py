@@ -925,11 +925,16 @@ class SwerveDrive(BaseDrive):
     def setCruiseVelocity(self, slow=False):
         """
         Changes the motion magic's max cruise velocity.
-        Used in CougarCourse.
         """
         for module in self.modules:
             module.setDriveCruiseVelocity(slow)
 
+    def setVariableCruiseVelocity(self, speed):
+        """
+        Sets the cruise velocity to any speed.
+        """
+        for module in self.modules:
+            module.setVariableDriveCruiseVelocity(speed)
 
 class Position:
     """

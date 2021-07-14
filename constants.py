@@ -59,7 +59,7 @@ drivetrain.turnMotorGearRatio = 12.8
 # Motion magic velocities and accelerations
 drivetrain.driveMotionAcceleration = 13500
 drivetrain.driveMotionCruiseVelocity = 18500
-drivetrain.slowDriveMotionCruiseVelocity = 11000
+drivetrain.slowDriveMotionCruiseVelocity = 2000
 
 drivetrain.turnMotionAcceleration = 1000
 drivetrain.turnMotionCruiseVelocity = 800
