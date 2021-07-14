@@ -178,15 +178,15 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         """
 
         # NOTE: Never tested 6/22/21.
-
+        
         self.addCommands(
-            InstantCommand(lambda: robot.shooter.setRPM(5000), [robot.shooter]),
-            InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
-            InstantCommand(
-                lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
-            ),
-            MoveCommand(120),
-            (AutomatedShootCommand(5000).withTimeout(8)),
+            # InstantCommand(lambda: robot.shooter.setRPM(5000), [robot.shooter]),
+            # InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
+            # InstantCommand(
+            #     lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+            # ),
+            # MoveCommand(120),
+            (AutomatedShootCommand(5000, ballCount=3)),
         )
 
     def tenBall(self):

@@ -1,19 +1,29 @@
 from commands2 import CommandBase
 
-import robot
+from wpilib import Timer
 
+import robot
 
 class ShootingProcessCommand(CommandBase):
     """Gets the shooter up to speed, then moves the ball through the robot and shoot them."""
 
-    def __init__(self, targetRPM=5000, tolerance=50):
+    def __init__(self, targetRPM=5000, tolerance=50, ballCount=-1, delay=4):
 
         super().__init__()
 
         self.targetRPM = targetRPM
         self.tolerance = tolerance
+        
+        self.delay = delay
 
         self.isAtTargetRPM = False
+        self.enableTimer = False
+        self.timerStarted = False
+        
+        self.found = False
+        self.ballCount = ballCount
+
+        self.lastBallTimer = Timer()
 
         self.addRequirements([robot.conveyorintake, robot.chamber])
 
@@ -25,7 +35,6 @@ class ShootingProcessCommand(CommandBase):
         self.checkRPM()
 
         if self.isAtTargetRPM:
-            print("at target")
             robot.conveyorintake.intakeBalls()
             robot.chamber.forward()
 
@@ -39,8 +48,26 @@ class ShootingProcessCommand(CommandBase):
             self.isAtTargetRPM = False
 
     def isFinished(self):
-        return False
-
+        if self.ballCount != -1 and robot.chamber.isBallPresent() and not self.found:
+            self.ballCount -= 1
+            self.found = True
+            if self.ballCount == 0:
+                self.enableTimer = True
+                print('done me stupid')
+        elif not robot.chamber.isBallPresent():
+            self.found = False
+        else:
+            return False
+        
+        if self.enableTimer and not self.timerStarted: 
+            self.lastBallTimer.start()
+            self.timerStarted = True
+        
+        if self.timerStarted and self.lastBallTimer.get() > self.delay:
+            self.lastBallTimer.stop()
+            self.lastBallTimer.reset()
+            return True
+                        
     def end(self, interrupted):
         robot.conveyorintake.stop()
         robot.chamber.stop()

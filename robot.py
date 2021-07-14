@@ -2,7 +2,7 @@
 
 from commands2 import TimedCommandRobot
 from wpilib._impl.main import run
-from wpilib import RobotBase, DriverStation
+from wpilib import RobotBase, DriverStation, CameraServer
 
 from custom import driverhud
 import controller.layout
@@ -28,7 +28,6 @@ from subsystems.climber import Climber as climber
 
 import math
 
-
 class KryptonBot(TimedCommandRobot):
     """Implements a Command Based robot design"""
 
@@ -42,6 +41,8 @@ class KryptonBot(TimedCommandRobot):
         controller.layout.init()
         autoconfig.init()
         driverhud.init()
+
+        CameraServer.launch()
 
         self.selectedAuto = autoconfig.getAutoProgram()
         self.auto = AutonomousCommandGroup()
@@ -68,11 +69,9 @@ class KryptonBot(TimedCommandRobot):
         # Schedule the autonomous command
         self.auto.schedule()
 
-        driverhud.showInfo("Starting %s" % self.auton)
-
     def disabledInit(self):
         try:
-            self.auton.disable()  # TODO: Fix this.
+            self.auto.end(True)  # TODO: Fix this.
         except (AttributeError):
             pass
 

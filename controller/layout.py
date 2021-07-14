@@ -45,6 +45,10 @@ from commands.hood.lowerhoodcommand import LowerHoodCommand
 
 from commands.limelight.automatedslowshootcommand import AutomatedSlowShootCommand
 from commands.limelight.automatedshootcommand import AutomatedShootCommand
+from commands.limelight.movedownoffsetcommand import MoveDownOffsetCommand
+from commands.limelight.moveupoffsetcommand import MoveUpOffsetCommand
+from commands.limelight.moverightoffsetcommand import MoveRightOffsetCommand
+from commands.limelight.moveleftoffsetcommand import MoveLeftOffsetCommand
 
 from commands.pneumatics.toggleintakecommand import ToggleIntakeCommand
 
@@ -113,8 +117,14 @@ def init():
 
     componentController.LeftTrigger.whileHeld(LowerHoodCommand())
     componentController.LeftBumper.whileHeld(RaiseHoodCommand())
-    componentController.RightTrigger.whileHeld(SetRPMCommand(4600))
+    componentController.RightTrigger.whileHeld(AutomatedShootCommand(4400))
+    componentController.RightBumper.whileHeld(SetRPMCommand(3800))
 
     componentController.A.whenPressed(ToggleIntakeCommand())
     componentController.X.whileHeld(ConveyorIntakeForwardCommand())
     componentController.B.whileHeld(ConveyorIntakeBackwardCommand())
+
+    componentController.DPadUp.whenPressed(MoveUpOffsetCommand())
+    componentController.DPadDown.whenPressed(MoveDownOffsetCommand())
+    componentController.DPadRight.whenPressed(MoveRightOffsetCommand())
+    componentController.DPadLeft.whenPressed(MoveLeftOffsetCommand())

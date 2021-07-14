@@ -8,7 +8,7 @@ from commands.limelight.sudocommandgroup import SudoCommandGroup
 
 
 class AutomatedShootCommand(ParallelCommandGroup):
-    def __init__(self, rpm=4400):
+    def __init__(self, rpm=4400, ballCount=-1):
         super().__init__()
 
-        self.addCommands(SudoCommandGroup(), ShootingProcessCommand(rpm))
+        self.addCommands(SudoCommandGroup(), ShootingProcessCommand(rpm, ballCount=ballCount))
