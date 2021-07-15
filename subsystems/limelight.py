@@ -21,10 +21,10 @@ class Limelight(CougarSystem):
 
     def setPipeline(self, pipeline: int):
         """
-        Changes the pipeline of the limelight. 
+        Changes the pipeline of the limelight.
         """
         self.put("pipeline", pipeline)
-        
+
     def setValue(self, name, val):
         """
         Changes any limelight value, given the key and desired val.

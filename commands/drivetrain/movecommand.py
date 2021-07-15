@@ -4,7 +4,9 @@ import robot
 
 
 class MoveCommand(CommandBase):
-    def __init__(self, distance, angle=0, tolerance=5, slow=False, torySlow=None, name=None):
+    def __init__(
+        self, distance, angle=0, tolerance=5, slow=False, torySlow=None, name=None
+    ):
         """
         Takes a distance in inches and stores it for later. We allow overriding
         name so that other autonomous driving commands can extend this class.
@@ -27,8 +29,8 @@ class MoveCommand(CommandBase):
     def initialize(self):
         if self.isSlow:
             robot.drivetrain.setCruiseVelocity(True)
-            
-        if self.torySlow != None: # This IF overrides the previous one.
+
+        if self.torySlow != None:  # This IF overrides the previous one.
             robot.drivetrain.setVariableCruiseVelocity(self.torySlow)
 
         robot.drivetrain.setModuleProfiles(1, turn=False)

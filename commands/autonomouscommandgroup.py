@@ -172,26 +172,50 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             ),
         )
 
-    def fiveBallTrench(self):
+    def getOffTheLine(self):
+        """
+        Literally, just move 3.5 feet forward.
+        """
+        self.addCommands(MoveCommand(42))
+
+    def shootFirstThree(self):
+        """
+        Shoots the first three balls, nothing more, nothing less.
+        """
+        self.addCommands(
+            InstantCommand(lambda: robot.shooter.setRPM(4400), [robot.shooter]),
+            MoveCommand(24),
+            AutomatedShootCommand(4400, ballCount=3),
+        )
+
+    def eightBall(self):
         """
         Collects two additional balls from the trench, and then shoots all five.
         """
 
         # NOTE: Never tested 6/22/21.
-        
+
         self.addCommands(
             InstantCommand(lambda: robot.shooter.setRPM(4600), [robot.shooter]),
             InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
             InstantCommand(
-                 lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+                lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
             ),
             MoveCommand(126, torySlow=12500),
-            ((AutomatedShootCommand(4600, ballCount=6)).withTimeout(7)).alongWith(MoveCommand(48, slow=True)),
-            BezierPathCommand([[15,70], [0,0], [75,0]], speed=1, stopWhenDone=True),
-            InstantCommand(
-                 lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+            ((AutomatedShootCommand(4600, ballCount=6)).withTimeout(7)).alongWith(
+                MoveCommand(48, slow=True)
             ),
-            MoveCommand(54, angle=-15, slow=True)
+            BezierPathCommand([[15, 70], [0, 0], [75, 0]], speed=1, stopWhenDone=True),
+            InstantCommand(
+                lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+            ),
+            MoveCommand(54, angle=-15, slow=True),
+            MoveCommand(-48, angle=-15),
+            InstantCommand(lambda: robot.conveyorintake.stop(), [robot.conveyorintake]),
+            InstantCommand(
+                lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]
+            ),
+            AutomatedShootCommand(4600, ballCount=3),
         )
 
     def tenBall(self):

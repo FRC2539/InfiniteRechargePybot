@@ -44,10 +44,12 @@ def init():
 
     # showCommand(ResetTiltCommand())
     # showCommand(ConfigurePIDCommandGroup())
-        
+
     cameraServerTable = NetworkTables.getTable("CameraServer")
-    
-    cameraServerTable.putString("camera_feed", "http://roborio-2539-frc.local:1181/stream.mjpg")
+
+    cameraServerTable.putString(
+        "camera_feed", "http://roborio-2539-frc.local:1181/stream.mjpg"
+    )
 
 
 def getAutonomousProgram():

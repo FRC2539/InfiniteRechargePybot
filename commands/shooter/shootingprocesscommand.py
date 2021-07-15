@@ -4,6 +4,7 @@ from wpilib import Timer
 
 import robot
 
+
 class ShootingProcessCommand(CommandBase):
     """Gets the shooter up to speed, then moves the ball through the robot and shoot them."""
 
@@ -13,13 +14,13 @@ class ShootingProcessCommand(CommandBase):
 
         self.targetRPM = targetRPM
         self.tolerance = tolerance
-        
+
         self.delay = delay
 
         self.isAtTargetRPM = False
         self.enableTimer = False
         self.timerStarted = False
-        
+
         self.found = False
         self.ballCount = ballCount
 
@@ -50,7 +51,7 @@ class ShootingProcessCommand(CommandBase):
     def isFinished(self):
         if self.ballCount != -1 and robot.chamber.isBallPresent() and not self.found:
             self.ballCount -= 1
-            print('remaining ' + str(self.ballCount))
+            print("remaining " + str(self.ballCount))
             self.found = True
             if self.ballCount == 0:
                 self.enableTimer = True
@@ -58,16 +59,16 @@ class ShootingProcessCommand(CommandBase):
             self.found = False
         else:
             return False
-        
-        if self.enableTimer and not self.timerStarted: 
+
+        if self.enableTimer and not self.timerStarted:
             self.lastBallTimer.start()
             self.timerStarted = True
-        
+
         if self.timerStarted and self.lastBallTimer.get() > self.delay:
             self.lastBallTimer.stop()
             self.lastBallTimer.reset()
             return True
-                        
+
     def end(self, interrupted):
         robot.conveyorintake.stop()
         robot.chamber.stop()

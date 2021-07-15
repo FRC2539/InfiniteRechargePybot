@@ -11,4 +11,6 @@ class AutomatedShootCommand(ParallelCommandGroup):
     def __init__(self, rpm=4400, ballCount=-1):
         super().__init__()
 
-        self.addCommands(SudoCommandGroup(), ShootingProcessCommand(rpm, ballCount=ballCount))
+        self.addCommands(
+            SudoCommandGroup(), ShootingProcessCommand(rpm, ballCount=ballCount)
+        )

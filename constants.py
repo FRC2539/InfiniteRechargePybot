@@ -101,7 +101,7 @@ shooter.kD = 0.1
 shooter.kF = 0.05
 shooter.IZone = 0
 
-# Constants for the limelight below. 
+# Constants for the limelight below.
 
 limelight.xOffsetStep = 0.1
 limelight.yOffsetStep = 0.1

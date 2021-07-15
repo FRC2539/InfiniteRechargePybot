@@ -936,6 +936,7 @@ class SwerveDrive(BaseDrive):
         for module in self.modules:
             module.setVariableDriveCruiseVelocity(speed)
 
+
 class Position:
     """
     No, not that garbage by Ariane Grande. Stores
