@@ -41,8 +41,8 @@ class MoveCommand(CommandBase):
         robot.drivetrain.setUniformModuleAngle(self.angle)
 
     def execute(self):
-
         self.count = 0
+        print(robot.drivetrain.getModuleAngles())
         if self.count != 4 and not self.moveSet:
             for currentAngle in robot.drivetrain.getModuleAngles():
                 if (
@@ -54,6 +54,7 @@ class MoveCommand(CommandBase):
                     continue
 
         if self.count == 4:  # All angles aligned.
+            print("ALL ANGLES ALIGNED, SETTING POSITIONS")
             robot.drivetrain.setPositions(
                 [self.distance, self.distance, self.distance, self.distance]
             )
@@ -68,6 +69,7 @@ class MoveCommand(CommandBase):
             if abs(position - (start + self.distance)) < 3:
                 count += 1
             else:
+                print("not finished")
                 return False
 
         if count == 4:
@@ -78,3 +80,4 @@ class MoveCommand(CommandBase):
         robot.drivetrain.setCruiseVelocity()
         robot.drivetrain.setModuleProfiles(0, turn=False)
         self.moveSet = False
+        print("done with " + str(self.distance))

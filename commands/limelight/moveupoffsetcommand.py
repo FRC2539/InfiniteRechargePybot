@@ -1,6 +1,7 @@
 from commands2 import InstantCommand
 
 import robot
+import constants
 
 
 class MoveUpOffsetCommand(InstantCommand):
@@ -8,7 +9,5 @@ class MoveUpOffsetCommand(InstantCommand):
         super().__init__()
 
     def initialize(self):
-        val = robot.limelight.getX()  # Yes, the functions should be inverted.
-        val -= constants.limelight.yOffsetStep  # Decrease the value so it has to go
-        # up (or right according to the ll) more to compensate.
-        robot.limelight.setValue("ty", val)
+        constants.limelight.yOffset -= constants.limelight.yOffsetStep
+        robot.limelight.updateYOffset()

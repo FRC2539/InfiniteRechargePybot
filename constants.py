@@ -103,5 +103,8 @@ shooter.IZone = 0
 
 # Constants for the limelight below.
 
-limelight.xOffsetStep = 0.1
-limelight.yOffsetStep = 0.1
+limelight.xOffset = 0
+limelight.yOffset = 0
+
+limelight.xOffsetStep = 0.5
+limelight.yOffsetStep = 0.5

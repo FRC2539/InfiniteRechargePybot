@@ -34,6 +34,7 @@ from commands.chamber.chamberbackwardcommand import ChamberBackwardCommand
 
 from commands.climber.lowerclimbercommand import LowerClimberCommand
 from commands.climber.raiseclimbercommand import RaiseClimberCommand
+from commands.climber.forcedowncommand import ForceDownCommand
 
 from commands.turret.turretlimelightcommand import TurretLimelightCommand
 
@@ -101,8 +102,14 @@ def init():
     driveControllerTwo.LeftTopLeft.whileHeld(RaiseHoodCommand())
     driveControllerTwo.LeftBottomLeft.whileHeld(LowerHoodCommand())
 
+    driveControllerOne.LeftTopLeft.whenPressed(MoveUpOffsetCommand())
+    driveControllerOne.LeftTopMiddle.whenPressed(MoveRightOffsetCommand())
+    driveControllerOne.LeftBottomMiddle.whenPressed(MoveDownOffsetCommand())
+    driveControllerOne.LeftBottomLeft.whenPressed(MoveLeftOffsetCommand())
+    
     driveControllerOne.RightTopLeft.whileHeld(RaiseClimberCommand())
     driveControllerOne.RightBottomLeft.whileHeld(LowerClimberCommand())
+    driveControllerOne.RightBottomRight.whileHeld(ForceDownCommand())
 
     driveControllerTwo.LeftBottomMiddle.whileHeld(SetRPMCommand(3700))
     driveControllerTwo.LeftTopMiddle.whileHeld(ConveyorIntakeForwardCommand())
@@ -120,11 +127,12 @@ def init():
     componentController.RightTrigger.whileHeld(AutomatedShootCommand(4400))
     componentController.RightBumper.whileHeld(SetRPMCommand(3800))
 
-    componentController.A.whenPressed(ToggleIntakeCommand())
+    componentController.A.whenPressed(ToggleIntakeCommand ())
     componentController.X.whileHeld(ConveyorIntakeForwardCommand())
     componentController.B.whileHeld(ConveyorIntakeBackwardCommand())
+    componentController.Y.whileHeld(ChamberBackwardCommand())
 
-    componentController.DPadUp.whenPressed(MoveUpOffsetCommand())
+    componentController.DPadUp.whenPressed(MoveUpOffsetCommand()) # DPad not working rn.
     componentController.DPadDown.whenPressed(MoveDownOffsetCommand())
     componentController.DPadRight.whenPressed(MoveRightOffsetCommand())
     componentController.DPadLeft.whenPressed(MoveLeftOffsetCommand())

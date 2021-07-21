@@ -28,6 +28,7 @@ class Climber(CougarSystem):
 
         # Standard speed of the climber, up and down.
         self.speed = 1
+        self.slowSpeed = 0.5
 
         # Climber limits.
         self.upperLimit = 515000
@@ -57,6 +58,12 @@ class Climber(CougarSystem):
             self.climberMotor.set(-self.speed)
         else:
             self.stopClimber()
+            
+    def forceLowerClimber(self):
+        """
+        Oh boy; daring are we?
+        """
+        self.climberMotor.set(-self.slowSpeed)
 
     def stopClimber(self):
         """

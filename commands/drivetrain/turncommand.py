@@ -40,7 +40,7 @@ class TurnCommand(CommandBase):
         # Rotate the swerve modules to a position where they can rotate in a circle.
         robot.drivetrain.setModuleAngles(self.targetAngles)
 
-        self.targetDistance = self._calculateDisplacement()
+        self.targetDistance = self.calculateDisplacement()
 
         # 316, 227
 
@@ -56,12 +56,19 @@ class TurnCommand(CommandBase):
                 ]
             )
             self.turnSet = True
-        else:
-            # Compare the degrees within a tolerance of 3 degrees.
-            self.targetDistance = self.calculateDisplacement()
+
+        if not self.modulesInPosition:
+            count = 0
+            for angle, desiredAngle in zip(
+                robot.drivetrain.getModuleAngles(), [135, 45, 225, 315]
+            ):
+                if abs(angle - desiredAngle) < 3:
+                    count += 1
+
+            if count == 4:
+                self.modulesInPosition = True
 
     def isFinished(self):
-
         return abs(robot.drivetrain.getAngleTo(self.startAngle)) + 3 > abs(self.degrees)
 
     def end(self, interrupted):

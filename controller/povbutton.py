@@ -23,5 +23,4 @@ class POVButton(Button):
 
     def get(self):
         """Whether the button is pressed or not."""
-
         return self.controller.getPOV() in self.validAngles
