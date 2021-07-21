@@ -1,8 +1,7 @@
 from wpilib import Joystick
-from commands2.button import JoystickButton
+from commands2.button import JoystickButton, POVButton
 
 from .controlleraxis import ControllerAxis
-from .povbutton import POVButton
 
 
 class GenericController(Joystick):
@@ -29,7 +28,7 @@ class GenericController(Joystick):
                 """
 
                 angle = (id - 20) * 90
-                self.__dict__[name] = POVButton(self, angle)
+                self.__dict__[name] = POVButton(self, angle, 0)
             else:
                 self.__dict__[name] = JoystickButton(self, id)
 

@@ -21,22 +21,38 @@ class Limelight(CougarSystem):
         self.setPipeline(1)
 
         # Grabs the offset.
-        constants.limelight.xOffset = (
-            self.get("xOffset", constants.limelight.xOffset)
+        constants.limelight.xOffset = self.get("xOffset", constants.limelight.xOffset)
+        constants.limelight.yOffset = self.get("yOffset", constants.limelight.yOffset)
+
+        # Pulls the original, or default, step from the nt or constants file.
+        constants.limelight.xOffsetStep = self.get(
+            "xOffsetStep", constants.limelight.xOffsetStep
         )
-        constants.limelight.yOffset = (
-            self.get("yOffset", constants.limelight.yOffset)
+        constants.limelight.yOffsetStep = self.get(
+            "yOffsetStep", constants.limelight.yOffsetStep
         )
-        
-        constants.limelight.xOffsetStep = self.get('xOffsetStep', constants.limelight.xOffsetStep)
-        constants.limelight.yOffsetStep = self.get('yOffsetStep', constants.limelight.yOffsetStep)
-        
+
+        # Creates the initial nt values.
         self.updateXOffset()
         self.updateYOffset()
-        
         self.updateXOffsetStep()
         self.updateYOffsetStep()
-        
+
+    def periodic(self):
+        """
+        Loops when nothing else is running in
+        this subsystem. Do not call this!
+        """
+        self.feed()
+
+        # Constantly updates the offsetStep.
+        constants.limelight.xOffsetStep = self.get(
+            "xOffsetStep", constants.limelight.xOffsetStep
+        )
+        constants.limelight.yOffsetStep = self.get(
+            "yOffsetStep", constants.limelight.yOffsetStep
+        )
+
     def setPipeline(self, pipeline: int):
         """
         Changes the pipeline of the limelight.
@@ -92,27 +108,27 @@ class Limelight(CougarSystem):
         with a USB cable.
         """
         self.put("snapshot", 1)
-        
+
     def updateYOffset(self):
         """
         Publish the y-offset to the dashboard.
         """
-        self.put('yOffset', constants.limelight.yOffset)
-        
+        self.put("yOffset", constants.limelight.yOffset)
+
     def updateXOffset(self):
         """
         Publish the x-offset to the dashboard.
         """
-        self.put('xOffset', constants.limelight.xOffset)
-        
+        self.put("xOffset", constants.limelight.xOffset)
+
     def updateYOffsetStep(self):
         """
         Publish the y-offset step to the dashboard.
         """
-        self.put('yOffsetStep', constants.limelight.yOffsetStep)
-        
+        self.put("yOffsetStep", constants.limelight.yOffsetStep)
+
     def updateXOffsetStep(self):
         """
         Publish the x-offset step to the dashboard.
         """
-        self.put('xOffsetStep', constants.limelight.xOffsetStep)
+        self.put("xOffsetStep", constants.limelight.xOffsetStep)

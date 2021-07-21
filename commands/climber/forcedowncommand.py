@@ -4,7 +4,6 @@ import robot
 
 
 class ForceDownCommand(CommandBase):
-
     def __init__(self):
         super().__init__()
 

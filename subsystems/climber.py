@@ -58,7 +58,7 @@ class Climber(CougarSystem):
             self.climberMotor.set(-self.speed)
         else:
             self.stopClimber()
-            
+
     def forceLowerClimber(self):
         """
         Oh boy; daring are we?

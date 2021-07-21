@@ -207,7 +207,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             MoveCommand(-135, angle=10),
             AutomatedShootCommand(4100, variableIntakeSpeed=0.6),
         )
-        
+
     def rendevousSixBall(self):
         """
         Shoots three, and then grabs the three balls on the north
@@ -221,9 +221,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
             ),
             MoveCommand(74),
-            BezierPathCommand([[0,40], [0,0], [20,0], [20,40]], speed=0.3),
+            BezierPathCommand([[0, 40], [0, 0], [20, 0], [20, 40]], speed=0.3),
             MoveCommand(90, angle=135),
-            AutomatedShootCommand(3300, ballCount=3)
+            AutomatedShootCommand(3300, ballCount=3),
         )
 
     def eightBall(self):

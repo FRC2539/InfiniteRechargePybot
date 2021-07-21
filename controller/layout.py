@@ -4,6 +4,7 @@ from . import logicalaxes
 
 from commands2 import InstantCommand
 
+
 from commands.drivetrain.drivecommand import DriveCommand
 from commands.drivetrain.togglefieldorientationcommand import (
     ToggleFieldOrientationCommand,
@@ -106,7 +107,7 @@ def init():
     driveControllerOne.LeftTopMiddle.whenPressed(MoveRightOffsetCommand())
     driveControllerOne.LeftBottomMiddle.whenPressed(MoveDownOffsetCommand())
     driveControllerOne.LeftBottomLeft.whenPressed(MoveLeftOffsetCommand())
-    
+
     driveControllerOne.RightTopLeft.whileHeld(RaiseClimberCommand())
     driveControllerOne.RightBottomLeft.whileHeld(LowerClimberCommand())
     driveControllerOne.RightBottomRight.whileHeld(ForceDownCommand())
@@ -127,12 +128,12 @@ def init():
     componentController.RightTrigger.whileHeld(AutomatedShootCommand(4400))
     componentController.RightBumper.whileHeld(SetRPMCommand(3800))
 
-    componentController.A.whenPressed(ToggleIntakeCommand ())
+    componentController.A.whenPressed(ToggleIntakeCommand())
     componentController.X.whileHeld(ConveyorIntakeForwardCommand())
     componentController.B.whileHeld(ConveyorIntakeBackwardCommand())
     componentController.Y.whileHeld(ChamberBackwardCommand())
 
-    componentController.DPadUp.whenPressed(MoveUpOffsetCommand()) # DPad not working rn.
+    componentController.DPadUp.whenPressed(MoveUpOffsetCommand())
     componentController.DPadDown.whenPressed(MoveDownOffsetCommand())
     componentController.DPadRight.whenPressed(MoveRightOffsetCommand())
     componentController.DPadLeft.whenPressed(MoveLeftOffsetCommand())

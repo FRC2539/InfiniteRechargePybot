@@ -139,7 +139,7 @@ class CougarSystem(SubsystemBase):
         The callable should take nothing (or use a lambda),
         and return the desired, updated value. For example, if
         you wanted RPM: "self.motor.getRPM", or
-        something of the liking.
+        something of the liking. Call this method in the constructor.
         """
 
         if not callable(call):
