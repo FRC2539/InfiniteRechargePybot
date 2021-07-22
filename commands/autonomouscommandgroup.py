@@ -79,7 +79,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             ),
         )
 
-    def BarellRacing(self):
+    def BarrelRacing(self):
         """
         IR@H Challenge.
         """
@@ -183,9 +183,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         Shoots the first three balls, nothing more, nothing less.
         """
         self.addCommands(
-            InstantCommand(lambda: robot.shooter.setRPM(4400), [robot.shooter]),
+            InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
             MoveCommand(42),
-            AutomatedShootCommand(4400, ballCount=3),
+            AutomatedShootCommand(3800, conveyorDelay=True),
         )
 
     def trenchSixBall(self):
@@ -196,12 +196,12 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
             MoveCommand(48),
             InstantCommand(lambda: robot.pneumatics.extendIntake()),
-            AutomatedShootCommand(4100, ballCount=3, conveyorDelay=True).withTimeout(5),
+            AutomatedShootCommand(4100, ballCount=3, conveyorDelay=True).withTimeout(4),
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
             InstantCommand(
-                lambda: robot.conveyorintake.move(0.6), [robot.conveyorintake]
+                lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]
             ),
-            MoveCommand(120, torySlow=5500),
+            MoveCommand(120, torySlow=5200),
             MoveCommand(-135, angle=10),
             AutomatedShootCommand(4100, conveyorDelay=True),
         )

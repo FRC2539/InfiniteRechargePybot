@@ -33,8 +33,8 @@ class Climber(CougarSystem):
         self.speed = 1
         self.slowSpeed = 0.5
         self.fallingSpeedDeadband = (
-            -0.0416
-        )  # Feet per second please. This value (-0.0416) is -1/24. NOTE: Measure this.
+            250
+        )  # NOTE: Measure this.
 
         # Climber limits.
         self.upperLimit = 515000
@@ -55,7 +55,8 @@ class Climber(CougarSystem):
         self.feed()
         self.hasLocked()
 
-        print("falling speed " + str(self.getLinearSpeed()))  # Test this.
+        print(str(self.climbing) + ' ' + str(self.climberMotor.getSelectedSensorPosition()
+            < 0.2 * self.upperLimit) + ' ' + str(not self.climberMoving) + ' ' + str(not self.isFalling()))  # Test this.
 
     def raiseClimber(self):
         """
@@ -89,22 +90,6 @@ class Climber(CougarSystem):
         """
         self.climberMotor.stopMotor()
         self.climberMoving = False
-
-    def getLinearSpeed(self):
-        """
-        Returns an approximation of the climber's
-        linear speed.
-        """
-        return (
-            (
-                (
-                    (self.climberMotor.getSelectedSensorVelocity() * 10) / 2048
-                )  # Rotations per second.
-                * 2
-                * math.pi  # Radians per second.
-            )
-            * self.pulleyRadius  # Inches per second.
-        ) / 12  # V = RW. V is in fps.
 
     def atUpperLimit(self):
         """
@@ -149,5 +134,5 @@ class Climber(CougarSystem):
         if we are falling faster than the fallingSpeedDeadband.
         """
         return (
-            self.getLinearSpeed() < self.fallingSpeedDeadband
+            abs(self.climberMotor.getSelectedSensorVelocity() > self.fallingSpeedDeadband)
         )  # Return true if we are falling.

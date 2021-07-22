@@ -51,7 +51,7 @@ class ShootingProcessCommand(CommandBase):
             robot.conveyorintake.intakeBalls()
             robot.chamber.forward()
 
-        elif self.isAtTargetRPM and robot.limelight.isAimed():
+        elif self.isAtTargetRPM and robot.limelight.isAimed() and robot.limelight.getTape():
             robot.conveyorintake.intakeBalls()
             robot.chamber.forward()
 

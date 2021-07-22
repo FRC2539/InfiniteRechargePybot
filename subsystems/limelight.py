@@ -21,7 +21,8 @@ class Limelight(CougarSystem):
         self.setPipeline(1)
 
         # The deadband for whether we are aimed or not.
-        self.put("aimedDeadband", 0.25)
+        self.aimedDeadband = 0.25
+        self.put("aimedDeadband", self.aimedDeadband)
 
         # Grabs the offset.
         constants.limelight.xOffset = self.get("xOffset", constants.limelight.xOffset)
@@ -86,13 +87,13 @@ class Limelight(CougarSystem):
         """
         Returns the raw y-value, correcting for the limelight rotation.
         """
-        return self.get("ty") + constants.limelight.xOffset
+        return self.get("ty")
 
     def getX(self):
         """
         Return the y-value to correct for the limelight being rotated.
         """
-        return self.get("ty")
+        return self.get("ty") + constants.limelight.xOffset
 
     def getA(self):
         """

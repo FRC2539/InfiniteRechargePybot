@@ -7,8 +7,10 @@ from custom import driverhud
 from networktables import NetworkTables
 
 excludedMethods = [
-    "interrupted"
+    "interrupted", "Slalom", "BarrelRacing", "Bounce", "GalacticSearchRedA", "GalacticSearchRedB", "tenball"
 ]  # Methods that aren't from the parents but aren't autos. If you want to exclude a program because it might not work, add it here.
+
+excludedMethods = [x.lower() for x in excludedMethods]
 
 table = NetworkTables.getTable("Autonomous")
 autoVars = [var.lower() for var in dir(AutonomousCommandGroup)]
@@ -21,7 +23,7 @@ for auto in autoVars:
         not in [
             var.lower() for var in dir(SequentialCommandGroup)
         ]  # Make sure it's not from the parent.
-        and auto
+        and auto.lower()
         not in excludedMethods  # Other methods to exclude that are in the Auto command group.
     ):
         definedAutos.append(auto)
@@ -29,7 +31,7 @@ for auto in autoVars:
 
 def init():
     table.putStringArray("autos", [a.lower() for a in definedAutos])
-    table.putString("selectedAuto", definedAutos[1].lower())
+    table.putString("selectedAuto", "shootfirstthree")
 
 
 def getAutoProgram():
