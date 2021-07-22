@@ -8,7 +8,9 @@ import robot
 class ShootingProcessCommand(CommandBase):
     """Gets the shooter up to speed, then moves the ball through the robot and shoot them."""
 
-    def __init__(self, targetRPM=5000, tolerance=50, ballCount=-1, delay=0.5, delayConveyor=False):
+    def __init__(
+        self, targetRPM=5000, tolerance=50, ballCount=-1, delay=0.5, delayConveyor=False
+    ):
 
         super().__init__()
 

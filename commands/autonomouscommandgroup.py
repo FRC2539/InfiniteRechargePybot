@@ -196,9 +196,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
             MoveCommand(48),
             InstantCommand(lambda: robot.pneumatics.extendIntake()),
-            AutomatedShootCommand(
-                4100, ballCount=3, conveyorDelay=True
-            ).withTimeout(5),
+            AutomatedShootCommand(4100, ballCount=3, conveyorDelay=True).withTimeout(5),
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
             InstantCommand(
                 lambda: robot.conveyorintake.move(0.6), [robot.conveyorintake]
@@ -222,7 +220,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             ),
             MoveCommand(74),
             BezierPathCommand([[0, 50], [0, 0], [20, 0], [20, 50]], speed=0.3),
-            BezierPathCommand([[30,40], [0,0]], speed=0.4),
+            BezierPathCommand([[30, 40], [0, 0]], speed=0.4),
             AutomatedShootCommand(3300, ballCount=3),
         )
 

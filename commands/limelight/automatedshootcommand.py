@@ -11,12 +11,16 @@ from commands.limelight.sudocommandgroup import SudoCommandGroup
 
 
 class AutomatedShootCommand(ParallelCommandGroup):
-    def __init__(self, rpm=4400, ballCount=-1, variableIntakeSpeed=None, conveyorDelay=False):
+    def __init__(
+        self, rpm=4400, ballCount=-1, variableIntakeSpeed=None, conveyorDelay=False
+    ):
         super().__init__()
         if variableIntakeSpeed is None:
             self.addCommands(
                 SudoCommandGroup(),
-                ShootingProcessCommand(targetRPM=rpm, ballCount=ballCount, delayConveyor=conveyorDelay),
+                ShootingProcessCommand(
+                    targetRPM=rpm, ballCount=ballCount, delayConveyor=conveyorDelay
+                ),
             )
         else:
             self.addCommands(

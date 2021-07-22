@@ -26,13 +26,26 @@ class Climber(CougarSystem):
             0
         )  # Start at zero so we don't risk over-driving downwards.
 
+        # Pulley radius, in inches. NOTE: this is a guess lol.
+        self.pulleyRadius = 1.5
+
         # Standard speed of the climber, up and down.
         self.speed = 1
         self.slowSpeed = 0.5
+        self.fallingSpeedDeadband = (
+            -0.0416
+        )  # Feet per second please. This value (-0.0416) is -1/24. NOTE: Measure this.
 
         # Climber limits.
         self.upperLimit = 515000
         self.lowerLimit = 14000  # Give some wiggle room.
+
+        # A boolean used to represent the status of the climber.
+        self.climbing = False
+        self.climberMoving = False
+
+        # The locked status of the climber.
+        self.put("locked", False)
 
     def periodic(self):
         """
@@ -40,6 +53,9 @@ class Climber(CougarSystem):
         this subsystem. Do not call this!
         """
         self.feed()
+        self.hasLocked()
+
+        print("falling speed " + str(self.getLinearSpeed()))  # Test this.
 
     def raiseClimber(self):
         """
@@ -47,6 +63,7 @@ class Climber(CougarSystem):
         """
         if not self.atUpperLimit():
             self.climberMotor.set(self.speed)
+            self.climberMoving = True
         else:
             self.stopClimber()
 
@@ -56,6 +73,7 @@ class Climber(CougarSystem):
         """
         if not self.atLowerLimit():
             self.climberMotor.set(-self.speed)
+            self.climberMoving = True
         else:
             self.stopClimber()
 
@@ -70,6 +88,23 @@ class Climber(CougarSystem):
         Stops the climber motor.
         """
         self.climberMotor.stopMotor()
+        self.climberMoving = False
+
+    def getLinearSpeed(self):
+        """
+        Returns an approximation of the climber's
+        linear speed.
+        """
+        return (
+            (
+                (
+                    (self.climberMotor.getSelectedSensorVelocity() * 10) / 2048
+                )  # Rotations per second.
+                * 2
+                * math.pi  # Radians per second.
+            )
+            * self.pulleyRadius  # Inches per second.
+        ) / 12  # V = RW. V is in fps.
 
     def atUpperLimit(self):
         """
@@ -85,3 +120,34 @@ class Climber(CougarSystem):
         all the way; ideally, we shouldn't need this).
         """
         return self.climberMotor.getSelectedSensorPosition() <= self.lowerLimit
+
+    def hasLocked(self):
+        """
+        Updates the "locked" value, which represents
+        the status of the climber's locking mechanism.
+        It assumes the status by watching the encoder.
+        """
+        # If we are more than 70% up, begin looking for signs of climbing.
+        if self.climberMotor.getSelectedSensorPosition() > 0.7 * self.upperLimit:
+            self.climbing = True
+        # If we have raised and begun to lower our climber, we're watching. If the climber
+        # is not being told to move, and we are not slowly falling, we're safe.
+        elif (
+            self.climbing  # We have gone up then down.
+            and self.climberMotor.getSelectedSensorPosition()
+            < 0.2 * self.upperLimit  # We are at the bottom.
+            and not self.climberMoving  # The climber is not being moved by a command.
+            and not self.isFalling()  # The climber is not falling.
+        ):  # If all of this is true, we are locked.
+            self.put("locked", True)
+
+    def isFalling(self):
+        """
+        Watches the speed of the climber. If it slowl and negative, it
+        assumes we are falling. We provide a falling speed so that we can allow
+        for minor errors in our calculations. So basically this returns true
+        if we are falling faster than the fallingSpeedDeadband.
+        """
+        return (
+            self.getLinearSpeed() < self.fallingSpeedDeadband
+        )  # Return true if we are falling.
