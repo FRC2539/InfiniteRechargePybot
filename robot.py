@@ -73,10 +73,8 @@ class KryptonBot(TimedCommandRobot):
         self.auto.schedule()
 
     def disabledInit(self):
-        try:
-            self.auto.end(True)  # TODO: Fix this.
-        except (AttributeError):
-            pass
+        if self.auto.isScheduled():
+            self.auto.cancel()
 
     def disabledPeriodic(self):
         if autoconfig.getAutoProgram() != self.selectedAuto:

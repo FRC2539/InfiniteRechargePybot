@@ -35,7 +35,7 @@ drivetrain.dIZk = 0
 drivetrain.sdPk = 0.5  # 0.1
 drivetrain.sdIk = 0
 drivetrain.sdDk = 0
-drivetrain.sdFFk = 0.1
+drivetrain.sdFFk = 0.18  # 0.15
 drivetrain.sdIZk = 0
 
 # Turn Position Control

@@ -20,6 +20,9 @@ class Limelight(CougarSystem):
 
         self.setPipeline(1)
 
+        # The deadband for whether we are aimed or not.
+        self.put("aimedDeadband", 0.25)
+
         # Grabs the offset.
         constants.limelight.xOffset = self.get("xOffset", constants.limelight.xOffset)
         constants.limelight.yOffset = self.get("yOffset", constants.limelight.yOffset)
@@ -52,6 +55,8 @@ class Limelight(CougarSystem):
         constants.limelight.yOffsetStep = self.get(
             "yOffsetStep", constants.limelight.yOffsetStep
         )
+
+        self.aimedDeadband = self.get("aimedDeadband", self.aimedDeadband)
 
     def setPipeline(self, pipeline: int):
         """
@@ -132,3 +137,12 @@ class Limelight(CougarSystem):
         Publish the x-offset step to the dashboard.
         """
         self.put("xOffsetStep", constants.limelight.xOffsetStep)
+
+    def isAimed(self):
+        """
+        Returns true if the limelight is on target.
+        """
+        return (
+            abs(self.getY()) < self.aimedDeadband
+            and abs(self.getX()) < self.aimedDeadband
+        )

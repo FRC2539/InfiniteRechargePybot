@@ -224,32 +224,84 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             AutomatedShootCommand(3300, ballCount=3),
         )
 
-    def eightBall(self):
+    def stealFiveBall(self):
+        """
+        Steal two balls from the enemy trench, and then shoots all.
+        """
+        self.addCommands(
+            InstantCommand(
+                lambda: robot.pneumatics.extendIntake(), [robot.conveyorintake]
+            ),
+            InstantCommand(
+                lambda: robot.conveyorintake.move(0.5), [robot.conveyorintake]
+            ),
+            MoveCommand(87, torySlow=5000),
+            TurnCommand(37),
+            MoveCommand(10, torySlow=4000),
+            InstantCommand(lambda: robot.shooter.setRPM(3300), [robot.shooter]),
+            MoveCommand(-145, angle=-20),
+            InstantCommand(lambda: robot.conveyorintake.stop(), [robot.conveyorintake]),
+            AutomatedShootCommand(3300, conveyorDelay=True, waitUntilAimed=True),
+        )
+
+    def badEightBall(self):
         """
         Collects two additional balls from the trench, and then shoots all five.
         """
 
-        # NOTE: Never tested 6/22/21.
+        self.addCommands(
+            InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
+            MoveCommand(48, torySlow=26000),
+            InstantCommand(lambda: robot.pneumatics.extendIntake()),
+            AutomatedShootCommand(3800, ballCount=3, conveyorDelay=True).withTimeout(
+                2.25
+            ),
+            InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
+            InstantCommand(
+                lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]
+            ),
+            MoveCommand(120, torySlow=9000),
+            MoveCommand(-100, angle=30, torySlow=28000),
+            AutomatedShootCommand(4100, conveyorDelay=True).withTimeout(1.5),
+            InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
+            TurnCommand(51),
+            InstantCommand(
+                lambda: robot.conveyorintake.move(0.6), [robot.conveyorintake]
+            ),
+            MoveCommand(26, torySlow=24000),
+            MoveCommand(-20, torySlow=2800),
+            TurnCommand(-51),
+            AutomatedShootCommand(4100, conveyorDelay=True),
+        )
+
+    def bensEightBall(self):
+        """
+        Collects two additional balls from the trench, and then shoots all five.
+        F in the chat bois. Didn't read the rules.
+        """
 
         self.addCommands(
-            InstantCommand(lambda: robot.shooter.setRPM(4600), [robot.shooter]),
-            InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
+            InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
+            MoveCommand(48, torySlow=30000),
+            InstantCommand(lambda: robot.pneumatics.extendIntake()),
+            AutomatedShootCommand(3800, ballCount=3, conveyorDelay=True).withTimeout(
+                2.75
+            ),
+            InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
             InstantCommand(
-                lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+                lambda: robot.conveyorintake.move(0.83), [robot.conveyorintake]
             ),
-            MoveCommand(126, angle=-2, torySlow=9500),
-            ((AutomatedShootCommand(4600, ballCount=6)).withTimeout(6)).alongWith(
-                MoveCommand(40, slow=True)
-            ),
-            InstantCommand(lambda: robot.shooter.setRPM(4600), [robot.shooter]),
-            MoveCommand(-78, angle=2, torySlow=22000),
-            TurnCommand(75),
+            BezierPathCommand([[0, 0], [0, 106]], speed=0.44, stopWhenDone=True),
+            BezierPathCommand([[0, 108], [0, 12], [16, 10], [25, 9]], speed=1.4),
+            InstantCommand(lambda: robot.conveyorintake.stop(), [robot.conveyorintake]),
+            TurnCommand(44),
             InstantCommand(
-                lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+                lambda: robot.conveyorintake.move(0.5), [robot.conveyorintake]
             ),
-            MoveCommand(70, torySlow=20000),
-            TurnCommand(-75),
-            AutomatedShootCommand(4500, ballCount=2),
+            MoveCommand(29, torySlow=22000),
+            MoveCommand(-29, torySlow=30000),
+            TurnCommand(-55),
+            AutomatedShootCommand(3800, conveyorDelay=True),
         )
 
     def tenBall(self):

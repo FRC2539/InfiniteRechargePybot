@@ -9,7 +9,13 @@ class ShootingProcessCommand(CommandBase):
     """Gets the shooter up to speed, then moves the ball through the robot and shoot them."""
 
     def __init__(
-        self, targetRPM=5000, tolerance=50, ballCount=-1, delay=0.5, delayConveyor=False
+        self,
+        targetRPM=5000,
+        tolerance=50,
+        ballCount=-1,
+        delay=0.5,
+        delayConveyor=False,
+        wait=False,
     ):
 
         super().__init__()
@@ -18,6 +24,7 @@ class ShootingProcessCommand(CommandBase):
         self.tolerance = tolerance
         self.delay = delay
         self.delayConveyor = delayConveyor
+        self.wait = wait
 
         self.isAtTargetRPM = False
         self.enableTimer = False
@@ -40,7 +47,11 @@ class ShootingProcessCommand(CommandBase):
     def execute(self):
         self.checkRPM()
 
-        if self.isAtTargetRPM:
+        if self.isAtTargetRPM and not self.wait:
+            robot.conveyorintake.intakeBalls()
+            robot.chamber.forward()
+
+        elif self.isAtTargetRPM and robot.limelight.isAimed():
             robot.conveyorintake.intakeBalls()
             robot.chamber.forward()
 
