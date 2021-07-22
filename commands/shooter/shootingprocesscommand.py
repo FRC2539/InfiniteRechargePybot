@@ -8,14 +8,14 @@ import robot
 class ShootingProcessCommand(CommandBase):
     """Gets the shooter up to speed, then moves the ball through the robot and shoot them."""
 
-    def __init__(self, targetRPM=5000, tolerance=50, ballCount=-1, delay=0.5):
+    def __init__(self, targetRPM=5000, tolerance=50, ballCount=-1, delay=0.5, delayConveyor=False):
 
         super().__init__()
 
         self.targetRPM = targetRPM
         self.tolerance = tolerance
-
         self.delay = delay
+        self.delayConveyor = delayConveyor
 
         self.isAtTargetRPM = False
         self.enableTimer = False
@@ -29,7 +29,10 @@ class ShootingProcessCommand(CommandBase):
         self.addRequirements([robot.conveyorintake, robot.chamber])
 
     def initialize(self):
-        robot.conveyorintake.intakeBalls()
+        if not self.delayConveyor:
+            robot.conveyorintake.intakeBalls()
+        else:
+            robot.conveyorintake.stop()
         robot.shooter.setRPM(self.targetRPM)
 
     def execute(self):
@@ -51,7 +54,6 @@ class ShootingProcessCommand(CommandBase):
     def isFinished(self):
         if self.ballCount != -1 and robot.chamber.isBallPresent() and not self.found:
             self.ballCount -= 1
-            print("remaining " + str(self.ballCount))
             self.found = True
             if self.ballCount == 0:
                 self.enableTimer = True

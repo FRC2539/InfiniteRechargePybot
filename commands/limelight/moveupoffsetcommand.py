@@ -16,5 +16,5 @@ class MoveUpOffsetCommand(InstantCommand):
         super().__init__()
 
     def initialize(self):
-        constants.limelight.yOffset -= constants.limelight.yOffsetStep
+        constants.limelight.yOffset += constants.limelight.yOffsetStep
         robot.limelight.updateYOffset()

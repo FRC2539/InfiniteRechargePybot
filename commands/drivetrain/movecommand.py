@@ -66,10 +66,10 @@ class MoveCommand(CommandBase):
     def isFinished(self):
         count = 0
         for position, start in zip(robot.drivetrain.getPositions(), self.startPos):
-            if abs(position - (start + self.distance)) < 3:
+            if abs(position - (start + self.distance)) < 4:
                 count += 1
             else:
-                print("not finished")
+                print("not finished: " + str(abs(position - (start + self.distance))))
                 return False
 
         if count == 4:
@@ -80,4 +80,4 @@ class MoveCommand(CommandBase):
         robot.drivetrain.setCruiseVelocity()
         robot.drivetrain.setModuleProfiles(0, turn=False)
         self.moveSet = False
-        print("done with " + str(self.distance))
+        print('\n\n\nDone\n\n\n')

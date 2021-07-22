@@ -197,7 +197,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             MoveCommand(48),
             InstantCommand(lambda: robot.pneumatics.extendIntake()),
             AutomatedShootCommand(
-                4100, ballCount=3, variableIntakeSpeed=0.6
+                4100, ballCount=3, conveyorDelay=True
             ).withTimeout(5),
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
             InstantCommand(
@@ -205,7 +205,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             ),
             MoveCommand(120, torySlow=5500),
             MoveCommand(-135, angle=10),
-            AutomatedShootCommand(4100, variableIntakeSpeed=0.6),
+            AutomatedShootCommand(4100, conveyorDelay=True),
         )
 
     def rendevousSixBall(self):
@@ -214,15 +214,15 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         face of the rendevous point.
         """
         self.addCommands(
-            AutomatedShootCommand(3300, ballCount=3).withTimeout(6),
+            AutomatedShootCommand(3300, ballCount=3, conveyorDelay=True).withTimeout(5),
             InstantCommand(lambda: robot.shooter.setRPM(3300), [robot.shooter]),
             InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
             InstantCommand(
                 lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
             ),
             MoveCommand(74),
-            BezierPathCommand([[0, 40], [0, 0], [20, 0], [20, 40]], speed=0.3),
-            MoveCommand(90, angle=135),
+            BezierPathCommand([[0, 50], [0, 0], [20, 0], [20, 50]], speed=0.3),
+            BezierPathCommand([[30,40], [0,0]], speed=0.4),
             AutomatedShootCommand(3300, ballCount=3),
         )
 

@@ -32,7 +32,7 @@ drivetrain.dFFk = 0.25  # 1?
 drivetrain.dIZk = 0
 
 # Drive Position Control
-drivetrain.sdPk = 0.45  # 0.1
+drivetrain.sdPk = 0.5  # 0.1
 drivetrain.sdIk = 0
 drivetrain.sdDk = 0
 drivetrain.sdFFk = 0.1
