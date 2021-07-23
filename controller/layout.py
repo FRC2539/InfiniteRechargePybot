@@ -103,10 +103,9 @@ def init():
     driveControllerTwo.LeftTopLeft.whileHeld(RaiseHoodCommand())
     driveControllerTwo.LeftBottomLeft.whileHeld(LowerHoodCommand())
 
-    driveControllerOne.LeftTopLeft.whenPressed(MoveUpOffsetCommand())
-    driveControllerOne.LeftTopMiddle.whenPressed(MoveRightOffsetCommand())
-    driveControllerOne.LeftBottomMiddle.whenPressed(MoveDownOffsetCommand())
-    driveControllerOne.LeftBottomLeft.whenPressed(MoveLeftOffsetCommand())
+    driveControllerOne.LeftTopRight.whileHeld(RaiseClimberCommand())
+    driveControllerOne.LeftBottomRight.whileHeld(LowerClimberCommand())
+    driveControllerOne.LeftBottomLeft.whileHeld(ForceDownCommand())
 
     driveControllerOne.RightTopLeft.whileHeld(RaiseClimberCommand())
     driveControllerOne.RightBottomLeft.whileHeld(LowerClimberCommand())

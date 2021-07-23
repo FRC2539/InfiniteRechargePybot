@@ -84,7 +84,7 @@ class ConveyorIntake(CougarSystem):
         Reverse the conveyor and intake so the balls
         move backwards.
         """
-        self.move(-self.speed)
+        self.move(-1) # Full speed, no mercy.
 
     def slowIntakeBalls(self):
         """
