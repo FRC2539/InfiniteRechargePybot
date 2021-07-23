@@ -10,6 +10,7 @@ class HoodLimelightCommand(CommandBase):
         super().__init__()
 
         self.addRequirements(robot.hood)
+        self.snapshotcounter = 0
 
         self.yOffsetP = (
             35  # A proportion to scale the error to a speed the motor can use.
@@ -19,7 +20,11 @@ class HoodLimelightCommand(CommandBase):
         robot.limelight.setPipeline(0)
 
     def execute(self):
-
+        if self.snapshotcounter < 4 :
+            self.snapshotcounter +=1
+        else:
+            self.snapshotcounter =0
+            robot.limelight.takeSnapShot
         # if robot.limelight.getTape():
         # if robot.limelight.getA() > 1.289:
         # robot.hood.setShootAngle(1.764918* (robot.limelight.getA()*robot.limelight.getA() + 8 ))
