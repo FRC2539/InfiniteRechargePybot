@@ -20,10 +20,10 @@ class HoodLimelightCommand(CommandBase):
         robot.limelight.setPipeline(0)
 
     def execute(self):
-        if self.snapshotcounter < 4 :
-            self.snapshotcounter +=1
+        if self.snapshotcounter < 4:
+            self.snapshotcounter += 1
         else:
-            self.snapshotcounter =0
+            self.snapshotcounter = 0
             robot.limelight.takeSnapShot
         # if robot.limelight.getTape():
         # if robot.limelight.getA() > 1.289:

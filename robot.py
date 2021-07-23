@@ -71,7 +71,7 @@ class KryptonBot(TimedCommandRobot):
 
         # Schedule the autonomous command
         self.auto.schedule()
-        
+
     def teleopInit(self):
         self.auto.cancel()
 
