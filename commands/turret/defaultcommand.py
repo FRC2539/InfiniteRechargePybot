@@ -7,6 +7,10 @@ logicalaxes.registerAxis("TURRETmOVE")
 
 
 class DefaultCommand(CommandBase):
+    """
+    The turret's default move command.
+    """
+
     def __init__(self):
         super().__init__()
 

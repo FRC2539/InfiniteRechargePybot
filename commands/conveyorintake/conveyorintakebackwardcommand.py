@@ -6,7 +6,7 @@ import robot
 class ConveyorIntakeBackwardCommand(CommandBase):
     """
     Runs the intake and the conveyor in a direction
-    that allows balls to pass through the robot. Remember,
+    that allows balls to reverse through the robot. Remember,
     the intake motor and conveyor systen use the SAME motor
     controller.
     """

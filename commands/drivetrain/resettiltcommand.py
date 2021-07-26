@@ -4,6 +4,10 @@ import robot
 
 
 class ResetTiltCommand(InstantCommand):
+    """
+    Resets the tilt of the robot's gyro.
+    """
+
     def __init__(self):
         super().__init__()
 
