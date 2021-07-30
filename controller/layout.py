@@ -98,7 +98,7 @@ def init():
 
     driveControllerTwo.BottomThumb.whenPressed(ToggleIntakeCommand())
 
-    driveControllerTwo.Trigger.whileHeld(AutomatedShootCommand(4600))
+    driveControllerTwo.Trigger.whileHeld(AutomatedShootCommand(4400))
 
     driveControllerTwo.LeftTopLeft.whileHeld(RaiseHoodCommand())
     driveControllerTwo.LeftBottomLeft.whileHeld(LowerHoodCommand())
@@ -111,7 +111,7 @@ def init():
     driveControllerOne.RightBottomLeft.whileHeld(LowerClimberCommand())
     driveControllerOne.RightBottomRight.whileHeld(ForceDownCommand())
 
-    driveControllerTwo.LeftBottomMiddle.whileHeld(SetRPMCommand(3700))
+    driveControllerTwo.LeftBottomMiddle.whileHeld(SetRPMCommand(4400))
     driveControllerTwo.LeftTopMiddle.whileHeld(ConveyorIntakeForwardCommand())
     driveControllerTwo.LeftTopMiddle.whileHeld(ChamberForwardCommand())
 
@@ -124,8 +124,8 @@ def init():
 
     componentController.LeftTrigger.whileHeld(LowerHoodCommand())
     componentController.LeftBumper.whileHeld(RaiseHoodCommand())
-    componentController.RightTrigger.whileHeld(AutomatedShootCommand(4400))
-    componentController.RightBumper.whileHeld(SetRPMCommand(3800))
+    componentController.RightTrigger.whileHeld(AutomatedShootCommand(4600))
+    componentController.RightBumper.whileHeld(SetRPMCommand(4800))
 
     componentController.A.whenPressed(ToggleIntakeCommand())
     componentController.X.whileHeld(ConveyorIntakeForwardCommand())

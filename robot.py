@@ -45,8 +45,6 @@ class KryptonBot(TimedCommandRobot):
 
         CameraServer.launch()
 
-        CameraServer.launch()
-
         self.selectedAuto = autoconfig.getAutoProgram()
         self.auto = AutonomousCommandGroup()
 

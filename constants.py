@@ -104,7 +104,7 @@ shooter.IZone = 0
 # Constants for the limelight below.
 
 limelight.xOffset = 0
-limelight.yOffset = 0
+limelight.yOffset = 3
 
 limelight.xOffsetStep = 0.5
 limelight.yOffsetStep = 0.5
