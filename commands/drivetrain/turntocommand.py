@@ -1,17 +1,25 @@
+from commands2 import CommandBase
+
 from .turncommand import TurnCommand
 
 import robot
 
 
-class TurnToCommand(TurnCommand):
+class TurnToCommand(CommandBase):
     """Turn to a specified angle using the gyroscope."""
 
     def __init__(self, targetDegrees):
-        super().__init__(targetDegrees)
+        """
+        targetDegrees is the angle to turn to.
+        """
+
+        super().__init__()
 
         self.targetDegrees = targetDegrees
 
     def initialize(self):
-        self.distance = robot.drivetrain.getAngleTo(self.targetDegrees)
+        angle = robot.drivetrain.getAngleTo(self.targetDegrees)
 
-        super().initialize()
+        TurnCommand(
+            angle
+        ).schedule()  # Should run the command at the next CommandScheduler loop.

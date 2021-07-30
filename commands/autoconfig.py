@@ -7,7 +7,13 @@ from custom import driverhud
 from networktables import NetworkTables
 
 excludedMethods = [
-    "interrupted", "Slalom", "BarrelRacing", "Bounce", "GalacticSearchRedA", "GalacticSearchRedB", "tenball"
+    "interrupted",
+    "Slalom",
+    "BarrelRacing",
+    "Bounce",
+    "GalacticSearchRedA",
+    "GalacticSearchRedB",
+    "tenball",
 ]  # Methods that aren't from the parents but aren't autos. If you want to exclude a program because it might not work, add it here.
 
 excludedMethods = [x.lower() for x in excludedMethods]
