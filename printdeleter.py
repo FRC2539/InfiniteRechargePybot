@@ -9,7 +9,7 @@ def findInFile(path):
         newLines = []
         for line in wList:
             l = str((line[1]))
-            if l[-1] == '\n':
+            if l[-1] == "\n":
                 l = str((line[1])[:-1])
             if l != "":
                 newLines.append([line[0], l])
@@ -45,7 +45,7 @@ for p in os.walk(path + where, topdown=False):
         clear.append(p)
 
 for data in clear:
-    p = data[0] + '/'
+    p = data[0] + "/"
     for f in data[2]:
         try:
             if f[-3:] == ".py":

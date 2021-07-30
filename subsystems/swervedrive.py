@@ -108,6 +108,7 @@ class SwerveDrive(BaseDrive):
         self.PosY = 0
         self.LastPositions = self.getPositions()
 
+        self.put("angleAdjustment", constants.drivetrain.defaultGyroAngleAdjustment)
         self.put("wheelAngles", self.getModuleAngles())
         self.put("wheelSpeeds", self.getSpeeds())
         self.put("robotVector", [0, 0])

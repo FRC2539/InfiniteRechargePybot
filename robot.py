@@ -6,7 +6,7 @@ from wpilib import RobotBase, DriverStation, CameraServer
 
 from custom import driverhud
 import controller.layout
-import subsystems
+import subsystems, constants
 import shutil, sys, os, inspect
 
 from commands2 import Subsystem, CommandScheduler
@@ -67,15 +67,20 @@ class KryptonBot(TimedCommandRobot):
         # Send field data to the dashboard
         driverhud.showField()
 
-        # Schedule the autonomous command
-        self.auto.schedule()
+        # Schedule the autonomous command, and then reorient the robot afterwards.
+        self.auto.schedule().andThen(
+            lambda: drivetrain.setGyroAngle(
+                -drivetrain.get(
+                    "angleAdjustment", constants.drivetrain.defaultGyroAngleAdjustment
+                )
+            )
+        )
 
     def teleopInit(self):
         self.auto.cancel()
 
     def disabledInit(self):
-        if self.auto.isScheduled():
-            self.auto.cancel()
+        self.auto.cancel()
 
     def disabledPeriodic(self):
         if autoconfig.getAutoProgram() != self.selectedAuto:

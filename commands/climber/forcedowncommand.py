@@ -4,6 +4,11 @@ import robot
 
 
 class ForceDownCommand(CommandBase):
+    """
+    Forcefully and slowly lowers the climber, overriding any
+    limits that may exist.
+    """
+
     def __init__(self):
         super().__init__()
 

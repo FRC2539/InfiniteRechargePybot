@@ -4,6 +4,10 @@ import robot
 
 
 class RaiseClimberCommand(CommandBase):
+    """
+    Raises the climber. Don't run this too early :(.
+    """
+
     def __init__(self):
         super().__init__()
 

@@ -28,7 +28,7 @@ class TurretLimelightCommand(CommandBase):
             )  # This value is found experimentally
         except (TypeError):
             xPercentError = 0
-#            raise Exception("\nERROR: Limelight is broken/unplugged \n")
+            print("\nERROR: Limelight is broken/unplugged \n")
 
         if abs(xPercentError) > 0.25:
             xPercentError = math.copysign(0.5, xPercentError)

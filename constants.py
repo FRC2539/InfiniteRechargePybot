@@ -89,6 +89,8 @@ drivetrain.encoderConfig.initializationStrategy = (
 )
 drivetrain.encoderConfig.sensorDirection = False
 
+drivetrain.defaultGyroAngleAdjustment = 0
+
 drivetrain.mostRecentPath = []  # Updated in record auto.
 
 drivetrain.preBuild = {1: ".barrelracing.json"}
