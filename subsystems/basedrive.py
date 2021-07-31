@@ -51,7 +51,10 @@ class BaseDrive(CougarSystem):
         self.navX = AHRS.create_spi()
 
         # self.setGyroAngle(-90)
-        self.resetGyro()
+        
+        """Reset the gyro (the starting position is the reverse of the proper orientation)"""
+        #self.resetGyro(90)
+        #print("--resetGyro 90")
 
         self.flatAngle = 0
 
@@ -180,9 +183,9 @@ class BaseDrive(CougarSystem):
                 motor.config_kF(profile, 0, 0)
                 motor.config_IntegralZone(profile, 0, 0)
 
-    def resetGyro(self):
+    def resetGyro(self, angle=0):
         """Force the navX to consider the current angle to be zero degrees."""
-        self.setGyroAngle(0)
+        self.setGyroAngle(angle)
 
     def setModuleSpeed(self, speed):
         pass

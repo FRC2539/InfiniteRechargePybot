@@ -10,4 +10,4 @@ class ZeroGyroCommand(InstantCommand):
         self.addRequirements(robot.drivetrain)
 
     def initialize(self):
-        robot.drivetrain.resetGyro()
+        robot.drivetrain.resetGyro(180)

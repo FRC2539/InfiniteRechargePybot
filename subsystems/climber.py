@@ -53,16 +53,6 @@ class Climber(CougarSystem):
         self.feed()
         self.hasLocked()
 
-        print(
-            str(self.climbing)
-            + " "
-            + str(self.climberMotor.getSelectedSensorPosition() < 0.2 * self.upperLimit)
-            + " "
-            + str(not self.climberMoving)
-            + " "
-            + str(not self.isFalling())
-        )  # Test this.
-
     def raiseClimber(self):
         """
         Raises the climber using the climber motor.

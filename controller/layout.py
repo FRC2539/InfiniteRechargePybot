@@ -9,11 +9,8 @@ from commands.drivetrain.drivecommand import DriveCommand
 from commands.drivetrain.togglefieldorientationcommand import (
     ToggleFieldOrientationCommand,
 )
-from commands.drivetrain.curvecommand import CurveCommand
 from commands.drivetrain.zerocancoderscommand import ZeroCANCodersCommand
 from commands.drivetrain.setspeedcommand import SetSpeedCommand
-from commands.drivetrain.recordautocommand import RecordAutoCommand
-from commands.drivetrain.runautocommand import RunAutoCommand
 from commands.drivetrain.dosadocommand import DosadoCommand
 from commands.drivetrain.playsongcommand import PlaySongCommand
 
@@ -78,7 +75,9 @@ def init():
 
     logicalaxes.rotate = driveControllerTwo.X
 
-    driveControllerOne.RightThumb.whileHeld(ConveyorIntakeBackwardCommand())
+    driveControllerOne.RightThumb.whileHeld(RaiseClimberCommand())
+    driveControllerOne.LeftThumb.whileHeld(LowerClimberCommand())
+    
     driveControllerOne.BottomThumb.whenPressed(ZeroGyroCommand())
 
     driveControllerOne.Trigger.whenPressed(
@@ -136,3 +135,5 @@ def init():
     componentController.DPadDown.whenPressed(MoveDownOffsetCommand())
     componentController.DPadRight.whenPressed(MoveRightOffsetCommand())
     componentController.DPadLeft.whenPressed(MoveLeftOffsetCommand())
+
+    componentController.Start.toggleWhenPressed(PlaySongCommand('thriller.chrp'))
