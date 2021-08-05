@@ -52,33 +52,37 @@ class SwerveDrive(BaseDrive):
         # Creates a list of swerve modules.
         self.modules = [
             SwerveModule(  # Front left module.
+                "front left",
                 ports.drivetrain.frontLeftDriveID,
                 ports.drivetrain.frontLeftTurnID,
                 ports.drivetrain.frontLeftCANCoder,
                 self.speedLimit,
-                -255.761719,
+                -255.498047,
             ),
             SwerveModule(  # Front right module.
+                "front right",
                 ports.drivetrain.frontRightDriveID,
                 ports.drivetrain.frontRightTurnID,
                 ports.drivetrain.frontRightCANCoder,
                 self.speedLimit,
-                -273.8672,
+                -272.548840625,
                 invertedDrive=True,  # Invert for some reason?
             ),
             SwerveModule(  # Back left module.
+                "back left",
                 ports.drivetrain.backLeftDriveID,
                 ports.drivetrain.backLeftTurnID,
                 ports.drivetrain.backLeftCANCoder,
                 self.speedLimit,
-                -41.484375,
+                -40.8692515625,
             ),
             SwerveModule(  # Back right module.
+                "back right",
                 ports.drivetrain.backRightDriveID,
                 ports.drivetrain.backRightTurnID,
                 ports.drivetrain.backRightCANCoder,
                 self.speedLimit,
-                -129.726563,
+                -128.759766125,
                 invertedDrive=True,  # Invert for some reason. Ezra's going nuts lol.
             ),
         ]
@@ -140,6 +144,8 @@ class SwerveDrive(BaseDrive):
 
         self.put("joystickPercent", controllerR)
         self.put("wheelPercents", self.getPercents())
+        
+        self.printAbsoluteModuleAngles()
 
     def generateRobotVector(self):
         """
@@ -505,7 +511,16 @@ class SwerveDrive(BaseDrive):
 
         # Add module in front, not to be confused with gyro! Returns degrees.
         return [module.getWheelAngle() % 360 for module in self.modules]
-
+    
+    def printAbsoluteModuleAngles(self):
+        """
+        Outputs the absolute wheel angles 
+        for each swerve module to the console.
+        """
+        angleStrings = [F"{module.moduleName}: {module.getAbsoluteWheelAngle()} " for module in self.modules]
+        
+        print("".join(angleStrings))
+        
     def setModuleAngles(self, angles: list):  # Set a list of different angles.
         """
         Set the angle of the wheel using the turn motor.

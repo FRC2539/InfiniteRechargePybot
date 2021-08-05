@@ -18,6 +18,7 @@ import constants
 class SwerveModule:
     def __init__(
         self,
+        name,
         driveMotorID,
         turnMotorID,
         canCoderID,
@@ -28,6 +29,9 @@ class SwerveModule:
         """
         The class constructor.
         """
+        
+        # Name the module (e.g. front left)
+        self.moduleName = name
 
         # Create the drive motor of this specific module.
         self.driveMotor = WPI_TalonFX(driveMotorID)  # Declare and setup drive motor.
@@ -161,6 +165,12 @@ class SwerveModule:
         Get wheel angle relative to the robot.
         """
         return self.cancoder.getPosition()  # Returns absolute position of CANCoder.
+    
+    def getAbsoluteWheelAngle(self):
+        """
+        Get the absolute angle of the wheel's CANCoder.
+        """
+        return self.cancoder.getAbsolutePosition()
 
     def setWheelAngle(self, angle):
         """
