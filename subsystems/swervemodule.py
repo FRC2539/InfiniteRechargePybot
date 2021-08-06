@@ -24,6 +24,7 @@ class SwerveModule:
         canCoderID,
         speedLimit,
         offset,
+        offsetBasis,
         invertedDrive=False,
     ):
         """
@@ -71,10 +72,18 @@ class SwerveModule:
         # Declare and setup the remote encoder.
         self.cancoder = CANCoder(canCoderID)
         self.cancoder.configAllSettings(constants.drivetrain.encoderConfig)
+        
+        # Stores the offset for this module
+        self.offset = offset
 
-        # Set's the magnet offset of the CANCoder. This can be determined through the Pheonix Tuner.
-        if offset is not None:
-            self.cancoder.configMagnetOffset(offset)
+        # Sets the magnet offset of the CANCoder. This can be determined through the Pheonix Tuner.
+        if self.offset is not None:
+            self.cancoder.configMagnetOffset(self.offset)
+
+        # Store the offset basis for zeroing the CANCoder. 
+        # This is used to determine the offset in combination
+        # with the getAbsoluteWheelAngle method
+        self.offsetBasis = offsetBasis
 
         # Declare and setup the turn motor of this module.
         self.turnMotor = WPI_TalonFX(turnMotorID)
