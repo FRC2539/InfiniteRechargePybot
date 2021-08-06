@@ -315,14 +315,14 @@ class SwerveDrive(BaseDrive):
         coordinates have not changed.
         """
 
-        if [x, y, rotate] == [0, 0, 0]:
-            self.stop()
-            return
-
         """Prevent drift caused by small input values"""
         x = math.copysign(max(abs(x) - self.deadband, 0), x)
         y = math.copysign(max(abs(y) - self.deadband, 0), y)
         rotate = math.copysign(max(abs(rotate) - (self.deadband + 0.05), 0), rotate)
+        
+        if [x, y, rotate] == [0, 0, 0]:
+            self.stop()
+            return
 
         speeds, angles = self._calculateSpeeds(x, y, rotate)
 
