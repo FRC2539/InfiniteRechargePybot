@@ -58,6 +58,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.frontLeftCANCoder,
                 self.speedLimit,
                 -255.498047,
+                180, # Offset basis - used for zeroing CANCoder
             ),
             SwerveModule(  # Front right module.
                 "front right",
@@ -66,6 +67,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.frontRightCANCoder,
                 self.speedLimit,
                 -272.548840625,
+                360, # Offset basis - used for zeroing CANCoder
                 invertedDrive=True,  # Invert for some reason?
             ),
             SwerveModule(  # Back left module.
@@ -75,6 +77,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.backLeftCANCoder,
                 self.speedLimit,
                 -40.8692515625,
+                180, # Offset basis - used for zeroing CANCoder
             ),
             SwerveModule(  # Back right module.
                 "back right",
@@ -83,6 +86,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.backRightCANCoder,
                 self.speedLimit,
                 -128.759766125,
+                360, # Offset basis - used for zeroing CANCoder
                 invertedDrive=True,  # Invert for some reason. Ezra's going nuts lol.
             ),
         ]
@@ -144,8 +148,6 @@ class SwerveDrive(BaseDrive):
 
         self.put("joystickPercent", controllerR)
         self.put("wheelPercents", self.getPercents())
-        
-        self.printAbsoluteModuleAngles()
 
     def generateRobotVector(self):
         """
@@ -518,6 +520,24 @@ class SwerveDrive(BaseDrive):
         for each swerve module to the console.
         """
         angleStrings = [F"{module.moduleName}: {module.getAbsoluteWheelAngle()} " for module in self.modules]
+        
+        print("".join(angleStrings))
+        
+    def printCorrectedModuleOffsets(self):
+        """
+        Determines how far off the offset for each module is,
+        and outputs the corrected values to the console. 
+        """
+        
+        # Calculate the new offset for each swerve module
+        # Algorithm: Current offset + (Base angle - absolute wheel angle)
+        correctedAngles = [
+            module.offset + (module.offsetBasis - module.getAbsoluteWheelAngle()) for module in self.modules
+        ]
+        
+        angleStrings = [
+            F"{module.moduleName}: {angle} " for module, angle in zip(self.modules, correctedAngles)
+        ]
         
         print("".join(angleStrings))
         
