@@ -523,10 +523,9 @@ class SwerveDrive(BaseDrive):
         
         print("".join(angleStrings))
         
-    def printCorrectedModuleOffsets(self):
+    def getCorrectedModuleOffsets(self):
         """
-        Determines how far off the offset for each module is,
-        and outputs the corrected values to the console. 
+        Determines how far off the offset for each module is.
         """
         
         # Calculate the new offset for each swerve module
@@ -534,6 +533,11 @@ class SwerveDrive(BaseDrive):
         correctedAngles = [
             module.offset + (module.offsetBasis - module.getAbsoluteWheelAngle()) for module in self.modules
         ]
+        
+    def printCorrectedModuleOffsets(self):
+        """
+        Outputs the corrected values to the console.
+        """
         
         angleStrings = [
             F"{module.moduleName}: {angle} " for module, angle in zip(self.modules, correctedAngles)
