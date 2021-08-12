@@ -306,6 +306,13 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     def tenBall(self):
         # Needs to be rewritten. If you want to see it, view commits.
         pass
+    
+    def justMove2(self):
+        # Needs to be rewritten. If you want to see it, view commits.
+        #pass
+        self.addCommands(
+            MoveCommand(-24)
+        )
 
     def interrupted(self):
         """

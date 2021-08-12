@@ -514,25 +514,25 @@ class SwerveDrive(BaseDrive):
         # Add module in front, not to be confused with gyro! Returns degrees.
         return [module.getWheelAngle() % 360 for module in self.modules]
     
-    def printAbsoluteModuleAngles(self):
-        """
-        Outputs the absolute wheel angles 
-        for each swerve module to the console.
-        """
-        angleStrings = [F"{module.moduleName}: {module.getAbsoluteWheelAngle()} " for module in self.modules]
+    #def printAbsoluteModuleAngles(self):
+        #"""
+        #Outputs the absolute wheel angles 
+        #for each swerve module to the console.
+        #"""
+        #angleStrings = [F"{module.moduleName}: {module.getAbsoluteWheelAngle()} " for module in self.modules]
         
-        print("".join(angleStrings))
+        #print("".join(angleStrings))
         
-    def getCorrectedModuleOffsets(self):
-        """
-        Determines how far off the offset for each module is.
-        """
+    #def getCorrectedModuleOffsets(self):
+        #"""
+        #Determines how far off the offset for each module is.
+        #"""
         
-        # Calculate the new offset for each swerve module
-        # Algorithm: Current offset + (Base angle - absolute wheel angle)
-        correctedAngles = [
-            module.offset + (module.offsetBasis - module.getAbsoluteWheelAngle()) for module in self.modules
-        ]
+        ## Calculate the new offset for each swerve module
+        ## Algorithm: Current offset + (Base angle - absolute wheel angle)
+        #correctedAngles = [
+            #module.offset + (module.offsetBasis - module.getAbsoluteWheelAngle()) for module in self.modules
+        #]
         
     def printCorrectedModuleOffsets(self):
         """

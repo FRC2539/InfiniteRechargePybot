@@ -69,8 +69,11 @@ class KryptonBot(TimedCommandRobot):
         
         from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 
-        # Schedule the autonomous command, and then reorient the robot afterwards.
-        (self.auto.beforeStarting(ZeroGyroCommand().schedule)).schedule()
+        # Zero the gyro to orient the robot properly for teleop       
+        ZeroGyroCommand().schedule()
+        
+        # Schedule the autonomous command
+        self.auto.schedule()
 
     def teleopInit(self):
         self.auto.cancel()
