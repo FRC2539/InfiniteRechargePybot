@@ -16,6 +16,8 @@ import constants
 
 import math
 
+from  networktables import NetworkTables
+
 logicalaxes.registerAxis("forward")
 logicalaxes.registerAxis("strafe")
 
@@ -119,6 +121,13 @@ class SwerveDrive(BaseDrive):
         self.put("wheelAngles", self.getModuleAngles())
         self.put("wheelSpeeds", self.getSpeeds())
         self.put("robotVector", [0, 0])
+        self.put("correctedOffsets", [0])
+        
+        # Stores whether or not the robot should send over the corrected wheel angle offsets
+        self.sendOffsets = False
+        
+        # Sync that value with network tables
+        self.put("sendOffsets", self.sendOffsets)
 
     def periodic(self):
         """
@@ -149,6 +158,16 @@ class SwerveDrive(BaseDrive):
         self.put("joystickPercent", controllerR)
         self.put("wheelPercents", self.getPercents())
 
+        self.updateSendOffsetsState()
+        
+        # Send the corrected wheel offsets 
+        # if that has been indicated in the dashboard
+        if self.sendOffsets:
+            self.put("correctedOffsets", self.getCorrectedModuleOffsets())
+    
+    def updateSendOffsetsState(self):
+        self.sendOffsets = self.get("sendOffsets")
+    
     def generateRobotVector(self):
         """
         Creates vectors for each module depending
@@ -514,30 +533,39 @@ class SwerveDrive(BaseDrive):
         # Add module in front, not to be confused with gyro! Returns degrees.
         return [module.getWheelAngle() % 360 for module in self.modules]
     
-    #def printAbsoluteModuleAngles(self):
-        #"""
-        #Outputs the absolute wheel angles 
-        #for each swerve module to the console.
-        #"""
-        #angleStrings = [F"{module.moduleName}: {module.getAbsoluteWheelAngle()} " for module in self.modules]
+    def printAbsoluteModuleAngles(self):
+        """
+        Outputs the absolute wheel angles 
+        for each swerve module to the console.
+        """
+        angleStrings = [F"{module.moduleName}: {module.getAbsoluteWheelAngle()} " for module in self.modules]
         
-        #print("".join(angleStrings))
+        print("".join(angleStrings))
         
-    #def getCorrectedModuleOffsets(self):
-        #"""
-        #Determines how far off the offset for each module is.
-        #"""
+    def getCorrectedModuleOffsets(self):
+        """
+        Determines how far off the offset for each module is.
+        """
         
-        ## Calculate the new offset for each swerve module
-        ## Algorithm: Current offset + (Base angle - absolute wheel angle)
-        #correctedAngles = [
-            #module.offset + (module.offsetBasis - module.getAbsoluteWheelAngle()) for module in self.modules
-        #]
+        # Calculate the new offset for each swerve module
+        # Algorithm: Current offset + (Base angle - absolute wheel angle)
+        correctedAngles = [
+            module.offset + (module.offsetBasis - module.getAbsoluteWheelAngle()) for module in self.modules
+        ]
+        
+        return correctedAngles
         
     def printCorrectedModuleOffsets(self):
         """
-        Outputs the corrected values to the console.
+        Use this when zeroing the wheels. 
+        
+        Calculates and outputs what the new offset values should be.
+        
+        These values SHOULD BE SIMILAR to the previous values.
+        If they aren't, try zeroing the wheels differently.
         """
+        
+        correctedAngles = self.getCorrectedModuleOffsets()
         
         angleStrings = [
             F"{module.moduleName}: {angle} " for module, angle in zip(self.modules, correctedAngles)
