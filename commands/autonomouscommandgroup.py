@@ -307,11 +307,20 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         # Needs to be rewritten. If you want to see it, view commits.
         pass
     
-    def justMove2(self):
-        # Needs to be rewritten. If you want to see it, view commits.
-        #pass
+    def uMoveandShoot(self):
+        # Robot makes a U movement. Picks up ball and shoots it.
         self.addCommands(
-            MoveCommand(-24)
+            InstantCommand(
+                lambda: robot.pneumatics.extendIntake(), [robot.conveyorintake]
+            ),
+            InstantCommand(
+                lambda: robot.conveyorintake.move(0.5), [robot.conveyorintake]
+            ),
+            MoveCommand(128, torySlow=5000)#,
+            #TurnCommand(-90),
+            #MoveCommand(-118),
+            #TurnCommand(90),
+            #MoveCommand(-128)
         )
 
     def interrupted(self):
