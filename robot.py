@@ -54,7 +54,7 @@ class KryptonBot(TimedCommandRobot):
         StartUpCommandGroup().schedule()
 
         from commands.drivetrain.drivecommand import DriveCommand
-        
+
     def autonomousInit(self):
         """This function is called each time autonomous mode starts."""
 
@@ -66,14 +66,12 @@ class KryptonBot(TimedCommandRobot):
 
         # Send field data to the dashboard
         driverhud.showField()
-        
+
         from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 
-        # Zero the gyro to orient the robot properly for teleop       
-        ZeroGyroCommand().schedule()
-        
-        # Schedule the autonomous command
-        self.auto.schedule()
+        # Zero the gyro to orient the robot properly for teleop,
+        # before scheduling the autonomous command
+        self.auto.beforeStarting(ZeroGyroCommand().initialize).schedule()
 
     def teleopInit(self):
         self.auto.cancel()
