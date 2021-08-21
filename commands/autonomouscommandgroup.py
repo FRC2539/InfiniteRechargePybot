@@ -306,9 +306,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     def tenBall(self):
         # Needs to be rewritten. If you want to see it, view commits.
         pass
-    
+
     def uMoveandShoot(self):
-        # Robot makes a U movement. Picks up ball and shoots it.
+        # Robot makes a U movement. Picks up ball and shoots it. Who made this????
         self.addCommands(
             InstantCommand(
                 lambda: robot.pneumatics.extendIntake(), [robot.conveyorintake]
@@ -316,11 +316,11 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             InstantCommand(
                 lambda: robot.conveyorintake.move(0.5), [robot.conveyorintake]
             ),
-            MoveCommand(128, torySlow=5000)#,
-            #TurnCommand(-90),
-            #MoveCommand(-118),
-            #TurnCommand(90),
-            #MoveCommand(-128)
+            MoveCommand(128, torySlow=5000)  # ,
+            # TurnCommand(-90),
+            # MoveCommand(-118),
+            # TurnCommand(90),
+            # MoveCommand(-128)
         )
 
     def interrupted(self):
@@ -330,3 +330,40 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         robot.conveyorintake.stop()
         robot.chamber.stop()
         robot.shooter.stopShooter()
+
+    def movePlease(self):
+        """
+        Haha robot go brrr
+        Square boi
+        """
+        self.addCommands(
+            MoveCommand(60),
+            TurnCommand(90),
+            MoveCommand(60),
+            TurnCommand(90),
+            MoveCommand(60),
+            TurnCommand(90),
+            MoveCommand(60),
+            TurnCommand(90),
+        )
+
+    def bezierStuff(self):
+        """
+        Bezier curve?
+        Wavy boi
+        """
+        self.addCommands(
+            BezierPathCommand([[0, 108], [0, 12], [16, 10], [25, 9]], speed=1.4)#,
+            # BezierPathCommand([[0, 0], [0, 60]], speed=0.3),
+            # BezierPathCommand([[0, 0], [-60, 0], [-60, 60], [0, 60]], speed=0.3),
+        )
+        
+    def sixBallBonanza(self):
+        """
+        The best six ball we've got. Don't question it.
+        """
+        self.addCommand(
+             AutomatedShootCommand(3300, ballCount=3, conveyorDelay=True).withTimeout(5),
+             MoveCommand(204, torySlow=30000)#,
+        )
+            
