@@ -376,10 +376,27 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         
     def sixBallBonanza(self):
         """
-        The best six ball we've got. Don't question it.
+        The best six ball we've got. Don't question it. 73 degrees.
         """
-        self.addCommand(
-             AutomatedShootCommand(3300, ballCount=3, conveyorDelay=True).withTimeout(5),
-             MoveCommand(204, torySlow=30000)#,
+        self.addCommands(
+            InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
+            MoveCommand(84),
+            InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
+            AutomatedShootCommand(4100, ballCount = 3, conveyorDelay = True).withTimeout(4),
+            TurnCommand(35),
+            InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
+            InstantCommand(lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]),
+            MoveCommand(120, torySlow = 5100),
+            MoveCommand(-135, angle = 10),
+            AutomatedShootCommand(4100, ballCount = 3),
+            InstantCommand(lambda: robot.pneumatics.retractIntake(), [robot.pneumatics])
+        )
+    
+    def sixBallBonanzaDeluxe(self):
+        """
+        Now with the curvy bois.
+        """
+        self.addCommands(
+            TurnCommand(-90)
         )
             

@@ -68,10 +68,12 @@ class KryptonBot(TimedCommandRobot):
         driverhud.showField()
 
         from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
-
-        # Zero the gyro to orient the robot properly for teleop,
-        # before scheduling the autonomous command
-        self.auto.beforeStarting(ZeroGyroCommand().initialize).schedule()
+        
+        # Schedule the autonomous command
+        self.auto.schedule()
+        
+        # Zero the gyro to orient the robot properly for teleop.
+        #ZeroGyroCommand().schedule()
 
     def teleopInit(self):
         self.auto.cancel()
