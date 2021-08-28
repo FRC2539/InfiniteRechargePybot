@@ -332,11 +332,11 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             InstantCommand(
                 lambda: robot.conveyorintake.move(0.5), [robot.conveyorintake]
             ),
-            MoveCommand(128, torySlow = 5000),
-            TurnCommand(90),
-            MoveCommand(-118, torySlow = 5000),
+            MoveCommand(128),
             TurnCommand(-90),
-            MoveCommand(-128, torySlow = 5000)
+            MoveCommand(-118),
+            TurnCommand(90),
+            MoveCommand(-128)
         )
 
     def interrupted(self):
