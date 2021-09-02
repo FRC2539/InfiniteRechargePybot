@@ -320,23 +320,23 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             TurnCommand(-90),
             MoveCommand(-118),
             TurnCommand(90),
-            MoveCommand(-128)
+            MoveCommand(-128),
         )
-            
+
     def moveTest(self):
-        
+
         self.addCommands(
-            InstantCommand(
-                lambda: robot.pneumatics.extendIntake(), [robot.conveyorintake]
-            ),
-            InstantCommand(
-                lambda: robot.conveyorintake.move(0.5), [robot.conveyorintake]
-            ),
+            # InstantCommand(
+            #    lambda: robot.pneumatics.extendIntake(), [robot.conveyorintake]
+            # ),
+            # InstantCommand(
+            #    lambda: robot.conveyorintake.move(0.5), [robot.conveyorintake]
+            # ),
             MoveCommand(128),
             TurnCommand(-90),
             MoveCommand(-118),
             TurnCommand(90),
-            MoveCommand(-128)
+            MoveCommand(-128),
         )
 
     def interrupted(self):
@@ -369,11 +369,11 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         Wavy boi
         """
         self.addCommands(
-            BezierPathCommand([[0, 108], [0, 12], [16, 10], [25, 9]], speed=1.4)#,
+            BezierPathCommand([[0, 108], [0, 12], [16, 10], [25, 9]], speed=1.4)  # ,
             # BezierPathCommand([[0, 0], [0, 60]], speed=0.3),
             # BezierPathCommand([[0, 0], [-60, 0], [-60, 60], [0, 60]], speed=0.3),
         )
-        
+
     def sixBallBonanza(self):
         """
         The best six ball we've got. Don't question it. 73 degrees.
@@ -382,23 +382,24 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
             MoveCommand(84),
             InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
-            AutomatedShootCommand(4100, ballCount = 3, conveyorDelay = True).withTimeout(4),
-            TurnCommand(35),
+            InstantCommand(
+                lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+            ),
+            AutomatedShootCommand(4100, ballCount=4, conveyorDelay=True).withTimeout(4),
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
-            InstantCommand(lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]),
-            MoveCommand(120, torySlow = 5100),
-            MoveCommand(-135, angle = 10),
-            AutomatedShootCommand(4100, ballCount = 3),
-            InstantCommand(lambda: robot.pneumatics.retractIntake(), [robot.pneumatics])
+            InstantCommand(
+                lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]
+            ),
+            MoveCommand(84, torySlow=5100),
+            MoveCommand(-135, angle=10),
+            AutomatedShootCommand(4100, ballCount=2).withTimeout(3),
+            InstantCommand(
+                lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]
+            ),
         )
-    
+
     def sixBallBonanzaDeluxe(self):
         """
         Now with the curvy bois.
         """
-        self.addCommands(
-            TurnCommand(-90)
-            
-            
-        )
-            
+        self.addCommands(TurnCommand(-90))
