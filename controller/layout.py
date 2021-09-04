@@ -48,6 +48,7 @@ from commands.limelight.movedownoffsetcommand import MoveDownOffsetCommand
 from commands.limelight.moveupoffsetcommand import MoveUpOffsetCommand
 from commands.limelight.moverightoffsetcommand import MoveRightOffsetCommand
 from commands.limelight.moveleftoffsetcommand import MoveLeftOffsetCommand
+from commands.limelight.sudocommandgroup import SudoCommandGroup
 
 from commands.pneumatics.toggleintakecommand import ToggleIntakeCommand
 
@@ -77,8 +78,8 @@ def init():
 
     driveControllerOne.RightThumb.whileHeld(RaiseClimberCommand())
     driveControllerOne.LeftThumb.whileHeld(LowerClimberCommand())
-    
-    driveControllerOne.BottomThumb.whenPressed(ZeroGyroCommand())
+
+    # driveControllerOne.BottomThumb.whenPressed(ZeroGyroCommand())
 
     driveControllerOne.Trigger.whenPressed(
         SetSpeedCommand(False)
@@ -136,4 +137,5 @@ def init():
     componentController.DPadRight.whenPressed(MoveRightOffsetCommand())
     componentController.DPadLeft.whenPressed(MoveLeftOffsetCommand())
 
-    componentController.Start.toggleWhenPressed(PlaySongCommand('thriller.chrp'))
+    # componentController.Start.toggleWhenPressed(PlaySongCommand("thriller.chrp"))
+    componentController.Start.toggleWhenPressed(SudoCommandGroup())

@@ -313,6 +313,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         Robot makes a U movement. Picks up ball and shoots it. Who made this???? Me.
         """
         self.addCommands(
+
             #InstantCommand(
             #    lambda: robot.pneumatics.extendIntake(), [robot.conveyorintake]
             #),
@@ -390,16 +391,20 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.addCommands(
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
             InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
+
+            MoveCommand(84),
             InstantCommand(
-                lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]
+                lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
             ),
-            MoveCommand(108, torySlow=5100),
+
             AutomatedShootCommand(4100, ballCount=4, conveyorDelay=True).withTimeout(5),
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
             InstantCommand(
                 lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]
             ),
-            MoveCommand(60, torySlow=5100),
+
+            MoveCommand(96, torySlow=5100),
+
             MoveCommand(-135, angle=10),
             AutomatedShootCommand(4100, ballCount=2).withTimeout(3),
             InstantCommand(
