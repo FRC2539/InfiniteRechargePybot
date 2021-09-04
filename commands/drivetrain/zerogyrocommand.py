@@ -4,10 +4,12 @@ import robot
 
 
 class ZeroGyroCommand(InstantCommand):
-    def __init__(self):
+    def __init__(self, flipOrientation=True):
         super().__init__()
 
         self.addRequirements(robot.drivetrain)
 
+        self.offsetAngle = 180 if flipOrientation else 0
+
     def initialize(self):
-        robot.drivetrain.resetGyro(180)
+        robot.drivetrain.resetGyro(self.offsetAngle)
