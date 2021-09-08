@@ -10,6 +10,7 @@ from commands2 import (
 )
 
 from commands.drivetrain.turncommand import TurnCommand
+from commands.drivetrain.turntocommand import TurnToCommand
 from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.generatevectors import GenerateVectors
 from commands.drivetrain.pathfollowercommand import PathFollowerCommand
@@ -307,36 +308,45 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         # Needs to be rewritten. If you want to see it, view commits.
         pass
 
-    def uMoveAndShoot(self):
-        # Robot makes a U movement. Picks up ball and shoots it. Who made this???? Me.
+    def uMoveAndShoot1(self):
+        """
+        Robot makes a U movement. Picks up ball and shoots it. Who made this???? Me.
+        """
         self.addCommands(
-            InstantCommand(
-                lambda: robot.pneumatics.extendIntake(), [robot.conveyorintake]
-            ),
-            InstantCommand(
-                lambda: robot.conveyorintake.move(0.5), [robot.conveyorintake]
-            ),
-            MoveCommand(128, torySlow=5000),
-            TurnCommand(-90),
-            MoveCommand(-118),
-            TurnCommand(90),
-            MoveCommand(-128),
-        )
 
-    def moveTest(self):
-
-        self.addCommands(
-            # InstantCommand(
+            #InstantCommand(
             #    lambda: robot.pneumatics.extendIntake(), [robot.conveyorintake]
-            # ),
-            # InstantCommand(
+            #),
+            #InstantCommand(
             #    lambda: robot.conveyorintake.move(0.5), [robot.conveyorintake]
-            # ),
-            MoveCommand(128),
-            TurnCommand(-90),
-            MoveCommand(-118),
+            #),
+            BezierPathCommand([[0, 0], [0, 230], [130, 230], [130, 0]], speed=0.25),
+            #MoveCommand(128),
+            #TurnCommand(-90),
+            #MoveCommand(-118),
+            #TurnCommand(90),
+            #MoveCommand(-128),
+            #InstantCommand(
+            #    lambda: robot.shooter.setRPM(3300), [robot.shooter]
+            #),
+            #InstantCommand(
+            #    lambda: robot.conveyorintake.stop(), [robot.conveyorintake]
+            #),
+            #TurnCommand(50),
+            #AutomatedShootCommand(4100, waitUntilAimed=True)
+        )
+            
+    def uMoveTurn(self):
+        """
+        Robot makes a U movement. Picks up ball and shoots it. Who made this???? Me.
+        """
+        self.addCommands(
+            MoveCommand(10),
             TurnCommand(90),
-            MoveCommand(-128),
+            MoveCommand(10),
+            TurnCommand(90),
+            MoveCommand(10)
+  
         )
 
     def interrupted(self):
@@ -381,18 +391,22 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.addCommands(
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
             InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
+
             MoveCommand(84),
             InstantCommand(
                 lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
             ),
-            AutomatedShootCommand(
-                4100, ballCount=4, conveyorDelay=True, waitUntilAimed=True
-            ).withTimeout(5),
+
+
+            AutomatedShootCommand(4100, ballCount=4, conveyorDelay=True).withTimeout(5),
+
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
             InstantCommand(
                 lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]
             ),
+
             MoveCommand(96, torySlow=5100),
+
             MoveCommand(-135, angle=10),
             AutomatedShootCommand(4100, ballCount=2).withTimeout(3),
             InstantCommand(

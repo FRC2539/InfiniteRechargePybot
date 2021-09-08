@@ -62,14 +62,14 @@ class TurnCommand(CommandBase):
             for angle, desiredAngle in zip(
                 robot.drivetrain.getModuleAngles(), [135, 45, 225, 315]
             ):
-                if abs(angle - desiredAngle) < 3:
+                if abs(angle - desiredAngle) < self.tolerance:
                     count += 1
 
             if count == 4:
                 self.modulesInPosition = True
 
     def isFinished(self):
-        return abs(robot.drivetrain.getAngleTo(self.startAngle)) + 3 > abs(self.degrees)
+        return abs(robot.drivetrain.getAngleTo(self.startAngle)) + self.tolerance > abs(self.degrees)
 
     def end(self, interrupted):
         robot.drivetrain.stop()
