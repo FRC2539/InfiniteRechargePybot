@@ -376,7 +376,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def sixBallBonanza(self):
         """
-        The best six ball we've got. Don't question it. 73 degrees.
+        The best six ball we've got. Don't question it.
         """
         self.addCommands(
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
@@ -385,7 +385,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             InstantCommand(
                 lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
             ),
-            AutomatedShootCommand(4100, ballCount=4, conveyorDelay=True).withTimeout(5),
+            AutomatedShootCommand(
+                4100, ballCount=4, conveyorDelay=True, waitUntilAimed=True
+            ).withTimeout(5),
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
             InstantCommand(
                 lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]
@@ -403,3 +405,39 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         Now with the curvy bois.
         """
         self.addCommands(TurnCommand(-90))
+    
+    def climbPlaceEightBall(self):
+        """
+        Now with the curvy bois.
+        """
+        self.addCommands(
+            InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
+            MoveCommand(42),
+            AutomatedShootCommand(3800).withTimeout(3),
+            InstantCommand(
+                lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]
+            ),
+            MoveCommand(58, torySlow=10000),
+            TurnCommand(-30),
+            InstantCommand(
+                lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+            ),
+            MoveCommand(70, torySlow=5100),
+            MoveCommand(-70, torySlow=10000),
+            TurnCommand(80),
+            MoveCommand(-40, torySlow=12500),
+            TurnCommand(-80),
+            InstantCommand(
+                lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+            ),
+            MoveCommand(70, torySlow=5100),
+            MoveCommand(-70, torySlow=10000),
+            InstantCommand(
+                lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]
+            ),
+            InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
+            TurnCommand(50),
+            MoveCommand(-40, torySlow=12500),
+            AutomatedShootCommand(3800, conveyorDelay=True).withTimeout(8),
+            TurnCommand(-3000),
+        )
