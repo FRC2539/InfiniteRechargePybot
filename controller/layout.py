@@ -79,7 +79,7 @@ def init():
     driveControllerOne.RightThumb.whileHeld(RaiseClimberCommand())
     driveControllerOne.LeftThumb.whileHeld(LowerClimberCommand())
 
-    # driveControllerOne.BottomThumb.whenPressed(ZeroGyroCommand())
+    driveControllerOne.BottomThumb.whenPressed(ZeroGyroCommand())
 
     driveControllerOne.Trigger.whenPressed(
         SetSpeedCommand(False)
