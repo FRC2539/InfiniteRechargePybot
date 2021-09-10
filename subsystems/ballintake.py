@@ -18,21 +18,22 @@ class BallIntake(CougarSystem):
 
         self.motors["intakeMotor"] = WPI_TalonSRX(ports.ballintake.intakeMotor)
         self.motors["conveyorMotor"] = WPI_TalonSRX(ports.ballintake.conveyorMotor)
-        self.motors["shooterFeedMotor"] = WPI_TalonSRX(
-            ports.ballintake.shooterFeedMotor
-        )
+        self.motors["shooterFeedMotor"] = WPI_TalonSRX(ports.ballintake.shooterFeedMotor)
+        
+        #print("shooter: " + str(ports.ballintake.shooterFeedMotor))
 
         # Configure the ball intake motors
         for motor in self.motors:
             self.motors[motor].setNeutralMode(NeutralMode.Brake)
 
         self.motors["conveyorMotor"].setInverted(True)
+        self.motors["shooterFeedMotor"].setInverted(True)
 
         # Percentages are from 0 - 1, 1 being 100%
         self.speeds = {
             "intakeMotor": 0.8,
             "conveyorMotor": 0.8,
-            "shooterFeedMotor": 0.8,
+            "shooterFeedMotor": 0.8
         }
 
         # Constantly updates the intake's status.
