@@ -6,6 +6,9 @@ from custom.config import Config
 from commands.drivetrain.drivecommand import DriveCommand
 from commands.resetcommand import ResetCommand
 
+from commands.ballintake.intakeforwardcommand import IntakeForwardCommand
+from commands.ballintake.intakebackwardcommand import IntakeBackwardCommand
+
 
 def init():
     """
@@ -28,7 +31,5 @@ def init():
     driveController.Back.whenPressed(ResetCommand())
     driveController.X.toggleWhenPressed(DriveCommand())
 
-    # The controller for non-driving subsystems of the robot
-    componentController = LogitechDualShock(1)
-
-    componentController.Back.whenPressed(ResetCommand())
+    driveController.DPadUp.whileHeld(IntakeForwardCommand())
+    driveController.DPadDown.whileHeld(IntakeBackwardCommand())

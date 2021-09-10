@@ -18,3 +18,9 @@ drivetrain.frontLeftMotorID = 1
 drivetrain.frontRightMotorID = 3
 drivetrain.backLeftMotorID = 2
 drivetrain.backRightMotorID = 4
+
+ballintake = PortsList()
+
+ballintake.intakeMotor = 5
+ballintake.conveyorMotor = 7
+ballintake.shooterFeedMotor = 6

@@ -1,8 +1,7 @@
 from wpilib import Joystick
-from commands2.button import JoystickButton
+from commands2.button import JoystickButton, POVButton
 
 from .controlleraxis import ControllerAxis
-from .povbutton import POVButton
 
 
 class GenericController(Joystick):

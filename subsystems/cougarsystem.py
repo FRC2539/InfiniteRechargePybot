@@ -109,12 +109,14 @@ class CougarSystem(SubsystemBase):
                     "Unrecognizable Data Type . . . \nShould be a: boolean, int, float, string, list of bools, \nlist of strings, list of numbers."
                 )
 
-    def get(self, valueName):
+    def get(self, valueName, defaultValue=None):
         """
         Get the value of the key with the
         given name.
         """
-        return self.table.getValue(valueName, None)  # Returns None if it doesn't exist.
+        return self.table.getValue(
+            valueName, defaultValue
+        )  # Returns None if it doesn't exist.
 
     def hasChanged(self, valueName, compareTo):
         """

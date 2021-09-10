@@ -16,6 +16,7 @@ from commands.autonomouscommandgroup import AutonomousCommandGroup
 
 from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
+from subsystems.ballintake import BallIntake as ballintake
 from subsystems.cougarsystem import CougarSystem
 
 import math
