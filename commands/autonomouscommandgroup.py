@@ -308,37 +308,46 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         # Needs to be rewritten. If you want to see it, view commits.
         pass
 
-    def uMoveAndShoot1(self):
+    def uMoveAndShoot(self):
         """
-        Robot makes a U movement. Picks up ball and shoots it. Who made this???? Me.
+        Soon to be eight ball. Robot shoots 3 starting balls then collects 5 additional balls from around the pillar and shoots them. Currently only starts with 3 balls, goes around the pillar and shoots them from there.
         """
         self.addCommands(
-
-            #InstantCommand(
-            #    lambda: robot.pneumatics.extendIntake(), [robot.conveyorintake]
-            #),
-            #InstantCommand(
-            #    lambda: robot.conveyorintake.move(0.5), [robot.conveyorintake]
-            #),
-            BezierPathCommand([[0, 0], [0, 230], [130, 230], [130, 0]], speed=0.25),
-            #MoveCommand(128),
-            #TurnCommand(-90),
-            #MoveCommand(-118),
-            #TurnCommand(90),
-            #MoveCommand(-128),
-            #InstantCommand(
-            #    lambda: robot.shooter.setRPM(3300), [robot.shooter]
-            #),
-            #InstantCommand(
-            #    lambda: robot.conveyorintake.stop(), [robot.conveyorintake]
-            #),
-            #TurnCommand(50),
-            #AutomatedShootCommand(4100, waitUntilAimed=True)
+            #AutomatedShootCommand(4100),
+            #BezierPathCommand([[0,0], [0,0], [0,0]], speed=0.25),
+            #TurnCommand(0),
+            #MoveCommand(0),
+            #BezierPathCommand([[0,0], [0,0], [0,0]], speed=0.25),
+            #TurnCommand(0),
+            #
+            #AutomatedShootCommand(4100),
+            #BezierPathComm
+            InstantCommand(
+                lambda: robot.pneumatics.extendIntake(), [robot.conveyorintake]
+            ),
+            
+            InstantCommand(
+                lambda: robot.conveyorintake.move(0.6), [robot.conveyorintake]
+            ),
+            BezierPathCommand([[0, 0], [0, 230], [90, 230], [90, 0]], speed=0.75),
+            
+            InstantCommand(
+                lambda: robot.shooter.setRPM(3300), [robot.shooter]
+            ),
+            InstantCommand(
+                lambda: robot.conveyorintake.stop(), [robot.conveyorintake]
+            ),
+            TurnCommand(15),
+            AutomatedShootCommand(4100, waitUntilAimed=True),
+            InstantCommand(
+                lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]
+            )
         )
+        
             
     def uMoveTurn(self):
         """
-        Robot makes a U movement. Picks up ball and shoots it. Who made this???? Me.
+        Robot moves and turns in a u movement
         """
         self.addCommands(
             MoveCommand(10),
@@ -391,22 +400,16 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.addCommands(
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
             InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
-
             MoveCommand(84),
             InstantCommand(
                 lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
             ),
-
-
             AutomatedShootCommand(4100, ballCount=4, conveyorDelay=True).withTimeout(5),
-
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
             InstantCommand(
                 lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]
             ),
-
             MoveCommand(96, torySlow=5100),
-
             MoveCommand(-135, angle=10),
             AutomatedShootCommand(4100, ballCount=2).withTimeout(3),
             InstantCommand(
@@ -455,3 +458,24 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             AutomatedShootCommand(3800, conveyorDelay=True).withTimeout(8),
             TurnCommand(-3000),
         )
+        
+    def magicFiveBall(self):
+        """
+        This auto picks up 2 balls right now after starting with 3.
+        """
+        self.addCommands(
+            InstantCommand(lambda: robot.shooter.setRPM(4400), [robot.shooter]),
+            MoveCommand(12 * 6),
+            InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
+            InstantCommand(lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]),
+            MoveCommand(12 * 4, torySlow = 304.8 * 6),
+            MoveCommand(-12 * 10),
+            InstantCommand(lambda: robot.conveyorintake.stop(), [robot.conveyorintake]),
+            InstantCommand(lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]),
+            TurnCommand(15),
+            AutomatedShootCommand(conveyorDelay = True).withTimeout(8),
+            
+        )
+    
+        
+    
