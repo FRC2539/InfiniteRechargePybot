@@ -27,6 +27,7 @@ class DriveCommand(CommandBase):
     def execute(self):
         # Avoid quick changes in direction
         y = logicalaxes.driveY.get()
+
         if self.lastY is None:
             self.lastY = y
         else:

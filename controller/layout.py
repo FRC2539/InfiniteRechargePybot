@@ -9,6 +9,8 @@ from commands.resetcommand import ResetCommand
 from commands.ballintake.intakeforwardcommand import IntakeForwardCommand
 from commands.ballintake.intakebackwardcommand import IntakeBackwardCommand
 
+from commands.shooter.shootrpmcommand import ShootRPMCommand
+
 
 def init():
     """
@@ -33,3 +35,5 @@ def init():
 
     driveController.DPadUp.whileHeld(IntakeForwardCommand())
     driveController.DPadDown.whileHeld(IntakeBackwardCommand())
+
+    driveController.RightBumper.whileHeld(ShootRPMCommand(6500))

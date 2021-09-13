@@ -14,13 +14,22 @@ class PortsList:
 drivetrain = PortsList()
 
 """CAN IDs for motors"""
-drivetrain.frontLeftMotorID = 1
-drivetrain.frontRightMotorID = 3
-drivetrain.backLeftMotorID = 2
-drivetrain.backRightMotorID = 4
+drivetrain.frontLeftMotorID = 4
+drivetrain.frontRightMotorID = 1
+drivetrain.backLeftMotorID = 3
+drivetrain.backRightMotorID = 2
 
 ballintake = PortsList()
 
+"""IDs for ball intake"""
 ballintake.intakeMotor = 5
 ballintake.conveyorMotor = 7
 ballintake.shooterFeedMotor = 6
+
+ballintake.sensor = 0
+
+shooter = PortsList()
+"""IDs for shooter motors"""
+
+shooter.leadMotor = 8
+shooter.followMotor = 9

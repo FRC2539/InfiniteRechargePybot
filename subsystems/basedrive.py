@@ -58,7 +58,7 @@ class BaseDrive(CougarSystem):
         """A record of the last arguments to move()"""
         self.lastInputs = None
 
-        self.speedLimit = self.get("Normal Speed", 45)
+        self.speedLimit = self.get("Normal Speed", 0.5)  # 45
         self.deadband = self.get("Deadband", 0.05)
 
         self.wheelBase = (
@@ -84,6 +84,9 @@ class BaseDrive(CougarSystem):
 
         # Tell the robot to use encoders.
         self.useEncoders = True
+
+        # Tell the robot to flip an axis from the controller
+        self.flipY = False
 
     def initDefaultCommand(self):
         """
@@ -113,6 +116,10 @@ class BaseDrive(CougarSystem):
             y = math.copysign(max(abs(y) - self.deadband, 0), y)
             rotate = math.copysign(max(abs(rotate) - self.deadband, 0), rotate)
 
+        """Flip the y axis"""
+        if self.flipY:
+            y = -1 * y
+
         speeds = self._calculateSpeeds(x, y, rotate)
 
         """Prevent speeds > 1"""
@@ -125,7 +132,9 @@ class BaseDrive(CougarSystem):
 
         """Use speeds to feed motor output."""
         for motor, speed in zip(self.activeMotors, speeds):
-            motor.set(ControlMode.Velocity, speed * self.speedLimit)
+            motor.set(ControlMode.PercentOutput, speed * self.speedLimit)
+            # motor.set(ControlMode.Velocity, speed * self.speedLimit)
+            # print(f"{motor}: {speed * self.speedLimit}")
 
     def setPositions(self, positions):
         """
