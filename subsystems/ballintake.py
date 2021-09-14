@@ -2,6 +2,8 @@ from .cougarsystem import *
 
 import ports
 
+from wpilib import AnalogInput
+
 from ctre import WPI_TalonSRX, NeutralMode, ControlMode
 
 
@@ -31,10 +33,16 @@ class BallIntake(CougarSystem):
 
         # Percentages are from 0 - 1, 1 being 100%
         self.speeds = {
-            "intakeMotor": 1,
+            "intakeMotor": 0.6,
             "conveyorMotor": 1,
             "shooterFeedMotor": 1,
         }
+
+        # Initialize the analog input for checking if a ball is present in the intake
+        self.ballSensor = AnalogInput(ports.ballintake.sensor)
+
+        # Set a threshold for confirming a ball's presence
+        self.ballPresentThreshold = 50
 
         # Constantly updates the intake's status.
         self.constantlyUpdate(
@@ -48,6 +56,42 @@ class BallIntake(CougarSystem):
         this subsystem. Do not call this!
         """
         self.feed()
+
+    def forwardIntake(self):
+        """
+        Runs the intake motor forward
+        """
+        self.forwardMotor("intakeMotor")
+
+    def forwardConveyor(self):
+        """
+        Runs the conveyor motor forward
+        """
+        self.forwardMotor("conveyorMotor")
+
+    def forwardShooterFeed(self):
+        """
+        Runs the shooter feed motor forward
+        """
+        self.forwardMotor("shooterFeedMotor")
+
+    def stopIntake(self):
+        """
+        Stops the intake motor
+        """
+        self.stopMotor("intakeMotor")
+
+    def stopConveyor(self):
+        """
+        Stops the conveyor motor
+        """
+        self.stopMotor("conveyorMotor")
+
+    def stopShooterFeed(self):
+        """
+        Stops the shooter feed motor
+        """
+        self.stopMotor("shooterFeedMotor")
 
     def forwardAll(self):
         """
@@ -95,3 +139,9 @@ class BallIntake(CougarSystem):
         Stop a specific motor
         """
         self.motors[motor].stopMotor()
+
+    def isBallPresent(self):
+        """
+        Checks if the ball is present in the intake
+        """
+        return self.ballSensor.getValue() < self.ballPresentThreshold

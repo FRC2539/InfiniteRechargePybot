@@ -2,7 +2,6 @@ from .cougarsystem import *
 
 import math
 
-from networktables import NetworkTables
 from ctre import ControlMode, NeutralMode, WPI_TalonFX, FeedbackDevice
 from navx import AHRS
 
@@ -87,6 +86,18 @@ class BaseDrive(CougarSystem):
 
         # Tell the robot to flip an axis from the controller
         self.flipY = False
+
+        # Constantly update various values in network tables
+        self.constantlyUpdate("Tilt", lambda: self.getTilt())
+        self.constantlyUpdate("Angle", lambda: self.getAngle())
+        # self.constantlyUpdate("Speeds", lambda: self.getSpeeds())
+
+    def periodic(self):
+        """
+        Loops when nothing else is running in
+        this subsystem. Do not call this!
+        """
+        self.feed()
 
     def initDefaultCommand(self):
         """

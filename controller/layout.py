@@ -11,6 +11,8 @@ from commands.ballintake.intakebackwardcommand import IntakeBackwardCommand
 
 from commands.shooter.shootrpmcommand import ShootRPMCommand
 
+from commands.ballintake.intakeloadcommand import IntakeLoadCommand
+
 
 def init():
     """
@@ -33,7 +35,9 @@ def init():
     driveController.Back.whenPressed(ResetCommand())
     driveController.X.toggleWhenPressed(DriveCommand())
 
+    driveController.A.whileHeld(IntakeLoadCommand())
+
     driveController.DPadUp.whileHeld(IntakeForwardCommand())
     driveController.DPadDown.whileHeld(IntakeBackwardCommand())
 
-    driveController.RightBumper.whileHeld(ShootRPMCommand(6500))
+    driveController.RightBumper.whileHeld(ShootRPMCommand(5400))

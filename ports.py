@@ -11,6 +11,9 @@ class PortsList:
     pass
 
 
+lights = PortsList()
+lights.lightControllerID = 0  # PWM
+
 drivetrain = PortsList()
 
 """CAN IDs for motors"""

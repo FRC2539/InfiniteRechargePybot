@@ -14,6 +14,7 @@ from commands2 import SubsystemBase, CommandScheduler
 from commands import autoconfig
 from commands.autonomouscommandgroup import AutonomousCommandGroup
 
+from subsystems.lights import Lights as lights
 from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
 from subsystems.ballintake import BallIntake as ballintake
@@ -79,7 +80,6 @@ class KryptonBot(TimedCommandRobot):
     def handleCrash(self, error):
         super().handleCrash()
         driverhud.showAlert("Fatal Error: %s" % error)
-
 
     @classmethod
     def subsystems(cls):
