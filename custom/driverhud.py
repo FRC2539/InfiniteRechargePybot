@@ -4,7 +4,6 @@ information from the dashboard and provide it to the program.
 """
 
 from wpilib import SmartDashboard, DriverStation, SendableChooser
-from wpilib.command import Scheduler
 from wpilib import DriverStation
 from networktables import NetworkTables
 
