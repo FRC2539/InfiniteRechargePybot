@@ -1,6 +1,12 @@
 from wpilib import DriverStation
 
-from commands2 import SequentialCommandGroup
+from commands2 import (SequentialCommandGroup, InstantCommand)
+
+from commands.drivetrain.turncommand import TurnCommand
+from commands.drivetrain.turntocommand import TurnToCommand
+from commands.drivetrain.movecommand import MoveCommand
+
+from commands.limelight.automatedshootcommand import AutomatedShootCommand
 
 from networktables import NetworkTables
 
@@ -41,3 +47,13 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         robot.chamber.stop()
         robot.conveyor.stop()
         robot.shooter.stopShooter()
+        
+    def shootAndMove(self):
+        """
+        Shoot 3 balls, then move off the line.
+        """
+        self.addCommands(
+            InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
+            AutomatedShootCommand(3800, conveyorDelay = true),
+            MoveCommand(42)
+        )
