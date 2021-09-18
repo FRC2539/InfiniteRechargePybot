@@ -24,43 +24,25 @@ drivetrain = Constants()
 shooter = Constants()
 
 # Drive Velocity Control
-drivetrain.dPk = 0.003
+drivetrain.dPk = 0.0075
 drivetrain.dIk = 0
 drivetrain.dDk = 1
-drivetrain.dFFk = 0.05
+drivetrain.dFFk = 0.00005
 drivetrain.dIZk = 0
-# Swerve values
-# drivetrain.dPk = 0.0085
-# drivetrain.dIk = 0
-# drivetrain.dDk = 0
-# drivetrain.dFFk = 0.25  # 1?
-# drivetrain.dIZk = 0
 
 # Drive Position Control
 drivetrain.sdPk = 0.005  # 0.1
 drivetrain.sdIk = 0
 drivetrain.sdDk = 0.05
 drivetrain.sdFFk = 0.003
-# drivetrain.sdIZk = 0
-# Swerve values
-# drivetrain.sdPk = 0.45  # 0.1
-# drivetrain.sdIk = 0
-# drivetrain.sdDk = 0
-# drivetrain.sdFFk = 0.1
-# drivetrain.sdIZk = 0
+drivetrain.sdIZk = 0
 
 # Turn Position Control
 drivetrain.tPk = 0.03
 drivetrain.tIk = 0
 drivetrain.tDk = 0.05
 drivetrain.tFFk = 0.005
-# drivetrain.tIZk = 0
-# Swerve values
-# drivetrain.tPk = 22.5
-# drivetrain.tIk = 0
-# drivetrain.tDk = 0.01
-# drivetrain.tFFk = 0
-# drivetrain.tIZk = 0
+drivetrain.tIZk = 0
 
 # Turn Secondary Position Control
 drivetrain.stPk = 8.5

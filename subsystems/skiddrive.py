@@ -6,25 +6,21 @@ import ports
 
 class SkidDrive(BaseDrive):
     """A drive base where all wheels on each side move together."""
-    
+
     def __init__(self, name):
         super().__init__(name)
 
     def _configureMotors(self):
 
-        """Only the front motors are active in a skid system."""
+        # Only the front motors are active in a skid system.
         self.activeMotors = self.motors[0:2]
 
-        """Make the back motors follow the front."""
+        # Have the rear motors follow the front motors
         if len(self.motors) == 4:
-            self.motors[RobotDriveBase.MotorType.kRearLeft].follow(
-                self.motors[RobotDriveBase.MotorType.kFrontLeft]
-            )
-            self.motors[RobotDriveBase.MotorType.kRearRight].follow(
-                self.motors[RobotDriveBase.MotorType.kFrontRight]
-            )
+            self.motors[2].follow(self.motors[0])
+            self.motors[3].follow(self.motors[1])
 
-        """Invert encoders"""
+        # Invert encoders
         for motor in self.activeMotors:
             motor.setSensorPhase(True)
 

@@ -9,7 +9,7 @@ from commands.resetcommand import ResetCommand
 from commands.ballintake.intakeforwardcommand import IntakeForwardCommand
 from commands.ballintake.intakebackwardcommand import IntakeBackwardCommand
 
-from commands.shooter.shootrpmcommand import ShootRPMCommand
+from commands.shooter.spinupandshootcommand import SpinUpAndShootCommand
 
 from commands.ballintake.intakeloadcommand import IntakeLoadCommand
 
@@ -35,9 +35,9 @@ def init():
     driveController.Back.whenPressed(ResetCommand())
     driveController.X.toggleWhenPressed(DriveCommand())
 
-    driveController.A.whileHeld(IntakeLoadCommand())
+    driveController.LeftBumper.whileHeld(IntakeLoadCommand())
 
     driveController.DPadUp.whileHeld(IntakeForwardCommand())
     driveController.DPadDown.whileHeld(IntakeBackwardCommand())
 
-    driveController.RightBumper.whileHeld(ShootRPMCommand(3200))
+    driveController.RightBumper.whileHeld(SpinUpAndShootCommand(3200))

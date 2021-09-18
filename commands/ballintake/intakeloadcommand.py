@@ -2,8 +2,6 @@ from commands2 import CommandBase
 
 import robot
 
-from wpilib import Timer
-
 
 class IntakeLoadCommand(CommandBase):
     def __init__(self):
