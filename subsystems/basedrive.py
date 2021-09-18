@@ -71,8 +71,10 @@ class BaseDrive(CougarSystem):
         """A record of the last arguments to move()"""
         self.lastInputs = None
 
-        self.speedLimit = self.get("Normal Speed", 120)  # 156
-        self.deadband = self.get("Deadband", 0.05)
+        self.put("Normal Speed", 120)
+        self.put("Deadband", 0.05)
+
+        self.updateNTConstants()
 
         self.wheelBase = (
             constants.drivetrain.wheelBase
@@ -97,6 +99,20 @@ class BaseDrive(CougarSystem):
 
         # Tell the robot to use encoders.
         self.useEncoders = True
+
+        self.constantlyUpdate(
+            "Motor Temperatures",
+            lambda: [motor.getTemperature() for motor in self.motors],
+        )
+
+    def periodic(self):
+        """
+        Loops when nothing else is running in
+        this subsystem. Do not call this!
+        """
+        self.feed()
+
+        self.updateNTConstants()
 
     def updateNTConstants(self):
         """
