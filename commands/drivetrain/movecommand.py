@@ -17,17 +17,15 @@ class MoveCommand(CommandBase):
 
         super().__init__()
 
-        if isinstance(robot.drivetain, SwerveDrive):
+        self.distance = -distance
+        self.angle = angle
+        self.tol = tolerance  # Angle tolerance in degrees.
+        self.isSlow = slow
 
-            self.distance = -distance
-            self.angle = angle
-            self.tol = tolerance  # Angle tolerance in degrees.
-            self.isSlow = slow
+        self.moveSet = False
+        self.addRequirements(robot.drivetrain)
 
-            self.moveSet = False
-            self.addRequirements(robot.drivetrain)
-
-    def swerveInitialize(self):
+    def initialize(self):
         if self.isSlow:
             robot.drivetrain.setCruiseVelocity(True)
 
