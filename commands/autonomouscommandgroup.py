@@ -368,8 +368,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def movePlease(self):
         """
-        Haha robot go brrr
-        Square boi
+        Move in a square formation.
         """
         self.addCommands(
             MoveCommand(60),
@@ -384,8 +383,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def bezierStuff(self):
         """
-        Bezier curve?
-        Wavy boi
+        Test for the bezier curve.
         """
         self.addCommands(
             BezierPathCommand([[0, 108], [0, 12], [16, 10], [25, 9]], speed=1.4)  # ,
@@ -393,9 +391,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             # BezierPathCommand([[0, 0], [-60, 0], [-60, 60], [0, 60]], speed=0.3),
         )
 
-    def sixBallBonanza(self):
+    def badTrenchSixBall(self):
         """
-        The best six ball we've got. Don't question it.
+        Move off the line, collect 1 ball, then shoot 4. Pick up the remaining balls in the trench and shoot from the line.
         """
         self.addCommands(
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
@@ -416,16 +414,10 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]
             ),
         )
-
-    def sixBallBonanzaDeluxe(self):
-        """
-        Now with the curvy bois.
-        """
-        self.addCommands(TurnCommand(-90))
     
     def climbPlaceEightBall(self):
         """
-        Now with the curvy bois.
+        DEFINE AUTO HERE.
         """
         self.addCommands(
             InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
@@ -461,7 +453,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         
     def magicFiveBall(self):
         """
-        This auto picks up 2 balls right now after starting with 3.
+        Pick up 2 balls after starting with 3.
         """
         self.addCommands(
             InstantCommand(lambda: robot.shooter.setRPM(4400), [robot.shooter]),
