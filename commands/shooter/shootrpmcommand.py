@@ -4,29 +4,29 @@ import robot
 
 
 class ShootRPMCommand(CommandBase):
-    def __init__(self, val, usePercent=False):
+    def __init__(self, targetRPM):
         super().__init__()
 
         self.addRequirements(robot.shooter)
 
-        self.val = val
-        self.usePercent = usePercent
+        self.targetRPM = targetRPM
 
     def initialize(self):
         robot.lights.blinkWhite()
-        if self.usePercent:
-            robot.shooter.setPercent(0.3)
-        else:
-            robot.shooter.setRPM(self.val)
+
+        # Spin up the motor
+        robot.shooter.setRPM(self.targetRPM)
 
     def execute(self):
-        if robot.shooter.getRPM() > 4000:
-            print("shooter over 4400")
-            robot.lights.fire()
+        # Change the led color if the target rpm has been reached
+        if robot.shooter.getRPM() >= self.targetRPM:
+            robot.lights.fireRed()
         else:
-            print("shooter under 4000")
             robot.lights.blinkWhite()
 
     def end(self, interrupted):
-        robot.lights.blinkWhite()
+        # Reset the lights
+        robot.lights.rainbow()
+
+        # Stop the shooter
         robot.shooter.stopShooter()

@@ -29,7 +29,8 @@ ballintake.intakeMotor = 5
 ballintake.conveyorMotor = 7
 ballintake.shooterFeedMotor = 6
 
-ballintake.sensor = 0
+ballintake.intakeSensor = 0
+ballintake.conveyorSensor = 1
 
 shooter = PortsList()
 """IDs for shooter motors"""

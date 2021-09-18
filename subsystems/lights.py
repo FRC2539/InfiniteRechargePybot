@@ -37,6 +37,8 @@ class Lights(CougarSystem):
             "lime": 0.73,
             "blinkWhite": -0.21,
             "blinkPink": -0.22,
+            "fireRed": -0.85,
+            "rainbow": -0.99,
         }
 
         self.off()
@@ -97,6 +99,12 @@ class Lights(CougarSystem):
 
     def blinkPink(self):
         self.set(self.colors["blinkPink"])
+
+    def fireRed(self):
+        self.set(self.colors["fireRed"])
+
+    def rainbow(self):
+        self.set(self.colors["rainbow"])
 
     def isZero(self):
         if robot.arm.isAtZero() and robot.elevator.isAtZero():

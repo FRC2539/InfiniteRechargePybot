@@ -40,4 +40,4 @@ def init():
     driveController.DPadUp.whileHeld(IntakeForwardCommand())
     driveController.DPadDown.whileHeld(IntakeBackwardCommand())
 
-    driveController.RightBumper.whileHeld(ShootRPMCommand(5400))
+    driveController.RightBumper.whileHeld(ShootRPMCommand(3200))
