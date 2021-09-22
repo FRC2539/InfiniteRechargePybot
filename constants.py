@@ -22,6 +22,7 @@ IDs for the CANbus, sensors, PWM, and the liking.
 
 drivetrain = Constants()
 shooter = Constants()
+limelight = Constants()
 
 # Drive Velocity Control
 drivetrain.dPk = 0.0075
@@ -55,7 +56,7 @@ drivetrain.stIZk = 0
 drivetrain.flatAngle = 0
 
 # Gear ratios on the drivetrain.
-drivetrain.driveMotorGearRatio = 6.86
+drivetrain.driveMotorGearRatio = 10.71  # 6.86
 drivetrain.turnMotorGearRatio = 12.8
 
 # Motion magic velocities and accelerations
@@ -71,11 +72,14 @@ drivetrain.maxMetersPerSecond = 1  # Velocity for trajectory
 drivetrain.maxMetersPerSecondSquared = 0.1  # Accel for trajectory
 
 # Diameter of the wheel in inches.
-drivetrain.wheelDiameter = 4
+drivetrain.wheelDiameter = 6  # 4
 
 # Distance between adjacent wheels.
 drivetrain.wheelBase = 23.5
 drivetrain.trackWidth = 23.5
+
+# Robot width
+drivetrain.robotWidth = 27.75
 
 # Center of the robot to the center of a wheel in inches.
 drivetrain.robotRadius = 16.84251
@@ -102,3 +106,11 @@ shooter.kI = 0
 shooter.kD = 0.003
 shooter.kF = 0.000158
 shooter.IZone = 0
+
+# Set the limelight's initial offset values
+limelight.xOffset = 0
+limelight.yOffset = 0
+
+# Set the step size for modifying the offsets
+limelight.xOffsetStep = 0.5
+limelight.yOffsetStep = 0.5

@@ -47,15 +47,24 @@ class BaseDrive(CougarSystem):
 
         for motor in self.motors:
             motor.setNeutralMode(NeutralMode.Brake)
+
+            # Prevent Watchdog messages
             motor.setSafetyEnabled(False)
+
+            # Configure the feedback sensor (encoder)
             motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0)
             motor.setSelectedSensorPosition(0)
+
             motor.configMotionCruiseVelocity(
                 constants.drivetrain.driveMotionCruiseVelocity, 0
             )
             motor.configMotionAcceleration(
                 constants.drivetrain.driveMotionAcceleration, 0
             )
+
+            # Set the ramp rate of the motor
+            motor.configOpenloopRamp(0.5)
+            motor.configClosedloopRamp(0.5)
 
         """
         Subclasses should configure motors correctly and populate activeMotors.
@@ -71,7 +80,7 @@ class BaseDrive(CougarSystem):
         """A record of the last arguments to move()"""
         self.lastInputs = None
 
-        self.put("Normal Speed", 120)
+        self.put("Normal Speed", 200)
         self.put("Deadband", 0.05)
 
         self.updateNTConstants()
@@ -166,8 +175,7 @@ class BaseDrive(CougarSystem):
 
     def setPositions(self, distanceForward):
         """
-        Have the motors move to the given positions. There should be one
-        position per active motor. Extra positions will be ignored.
+        Have the motors move the given distance
         """
 
         if not self.useEncoders:
@@ -177,6 +185,21 @@ class BaseDrive(CougarSystem):
             motor.set(
                 TalonFXControlMode.MotionMagic,
                 self.getPositions(False) + self.inchesToTicks(distanceForward),
+            )
+
+    def setMotorPositions(self, positions):
+        """
+        Have the motors move to the given positions. There should be one
+        position per active motor. Extra positions will be ignored.
+        """
+
+        if not self.useEncoders:
+            raise RuntimeError("Cannot set position. Encoders are disabled.")
+
+        for motor, position in zip(self.motors, positions):
+            motor.set(
+                TalonFXControlMode.MotionMagic,
+                self.getPositions(False) + self.inchesToTicks(positions),
             )
 
     def averageError(self):
@@ -210,7 +233,7 @@ class BaseDrive(CougarSystem):
     def resetPID(self):
         """Set all PID values for profiles 0 and 1."""
         for motor in self.activeMotors:
-            motor.configClosedLoopRamp(0, 0)
+            # motor.configClosedLoopRamp(0)
 
             # Drive PIDs here.
             motor.config_kP(0, constants.drivetrain.dPk, 0)

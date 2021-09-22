@@ -33,9 +33,9 @@ class BallIntake(CougarSystem):
 
         # Percentages are from 0 - 1, 1 being 100%
         self.speeds = {
-            "intakeMotor": 0.4,
+            "intakeMotor": 0.65,
             "conveyorMotor": 0.55,
-            "shooterFeedMotor": 0.75,  # 0.9
+            "shooterFeedMotor": 0.65,  # 0.9
         }
 
         # Initialize the analog inputs for checking if a ball is present

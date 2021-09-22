@@ -1,12 +1,10 @@
 from commands2 import CommandBase
-from subsystems.swervedrive import SwerveDrive
-from custom import driverhud
-from custom.config import MissingConfigError
+
 import robot
 
 
 class MoveCommand(CommandBase):
-    def __init__(self, distance, angle=0, tolerance=5, slow=False, name=None):
+    def __init__(self, distance, reversedDirection=False, name=None):
         """
         Takes a distance in inches and stores it for later. We allow overriding
         name so that other autonomous driving commands can extend this class.
@@ -17,62 +15,38 @@ class MoveCommand(CommandBase):
 
         super().__init__()
 
-        self.distance = -distance
-        self.angle = angle
-        self.tol = tolerance  # Angle tolerance in degrees.
-        self.isSlow = slow
+        # Determine which direction to drive
+        self.reversed = -1 if reversedDirection else 1
 
-        self.moveSet = False
+        # Calculate the distance to travel
+        self.distance = distance * self.reversed
+
         self.addRequirements(robot.drivetrain)
 
     def initialize(self):
-        if self.isSlow:
-            robot.drivetrain.setCruiseVelocity(True)
+        # Set the PID profile to the auto one
+        robot.drivetrain.setProfile(1)
 
-        robot.drivetrain.setModuleProfiles(1, turn=False)
+        # TODO get wheel measurements for accurate calculations
 
-        self.count = 0
-        self.startPos = robot.drivetrain.getPositions()
+        # Store the robot's starting position
+        self.startPosition = robot.drivetrain.getPositions()
 
-        robot.drivetrain.setUniformModuleAngle(self.angle)
+        # Calculate the target position for the motors
+        self.targetPosition = self.startPosition[0] + abs(self.distance)
 
-    def execute(self):
-
-        self.count = 0
-        if self.count != 4 and not self.moveSet:
-            print(robot.drivetrain.getModuleAngles())
-            for currentAngle in robot.drivetrain.getModuleAngles():
-                if (
-                    abs(currentAngle - self.angle) < self.tol
-                    or abs(currentAngle - self.angle - 360) < self.tol
-                ):
-                    self.count += 1
-                else:
-                    continue
-
-        if self.count == 4:  # All angles aligned.
-            robot.drivetrain.setPositions(
-                [self.distance, self.distance, self.distance, self.distance]
-            )
-
-            self.moveSet = True
-
-        robot.drivetrain.setUniformModuleAngle(self.angle)
+        # Move forward the given distance
+        robot.drivetrain.setPositions(self.distance)
 
     def isFinished(self):
-        count = 0
-        for position, start in zip(robot.drivetrain.getPositions(), self.startPos):
-            if abs(position - (start + self.distance)) < 4:
-                count += 1
-            else:
-                return False
+        positions = robot.drivetrain.getPositions()
 
-        if count == 4:
-            return True
+        # Determines if the robot has made it to the target position
+        return self.targetPosition <= min([abs(positions[0]), abs(positions[1])])
 
     def end(self, interrupted):
-        print("WHAT")
+        # Stop the robot
         robot.drivetrain.stop()
-        robot.drivetrain.setCruiseVelocity()
-        robot.drivetrain.setModuleProfiles(0, turn=False)
-        self.moveSet = False
+
+        # Reset the PID profile
+        robot.drivetrain.setProfile(0)
