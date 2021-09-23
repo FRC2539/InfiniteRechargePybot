@@ -461,9 +461,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
             InstantCommand(lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]),
             MoveCommand(12 * 4, torySlow = 304.8 * 6),
-            MoveCommand(-12 * 10),
             InstantCommand(lambda: robot.conveyorintake.stop(), [robot.conveyorintake]),
             InstantCommand(lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]),
+            MoveCommand(-12 * 10),
             TurnCommand(15),
             AutomatedShootCommand(conveyorDelay = True).withTimeout(8),
             
