@@ -393,9 +393,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             # BezierPathCommand([[0, 0], [-60, 0], [-60, 60], [0, 60]], speed=0.3),
         )
 
-    def sixBallBonanza(self):
+    def badSixBall(self):
         """
-        The best six ball we've got. Don't question it.
+        Okay, I lied. Do not use this.
         """
         self.addCommands(
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
@@ -417,11 +417,25 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             ),
         )
 
-    def sixBallBonanzaDeluxe(self):
+    def homeTrenchEightBall(self):
         """
-        Now with the curvy bois.
+        Shoot 3 and pick up the other 3 from the trench. Then collect 2+ center balls.
         """
-        self.addCommands(TurnCommand(-90))
+        self.addCommands(
+            #Trench portion.
+            InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
+            MoveCommand(48),
+            InstantCommand(lambda: robot.pneumatics.extendIntake()),
+            AutomatedShootCommand(4100, ballCount=3, conveyorDelay=True).withTimeout(4),
+            InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
+            InstantCommand(
+                lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]
+            ),
+            MoveCommand(120, torySlow=5200),
+            
+            #Move into position for bezier curve
+            MoveCommand(-111, angle=10),
+        )
     
     def climbPlaceEightBall(self):
         """
