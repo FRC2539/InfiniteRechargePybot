@@ -2,8 +2,6 @@ from .movecommand import MoveCommand
 
 import robot
 
-# from custom.config import Config
-
 import constants
 
 import math
@@ -29,33 +27,9 @@ class TurnCommand(MoveCommand):
     def initialize(self):
         """Calculates new positions by offseting the current ones."""
 
-        distance = self._calculateDisplacement()
-
-        targetPositions = []
-
-        # Flip the sign for every other motor
-        sign = 1
-
-        # Calculate all of the target positions for the rotation
-        for position in robot.drivetrain.getPositions():
-            targetPositions.append(position + (distance * sign))
-            sign *= -1
-
-        robot.drivetrain.setMotorPositions(targetPositions)
+        robot.drivetrain.rotateByAngle(self.degrees)
 
     def isFinished(self):
         return abs(
             robot.drivetrain.getAngleTo(self.initialAngle)
         ) + self.tolerance > abs(self.degrees)
-
-    def _calculateDisplacement(self):
-        """
-        In order to avoid having a separate ticksPerDegree, we calculate it
-        based on the width of the robot base.
-        """
-
-        inchesPerDegree = math.pi * constants.drivetrain.robotWidth / 360
-
-        totalDistanceInInches = self.distance * inchesPerDegree
-
-        return totalDistanceInInches

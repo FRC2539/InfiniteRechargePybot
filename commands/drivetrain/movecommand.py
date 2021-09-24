@@ -27,8 +27,6 @@ class MoveCommand(CommandBase):
         # Set the PID profile to the auto one
         robot.drivetrain.setProfile(1)
 
-        # TODO get wheel measurements for accurate calculations
-
         # Store the robot's starting position
         self.startPosition = robot.drivetrain.getPositions()
 

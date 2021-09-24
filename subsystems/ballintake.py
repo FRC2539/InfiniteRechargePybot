@@ -33,14 +33,15 @@ class BallIntake(CougarSystem):
 
         # Percentages are from 0 - 1, 1 being 100%
         self.speeds = {
-            "intakeMotor": 0.65,
-            "conveyorMotor": 0.55,
-            "shooterFeedMotor": 0.65,  # 0.9
+            "intakeMotor": 0.40,
+            "conveyorMotor": 0.60,
+            "shooterFeedMotor": 0.565,  # 0.9
         }
 
         # Initialize the analog inputs for checking if a ball is present
         self.intakeSensor = AnalogInput(ports.ballintake.intakeSensor)
         self.conveyorSensor = AnalogInput(ports.ballintake.conveyorSensor)
+        self.shooterSensor = AnalogInput(ports.ballintake.shooterSensor)
 
         # Set a threshold for confirming a ball's presence
         self.ballPresentThreshold = 50
@@ -152,3 +153,9 @@ class BallIntake(CougarSystem):
         Checks if the ball is present in the conveyor
         """
         return self.conveyorSensor.getValue() < self.ballPresentThreshold
+
+    def isShooterBallPresent(self):
+        """
+        Checks if the ball is present in the shooter
+        """
+        return self.shooterSensor.getValue() < self.ballPresentThreshold

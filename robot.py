@@ -20,6 +20,7 @@ from subsystems.drivetrain import DriveTrain as drivetrain
 from subsystems.ballintake import BallIntake as ballintake
 from subsystems.shooter import Shooter as shooter
 from subsystems.limelight import Limelight as limelight
+from subsystems.hood import Hood as hood
 from subsystems.cougarsystem import CougarSystem
 
 import math

@@ -63,8 +63,8 @@ class BaseDrive(CougarSystem):
             )
 
             # Set the ramp rate of the motor
-            motor.configOpenloopRamp(0.5)
-            motor.configClosedloopRamp(0.5)
+            motor.configOpenloopRamp(0.15)
+            motor.configClosedloopRamp(0.15)
 
         """
         Subclasses should configure motors correctly and populate activeMotors.
@@ -80,7 +80,7 @@ class BaseDrive(CougarSystem):
         """A record of the last arguments to move()"""
         self.lastInputs = None
 
-        self.put("Normal Speed", 200)
+        self.put("Normal Speed", 100)
         self.put("Deadband", 0.05)
 
         self.updateNTConstants()
@@ -172,6 +172,26 @@ class BaseDrive(CougarSystem):
                 ControlMode.Velocity,
                 self.inchesPerSecondToTicksPerTenth(speed * self.speedLimit),
             )
+
+    def rotateByAngle(self, angle):
+        """Rotates the robot by a specific angle."""
+
+        # Calculate how far to move the wheels (in inches)
+        distance = self.degreesToInches(angle)
+
+        # Store the new positions for the motors
+        targetPositions = []
+
+        # Flip the sign for every other motor
+        sign = 1
+
+        # Calculate all of the target positions for the rotation
+        for position in self.getPositions():
+            targetPositions.append(position + (distance * sign))
+            sign *= -1
+
+        # Move the motors to the calculated positions
+        self.setMotorPositions(targetPositions)
 
     def setPositions(self, distanceForward):
         """
@@ -311,6 +331,16 @@ class BaseDrive(CougarSystem):
         Convert a robot velocity to a legible one.
         """
         return self.ticksToInches(ticksPerTenth * 10)
+
+    def degreesToInches(self, degrees):
+        """
+        Convert a degree rotation to a distance in inches
+        """
+        inchesPerDegree = math.pi * constants.drivetrain.robotWidth / 360
+
+        totalDistanceInInches = degrees * inchesPerDegree
+
+        return totalDistanceInInches
 
     def resetTilt(self):
         self.flatAngle = self.navX.getPitch()
