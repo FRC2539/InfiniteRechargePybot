@@ -66,7 +66,7 @@ class KryptonBot(TimedCommandRobot):
         # Schedule the autonomous command
         self.auto.schedule()
 
-        driverhud.showInfo("Starting %s" % self.auton)
+        driverhud.showInfo("Starting %s" % self.auto)
 
     def disabledInit(self):
         try:
