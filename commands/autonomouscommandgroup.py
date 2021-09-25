@@ -174,7 +174,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def getOffTheLine(self):
         """
-        Literally, just move 3.5 feet forward.
+        Literally, just move 3.5 feet back off the line.
         """
         self.addCommands(MoveCommand(42))
 
