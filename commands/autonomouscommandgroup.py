@@ -320,9 +320,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
                 lambda: robot.conveyorintake.move(0.6), [robot.conveyorintake]
             ),
             #AutomatedShootCommand(4100, ballCount=3, waitUntilAimed=True),
-            #TurnCommand(90),
             BezierPathCommand([[0, 0], [0, 140], [0, 150], [90, 150]], speed=0.75),
-            
             InstantCommand(
                 lambda: robot.shooter.setRPM(3300), [robot.shooter]
             ),

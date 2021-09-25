@@ -36,8 +36,6 @@ class BezierPathCommand(CommandBase):
 
         points - first and last points are anchor points
                  second and third points are corresponding control points
-        
-        As of 8/17/21, the bezier curve command causes unexpected robot behavior. Please fix/use caution.
         """
 
         super().__init__()
