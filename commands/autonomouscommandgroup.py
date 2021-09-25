@@ -48,12 +48,11 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         robot.conveyor.stop()
         robot.shooter.stopShooter()
 
-    # def shootAndMove(self):
-    #     """
-    #     Shoot 3 balls, then move off the line.
-    #     """
-    #     self.addCommands(
-    #         InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
-    #         AutomatedShootCommand(3800, conveyorDelay=true),
-    #         MoveCommand(42),
-    #     )
+    def shootAndMove(self):
+        """
+        Shoot 3 balls, then move off the line.
+        """
+        self.addCommands(
+            AutomatedShootCommand(3300),
+            MoveCommand(42),
+        )
