@@ -48,129 +48,129 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
         eval("self." + toRun + "()")  # Setups the method.
 
-    def Slalom(self):
-        """
-        IR@H Challenge.
-        """
+    # def Slalom(self):
+    #     """
+    #     IR@H Challenge.
+    #     """
 
-        # NOTE: Don't write autos like this, for the love of God.
+    #     # NOTE: Don't write autos like this, for the love of God.
 
-        self.addCommands(
-            SegmentFollowerCommand(
-                [
-                    [0, 13],
-                    [-28, 14],
-                    [-64, 26],
-                    [-64, 64],
-                    [-63, 180],
-                    [-10, 188, {"speed": 0.9}],
-                    [42, 192, {"speed": 0.9}],
-                    [49, 218, {"speed": 0.9}],
-                    [48, 258, {"speed": 0.9}],
-                    [8, 274, {"speed": 0.9}],
-                    [-40, 233, {"speed": 0.9}],
-                    [-40, 197, {"speed": 0.9}],
-                    [32, 194],
-                    [32, 26, {"speed": 0.9}],
-                    [-64, 30, {"speed": 0.9}],
-                    [-66, -45, {"speed": 0.9}],
-                ],
-                maxSpeed=1.6,
-            ),
-        )
+    #     self.addCommands(
+    #         SegmentFollowerCommand(
+    #             [
+    #                 [0, 13],
+    #                 [-28, 14],
+    #                 [-64, 26],
+    #                 [-64, 64],
+    #                 [-63, 180],
+    #                 [-10, 188, {"speed": 0.9}],
+    #                 [42, 192, {"speed": 0.9}],
+    #                 [49, 218, {"speed": 0.9}],
+    #                 [48, 258, {"speed": 0.9}],
+    #                 [8, 274, {"speed": 0.9}],
+    #                 [-40, 233, {"speed": 0.9}],
+    #                 [-40, 197, {"speed": 0.9}],
+    #                 [32, 194],
+    #                 [32, 26, {"speed": 0.9}],
+    #                 [-64, 30, {"speed": 0.9}],
+    #                 [-66, -45, {"speed": 0.9}],
+    #             ],
+    #             maxSpeed=1.6,
+    #         ),
+    #     )
 
-    def BarrelRacing(self):
-        """
-        IR@H Challenge.
-        """
-        self.addCommands(
-            BezierPathCommand(
-                [[0, 0], [70, 30], [75, 0]], speed=1.4, stopWhenDone=False
-            ),
-            BezierPathCommand(
-                [[90, 70], [90, 0], [10, 0], [10, 70]], speed=1.2, stopWhenDone=False
-            ),
-            BezierPathCommand(
-                [[0, 20], [10, 60], [195, 10], [195, 80]], speed=1.2, stopWhenDone=False
-            ),
-            BezierPathCommand(
-                [[90, 10], [90, 80], [0, 80], [0, 10]], speed=1.1, stopWhenDone=False
-            ),
-            BezierPathCommand(
-                [[0, 110], [0, 30], [10, 0], [70, 0]], speed=1.25, stopWhenDone=False
-            ),
-            BezierPathCommand(
-                [[0, 0], [115, 0], [115, 45], [50, 60]], speed=1.25, stopWhenDone=False
-            ),
-            BezierPathCommand([[250, 0], [210, 5], [0, 7]], speed=1.5),
-        )
+    # def BarrelRacing(self):
+    #     """
+    #     IR@H Challenge.
+    #     """
+    #     self.addCommands(
+    #         BezierPathCommand(
+    #             [[0, 0], [70, 30], [75, 0]], speed=1.4, stopWhenDone=False
+    #         ),
+    #         BezierPathCommand(
+    #             [[90, 70], [90, 0], [10, 0], [10, 70]], speed=1.2, stopWhenDone=False
+    #         ),
+    #         BezierPathCommand(
+    #             [[0, 20], [10, 60], [195, 10], [195, 80]], speed=1.2, stopWhenDone=False
+    #         ),
+    #         BezierPathCommand(
+    #             [[90, 10], [90, 80], [0, 80], [0, 10]], speed=1.1, stopWhenDone=False
+    #         ),
+    #         BezierPathCommand(
+    #             [[0, 110], [0, 30], [10, 0], [70, 0]], speed=1.25, stopWhenDone=False
+    #         ),
+    #         BezierPathCommand(
+    #             [[0, 0], [115, 0], [115, 45], [50, 60]], speed=1.25, stopWhenDone=False
+    #         ),
+    #         BezierPathCommand([[250, 0], [210, 5], [0, 7]], speed=1.5),
+    #     )
 
-    def Bounce(self):
-        """
-        IR@H Challenge.
-        """
-        self.addCommands(
-            BezierPathCommand([[0, 0], [40, 0], [38, 45]], speed=1),
-            InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
-            InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
-            BezierPathCommand(
-                [[0, 100], [0, 0], [20, 40], [20, 0]], speed=1, stopWhenDone=False
-            ),
-            BezierPathCommand(
-                [[0, 90], [0, 50], [56, 50], [56, 90]], speed=1, stopWhenDone=False
-            ),
-            BezierPathCommand([[0, 0], [0, 90], [0, 90]], speed=1),
-            InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
-            InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
-            BezierPathCommand([[0, 90], [0, 0]], speed=1, stopWhenDone=False),
-            BezierPathCommand(
-                [[0, 54], [0, 0], [103, 0], [103, 54]], speed=1, stopWhenDone=False
-            ),
-            BezierPathCommand([[0, 0], [0, 78], [0, 78]], speed=1),
-            InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
-            InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
-            BezierPathCommand([[0, 30], [0, 0], [15, 0]], speed=1),
-        )
+    # def Bounce(self):
+    #     """
+    #     IR@H Challenge.
+    #     """
+    #     self.addCommands(
+    #         BezierPathCommand([[0, 0], [40, 0], [38, 45]], speed=1),
+    #         InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
+    #         InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
+    #         BezierPathCommand(
+    #             [[0, 100], [0, 0], [20, 40], [20, 0]], speed=1, stopWhenDone=False
+    #         ),
+    #         BezierPathCommand(
+    #             [[0, 90], [0, 50], [56, 50], [56, 90]], speed=1, stopWhenDone=False
+    #         ),
+    #         BezierPathCommand([[0, 0], [0, 90], [0, 90]], speed=1),
+    #         InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
+    #         InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
+    #         BezierPathCommand([[0, 90], [0, 0]], speed=1, stopWhenDone=False),
+    #         BezierPathCommand(
+    #             [[0, 54], [0, 0], [103, 0], [103, 54]], speed=1, stopWhenDone=False
+    #         ),
+    #         BezierPathCommand([[0, 0], [0, 78], [0, 78]], speed=1),
+    #         InstantCommand(lambda: robot.drivetrain.stop(), [robot.drivetrain]),
+    #         InstantCommand(lambda: robot.drivetrain.waitForRoll(), [robot.drivetrain]),
+    #         BezierPathCommand([[0, 30], [0, 0], [15, 0]], speed=1),
+    #     )
 
-    def GalacticSearchRedA(self):
-        """
-        IR@H Challenge.
-        """
-        self.addCommands(
-            InstantCommand(
-                lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
-            ),
-            WaitCommand(0.2),
-            BezierPathCommand(
-                [[200, 0], [190, 125], [209, 30], [209, 120]],
-                speed=1.3,
-                stopWhenDone=True,
-            ),
-            BezierPathCommand(
-                [[160, 50], [7, 0], [37, 0], [57, 140]], speed=1.8, stopWhenDone=False
-            ),
-            BezierPathCommand([[0, 0], [0, 200]], speed=5),
-        )
+    # def GalacticSearchRedA(self):
+    #     """
+    #     IR@H Challenge.
+    #     """
+    #     self.addCommands(
+    #         InstantCommand(
+    #             lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+    #         ),
+    #         WaitCommand(0.2),
+    #         BezierPathCommand(
+    #             [[200, 0], [190, 125], [209, 30], [209, 120]],
+    #             speed=1.3,
+    #             stopWhenDone=True,
+    #         ),
+    #         BezierPathCommand(
+    #             [[160, 50], [7, 0], [37, 0], [57, 140]], speed=1.8, stopWhenDone=False
+    #         ),
+    #         BezierPathCommand([[0, 0], [0, 200]], speed=5),
+    #     )
 
-    def GalacticSearchRedB(self):
-        """
-        IR@H Challenge.
-        """
-        self.addCommands(
-            InstantCommand(
-                lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
-            ),
-            WaitCommand(0.2),
-            SegmentFollowerCommand(
-                [
-                    [0, 5, {"speed": 0.45}],
-                    [0, 10, {"speed": 1.1}],
-                    [50, 60, {"speed": 1.2}],
-                    [-50, 130, {"speed": 3}],
-                    [-25, 430],
-                ]
-            ),
-        )
+    # def GalacticSearchRedB(self):
+    #     """
+    #     IR@H Challenge.
+    #     """
+    #     self.addCommands(
+    #         InstantCommand(
+    #             lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+    #         ),
+    #         WaitCommand(0.2),
+    #         SegmentFollowerCommand(
+    #             [
+    #                 [0, 5, {"speed": 0.45}],
+    #                 [0, 10, {"speed": 1.1}],
+    #                 [50, 60, {"speed": 1.2}],
+    #                 [-50, 130, {"speed": 3}],
+    #                 [-25, 430],
+    #             ]
+    #         ),
+    #     )
 
     def getOffTheLine(self):
         """
@@ -206,23 +206,24 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             AutomatedShootCommand(4100, conveyorDelay=True),
         )
 
-    def rendevousSixBall(self):
-        """
-        Shoots three, and then grabs the three balls on the north
-        face of the rendevous point.
-        """
-        self.addCommands(
-            AutomatedShootCommand(3300, ballCount=3, conveyorDelay=True).withTimeout(5),
-            InstantCommand(lambda: robot.shooter.setRPM(3300), [robot.shooter]),
-            InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
-            InstantCommand(
-                lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
-            ),
-            MoveCommand(74),
-            BezierPathCommand([[0, 50], [0, 0], [20, 0], [20, 50]], speed=0.3),
-            BezierPathCommand([[30, 40], [0, 0]], speed=0.4),
-            AutomatedShootCommand(3300, ballCount=3),
-        )
+    # def rendevousSixBall(self):
+    #     """
+    #     Previous year rendevous.
+    #     Shoots three, and then grabs the three balls on the north
+    #     face of the rendevous point.
+    #     """
+    #     self.addCommands(
+    #         AutomatedShootCommand(3300, ballCount=3, conveyorDelay=True).withTimeout(5),
+    #         InstantCommand(lambda: robot.shooter.setRPM(3300), [robot.shooter]),
+    #         InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
+    #         InstantCommand(
+    #             lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+    #         ),
+    #         MoveCommand(74),
+    #         BezierPathCommand([[0, 50], [0, 0], [20, 0], [20, 50]], speed=0.3),
+    #         BezierPathCommand([[30, 40], [0, 0]], speed=0.4),
+    #         AutomatedShootCommand(3300, ballCount=3),
+    #     )
 
     def stealFiveBall(self):
         """
@@ -244,109 +245,103 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             AutomatedShootCommand(3300, conveyorDelay=True, waitUntilAimed=True),
         )
 
-    def badEightBall(self):
-        """
-        Collects two additional balls from the trench, and then shoots all five.
-        """
+    # def badEightBall(self):
+    #     """
+    #     Collects two additional balls from the trench, and then shoots all five.
+    #     """
 
-        self.addCommands(
-            InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
-            MoveCommand(48, torySlow=26000),
-            InstantCommand(lambda: robot.pneumatics.extendIntake()),
-            AutomatedShootCommand(3800, ballCount=3, conveyorDelay=True).withTimeout(
-                2.25
-            ),
-            InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
-            InstantCommand(
-                lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]
-            ),
-            MoveCommand(120, torySlow=9000),
-            MoveCommand(-100, angle=30, torySlow=28000),
-            AutomatedShootCommand(4100, conveyorDelay=True).withTimeout(1.5),
-            InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
-            TurnCommand(51),
-            InstantCommand(
-                lambda: robot.conveyorintake.move(0.6), [robot.conveyorintake]
-            ),
-            MoveCommand(26, torySlow=24000),
-            MoveCommand(-20, torySlow=2800),
-            TurnCommand(-51),
-            AutomatedShootCommand(4100, conveyorDelay=True),
-        )
+    #     self.addCommands(
+    #         InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
+    #         MoveCommand(48, torySlow=26000),
+    #         InstantCommand(lambda: robot.pneumatics.extendIntake()),
+    #         AutomatedShootCommand(3800, ballCount=3, conveyorDelay=True).withTimeout(
+    #             2.25
+    #         ),
+    #         InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
+    #         InstantCommand(
+    #             lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]
+    #         ),
+    #         MoveCommand(120, torySlow=9000),
+    #         MoveCommand(-100, angle=30, torySlow=28000),
+    #         AutomatedShootCommand(4100, conveyorDelay=True).withTimeout(1.5),
+    #         InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
+    #         TurnCommand(51),
+    #         InstantCommand(
+    #             lambda: robot.conveyorintake.move(0.6), [robot.conveyorintake]
+    #         ),
+    #         MoveCommand(26, torySlow=24000),
+    #         MoveCommand(-20, torySlow=2800),
+    #         TurnCommand(-51),
+    #         AutomatedShootCommand(4100, conveyorDelay=True),
+    #     )
 
-    def bensEightBall(self):
-        """
-        Collects two additional balls from the trench, and then shoots all five.
-        F in the chat bois. Didn't read the rules.
-        """
+    # def bensEightBall(self):
+    #     """
+    #     Collects two additional balls from the trench, and then shoots all five.
+    #     F in the chat bois. Didn't read the rules.
+    #     """
 
-        self.addCommands(
-            InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
-            MoveCommand(48, torySlow=30000),
-            InstantCommand(lambda: robot.pneumatics.extendIntake()),
-            AutomatedShootCommand(3800, ballCount=3, conveyorDelay=True).withTimeout(
-                2.75
-            ),
-            InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
-            InstantCommand(
-                lambda: robot.conveyorintake.move(0.83), [robot.conveyorintake]
-            ),
-            BezierPathCommand([[0, 0], [0, 106]], speed=0.44, stopWhenDone=True),
-            BezierPathCommand([[0, 108], [0, 12], [16, 10], [25, 9]], speed=1.4),
-            InstantCommand(lambda: robot.conveyorintake.stop(), [robot.conveyorintake]),
-            TurnCommand(44),
-            InstantCommand(
-                lambda: robot.conveyorintake.move(0.5), [robot.conveyorintake]
-            ),
-            MoveCommand(29, torySlow=22000),
-            MoveCommand(-29, torySlow=30000),
-            TurnCommand(-55),
-            AutomatedShootCommand(3800, conveyorDelay=True),
-        )
+    #     self.addCommands(
+    #         InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
+    #         MoveCommand(48, torySlow=30000),
+    #         InstantCommand(lambda: robot.pneumatics.extendIntake()),
+    #         AutomatedShootCommand(3800, ballCount=3, conveyorDelay=True).withTimeout(
+    #             2.75
+    #         ),
+    #         InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
+    #         InstantCommand(
+    #             lambda: robot.conveyorintake.move(0.83), [robot.conveyorintake]
+    #         ),
+    #         BezierPathCommand([[0, 0], [0, 106]], speed=0.44, stopWhenDone=True),
+    #         BezierPathCommand([[0, 108], [0, 12], [16, 10], [25, 9]], speed=1.4),
+    #         InstantCommand(lambda: robot.conveyorintake.stop(), [robot.conveyorintake]),
+    #         TurnCommand(44),
+    #         InstantCommand(
+    #             lambda: robot.conveyorintake.move(0.5), [robot.conveyorintake]
+    #         ),
+    #         MoveCommand(29, torySlow=22000),
+    #         MoveCommand(-29, torySlow=30000),
+    #         TurnCommand(-55),
+    #         AutomatedShootCommand(3800, conveyorDelay=True),
+    #     )
 
-    def tenBall(self):
-        # Needs to be rewritten. If you want to see it, view commits.
-        pass
+    # def tenBall(self):
+    #     Needs to be rewritten. If you want to see it, view commits.
+    #     pass
 
-    def uEightBall(self):
-        """
-        Soon to be eight ball. Robot shoots 3 starting balls then collects 5 additional balls from around the pillar and shoots them. Currently starts with 3 balls, goes around the pillar and shoots them from there.
-        """
-        self.addCommands(
-            InstantCommand(
-                lambda: robot.pneumatics.extendIntake(), [robot.conveyorintake]
-            ),
-            InstantCommand(
-                lambda: robot.conveyorintake.move(0.6), [robot.conveyorintake]
-            ),
-            #AutomatedShootCommand(4100, ballCount=3, waitUntilAimed=True),
-            BezierPathCommand([[0, 0], [0, 140], [0, 150], [90, 150]], speed=0.75),
-            InstantCommand(
-                lambda: robot.shooter.setRPM(3300), [robot.shooter]
-            ),
-            InstantCommand(
-                lambda: robot.conveyorintake.stop(), [robot.conveyorintake]
-            ),
-            TurnCommand(-15),
-            AutomatedShootCommand(4100, waitUntilAimed=True),
-            InstantCommand(
-                lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]
-            )
-        )
-        
-            
-    def uMoveTurn(self):
-        """
-        Robot moves and turns in a u movement
-        """
-        self.addCommands(
-            MoveCommand(10),
-            TurnCommand(90),
-            MoveCommand(10),
-            TurnCommand(90),
-            MoveCommand(10)
-  
-        )
+    # def uEightBall(self):
+    #     """
+    #     Soon to be eight ball. Robot shoots 3 starting balls then collects 5 additional balls from around the pillar and shoots them. Currently starts with 3 balls, goes around the pillar and shoots them from there.
+    #     """
+    #     self.addCommands(
+    #         InstantCommand(
+    #             lambda: robot.pneumatics.extendIntake(), [robot.conveyorintake]
+    #         ),
+    #         InstantCommand(
+    #             lambda: robot.conveyorintake.move(0.6), [robot.conveyorintake]
+    #         ),
+    #         AutomatedShootCommand(4100, ballCount=3, waitUntilAimed=True),
+    #         BezierPathCommand([[0, 0], [0, 140], [0, 150], [90, 150]], speed=0.75),
+    #         InstantCommand(lambda: robot.shooter.setRPM(3300), [robot.shooter]),
+    #         InstantCommand(lambda: robot.conveyorintake.stop(), [robot.conveyorintake]),
+    #         TurnCommand(-15),
+    #         AutomatedShootCommand(4100, waitUntilAimed=True),
+    #         InstantCommand(
+    #             lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]
+    #         ),
+    #     )
+
+    # def uMoveTurn(self):
+    #     """
+    #     Robot moves and turns in a u movement
+    #     """
+    #     self.addCommands(
+    #         MoveCommand(10),
+    #         TurnCommand(90),
+    #         MoveCommand(10),
+    #         TurnCommand(90),
+    #         MoveCommand(10),
+    #     )
 
     def interrupted(self):
         """
@@ -356,116 +351,114 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         robot.chamber.stop()
         robot.shooter.stopShooter()
 
-    def movePlease(self):
-        """
-        Haha robot go brrr
-        Square boi
-        """
-        self.addCommands(
-            MoveCommand(60),
-            TurnCommand(90),
-            MoveCommand(60),
-            TurnCommand(90),
-            MoveCommand(60),
-            TurnCommand(90),
-            MoveCommand(60),
-            TurnCommand(90),
-        )
+    # def movePlease(self):
+    #     """
+    #     Haha robot go brrr
+    #     Square boi
+    #     """
+    #     self.addCommands(
+    #         MoveCommand(60),
+    #         TurnCommand(90),
+    #         MoveCommand(60),
+    #         TurnCommand(90),
+    #         MoveCommand(60),
+    #         TurnCommand(90),
+    #         MoveCommand(60),
+    #         TurnCommand(90),
+    #     )
 
-    def bezierStuff(self):
-        """
-        Bezier curve?
-        Wavy boi
-        """
-        self.addCommands(
-            BezierPathCommand([[0, 108], [0, 12], [16, 10], [25, 9]], speed=1.4)  # ,
-            # BezierPathCommand([[0, 0], [0, 60]], speed=0.3),
-            # BezierPathCommand([[0, 0], [-60, 0], [-60, 60], [0, 60]], speed=0.3),
-        )
+    # def bezierStuff(self):
+    #     """
+    #     Bezier curve?
+    #     Wavy boi
+    #     """
+    #     self.addCommands(
+    #         BezierPathCommand([[0, 108], [0, 12], [16, 10], [25, 9]], speed=1.4),
+    #         BezierPathCommand([[0, 0], [0, 60]], speed=0.3),
+    #         BezierPathCommand([[0, 0], [-60, 0], [-60, 60], [0, 60]], speed=0.3),
+    #     )
 
-    def sixBallBonanza(self):
-        """
-        The best six ball we've got. Don't question it. 
-        """
-        self.addCommands(
-            InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
-            InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
-            MoveCommand(84),
-            InstantCommand(
-                lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
-            ),
-            AutomatedShootCommand(4100, ballCount=4, conveyorDelay=True).withTimeout(5),
-            InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
-            InstantCommand(
-                lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]
-            ),
-            MoveCommand(96, torySlow=5100),
-            MoveCommand(-135, angle=10),
-            AutomatedShootCommand(4100, ballCount=2).withTimeout(3),
-            InstantCommand(
-                lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]
-            ),
-        )
+    # def sixBallBonanza(self):
+    #     """
+    #     The best six ball we've got. Don't question it.
+    #     """
+    #     self.addCommands(
+    #         InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
+    #         InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
+    #         MoveCommand(84),
+    #         InstantCommand(
+    #             lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+    #         ),
+    #         AutomatedShootCommand(4100, ballCount=4, conveyorDelay=True).withTimeout(5),
+    #         InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
+    #         InstantCommand(
+    #             lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]
+    #         ),
+    #         MoveCommand(96, torySlow=5100),
+    #         MoveCommand(-135, angle=10),
+    #         AutomatedShootCommand(4100, ballCount=2).withTimeout(3),
+    #         InstantCommand(
+    #             lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]
+    #         ),
+    #     )
 
-    def sixBallBonanzaDeluxe(self):
-        """
-        Now with the curvy bois.
-        """
-        self.addCommands(TurnCommand(-90))
-    
-    def climbPlaceEightBall(self):
-        """
-        Now with the curvy bois.
-        """
-        self.addCommands(
-            InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
-            MoveCommand(42),
-            AutomatedShootCommand(3800).withTimeout(3),
-            InstantCommand(
-                lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]
-            ),
-            MoveCommand(58, torySlow=10000),
-            TurnCommand(-30),
-            InstantCommand(
-                lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
-            ),
-            MoveCommand(70, torySlow=5100),
-            MoveCommand(-70, torySlow=10000),
-            TurnCommand(80),
-            MoveCommand(-40, torySlow=12500),
-            TurnCommand(-80),
-            InstantCommand(
-                lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
-            ),
-            MoveCommand(70, torySlow=5100),
-            MoveCommand(-70, torySlow=10000),
-            InstantCommand(
-                lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]
-            ),
-            InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
-            TurnCommand(50),
-            MoveCommand(-40, torySlow=12500),
-            AutomatedShootCommand(3800, conveyorDelay=True).withTimeout(8),
-            TurnCommand(-3000),
-        )
-        
-    def magicFiveBall(self):
-        """
-        This auto picks up 2 balls right now after starting with 3.
-        """
-        self.addCommands(
-            InstantCommand(lambda: robot.shooter.setRPM(4400), [robot.shooter]),
-            MoveCommand(12 * 6),
-            InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
-            InstantCommand(lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]),
-            MoveCommand(12 * 4, torySlow = 304.8 * 6),
-            InstantCommand(lambda: robot.conveyorintake.stop(), [robot.conveyorintake]),
-            InstantCommand(lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]),
-            MoveCommand(-12 * 10),
-            TurnCommand(15),
-            AutomatedShootCommand(conveyorDelay = True).withTimeout(8),
-            
-        )
-    
-        
-    
+    # def sixBallBonanzaDeluxe(self):
+    #     """
+    #     Now with the curvy bois.
+    #     """
+    #     self.addCommands(TurnCommand(-90))
+
+    # def climbPlaceEightBall(self):
+    #     """
+    #     Now with the curvy bois.
+    #     """
+    #     self.addCommands(
+    #         InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
+    #         MoveCommand(42),
+    #         AutomatedShootCommand(3800).withTimeout(3),
+    #         InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
+    #         MoveCommand(58, torySlow=10000),
+    #         TurnCommand(-30),
+    #         InstantCommand(
+    #             lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+    #         ),
+    #         MoveCommand(70, torySlow=5100),
+    #         MoveCommand(-70, torySlow=10000),
+    #         TurnCommand(80),
+    #         MoveCommand(-40, torySlow=12500),
+    #         TurnCommand(-80),
+    #         InstantCommand(
+    #             lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+    #         ),
+    #         MoveCommand(70, torySlow=5100),
+    #         MoveCommand(-70, torySlow=10000),
+    #         InstantCommand(
+    #             lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]
+    #         ),
+    #         InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
+    #         TurnCommand(50),
+    #         MoveCommand(-40, torySlow=12500),
+    #         AutomatedShootCommand(3800, conveyorDelay=True).withTimeout(8),
+    #         TurnCommand(-3000),
+    #     )
+
+    # def magicFiveBall(self):
+    #     """
+    #     This auto picks up 2 balls right now after starting with 3.
+    #     """
+    #     self.addCommands(
+    #         InstantCommand(lambda: robot.shooter.setRPM(4400), [robot.shooter]),
+    #         MoveCommand(12 * 6),
+    #         InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
+    #         InstantCommand(
+    #             lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+    #         ),
+    #         MoveCommand(12 * 4, torySlow=304.8 * 6),
+    #         InstantCommand(lambda: robot.conveyorintake.stop(), [robot.conveyorintake]),
+    #         InstantCommand(
+    #             lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]
+    #         ),
+    #         MoveCommand(-12 * 10),
+    #         TurnCommand(15),
+    #         AutomatedShootCommand(conveyorDelay=True).withTimeout(8),
+    #     )
