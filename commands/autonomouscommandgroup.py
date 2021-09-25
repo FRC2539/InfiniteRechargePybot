@@ -48,11 +48,38 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         robot.conveyor.stop()
         robot.shooter.stopShooter()
 
-    def shootAndMove(self):
+    def justMove(self):
         """
-        Shoot 3 balls, then move off the line.
+        Just move back off the line.
         """
         self.addCommands(
-            AutomatedShootCommand(3300),
-            MoveCommand(42),
+            MoveCommand(42)
         )
+        
+    def shootFirstThree(self):
+        """
+        Move off the line and shoot 3 balls.
+        """
+        self.addCommands(
+            MoveCommand(42),
+            AutomatedShootCommand(3300)
+        )
+        
+    def trenchSixBall(self):
+        """
+        Shoot 3 balls, then collect the rest of the balls from the trench. Move to a safe location and shoot.
+        """
+        self.addCommands(
+            InstantCommand(lambda: robot.shooter.setRPM(3300), [robot.shooter]),
+            MoveCommand(48),
+            AutomatedShootCommand(3300).withTimeout(4),
+            InstantCommand(lambda: robot.shooter.setRPM(3300), [robot.shooter]),
+            InstantCommand(
+                lambda: robot.ballintake.forwardIntake, [robot.ballintake]
+            ),
+            MoveCommand(120),
+            TurnCommand(10),
+            MoveCommand(-135),
+            AutomatedShootCommand(3300)
+        )
+            
