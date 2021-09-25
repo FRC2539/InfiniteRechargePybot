@@ -308,28 +308,20 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         # Needs to be rewritten. If you want to see it, view commits.
         pass
 
-    def uMoveAndShoot(self):
+    def uEightBall(self):
         """
-        Soon to be eight ball. Robot shoots 3 starting balls then collects 5 additional balls from around the pillar and shoots them. Currently only starts with 3 balls, goes around the pillar and shoots them from there.
+        Soon to be eight ball. Robot shoots 3 starting balls then collects 5 additional balls from around the pillar and shoots them. Currently starts with 3 balls, goes around the pillar and shoots them from there.
         """
         self.addCommands(
-            #AutomatedShootCommand(4100),
-            #BezierPathCommand([[0,0], [0,0], [0,0]], speed=0.25),
-            #TurnCommand(0),
-            #MoveCommand(0),
-            #BezierPathCommand([[0,0], [0,0], [0,0]], speed=0.25),
-            #TurnCommand(0),
-            #
-            #AutomatedShootCommand(4100),
-            #BezierPathComm
             InstantCommand(
                 lambda: robot.pneumatics.extendIntake(), [robot.conveyorintake]
             ),
-            
             InstantCommand(
                 lambda: robot.conveyorintake.move(0.6), [robot.conveyorintake]
             ),
-            BezierPathCommand([[0, 0], [0, 230], [90, 230], [90, 0]], speed=0.75),
+            #AutomatedShootCommand(4100, ballCount=3, waitUntilAimed=True),
+            #TurnCommand(90),
+            BezierPathCommand([[0, 0], [0, 140], [0, 150], [90, 150]], speed=0.75),
             
             InstantCommand(
                 lambda: robot.shooter.setRPM(3300), [robot.shooter]
@@ -337,7 +329,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             InstantCommand(
                 lambda: robot.conveyorintake.stop(), [robot.conveyorintake]
             ),
-            TurnCommand(15),
+            TurnCommand(-15),
             AutomatedShootCommand(4100, waitUntilAimed=True),
             InstantCommand(
                 lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]
@@ -395,7 +387,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
     def sixBallBonanza(self):
         """
-        The best six ball we've got. Don't question it.
+        The best six ball we've got. Don't question it. 
         """
         self.addCommands(
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
