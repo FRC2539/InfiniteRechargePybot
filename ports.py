@@ -11,7 +11,7 @@ class PortsList:
     pass
 
 
-hood = PortsList
+hood = PortsList()
 
 hood.motorID = 10
 hood.absoluteThroughbore = 0  # DI/O
@@ -34,8 +34,6 @@ ballintake.intakeMotor = 5
 ballintake.conveyorMotor = 7
 ballintake.shooterFeedMotor = 6
 
-# hood is 10
-
 ballintake.intakeSensor = 0
 ballintake.conveyorSensor = 1
 ballintake.shooterSensor = 2
@@ -47,3 +45,9 @@ shooter.leadMotor = 8
 shooter.followMotor = 9
 
 limelight = PortsList()
+
+climber = PortsList()
+climber.motor = 11
+
+colorWheelSpinner = PortsList()
+colorWheelSpinner.motor = 12

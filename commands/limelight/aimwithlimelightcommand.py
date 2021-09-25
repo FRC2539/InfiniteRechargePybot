@@ -32,6 +32,11 @@ class AimWithLimelightCommand(CommandBase):
         # Correct by going in the opposite direction of the offset
         robot.drivetrain.rotateByAngle(-1 * self.xOffset)
 
+    def execute(self):
+        self.xOffset = robot.limelight.getX()
+
+        self.isAimed = abs(xOffset) <= self.tolerance
+
     def isFinished(self):
         return self.isAimed
 

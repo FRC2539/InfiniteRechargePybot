@@ -3,14 +3,14 @@ from commands2 import CommandBase
 import robot
 
 
-class RaiseHoodCommand(CommandBase):
+class LowerHoodCommand(CommandBase):
     def __init__(self):
         super().__init__()
 
         self.addRequirements(robot.hood)
 
     def initialize(self):
-        hood.raiseHood()
+        hood.lowerHood()
 
     def isFinished(self):
         return not hood.isWithinBounds()
