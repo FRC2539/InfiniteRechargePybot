@@ -19,26 +19,28 @@ class AimWithLimelightCommand(CommandBase):
         self.isAimed = False
 
     def initialize(self):
-        robot.limelight.setPipeline(0)
+        robot.limelight.setPipeline(1)
 
         self.xOffset = robot.limelight.getX()
 
-        self.isAimed = abs(xOffset) <= self.tolerance
+        self.isAimed = abs(self.xOffset) <= self.tolerance
 
         # We don't need to aim
         if self.isAimed:
             pass
 
         # Correct by going in the opposite direction of the offset
-        robot.drivetrain.rotateByAngle(-1 * self.xOffset)
+        robot.drivetrain.rotateByAngle(self.xOffset)
 
     def execute(self):
         self.xOffset = robot.limelight.getX()
 
-        self.isAimed = abs(xOffset) <= self.tolerance
+        self.isAimed = abs(self.xOffset) <= self.tolerance
 
     def isFinished(self):
         return self.isAimed
 
     def end(self, interrupted):
+        robot.limelight.setPipeline(0)
+
         robot.drivetrain.stop()

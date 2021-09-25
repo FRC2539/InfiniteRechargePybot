@@ -201,10 +201,13 @@ class BaseDrive(CougarSystem):
         if not self.useEncoders:
             raise RuntimeError("Cannot set position. Encoders are disabled.")
 
-        for motor in self.motors:
+        # Get the current motor positions in inches
+        motorPositions = self.getPositions(False)
+
+        for motor, motorPosition in zip(self.motors, motorPositions):
             motor.set(
                 TalonFXControlMode.MotionMagic,
-                self.getPositions(False) + self.inchesToTicks(distanceForward),
+                motorPosition + self.inchesToTicks(distanceForward),
             )
 
     def setMotorPositions(self, positions):
@@ -216,10 +219,15 @@ class BaseDrive(CougarSystem):
         if not self.useEncoders:
             raise RuntimeError("Cannot set position. Encoders are disabled.")
 
-        for motor, position in zip(self.motors, positions):
+        # Get the current motor positions in inches
+        motorPositions = self.getPositions(False)
+
+        for motor, position, motorPosition in zip(
+            self.motors, positions, motorPositions
+        ):
             motor.set(
                 TalonFXControlMode.MotionMagic,
-                self.getPositions(False) + self.inchesToTicks(positions),
+                motorPosition + self.inchesToTicks(position),
             )
 
     def averageError(self):
@@ -367,7 +375,7 @@ class BaseDrive(CougarSystem):
         """Returns the position of each active motor."""
         if inInches:
             return [
-                self.ticksToInches(self.getSelectedSensorPosition(0))
+                self.ticksToInches(x.getSelectedSensorPosition(0))
                 for x in self.activeMotors
             ]
         return [x.getSelectedSensorPosition(0) for x in self.activeMotors]

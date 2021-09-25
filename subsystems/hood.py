@@ -31,8 +31,11 @@ class Hood(CougarSystem):
 
         self.speed = 0.3
 
-        self.angleMax = 236.00
-        self.angleMin = 166.00
+        # Corrects for an inverted hood motor direction
+        self.direction = -1
+
+        self.angleMax = 327.00
+        self.angleMin = 302.00
 
         self.constantlyUpdate("Hood Position", self.getPosition)
 
@@ -50,19 +53,25 @@ class Hood(CougarSystem):
         self.motor.stopMotor()
 
     def setPercent(self, speed):
-        self.motor.set(speed)
+        self.motor.set(speed * self.direction)
 
     def raiseHood(self):
-        if self.isWithinBounds():
-            self.motor.set(self.speed)
+        if self.isBelowMaxAngle():
+            self.setPercent(self.speed)
         else:
             self.stopHood()
 
     def lowerHood(self):
-        if self.isWithinBounds():
-            self.motor.set(-self.speed)
+        if self.isAboveMinAngle():
+            self.setPercent(-self.speed)
         else:
             self.stopHood()
+
+    def isAboveMinAngle(self):
+        return self.angleMin < self.getPosition()
+
+    def isBelowMaxAngle(self):
+        return self.getPosition() < self.angleMax
 
     def isWithinBounds(self):
         return self.angleMin < self.getPosition() < self.angleMax

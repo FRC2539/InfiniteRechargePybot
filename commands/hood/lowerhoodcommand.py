@@ -10,10 +10,10 @@ class LowerHoodCommand(CommandBase):
         self.addRequirements(robot.hood)
 
     def initialize(self):
-        hood.lowerHood()
+        robot.hood.lowerHood()
 
     def isFinished(self):
-        return not hood.isWithinBounds()
+        return not robot.hood.isAboveMinAngle()
 
     def end(self, interrupted):
-        hood.stopHood()
+        robot.hood.stopHood()

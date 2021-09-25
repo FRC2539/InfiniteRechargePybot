@@ -11,6 +11,7 @@ from commands.ballintake.intakebackwardcommand import IntakeBackwardCommand
 
 # from commands.hood.RaiseHoodCommand import RaiseHoodCommand
 from commands.hood.raisehoodcommand import RaiseHoodCommand
+from commands.hood.lowerhoodcommand import LowerHoodCommand
 
 # from commands.shooter.spinupandshootcommand import SpinUpAndShootCommand
 from commands.limelight.automatedshootcommand import AutomatedShootCommand
@@ -45,5 +46,6 @@ def init():
     driveController.DPadDown.whileHeld(IntakeBackwardCommand())
 
     driveController.DPadRight.whileHeld(RaiseHoodCommand())
+    driveController.DPadLeft.whileHeld(LowerHoodCommand())
 
     driveController.RightBumper.whileHeld(AutomatedShootCommand(3300))
