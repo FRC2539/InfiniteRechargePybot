@@ -206,24 +206,23 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             AutomatedShootCommand(4100, conveyorDelay=True),
         )
 
-    # def rendevousSixBall(self):
-    #     """
-    #     Previous year rendevous.
-    #     Shoots three, and then grabs the three balls on the north
-    #     face of the rendevous point.
-    #     """
-    #     self.addCommands(
-    #         AutomatedShootCommand(3300, ballCount=3, conveyorDelay=True).withTimeout(5),
-    #         InstantCommand(lambda: robot.shooter.setRPM(3300), [robot.shooter]),
-    #         InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
-    #         InstantCommand(
-    #             lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
-    #         ),
-    #         MoveCommand(74),
-    #         BezierPathCommand([[0, 50], [0, 0], [20, 0], [20, 50]], speed=0.3),
-    #         BezierPathCommand([[30, 40], [0, 0]], speed=0.4),
-    #         AutomatedShootCommand(3300, ballCount=3),
-    #     )
+    def inProgressRendevousSixBall(self):
+        """
+        Shoots three, and then grabs the three balls on the north
+        face of the rendevous point.
+        """
+        self.addCommands(
+            AutomatedShootCommand(3300, ballCount=3, conveyorDelay=True).withTimeout(4),
+            InstantCommand(lambda: robot.shooter.setRPM(3300), [robot.shooter]),
+            InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
+            InstantCommand(
+                lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+            ),
+            MoveCommand(74),
+            BezierPathCommand([[0, 50], [0, 0], [20, 0], [20, 50]], speed=0.3),
+            BezierPathCommand([[30, 40], [0, 0]], speed=0.4),
+            AutomatedShootCommand(3300, ballCount=3),
+        )
 
     def stealFiveBall(self):
         """
@@ -309,27 +308,30 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     #     Needs to be rewritten. If you want to see it, view commits.
     #     pass
 
-    # def uEightBall(self):
-    #     """
-    #     Soon to be eight ball. Robot shoots 3 starting balls then collects 5 additional balls from around the pillar and shoots them. Currently starts with 3 balls, goes around the pillar and shoots them from there.
-    #     """
-    #     self.addCommands(
-    #         InstantCommand(
-    #             lambda: robot.pneumatics.extendIntake(), [robot.conveyorintake]
-    #         ),
-    #         InstantCommand(
-    #             lambda: robot.conveyorintake.move(0.6), [robot.conveyorintake]
-    #         ),
-    #         AutomatedShootCommand(4100, ballCount=3, waitUntilAimed=True),
-    #         BezierPathCommand([[0, 0], [0, 140], [0, 150], [90, 150]], speed=0.75),
-    #         InstantCommand(lambda: robot.shooter.setRPM(3300), [robot.shooter]),
-    #         InstantCommand(lambda: robot.conveyorintake.stop(), [robot.conveyorintake]),
-    #         TurnCommand(-15),
-    #         AutomatedShootCommand(4100, waitUntilAimed=True),
-    #         InstantCommand(
-    #             lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]
-    #         ),
-    #     )
+    def inProgressEightBall(self):
+        """
+        Soon to be eight ball. Robot shoots 3 starting balls then collects 5 additional balls from the north face of the rendevous point and shoots them. Currently starts with 3 balls, goes around the pillar and shoots them from there.
+        """
+        self.addCommands(
+            InstantCommand(
+                lambda: robot.shooter.setRPM(4100), [robot.shooter]
+            ),
+            InstandCommand(
+                lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]
+            ),
+            AutomatedShootCommand(4100, ballCount=3, conveyorDelay=True, waitUntilAimed=True).withTimeout(4),
+            InstantCommand(
+                lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]
+            ),
+            BezierPathCommand([[0, 0], [0, 140], [0, 150], [90, 150]], speed=0.75),
+            TurnCommand(-15),
+            InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
+            InstantCommand(lambda: robot.conveyorintake.stop(), [robot.conveyorintake]),
+            AutomatedShootCommand(4100, ballcount = 5, conveyorDelay=True, waitUntilAimed=True),
+            InstantCommand(
+                lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]
+            ),
+        )
 
     # def uMoveTurn(self):
     #     """
