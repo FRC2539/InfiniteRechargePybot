@@ -4,14 +4,17 @@ import robot
 
 
 class AimWithLimelightCommand(CommandBase):
-    def __init__(self, tolerance=0.5):
+    def __init__(self, tolerance=0.3):
         super().__init__()
 
         self.addRequirements([robot.limelight, robot.drivetrain])
 
         # How close we should get to the angle before we say good enough
         # (Accounts for oscilation)
-        self.tolerance = 0.5
+        self.tolerance = tolerance
+
+        # Multiplied by the error to find how much to move the motor
+        self.errorPercent = 0.2
 
         # Track where we need to move the robot to aim
         self.xOffset = 0
@@ -19,8 +22,6 @@ class AimWithLimelightCommand(CommandBase):
         self.isAimed = False
 
     def initialize(self):
-        robot.limelight.setPipeline(1)
-
         self.xOffset = robot.limelight.getX()
 
         self.isAimed = abs(self.xOffset) <= self.tolerance
@@ -29,8 +30,16 @@ class AimWithLimelightCommand(CommandBase):
         if self.isAimed:
             pass
 
-        # Correct by going in the opposite direction of the offset
-        robot.drivetrain.rotateByAngle(self.xOffset)
+        # Account for if the offset is negative
+        sign = -1 if self.xOffset < 0 else 1
+
+        # Scale the offset
+        self.xOffset *= self.errorPercent
+
+        # Limit the offset to a maximum speed of 0.25
+        self.xOffset = sign * min(abs(self.xOffset), 0.3)
+
+        robot.drivetrain.move(0, 0, self.xOffset)
 
     def execute(self):
         self.xOffset = robot.limelight.getX()
@@ -41,6 +50,4 @@ class AimWithLimelightCommand(CommandBase):
         return self.isAimed
 
     def end(self, interrupted):
-        robot.limelight.setPipeline(0)
-
         robot.drivetrain.stop()

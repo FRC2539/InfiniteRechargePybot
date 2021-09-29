@@ -15,6 +15,7 @@ class Hood(CougarSystem):
 
         self.motor = CANSparkMax(ports.hood.motorID, MotorType.kBrushless)
         self.motor.setIdleMode(IdleMode.kBrake)
+        self.motor.setInverted(True)
 
         self.encoder = self.motor.getEncoder()
         self.controller = self.motor.getPIDController()
@@ -30,9 +31,6 @@ class Hood(CougarSystem):
         )
 
         self.speed = 0.3
-
-        # Corrects for an inverted hood motor direction
-        self.direction = -1
 
         self.angleMax = 327.00
         self.angleMin = 302.00
@@ -53,7 +51,7 @@ class Hood(CougarSystem):
         self.motor.stopMotor()
 
     def setPercent(self, speed):
-        self.motor.set(speed * self.direction)
+        self.motor.set(speed)
 
     def raiseHood(self):
         if self.isBelowMaxAngle():

@@ -14,7 +14,8 @@ class Limelight(CougarSystem):
     def __init__(self):
         super().__init__("limelight")
 
-        self.setPipeline(1)
+        # self.setPipeline(1)
+        self.put("pipeline", 1)
 
         # The deadband for whether we are aimed or not.
         # Also comparable to a threshold range

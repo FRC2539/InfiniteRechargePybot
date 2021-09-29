@@ -80,7 +80,7 @@ class BaseDrive(CougarSystem):
         """A record of the last arguments to move()"""
         self.lastInputs = None
 
-        self.put("Normal Speed", 100)
+        self.put("Normal Speed", 60)  # 100
         self.put("Deadband", 0.05)
 
         self.updateNTConstants()
