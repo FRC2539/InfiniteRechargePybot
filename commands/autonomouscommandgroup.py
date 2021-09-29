@@ -72,6 +72,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.addCommands(
             InstantCommand(lambda: robot.shooter.setRPM(3300), [robot.shooter]),
             MoveCommand(48),
+            AimWithLimelightCommand([robot.limelight, robot.drivetrain]),
             AutomatedShootCommand(3300).withTimeout(4),
             InstantCommand(lambda: robot.shooter.setRPM(3300), [robot.shooter]),
             InstantCommand(
