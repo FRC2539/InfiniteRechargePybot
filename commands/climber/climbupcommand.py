@@ -9,7 +9,7 @@ class ClimbUpCommand(CommandBase):
 
         self.addRequirements(robot.climber)
 
-    def initialize(self):
+    def execute(self):
         robot.climber.raiseClimber()
 
     def end(self, interrupted):

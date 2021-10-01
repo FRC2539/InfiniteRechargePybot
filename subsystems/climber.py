@@ -35,7 +35,7 @@ class Climber(CougarSystem):
 
         # Climber limits.
         self.upperLimit = 515000
-        self.lowerLimit = 14000  # Give some wiggle room.
+        self.lowerLimit = 5000  # Give some wiggle room.
 
         # A boolean used to represent the status of the climber.
         self.climbing = False

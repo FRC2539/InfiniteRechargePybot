@@ -14,8 +14,9 @@ from commands.hood.raisehoodcommand import RaiseHoodCommand
 from commands.hood.lowerhoodcommand import LowerHoodCommand
 
 # from commands.shooter.spinupandshootcommand import SpinUpAndShootCommand
-# from commands.limelight.automatedshootcommand import AutomatedShootCommand
-from commands.limelight.aimwithlimelightcommand import AimWithLimelightCommand
+from commands.limelight.automatedshootcommand import AutomatedShootCommand
+
+# from commands.limelight.aimwithlimelightcommand import AimWithLimelightCommand
 
 from commands.ballintake.intakeloadcommand import IntakeLoadCommand
 
@@ -52,8 +53,8 @@ def init():
     driveController.DPadRight.whileHeld(RaiseHoodCommand())
     driveController.DPadLeft.whileHeld(LowerHoodCommand())
 
-    driveController.RightBumper.whileHeld(AimWithLimelightCommand())
-    # driveController.RightBumper.whileHeld(AutomatedShootCommand(3300))
+    # driveController.RightBumper.whileHeld(AimWithLimelightCommand())
+    driveController.RightBumper.whileHeld(AutomatedShootCommand(4500))
 
     driveController.Y.whileHeld(ClimbUpCommand())
     driveController.A.whileHeld(ClimbDownCommand())
