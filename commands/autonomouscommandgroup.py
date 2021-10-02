@@ -62,7 +62,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         """
         self.addCommands(
             MoveCommand(42),
-            AutomatedShootCommand(3300)
+            AutomatedShootCommand(3300),
         )
         
     def trenchSixBall(self):
@@ -72,7 +72,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.addCommands(
             InstantCommand(lambda: robot.shooter.setRPM(3300), [robot.shooter]),
             MoveCommand(48),
-            AimWithLimelightCommand([robot.limelight, robot.drivetrain]),
+            AimWithLimelightCommand(),
             AutomatedShootCommand(3300).withTimeout(4),
             InstantCommand(lambda: robot.shooter.setRPM(3300), [robot.shooter]),
             InstantCommand(
@@ -81,6 +81,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             MoveCommand(120),
             TurnCommand(10),
             MoveCommand(-135),
-            AutomatedShootCommand(3300)
+            AimWithLimelightCommand(),
+            AutomatedShootCommand(3300),
         )
             
