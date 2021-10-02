@@ -9,19 +9,18 @@ from commands.resetcommand import ResetCommand
 from commands.ballintake.intakeforwardcommand import IntakeForwardCommand
 from commands.ballintake.intakebackwardcommand import IntakeBackwardCommand
 
-# from commands.hood.RaiseHoodCommand import RaiseHoodCommand
 from commands.hood.raisehoodcommand import RaiseHoodCommand
 from commands.hood.lowerhoodcommand import LowerHoodCommand
 
-# from commands.shooter.spinupandshootcommand import SpinUpAndShootCommand
 from commands.limelight.automatedshootcommand import AutomatedShootCommand
-
-# from commands.limelight.aimwithlimelightcommand import AimWithLimelightCommand
 
 from commands.ballintake.intakeloadcommand import IntakeLoadCommand
 
 from commands.climber.climbupcommand import ClimbUpCommand
 from commands.climber.climbdowncommand import ClimbDownCommand
+
+# from commands.hood.sethoodpositioncommand import SetHoodPositionCommand
+from commands.drivetrain.turncommand import TurnCommand
 
 
 def init():
@@ -58,3 +57,6 @@ def init():
 
     driveController.Y.whileHeld(ClimbUpCommand())
     driveController.A.whileHeld(ClimbDownCommand())
+
+    driveController.B.whenPressed(TurnCommand(30))
+    # driveController.B.whenPressed(SetHoodPositionCommand(315))

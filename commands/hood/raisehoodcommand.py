@@ -9,11 +9,8 @@ class RaiseHoodCommand(CommandBase):
 
         self.addRequirements(robot.hood)
 
-    def initialize(self):
+    def execute(self):
         robot.hood.raiseHood()
-
-    def isFinished(self):
-        return not robot.hood.isBelowMaxAngle()
 
     def end(self, interrupted):
         robot.hood.stopHood()

@@ -15,7 +15,7 @@ class Hood(CougarSystem):
 
         self.motor = CANSparkMax(ports.hood.motorID, MotorType.kBrushless)
         self.motor.setIdleMode(IdleMode.kBrake)
-        self.motor.setInverted(True)
+        self.motor.setInverted(False)
 
         self.encoder = self.motor.getEncoder()
         self.controller = self.motor.getPIDController()
@@ -33,7 +33,7 @@ class Hood(CougarSystem):
         self.speed = 0.3
 
         self.angleMax = 327.00
-        self.angleMin = 302.00
+        self.angleMin = 315.00
 
         self.constantlyUpdate("Hood Position", self.getPosition)
 
@@ -73,3 +73,6 @@ class Hood(CougarSystem):
 
     def isWithinBounds(self):
         return self.angleMin < self.getPosition() < self.angleMax
+
+    def angleIsWithinBounds(self, angle):
+        return self.angleMin < angle < self.angleMax

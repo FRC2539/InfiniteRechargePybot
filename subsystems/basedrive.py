@@ -114,6 +114,11 @@ class BaseDrive(CougarSystem):
             lambda: [motor.getTemperature() for motor in self.motors],
         )
 
+        self.constantlyUpdate(
+            "Robot Angle",
+            self.getAngle,
+        )
+
     def periodic(self):
         """
         Loops when nothing else is running in
@@ -173,25 +178,25 @@ class BaseDrive(CougarSystem):
                 self.inchesPerSecondToTicksPerTenth(speed * self.speedLimit),
             )
 
-    def rotateByAngle(self, angle):
-        """Rotates the robot by a specific angle."""
+    # def rotateByAngle(self, angle):
+    #     """Rotates the robot by a specific angle."""
 
-        # Calculate how far to move the wheels (in inches)
-        distance = self.degreesToInches(angle)
+    #     # Calculate how far to move the wheels (in inches)
+    #     distance = self.degreesToInches(angle)
 
-        # Store the new positions for the motors
-        targetPositions = []
+    #     # Store the new positions for the motors
+    #     targetPositions = []
 
-        # Flip the sign for every other motor
-        sign = 1
+    #     # Flip the sign for every other motor
+    #     sign = 1
 
-        # Calculate all of the target positions for the rotation
-        for position in self.getPositions():
-            targetPositions.append(position + (distance * sign))
-            sign *= -1
+    #     # Calculate all of the target positions for the rotation
+    #     for position in self.getPositions():
+    #         targetPositions.append(position + (distance * sign))
+    #         sign *= -1
 
-        # Move the motors to the calculated positions
-        self.setMotorPositions(targetPositions)
+    #     # Move the motors to the calculated positions
+    #     self.setMotorPositions(targetPositions)
 
     def setPositions(self, distanceForward):
         """
@@ -204,7 +209,7 @@ class BaseDrive(CougarSystem):
         # Get the current motor positions in inches
         motorPositions = self.getPositions(False)
 
-        for motor, motorPosition in zip(self.motors, motorPositions):
+        for motor, motorPosition in zip(self.activeMotors, motorPositions):
             motor.set(
                 TalonFXControlMode.MotionMagic,
                 motorPosition + self.inchesToTicks(distanceForward),
@@ -223,7 +228,7 @@ class BaseDrive(CougarSystem):
         motorPositions = self.getPositions(False)
 
         for motor, position, motorPosition in zip(
-            self.motors, positions, motorPositions
+            self.activeMotors, positions, motorPositions
         ):
             motor.set(
                 TalonFXControlMode.MotionMagic,
@@ -287,6 +292,11 @@ class BaseDrive(CougarSystem):
 
         self.navX.reset()
         self.navX.setAngleAdjustment(angle)
+
+    def getRawAngle(self):
+        """Current raw gyro reading"""
+
+        return self.navX.getAngle()
 
     def getAngle(self):
         """Current gyro reading"""
