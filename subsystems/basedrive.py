@@ -70,6 +70,12 @@ class BaseDrive(CougarSystem):
         """Allow changing CAN Talon settings from dashboard"""
         self._publishPID("Speed", 0)
         self._publishPID("Position", 1)
+        
+        """Return motor temperatues"""
+        self.constantlyUpdate(
+            "Motor Temperatures",
+            lambda: [motor.getTemperature() for motor in self.motors],
+        )
 
     def initDefaultCommand(self):
         """
