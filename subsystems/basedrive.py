@@ -63,8 +63,8 @@ class BaseDrive(CougarSystem):
             )
 
             # Set the ramp rate of the motor
-            motor.configOpenloopRamp(0.15)
-            motor.configClosedloopRamp(0.15)  # 0.15
+            motor.configOpenloopRamp(0.1)
+            motor.configClosedloopRamp(0.1)  # 0.15
 
         """
         Subclasses should configure motors correctly and populate activeMotors.
@@ -80,7 +80,7 @@ class BaseDrive(CougarSystem):
         """A record of the last arguments to move()"""
         self.lastInputs = None
 
-        self.put("Normal Speed", 120)  # 100
+        self.put("Normal Speed", constants.drivetrain.speedLimit)  # 100
         self.put("Deadband", 0.05)
 
         self.updateNTConstants()
@@ -118,6 +118,8 @@ class BaseDrive(CougarSystem):
             "Robot Angle",
             self.getAngle,
         )
+
+        self.constantlyUpdate("Wheel Positions", lambda: self.getPositions())
 
     def periodic(self):
         """
@@ -180,7 +182,12 @@ class BaseDrive(CougarSystem):
             motor.set(
                 ControlMode.Velocity,
                 self.inchesPerSecondToTicksPerTenth(
-                    speed * (speedLimit if not isBackwards else 30)
+                    speed
+                    * (
+                        speedLimit
+                        if not isBackwards
+                        else constants.drivetrain.backwardSpeedLimit
+                    )
                 ),
             )
 

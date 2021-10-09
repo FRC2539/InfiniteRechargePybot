@@ -50,4 +50,6 @@ climber = PortsList()
 climber.motor = 11
 
 colorWheelSpinner = PortsList()
+
 colorWheelSpinner.motor = 12
+colorWheelSpinner.sensor = 0  # I2C port

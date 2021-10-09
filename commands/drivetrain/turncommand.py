@@ -16,6 +16,9 @@ class TurnCommand(CommandBase):
         self.degrees = degrees
 
     def initialize(self):
+        # Set the PID profile to the auto one
+        # robot.drivetrain.setProfile(1)
+
         # Store our initial angle
         self.initialAngle = robot.drivetrain.getRawAngle()
 
@@ -65,3 +68,6 @@ class TurnCommand(CommandBase):
 
     def end(self, interrupted):
         robot.drivetrain.stop()
+
+        # Reset the PID profile
+        # robot.drivetrain.setProfile(0)

@@ -2,6 +2,8 @@ from commands2 import CommandBase
 
 import robot
 
+import constants
+
 
 class AimWithLimelightCommand(CommandBase):
     def __init__(self, tolerance=0.3):
@@ -17,7 +19,7 @@ class AimWithLimelightCommand(CommandBase):
         self.errorPercent = 0.25
 
         # Set a speed to aim at
-        self.aimSpeed = 40
+        self.aimSpeed = constants.drivetrain.limelightSpeedLimit
 
         # Track where we need to move the robot to aim
         self.xOffset = 0

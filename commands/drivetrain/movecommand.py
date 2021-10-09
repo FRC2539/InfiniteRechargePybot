@@ -25,7 +25,7 @@ class MoveCommand(CommandBase):
 
     def initialize(self):
         # Set the PID profile to the auto one
-        robot.drivetrain.setProfile(1)
+        # robot.drivetrain.setProfile(1)
 
         # Store the robot's starting position
         self.startPosition = robot.drivetrain.getPositions()
@@ -47,4 +47,4 @@ class MoveCommand(CommandBase):
         robot.drivetrain.stop()
 
         # Reset the PID profile
-        robot.drivetrain.setProfile(0)
+        # robot.drivetrain.setProfile(0)

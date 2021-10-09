@@ -25,17 +25,17 @@ shooter = Constants()
 limelight = Constants()
 
 # Drive Velocity Control
-drivetrain.dPk = 0.0075
+drivetrain.dPk = 0.003  # 0.0075
 drivetrain.dIk = 0
 drivetrain.dDk = 1
-drivetrain.dFFk = 0.00005
+drivetrain.dFFk = 0.000005  # 0.00005
 drivetrain.dIZk = 0
 
 # Drive Position Control
 drivetrain.sdPk = 0.005  # 0.1
 drivetrain.sdIk = 0
 drivetrain.sdDk = 0.05
-drivetrain.sdFFk = 0.003
+drivetrain.sdFFk = 0.00003
 drivetrain.sdIZk = 0
 
 # Turn Position Control
@@ -86,8 +86,11 @@ drivetrain.robotWidth = 27.75
 drivetrain.robotRadius = 16.84251
 
 drivetrain.speedLimit = (
-    30.0  # in inches per second (if you have feet per second, multiply by 12!)
+    120.0  # in inches per second (if you have feet per second, multiply by 12!)
 )
+drivetrain.backwardSpeedLimit = 60
+drivetrain.limelightSpeedLimit = 40
+
 
 drivetrain.encoderConfig = CANCoderConfiguration()
 drivetrain.encoderConfig.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360

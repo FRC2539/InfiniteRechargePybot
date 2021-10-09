@@ -22,6 +22,7 @@ from subsystems.shooter import Shooter as shooter
 from subsystems.limelight import Limelight as limelight
 from subsystems.hood import Hood as hood
 from subsystems.climber import Climber as climber
+from subsystems.colorwheel import ColorWheel as colorwheel
 from subsystems.cougarsystem import CougarSystem
 
 import math
