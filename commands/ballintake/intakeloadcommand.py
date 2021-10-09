@@ -15,7 +15,6 @@ class IntakeLoadCommand(CommandBase):
         self.shooterBallIsPresent = False
 
     def initialize(self):
-        print("init intake")
         robot.lights.solidGreen()
         robot.ballintake.forwardIntake()
 
@@ -24,19 +23,17 @@ class IntakeLoadCommand(CommandBase):
         self.updateSensorReadings()
 
         if self.shooterBallIsPresent and not self.intakeBallIsPresent:
-            print("stage 1")
+            # Runs the intake motor to intake balls
             robot.ballintake.forwardIntake()
             robot.ballintake.stopConveyor()
             robot.ballintake.stopShooterFeed()
 
         elif self.intakeBallIsPresent and self.shooterBallIsPresent:
-            print("stage 2")
             robot.ballintake.stopIntake()
             robot.ballintake.stopConveyor()
             robot.ballintake.stopShooterFeed()
 
         elif self.intakeBallIsPresent and not self.shooterBallIsPresent:
-            print("stage 3")
             # Runs the internal ball system when
             # there is a ball in the intake
             robot.ballintake.forwardConveyor()
@@ -47,7 +44,6 @@ class IntakeLoadCommand(CommandBase):
             and not self.conveyorBallIsPresent
             and not self.shooterBallIsPresent
         ):
-            print("else")
             # Stops the internal intake when no ball is present
             robot.ballintake.stopConveyor()
             robot.ballintake.stopShooterFeed()

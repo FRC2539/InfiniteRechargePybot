@@ -72,7 +72,8 @@ drivetrain.maxMetersPerSecond = 1  # Velocity for trajectory
 drivetrain.maxMetersPerSecondSquared = 0.1  # Accel for trajectory
 
 # Diameter of the wheel in inches.
-drivetrain.wheelDiameter = 6  # 4
+drivetrain.wheelDiameter = 6
+# 6 is correct, 4 provides correct distances, need to figure out why
 
 # Distance between adjacent wheels.
 drivetrain.wheelBase = 23.5

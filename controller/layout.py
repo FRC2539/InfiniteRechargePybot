@@ -18,9 +18,12 @@ from commands.ballintake.intakeloadcommand import IntakeLoadCommand
 
 from commands.climber.climbupcommand import ClimbUpCommand
 from commands.climber.climbdowncommand import ClimbDownCommand
+from commands.climber.forceclimbdowncommand import ForceClimbDownCommand
 
 # from commands.hood.sethoodpositioncommand import SetHoodPositionCommand
 from commands.drivetrain.turncommand import TurnCommand
+
+# from commands.drivetrain.movecommand import MoveCommand
 
 
 def init():
@@ -57,6 +60,7 @@ def init():
 
     driveController.Y.whileHeld(ClimbUpCommand())
     driveController.A.whileHeld(ClimbDownCommand())
+    driveController.RightTrigger.whileHeld(ForceClimbDownCommand())
 
-    driveController.B.whenPressed(TurnCommand(30))
+    driveController.B.whenPressed(TurnCommand(360))
     # driveController.B.whenPressed(SetHoodPositionCommand(315))

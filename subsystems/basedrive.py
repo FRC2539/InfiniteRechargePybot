@@ -64,7 +64,7 @@ class BaseDrive(CougarSystem):
 
             # Set the ramp rate of the motor
             motor.configOpenloopRamp(0.15)
-            motor.configClosedloopRamp(0.15)
+            motor.configClosedloopRamp(0.15)  # 0.15
 
         """
         Subclasses should configure motors correctly and populate activeMotors.
@@ -80,7 +80,7 @@ class BaseDrive(CougarSystem):
         """A record of the last arguments to move()"""
         self.lastInputs = None
 
-        self.put("Normal Speed", 60)  # 100
+        self.put("Normal Speed", 120)  # 100
         self.put("Deadband", 0.05)
 
         self.updateNTConstants()
@@ -145,7 +145,7 @@ class BaseDrive(CougarSystem):
 
         self.setDefaultCommand(DriveCommand())
 
-    def move(self, x, y, rotate):
+    def move(self, x, y, rotate, customSpeed=None):
         """Turns coordinate arguments into motor outputs."""
 
         # Short-circuits the rather expensive movement calculations if the
@@ -171,32 +171,18 @@ class BaseDrive(CougarSystem):
         if maxSpeed > 1:
             speeds = [x / maxSpeed for x in speeds]
 
+        isBackwards = speeds[0] < 0 and speeds[1] >= 0
+
+        speedLimit = self.speedLimit if customSpeed == None else customSpeed
+
         # Use speeds to feed motor output.
         for motor, speed in zip(self.activeMotors, speeds):
             motor.set(
                 ControlMode.Velocity,
-                self.inchesPerSecondToTicksPerTenth(speed * self.speedLimit),
+                self.inchesPerSecondToTicksPerTenth(
+                    speed * (speedLimit if not isBackwards else 30)
+                ),
             )
-
-    # def rotateByAngle(self, angle):
-    #     """Rotates the robot by a specific angle."""
-
-    #     # Calculate how far to move the wheels (in inches)
-    #     distance = self.degreesToInches(angle)
-
-    #     # Store the new positions for the motors
-    #     targetPositions = []
-
-    #     # Flip the sign for every other motor
-    #     sign = 1
-
-    #     # Calculate all of the target positions for the rotation
-    #     for position in self.getPositions():
-    #         targetPositions.append(position + (distance * sign))
-    #         sign *= -1
-
-    #     # Move the motors to the calculated positions
-    #     self.setMotorPositions(targetPositions)
 
     def setPositions(self, distanceForward):
         """
@@ -209,11 +195,16 @@ class BaseDrive(CougarSystem):
         # Get the current motor positions in inches
         motorPositions = self.getPositions(False)
 
-        for motor, motorPosition in zip(self.activeMotors, motorPositions):
+        # Switches the direction of every other motor to move in the same direction
+        sign = 1
+
+        for motor, motorPosition in zip(self.motors, motorPositions):
             motor.set(
                 TalonFXControlMode.MotionMagic,
-                motorPosition + self.inchesToTicks(distanceForward),
+                motorPosition + self.inchesToTicks(distanceForward) * sign,
             )
+
+            sign *= -1
 
     def setMotorPositions(self, positions):
         """
@@ -228,7 +219,7 @@ class BaseDrive(CougarSystem):
         motorPositions = self.getPositions(False)
 
         for motor, position, motorPosition in zip(
-            self.activeMotors, positions, motorPositions
+            self.motors, positions, motorPositions
         ):
             motor.set(
                 TalonFXControlMode.MotionMagic,

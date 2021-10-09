@@ -14,7 +14,10 @@ class AimWithLimelightCommand(CommandBase):
         self.tolerance = tolerance
 
         # Multiplied by the error to find how much to move the motor
-        self.errorPercent = 0.2
+        self.errorPercent = 0.25
+
+        # Set a speed to aim at
+        self.aimSpeed = 40
 
         # Track where we need to move the robot to aim
         self.xOffset = 0
@@ -39,7 +42,7 @@ class AimWithLimelightCommand(CommandBase):
         # Limit the offset to a maximum speed of 0.25
         self.xOffset = sign * min(abs(self.xOffset), 0.3)
 
-        robot.drivetrain.move(0, 0, self.xOffset)
+        robot.drivetrain.move(0, 0, self.xOffset, customSpeed=self.aimSpeed)
 
     def execute(self):
         self.xOffset = robot.limelight.getX()
