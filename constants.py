@@ -86,10 +86,10 @@ drivetrain.robotWidth = 27.75
 drivetrain.robotRadius = 16.84251
 
 drivetrain.speedLimit = (
-    120.0  # in inches per second (if you have feet per second, multiply by 12!)
+    200.0  # in inches per second (if you have feet per second, multiply by 12!)
 )
-drivetrain.backwardSpeedLimit = 60
-drivetrain.limelightSpeedLimit = 40
+drivetrain.limelightSpeedLimit = 50
+drivetrain.intakeSpeedLimit = 45
 
 
 drivetrain.encoderConfig = CANCoderConfiguration()

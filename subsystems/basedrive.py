@@ -83,6 +83,8 @@ class BaseDrive(CougarSystem):
         self.put("Normal Speed", constants.drivetrain.speedLimit)  # 100
         self.put("Deadband", 0.05)
 
+        self.speedLimit = self.get("Normal Speed")
+
         self.updateNTConstants()
 
         self.wheelBase = (
@@ -134,7 +136,7 @@ class BaseDrive(CougarSystem):
         """
         Updates the speed and deadband with new NT values.
         """
-        self.speedLimit = self.get("Normal Speed")
+        # self.speedLimit = self.get("Normal Speed")
         self.deadband = self.get("Deadband")
 
     def initDefaultCommand(self):
@@ -173,22 +175,13 @@ class BaseDrive(CougarSystem):
         if maxSpeed > 1:
             speeds = [x / maxSpeed for x in speeds]
 
-        isBackwards = speeds[0] < 0 and speeds[1] >= 0
-
         speedLimit = self.speedLimit if customSpeed == None else customSpeed
 
         # Use speeds to feed motor output.
         for motor, speed in zip(self.activeMotors, speeds):
             motor.set(
                 ControlMode.Velocity,
-                self.inchesPerSecondToTicksPerTenth(
-                    speed
-                    * (
-                        speedLimit
-                        if not isBackwards
-                        else constants.drivetrain.backwardSpeedLimit
-                    )
-                ),
+                self.inchesPerSecondToTicksPerTenth(speed * speedLimit),
             )
 
     def setPositions(self, distanceForward):
@@ -395,6 +388,13 @@ class BaseDrive(CougarSystem):
         done lightly, as many commands rely on encoder information.
         """
         self.useEncoders = useEncoders
+
+    def getSpeedLimit(self):
+        """
+        Returns the current speed limit for driving.
+        """
+
+        return self.speedLimit
 
     def setSpeedLimit(self, speed):
         """

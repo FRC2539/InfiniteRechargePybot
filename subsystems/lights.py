@@ -94,6 +94,18 @@ class Lights(CougarSystem):
     def chase(self):
         self.set(self.colors["chase"])
 
+    def blinkGreen(self):
+        self.set(self.colors["solidGreen"])
+
+    def blinkBlue(self):
+        self.set(self.colors["solidBlue"])
+
+    def blinkYellow(self):
+        self.set(self.colors["solidYellow"])
+
+    def blinkRed(self):
+        self.set(self.colors["solidRed"])
+
     def blinkWhite(self):
         self.set(self.colors["blinkWhite"])
 

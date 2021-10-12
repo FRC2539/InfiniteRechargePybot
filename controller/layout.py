@@ -28,6 +28,7 @@ from commands.drivetrain.turncommand import TurnCommand
 from commands.drivetrain.movecommand import MoveCommand
 
 from commands.colorwheel.spinwheelcommand import SpinWheelCommand
+from commands.colorwheel.getcolorcommand import GetColorCommand
 
 
 def init():
@@ -61,14 +62,15 @@ def init():
     # Configure the bumpers and triggers
     driveController.LeftBumper.whileHeld(IntakeLoadCommand())
     driveController.RightBumper.whileHeld(AutomatedShootCommand(4500))
-    driveController.RightTrigger.whileHeld(ForceClimbDownCommand())
+    # driveController.RightTrigger.whileHeld(ForceClimbDownCommand())
     driveController.LeftTrigger.whileHeld(SpinWheelCommand())
 
     # Configure the letter buttons
     driveController.Y.whileHeld(ClimbUpCommand())
     driveController.A.whileHeld(ClimbDownCommand())
     driveController.B.whenPressed(TurnCommand(90))
-    driveController.X.whenPressed(MoveCommand(-40))
+    # driveController.X.whenPressed(MoveCommand(-40))
+    driveController.X.whenPressed(GetColorCommand())
 
     # The controller for operating the robot
     operatorController = LogitechDualShock(1)

@@ -32,7 +32,7 @@ class Hood(CougarSystem):
 
         self.speed = 0.3
 
-        self.angleMax = 327.00
+        self.angleMax = 343  # 327.00
         self.angleMin = 315.00
 
         self.constantlyUpdate("Hood Position", self.getPosition)

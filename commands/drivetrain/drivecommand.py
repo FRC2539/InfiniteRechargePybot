@@ -41,11 +41,6 @@ class DriveCommand(CommandBase):
             if abs(y) > abs(self.lastY):
                 self.lastY = y
 
-        tilt = robot.drivetrain.getTilt()
-        correction = tilt / 20
-        if abs(correction) < 0.2:
-            correction = 0
-
         robot.drivetrain.move(
-            logicalaxes.driveX.get(), y - correction, logicalaxes.driveRotate.get()
+            logicalaxes.driveX.get(), y, logicalaxes.driveRotate.get()
         )

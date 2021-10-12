@@ -2,6 +2,8 @@ from commands2 import CommandBase
 
 import robot
 
+import constants
+
 
 class IntakeLoadCommand(CommandBase):
     def __init__(self):
@@ -17,6 +19,12 @@ class IntakeLoadCommand(CommandBase):
     def initialize(self):
         robot.lights.solidGreen()
         robot.ballintake.forwardIntake()
+
+        # Store the current speed limit
+        self.currentSpeedLimit = robot.drivetrain.getSpeedLimit()
+
+        # Update the speed limit to be slower while intaking
+        robot.drivetrain.setSpeedLimit(constants.drivetrain.intakeSpeedLimit)
 
     def execute(self):
         # Read the values from the sensors
@@ -59,3 +67,4 @@ class IntakeLoadCommand(CommandBase):
     def end(self, interrupted):
         robot.lights.off()
         robot.ballintake.stopAll()
+        robot.drivetrain.setSpeedLimit(self.currentSpeedLimit)
