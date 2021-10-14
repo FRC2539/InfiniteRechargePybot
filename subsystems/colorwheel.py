@@ -18,12 +18,10 @@ class ColorWheel(CougarSystem):
 
         self.colorMatcher = ColorMatch()
 
-        self.colorMatcher.addColorMatch(Color(0, 0.4, 0.4))  # Blue
-        self.colorMatcher.addColorMatch(Color(0.7, 0, 0))  # Red
-        self.colorMatcher.addColorMatch(Color(0.4, 0.4, 0))  # Yellow
-        self.colorMatcher.addColorMatch(Color(0, 0.7, 0))  # Green
-
-        # self.colors = ["y", "r", "g", "b", "y", "r", "g", "b"]
+        self.colorMatcher.addColorMatch(Color(0.15, 0.43, 0.42))  # Blue
+        self.colorMatcher.addColorMatch(Color(0.51, 0.35, 0.14))  # Red
+        self.colorMatcher.addColorMatch(Color(0.33, 0.55, 0.13))  # Yellow
+        self.colorMatcher.addColorMatch(Color(0.18, 0.57, 0.25))  # Green
 
         self.colorSensor = ColorSensorV3(wpilib.I2C.Port.kOnboard)
 
@@ -39,7 +37,7 @@ class ColorWheel(CougarSystem):
         self.encoder = self.motor.getEncoder()
         self.controller = self.motor.getPIDController()
 
-        self.controller.setP(0.001, 0)
+        self.controller.setP(0.01, 0)
         self.controller.setI(0, 0)
         self.controller.setD(0, 0)
         self.controller.setFF(0, 0)
@@ -72,47 +70,15 @@ class ColorWheel(CougarSystem):
     def spinBackwards(self):
         self.setPercent(-self.speed)
 
-    def getColor(self):
-        # print(self.colorSensor.getColor())
+    def spinRotations(self, rotations):
+        self.controller.setReference(rotations, ControlType.kPosition)
 
+    def getColor(self):
         return self.colorMatcher.matchClosestColor(self.colorSensor.getColor(), 0.9)
 
     def getColorAsArray(self):
         currentColor = self.getColor()
 
-        print([currentColor.red, currentColor.green, currentColor.blue])
+        # print([currentColor.red, currentColor.green, currentColor.blue])
 
         return [currentColor.red, currentColor.green, currentColor.blue]
-
-    # def getColor(self):
-    #     self.color = self.colorSensor.getColor()
-    #     # print("r: " + str(self.color.red))
-    #     # print("g: " + str(self.color.green))
-    #     # print("b: " + str(self.color.blue))
-    #     # print("ny: " + str(self.color.red / self.color.green))
-
-    #     if (
-    #         self.color.blue > (self.color.green - 0.18)
-    #         and self.color.blue > self.color.red
-    #     ):  # subtracts because there is more green in blue than blue lol.
-    #         print("set b")
-    #         return "b"
-    #     # elif self.color.red > self.color.green and self.color.red > self.color.blue:
-    #     #   return 'r'
-    #     elif (
-    #         self.color.green - 0.25 > self.color.red
-    #         and self.color.green > self.color.blue
-    #     ):
-    #         # print("green")
-    #         return "set g"
-    #     elif (
-    #         self.color.red / self.color.green < 0.65
-    #     ):  # checks a highly-tuned ratio for current color since yellow isn't RGB and if you think it is you're an idiot.
-    #         # print("yellow")
-    #         return "set y"  # cough cough people who deleted Bens winch code cough cough
-    #     else:
-    #         # print("red")
-    #         return "set r"
-
-    # def getSensorColor(self):
-    #     return self.sensor.getColor()

@@ -23,6 +23,7 @@ IDs for the CANbus, sensors, PWM, and the liking.
 drivetrain = Constants()
 shooter = Constants()
 limelight = Constants()
+colorWheel = Constants()
 
 # Drive Velocity Control
 drivetrain.dPk = 0.003  # 0.0075
@@ -118,3 +119,7 @@ limelight.yOffset = 0
 # Set the step size for modifying the offsets
 limelight.xOffsetStep = 0.5
 limelight.yOffsetStep = 0.5
+
+# Set constants for the color wheel data
+colorWheel.controlPanelDiameter = 32  # inches
+colorWheel.spinnerDiameter = 3  # inches

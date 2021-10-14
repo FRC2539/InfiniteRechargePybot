@@ -33,7 +33,7 @@ class BallIntake(CougarSystem):
 
         # Percentages are from 0 - 1, 1 being 100%
         self.speeds = {
-            "intakeMotor": 0.40,
+            "intakeMotor": 0.50,
             "conveyorMotor": 0.60,
             "shooterFeedMotor": 0.565,  # 0.9
         }

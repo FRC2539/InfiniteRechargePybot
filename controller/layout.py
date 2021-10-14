@@ -29,6 +29,7 @@ from commands.drivetrain.movecommand import MoveCommand
 
 from commands.colorwheel.spinwheelcommand import SpinWheelCommand
 from commands.colorwheel.getcolorcommand import GetColorCommand
+from commands.colorwheel.rotationcontrolcommand import RotationControlCommand
 
 
 def init():
@@ -70,14 +71,17 @@ def init():
     driveController.A.whileHeld(ClimbDownCommand())
     driveController.B.whenPressed(TurnCommand(90))
     # driveController.X.whenPressed(MoveCommand(-40))
-    driveController.X.whenPressed(GetColorCommand())
+    # driveController.X.whenPressed(GetColorCommand())
+    driveController.X.whenPressed(RotationControlCommand())
 
     # The controller for operating the robot
     operatorController = LogitechDualShock(1)
 
     # Configure the letter buttons
     operatorController.Y.whileHeld(ClimbUpCommand())
-    operatorController.A.whileHeld(ForceClimbDownCommand())
+    operatorController.A.whileHeld(ClimbDownCommand())
+
+    operatorController.Start.whileHeld(ForceClimbDownCommand())
 
     # Configure the d pad
     operatorController.DPadUp.whileHeld(IntakeForwardCommand())
