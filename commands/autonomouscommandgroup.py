@@ -415,33 +415,22 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         Dunno if this works hope it doesnt break the robot.
         """
         self.addCommands(
-            InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
-            MoveCommand(42),
-            AutomatedShootCommand(3800).withTimeout(3),
-            InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
-            MoveCommand(58, torySlow=10000),
-            TurnCommand(-30),
+            InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
+            MoveCommand(48),
+            InstantCommand(lambda: robot.pneumatics.extendIntake()),
+            AutomatedShootCommand(4100, ballCount=3, conveyorDelay=True).withTimeout(4),
+            InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
             InstantCommand(
-                lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
+                lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]
             ),
-            MoveCommand(70, torySlow=5100),
-            MoveCommand(-70, torySlow=10000),
-            TurnCommand(80),
-            MoveCommand(-40, torySlow=12500),
-            TurnCommand(-80),
-            InstantCommand(
-                lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]
-            ),
-            MoveCommand(70, torySlow=5100),
-            MoveCommand(-70, torySlow=10000),
-            InstantCommand(
-                lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]
-            ),
-            InstantCommand(lambda: robot.shooter.setRPM(3800), [robot.shooter]),
-            TurnCommand(50),
-            MoveCommand(-40, torySlow=12500),
-            AutomatedShootCommand(3800, conveyorDelay=True).withTimeout(8),
-            TurnCommand(-3000),
+            MoveCommand(120, torySlow=5200),
+            MoveCommand(-135, angle=15),
+            AutomatedShootCommand(4100, conveyorDelay=True),
+            #End trench portion
+            BezierPathCommand([[0, 0], [3, 0], [4, 1], [3, 12]], speed=0.25),
+            MoveCommand(3),
+            MoveCommand(-3),
+            
         )
 
     # def magicFiveBall(self):
