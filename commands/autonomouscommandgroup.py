@@ -410,23 +410,50 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     #     """
     #     self.addCommands(TurnCommand(-90))
 
+    #def questionableElevenBall(self):
+        #"""
+        #Move off the line, shoot 3, then collect the balls from the trench and shoot those. Collect the 5 balls in the rendevous point and shoot those.
+        
+        #Speeds are slow for testing purposes.
+        #"""
+        #self.addCommands(
+            #InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
+            #MoveCommand(48),
+            #InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
+            #AutomatedShootCommand(4100, ballCount=3, conveyorDelay=True).withTimeout(4),
+            #InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
+            #InstantCommand(lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]),
+            #MoveCommand(120, torySlow=5200),
+            #MoveCommand(-135, angle=15),
+            #AutomatedShootCommand(4100, ballCount=3, conveyorDelay=True),
+            ##End trench portion
+            #BezierPathCommand([[0, 0], [3, 0], [4, 1], [3, 12]], speed=0.25),
+            ##Far 3 balls
+            #InstantCommand(lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]
+            #),
+            #MoveCommand(3, torySlow = 5200),
+            #MoveCommand(-5, torySlow = 5200),
+            ##Close 2 balls
+            #MoveCommand(2, angle=50, torySlow = 5200),
+            #InstantCommand(lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]),
+            #MoveCommand(3, torySlow = 5200),
+            ##Return to shoot
+            ##InstandCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
+            #MoveCommand(-6, torySlow = 5200),
+            #TurnCommand(-60),
+            #MoveCommand(7, torySlow = 5200),
+            ##AutomatedShootCommand(4100, ballCount=5, conveyorDelay=True).withTimeout(6),
+            #InstandCommand(lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]),
+        #)
     def questionableEightBall(self):
         """
-        Move off the line, shoot 3, then collect the balls from the trench and shoot those. Collect the 5 balls in the rendevous point and shoot those.
-        
-        Speeds are slow for testing purposes.
+        Eight ball wooowooo
         """
         self.addCommands(
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
             MoveCommand(48),
             InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
             AutomatedShootCommand(4100, ballCount=3, conveyorDelay=True).withTimeout(4),
-            InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
-            InstantCommand(lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]),
-            MoveCommand(120, torySlow=5200),
-            MoveCommand(-135, angle=15),
-            AutomatedShootCommand(4100, ballCount=3, conveyorDelay=True),
-            #End trench portion
             BezierPathCommand([[0, 0], [3, 0], [4, 1], [3, 12]], speed=0.25),
             #Far 3 balls
             InstantCommand(lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]
