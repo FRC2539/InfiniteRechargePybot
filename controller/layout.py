@@ -53,6 +53,7 @@ def init():
 
     driveController.Back.whenPressed(ResetCommand())
     # driveController.X.toggleWhenPressed(DriveCommand())
+    driveController.Start.whileHeld(ForceClimbDownCommand())
 
     # Configure the d pad
     driveController.DPadUp.whileHeld(IntakeForwardCommand())
@@ -69,10 +70,8 @@ def init():
     # Configure the letter buttons
     driveController.Y.whileHeld(ClimbUpCommand())
     driveController.A.whileHeld(ClimbDownCommand())
-    driveController.B.whenPressed(TurnCommand(90))
-    # driveController.X.whenPressed(MoveCommand(-40))
-    # driveController.X.whenPressed(GetColorCommand())
-    driveController.X.whenPressed(RotationControlCommand())
+    # driveController.B.whenPressed(TurnCommand(90))
+    driveController.X.whileHeld(RotationControlCommand())
 
     # The controller for operating the robot
     operatorController = LogitechDualShock(1)
@@ -80,6 +79,7 @@ def init():
     # Configure the letter buttons
     operatorController.Y.whileHeld(ClimbUpCommand())
     operatorController.A.whileHeld(ClimbDownCommand())
+    operatorController.X.whileHeld(RotationControlCommand())
 
     operatorController.Start.whileHeld(ForceClimbDownCommand())
 

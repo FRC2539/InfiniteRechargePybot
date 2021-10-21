@@ -28,7 +28,7 @@ class TurnCommand(CommandBase):
         # Set a tolerance for the angle
         self.tolerance = 5
 
-        self.distance = robot.drivetrain.degreesToInches(self.degrees)
+        self.distance = robot.drivetrain.degreesToInches(self.degrees) * 2
 
         # [Front Left, Front Right, Back Left, Back Right]
         self.targetDistances = [
@@ -48,25 +48,46 @@ class TurnCommand(CommandBase):
         # ]
 
         robot.drivetrain.setMotorPositions(self.targetDistances)
+        # print("turning?")
 
     def isFinished(self):
         # Get the motor positions in inches
-        motorPositions = robot.drivetrain.getPositions()
+        # motorPositions = robot.drivetrain.getPositions()
 
-        if self.distance >= 0:
-            # calculate the distance using 6 in rather than 4 in
-            print(motorPositions[1], self.initialPositions[1], self.distance)
+        print(abs(self.initialAngle - robot.drivetrain.getRawAngle()))
 
-            return motorPositions[0] >= self.initialPositions[0] + self.distance
-        else:
-            return motorPositions[0] <= self.initialPositions[0] + self.distance
+        return abs(self.initialAngle - robot.drivetrain.getRawAngle()) - (
+            self.tolerance / 2
+        ) >= abs(self.degrees)
+
+        # if self.distance >= 0:
+        #     print("a: " + str(self.distance))
+        #     # calculate the distance using 6 in rather than 4 in
+        #     # print(motorPositions[1], self.initialPositions[1], self.distance)
+        #     print(
+        #         "a mPos: "
+        #         + str(motorPositions[0])
+        #         + " initPos:"
+        #         + str(self.initialPositions[0] + self.distance)
+        #     )
+        #     return motorPositions[0] >= self.initialPositions[0] + self.distance
+        # else:
+        #     print(
+        #         "b mPos: "
+        #         + str(motorPositions[0])
+        #         + " initPos:"
+        #         + str(self.initialPositions[0] + self.distance)
+        #     )
+
+        #     return motorPositions[0] <= self.initialPositions[0] + self.distance
 
         # if
-        # return abs(self.initialAngle - robot.drivetrain.getRawAngle()) + (
-        #     self.tolerance / 2
-        # ) >= abs(self.degrees)
+        #  return abs(self.initialAngle - robot.drivetrain.getRawAngle()) + (
+        #      self.tolerance / 2
+        #  ) >= abs(self.degrees)
 
     def end(self, interrupted):
+        print("isEnd?")
         robot.drivetrain.stop()
 
         # Reset the PID profile

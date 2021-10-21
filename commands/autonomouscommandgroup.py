@@ -7,6 +7,7 @@ from commands.drivetrain.turntocommand import TurnToCommand
 from commands.drivetrain.movecommand import MoveCommand
 
 from commands.limelight.automatedshootcommand import AutomatedShootCommand
+from commands.limelight.aimwithlimelightcommand import AimWithLimelightCommand
 
 # from commands.limelight.automatedshootcommand import AutomatedShootCommand
 
@@ -72,10 +73,17 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         Shoot 3 balls, then collect the rest of the balls from the trench. Move to a safe location and shoot.
         """
         self.addCommands(
-            InstantCommand(lambda: robot.shooter.setRPM(3300), [robot.shooter]),
-            MoveCommand(48),
+            # InstantCommand(lambda: robot.shooter.setRPM(3300), [robot.shooter]),
+            # MoveCommand(48),
+            # TurnCommand(90),
+            MoveCommand(30),
+            TurnCommand(-30),
+            MoveCommand(30),
+            TurnCommand(300),
+            MoveCommand(15),
             AimWithLimelightCommand(),
             AutomatedShootCommand(3300).withTimeout(4),
+            TurnCommand(30),
             InstantCommand(lambda: robot.shooter.setRPM(3300), [robot.shooter]),
             InstantCommand(lambda: robot.ballintake.forwardIntake, [robot.ballintake]),
             MoveCommand(120),

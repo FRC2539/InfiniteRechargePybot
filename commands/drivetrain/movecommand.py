@@ -39,6 +39,9 @@ class MoveCommand(CommandBase):
     def isFinished(self):
         positions = robot.drivetrain.getPositions()
 
+        print(self.targetPosition)
+        print(min([abs(positions[0]), abs(positions[1])]))
+
         # Determines if the robot has made it to the target position
         return self.targetPosition <= min([abs(positions[0]), abs(positions[1])])
 

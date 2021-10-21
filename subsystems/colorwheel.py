@@ -43,7 +43,7 @@ class ColorWheel(CougarSystem):
         self.controller.setFF(0, 0)
         self.controller.setIZone(0, 0)
 
-        self.speed = 0.2
+        self.speed = 0.5
 
         self.constantlyUpdate("Spinner Position", self.getPosition)
         self.constantlyUpdate("Color", self.getColorAsArray)

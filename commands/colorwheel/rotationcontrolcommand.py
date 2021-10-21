@@ -4,6 +4,8 @@ import robot
 import math
 import constants
 
+from wpilib import Timer
+
 
 class RotationControlCommand(CommandBase):
     def __init__(self, rotations=4):
@@ -11,26 +13,50 @@ class RotationControlCommand(CommandBase):
 
         self.addRequirements(robot.colorwheel)
 
-        self.rotations = rotations
-
     def initialize(self):
-        self.initialPosition = robot.colorwheel.getPosition()
+        self.timer = Timer()
 
-        controlPanelCircumference = math.pi * constants.colorWheel.controlPanelDiameter
-        spinnerCircumference = math.pi * constants.colorWheel.spinnerDiameter
+        self.timer.reset()
+        self.timer.start()
 
-        rotationsPerPanelRotation = controlPanelCircumference / spinnerCircumference
-
-        self.rotationsNeeded = self.rotations * rotationsPerPanelRotation
-
-        print(self.rotationsNeeded)
-
-        robot.colorwheel.spinRotations(self.initialPosition + self.rotationsNeeded)
+        robot.colorwheel.spin()
 
     def isFinished(self):
-        currentPosition = robot.colorwheel.getPosition()
-
-        return currentPosition - self.initialPosition >= self.rotationsNeeded
+        # 16 sec at 0.4s
+        return self.timer.hasElapsed(15)
 
     def end(self, interrupted):
         robot.colorwheel.stopSpinner()
+
+        self.timer.stop()
+
+
+# class RotationControlCommand(CommandBase):
+#     def __init__(self, rotations=4):
+#         super().__init__()
+
+#         self.addRequirements(robot.colorwheel)
+
+#         self.rotations = rotations
+
+#     def initialize(self):
+#         self.initialPosition = robot.colorwheel.getPosition()
+
+#         controlPanelCircumference = math.pi * constants.colorWheel.controlPanelDiameter
+#         spinnerCircumference = math.pi * constants.colorWheel.spinnerDiameter
+
+#         rotationsPerPanelRotation = controlPanelCircumference / spinnerCircumference
+
+#         self.rotationsNeeded = self.rotations * rotationsPerPanelRotation
+
+#         print(self.rotationsNeeded)
+
+#         robot.colorwheel.spinRotations(self.initialPosition + self.rotationsNeeded)
+
+#     def isFinished(self):
+#         currentPosition = robot.colorwheel.getPosition()
+
+#         return currentPosition - self.initialPosition >= self.rotationsNeeded
+
+#     def end(self, interrupted):
+#         robot.colorwheel.stopSpinner()
