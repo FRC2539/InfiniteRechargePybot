@@ -451,10 +451,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         """
         self.addCommands(
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
-            MoveCommand(48),
             InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
             AutomatedShootCommand(4100, ballCount=3, conveyorDelay=True).withTimeout(4),
-            BezierPathCommand([[0, 0], [3, 0], [4, 1], [3, 12]], speed=0.25),
+            BezierPathCommand([[0, 0], [36, 0], [48, 12], [36, 144]], speed=0.25),
             #Far 3 balls
             InstantCommand(lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]
             ),
@@ -465,12 +464,11 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             InstantCommand(lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]),
             MoveCommand(3, torySlow = 5200),
             #Return to shoot
-            #InstandCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
+            #InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
             MoveCommand(-6, torySlow = 5200),
             TurnCommand(-60),
-            MoveCommand(7, torySlow = 5200),
             #AutomatedShootCommand(4100, ballCount=5, conveyorDelay=True).withTimeout(6),
-            InstandCommand(lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]),
+            InstantCommand(lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]),
         )
 
     # def magicFiveBall(self):
@@ -493,3 +491,12 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     #         TurnCommand(15),
     #         AutomatedShootCommand(conveyorDelay=True).withTimeout(8),
     #     )
+    
+    def bezierTest(self):
+        """
+        In testing we trust.
+        """
+        self.addCommands(
+            BezierPathCommand([[0, 0], [0, -144], [12, -120], [-36, -144]], speed=0.25)
+        )
+        
