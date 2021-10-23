@@ -2,7 +2,7 @@
 
 from commands2 import TimedCommandRobot
 from wpilib._impl.main import run
-from wpilib import RobotBase, DriverStation, CameraServer
+from wpilib import RobotBase, DriverStation
 
 from custom import driverhud
 import controller.layout
@@ -24,6 +24,7 @@ from subsystems.hood import Hood as hood
 from subsystems.turret import Turret as turret
 from subsystems.pneumatics import Pneumatics as pneumatics
 from subsystems.climber import Climber as climber
+from subsystems.colorwheel import ColorWheel as colorwheel
 
 
 import math
@@ -42,8 +43,6 @@ class KryptonBot(TimedCommandRobot):
         controller.layout.init()
         autoconfig.init()
         driverhud.init()
-
-        CameraServer.launch()
 
         self.selectedAuto = autoconfig.getAutoProgram()
         self.auto = AutonomousCommandGroup()

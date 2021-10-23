@@ -52,6 +52,9 @@ from commands.limelight.sudocommandgroup import SudoCommandGroup
 
 from commands.pneumatics.toggleintakecommand import ToggleIntakeCommand
 
+from commands.colorwheel.spinwheelcommand import SpinWheelCommand
+from commands.colorwheel.rotationcontrolcommand import RotationControlCommand
+
 import constants
 import robot
 
@@ -107,9 +110,11 @@ def init():
     driveControllerOne.LeftBottomRight.whileHeld(LowerClimberCommand())
     driveControllerOne.LeftBottomLeft.whileHeld(ForceDownCommand())
 
-    driveControllerOne.RightTopLeft.whileHeld(RaiseClimberCommand())
-    driveControllerOne.RightBottomLeft.whileHeld(LowerClimberCommand())
-    driveControllerOne.RightBottomRight.whileHeld(ForceDownCommand())
+    # driveControllerOne.RightTopLeft.whileHeld(RaiseClimberCommand())
+    # driveControllerOne.RightBottomLeft.whileHeld(LowerClimberCommand())
+    # driveControllerOne.RightBottomRight.whileHeld(ForceDownCommand())
+    driveControllerOne.RightBottomLeft.whileHeld(SpinWheelCommand())
+    driveControllerOne.RightBottomMiddle.whenPressed(RotationControlCommand())
 
     driveControllerTwo.LeftBottomMiddle.whileHeld(SetRPMCommand(4400))
     driveControllerTwo.LeftTopMiddle.whileHeld(ConveyorIntakeForwardCommand())

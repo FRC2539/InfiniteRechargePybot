@@ -18,3 +18,4 @@ class ResetCommand(InstantCommand):
         self.addRequirements(robot.drivetrain)
         self.addRequirements(robot.pneumatics)
         self.addRequirements(robot.climber)
+        self.addRequirements(robot.colorwheel)

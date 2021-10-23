@@ -106,6 +106,13 @@ class CougarSystem(SubsystemBase):
                     "Unrecognizable Data Type . . . \nShould be a: boolean, int, float, string, list of bools, \nlist of strings, list of numbers."
                 )
 
+    def makePersistent(self, key):
+        """
+        Make the given key persist even 
+        when the robot is off.
+        """
+        self.table.setPersistent(key)
+
     def get(self, valueName, defaultVal=None):
         """
         Get the value of the key with the

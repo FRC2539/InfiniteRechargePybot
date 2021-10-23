@@ -24,7 +24,10 @@ class Chamber(CougarSystem):
         # INFO: Percentages are from 0 - 1, 1 being 100%
         self.speed = 0.8  # 0.8
         self.slowSpeed = 0.2
-        # Option: separate into forward and backward speeds
+
+        self.put("Spin Speed", 0.8)
+
+        self.getNetworkTableValues()
 
         # The sensor for telling if a ball is present.
         self.ballSensor = AnalogInput(ports.chamber.sensorPort)
@@ -34,12 +37,16 @@ class Chamber(CougarSystem):
             "Chamber Running", lambda: self.motor.getMotorOutputPercent() != 0
         )
 
+    def getNetworkTableValues(self):
+        self.spinSpeed = self.get("Spin Speed", 0.8)
+
     def periodic(self):
         """
         Loops when nothing else is running in
         this subsystem. Do not call this!
         """
         self.feed()
+        self.getNetworkTableValues()
 
     def forward(self):
         """
@@ -86,3 +93,9 @@ class Chamber(CougarSystem):
         Does the ball sensor see a ball?
         """
         return self.ballSensor.getValue() < 50
+
+    def spinColorWheel(self):
+        """
+        Spin the color wheel using the color wheel spinner motor.
+        """
+        self.move(self.spinSpeed)
