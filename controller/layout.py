@@ -54,6 +54,7 @@ from commands.pneumatics.toggleintakecommand import ToggleIntakeCommand
 
 from commands.colorwheel.spinwheelcommand import SpinWheelCommand
 from commands.colorwheel.rotationcontrolcommand import RotationControlCommand
+from commands.colorwheel.colorcontrolcommand import ColorControlCommand
 
 import constants
 import robot
@@ -115,6 +116,7 @@ def init():
     # driveControllerOne.RightBottomRight.whileHeld(ForceDownCommand())
     driveControllerOne.RightBottomLeft.whileHeld(SpinWheelCommand())
     driveControllerOne.RightBottomMiddle.whenPressed(RotationControlCommand())
+    driveControllerOne.RightBottomRight.whileHeld(ColorControlCommand())
 
     driveControllerTwo.LeftBottomMiddle.whileHeld(SetRPMCommand(4400))
     driveControllerTwo.LeftTopMiddle.whileHeld(ConveyorIntakeForwardCommand())

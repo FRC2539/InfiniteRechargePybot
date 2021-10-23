@@ -26,6 +26,7 @@ class Chamber(CougarSystem):
         self.slowSpeed = 0.2
 
         self.put("Spin Speed", 0.8)
+        self.put("Slow Spin Speed", 0.4)
 
         self.getNetworkTableValues()
 
@@ -39,6 +40,7 @@ class Chamber(CougarSystem):
 
     def getNetworkTableValues(self):
         self.spinSpeed = self.get("Spin Speed", 0.8)
+        self.slowSpinSpeed = self.get("Slow Spin Speed", 0.4)
 
     def periodic(self):
         """
@@ -99,3 +101,10 @@ class Chamber(CougarSystem):
         Spin the color wheel using the color wheel spinner motor.
         """
         self.move(self.spinSpeed)
+
+    def spinColorWheelSlow(self):
+        """
+        Spin the color wheel slowly using the color wheel spinner motor.
+        This is more appropriate for manual color control.
+        """
+        self.move(self.slowSpinSpeed)
