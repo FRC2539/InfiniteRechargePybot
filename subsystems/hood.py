@@ -56,6 +56,12 @@ class Hood(CougarSystem):
         """
         return self.encoder.getOutput() * 360
 
+    def setPercent(self, speed):
+        """
+        A 'raw' move method that moves the motor unconstrained at a constant speed
+        """
+        self.motor.set(speed)
+
     def up(self):
         """
         Raise the hood.
@@ -107,6 +113,12 @@ class Hood(CougarSystem):
             return self.isAboveMinAngle()
         else:
             return self.isUnderMaxAngle() and self.isAboveMinAngle()
+
+    def angleIsWithinBounds(self, angle):
+        """
+        Checks if the given angle is a valid angle for the hood
+        """
+        return self.angleMin <= angle <= self.angleMax
 
     def isUnderMaxAngle(self):
         """
