@@ -18,10 +18,16 @@ class ColorWheel(CougarSystem):
 
         self.colorMatcher = ColorMatch()
 
-        self.colorMatcher.addColorMatch(Color(0.15, 0.43, 0.42))  # Blue
-        self.colorMatcher.addColorMatch(Color(0.51, 0.35, 0.14))  # Red
-        self.colorMatcher.addColorMatch(Color(0.33, 0.55, 0.13))  # Yellow
-        self.colorMatcher.addColorMatch(Color(0.18, 0.57, 0.25))  # Green
+        self.colors = [  # Colors in field order (important)
+            Color(0.51, 0.35, 0.14),  # Red
+            Color(0.33, 0.55, 0.13),  # Yellow
+            Color(0.15, 0.43, 0.42),  # Blue
+            Color(0.18, 0.57, 0.25),  # Green
+        ]
+
+        # Add all of the colors to the color match object
+        for color in self.colors:
+            self.colorMatcher.addColorMatch(color)
 
         self.colorSensor = ColorSensorV3(wpilib.I2C.Port.kOnboard)
 
@@ -46,6 +52,9 @@ class ColorWheel(CougarSystem):
         """
         self.feed()
         self.getNetworkTableValues()
+
+    def getColorsList(self):
+        return self.colors
 
     def getColor(self):
         return self.colorMatcher.matchClosestColor(self.colorSensor.getColor(), 0.9)
