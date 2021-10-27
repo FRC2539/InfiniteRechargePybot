@@ -18,6 +18,7 @@ from commands.drivetrain.cougarcoursecommand import CougarCourseCommand
 from commands.drivetrain.segmentfollowercommand import SegmentFollowerCommand
 from commands.drivetrain.dosadocommand import DosadoCommand
 from commands.drivetrain.bezierpathcommand import BezierPathCommand
+from commands.hood.sethoodpositioncommand import SetHoodPositionCommand
 
 from commands.limelight.automatedshootcommand import AutomatedShootCommand
 
@@ -421,23 +422,27 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
             InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
             AutomatedShootCommand(4100, ballCount=3, conveyorDelay=True).withTimeout(4),
-            InstandCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
+            InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
             
             #Curve to 4 balls
-            MoveCommand(160, torySlow = 6000),
-            TurnCommand(100),
-            InstantCommand(lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]),
-            MoveCommand(48, torySlow = 3000),
-            TurnCommand(135),
+            MoveCommand(160, torySlow = 20000),
+            TurnCommand(98),
+            InstantCommand(lambda: robot.conveyorintake.move(0.75), [robot.conveyorintake]),
+            MoveCommand(42, torySlow = 3000),
+            InstantCommand(lambda: robot.conveyorintake.move(0.65), [robot.conveyorintake]),
+            MoveCommand(42, torySlow = 3000),
+            SetHoodPositionCommand(100),
+            InstantCommand(lambda: robot.shooter.setRPM(3600), [robot.shooter]),
+            TurnCommand(155),
             
             #Last ball
+            InstantCommand(lambda: robot.conveyorintake.move(0.8), [robot.conveyorintake]),
+            MoveCommand(90, torySlow = 9000),
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
-            InstantCommand(lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]),
-            MoveCommand(60, torySlow = 3000),
             
             #Turn to shoot
-            TurnCommand(65),
-            AutomatedShootCommand(4100, ballCount=5, conveyorDelay=True, waitUntilAimed=True).withTimeout(6),
+            TurnCommand(110),
+            AutomatedShootCommand(3600, ballCount=5, conveyorDelay=True).withTimeout(6),
         )
 
     # def magicFiveBall(self):
@@ -460,22 +465,4 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     #         TurnCommand(15),
     #         AutomatedShootCommand(conveyorDelay=True).withTimeout(8),
     #     )
-    
-    def autoTest(self):
-        """
-        In testing we trust.
-        
-        DO NOT DELETE/MODIFY THIS! Used for testing the questionableEightBall auto.
-        """
-        self.addCommands(
-            InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
-            MoveCommand(160, torySlow = 6000),
-            TurnCommand(100),
-            InstantCommand(lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]),
-            MoveCommand(66, torySlow = 3000),
-            TurnCommand(135),
-            InstantCommand(lambda: robot.conveyorintake.intakeBalls(), [robot.conveyorintake]),
-            MoveCommand(72, torySlow = 3000),
-            TurnCommand(135),
-        )
         
