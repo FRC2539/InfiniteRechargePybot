@@ -411,7 +411,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     #     """
     #     self.addCommands(TurnCommand(-90))
 
-    def questionableEightBall(self):
+    def eightBall(self):
         """
         Shoot from the line, then collect 5 balls from the rendevous point and shoot those.
         
@@ -419,30 +419,34 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         """
         self.addCommands(
             #First 3 balls
-            InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
+            InstantCommand(lambda: robot.shooter.setRPM(2300), [robot.shooter]),
             InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
-            AutomatedShootCommand(4100, ballCount=3, conveyorDelay=True).withTimeout(4),
+            AutomatedShootCommand(2250, ballCount=3, conveyorDelay=True).withTimeout(2.5),
             InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
             
             #Curve to 4 balls
-            MoveCommand(160, torySlow = 20000),
+            MoveCommand(160, torySlow = 28000),
             TurnCommand(98),
-            InstantCommand(lambda: robot.conveyorintake.move(0.75), [robot.conveyorintake]),
-            MoveCommand(42, torySlow = 3000),
-            InstantCommand(lambda: robot.conveyorintake.move(0.65), [robot.conveyorintake]),
-            MoveCommand(42, torySlow = 3000),
-            SetHoodPositionCommand(100),
-            InstantCommand(lambda: robot.shooter.setRPM(3600), [robot.shooter]),
-            TurnCommand(155),
+            InstantCommand(lambda: robot.conveyorintake.move(0.85), [robot.conveyorintake]),
+            #Intake 0.85
+            MoveCommand(84, torySlow = 3250),
+            #Move 2750
+            #InstantCommand(lambda: robot.conveyorintake.move(0.75), [robot.conveyorintake]),
+            #MoveCommand(42, torySlow = 2000),
+            InstantCommand(lambda: robot.shooter.setRPM(2800), [robot.shooter]),
+            TurnCommand(149, tolerance=7),
             
             #Last ball
             InstantCommand(lambda: robot.conveyorintake.move(0.8), [robot.conveyorintake]),
-            MoveCommand(90, torySlow = 9000),
-            InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
+            #Intake 0.8
+            MoveCommand(92, torySlow = 18000),
+            InstantCommand(lambda: robot.conveyorintake.outtakeBalls(), [robot.conveyorintake]),
+            InstantCommand(lambda: robot.shooter.setRPM(2300), [robot.shooter]),
+            SetHoodPositionCommand(100),
             
-            #Turn to shoot
-            TurnCommand(110),
-            AutomatedShootCommand(3600, ballCount=5, conveyorDelay=True).withTimeout(6),
+            #Turn to shoot.
+            TurnCommand(125),
+            AutomatedShootCommand(3000, ballCount=5, conveyorDelay=True).withTimeout(6),
         )
 
     # def magicFiveBall(self):
