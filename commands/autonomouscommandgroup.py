@@ -448,6 +448,42 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             TurnCommand(125),
             AutomatedShootCommand(3000, ballCount=5, conveyorDelay=True).withTimeout(6),
         )
+    
+    def pickupEightBall(self):
+        """
+        Experimental. Do not use this one in comp yet!
+        """
+        self.addCommands(
+            #First 3 balls
+            InstantCommand(lambda: robot.shooter.setRPM(2300), [robot.shooter]),
+            InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
+            AutomatedShootCommand(2250, ballCount=3, conveyorDelay=True).withTimeout(2.5),
+            InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
+            
+            #Curve to 4 balls
+            MoveCommand(160, torySlow = 28000),
+            TurnCommand(98),
+            InstantCommand(lambda: robot.conveyorintake.move(0.85), [robot.conveyorintake]),
+            #Intake 0.85
+            MoveCommand(84, torySlow = 3250),
+            #Move 2750
+            #InstantCommand(lambda: robot.conveyorintake.move(0.75), [robot.conveyorintake]),
+            #MoveCommand(42, torySlow = 2000),
+            InstantCommand(lambda: robot.shooter.setRPM(2800), [robot.shooter]),
+            TurnCommand(149, tolerance=7),
+            
+            #Last ball
+            InstantCommand(lambda: robot.conveyorintake.move(0.8), [robot.conveyorintake]),
+            #Intake 0.8
+            MoveCommand(92, torySlow = 18000),
+            InstantCommand(lambda: robot.conveyorintake.outtakeBalls(), [robot.conveyorintake]),
+            InstantCommand(lambda: robot.shooter.setRPM(2300), [robot.shooter]),
+            SetHoodPositionCommand(100),
+            
+            #Turn to shoot.
+            TurnCommand(125),
+            AutomatedShootCommand(3000, ballCount=5, conveyorDelay=True).withTimeout(6),
+        )
 
     # def magicFiveBall(self):
     #     """

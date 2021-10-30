@@ -9,12 +9,15 @@ from wpilib import Color
 from rev import CANSparkMax, MotorType, ControlType, IdleMode
 from rev.color import ColorSensorV3, ColorMatch
 
+from networktables import NetworkTables
 
 class ColorWheel(CougarSystem):
     """Controls the color wheel sensor."""
 
     def __init__(self):
         super().__init__("ColorWheel")
+        
+        self.fmsInfo = NetworkTables.getTable("FMSInfo")
 
         self.colorMatcher = ColorMatch()
 
@@ -52,6 +55,9 @@ class ColorWheel(CougarSystem):
         """
         self.feed()
         self.getNetworkTableValues()
+        
+    def getFieldColor(self):
+        return self.fmsInfo.getValue("GameSpecificMessage", "R")
 
     def getColorsList(self):
         return self.colors

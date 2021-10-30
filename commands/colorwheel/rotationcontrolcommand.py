@@ -27,7 +27,7 @@ class RotationControlCommand(CommandBase):
         robot.chamber.spinColorWheel()
 
     def isFinished(self):
-        return self.timer.hasElapsed(7)
+        return self.timer.hasElapsed(7.7)
 
     def end(self, interrupted):
         robot.chamber.stop()

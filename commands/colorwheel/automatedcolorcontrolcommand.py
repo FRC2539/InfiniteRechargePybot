@@ -25,13 +25,11 @@ class AutomatedColorControlCommand(CommandBase):
             "G",
         ]
 
-        self.fmsInfoTable = NetworkTables.getTable("FMSInfo")
-
     def initialize(self):
         # Find which color we are positioned on, on the color wheel
         self.updateColorReadings()
-
-        colorFromNetworkTables = self.fmsInfoTable.getValue("GameSpecificMessage")
+                
+        colorFromNetworkTables = robot.colorwheel.getFieldColor()
 
         # Find the index of goal color in the colors list
         colorIndex = self.colorOrder.index(colorFromNetworkTables)
