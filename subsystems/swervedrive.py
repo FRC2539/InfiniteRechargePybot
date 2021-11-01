@@ -513,6 +513,14 @@ class SwerveDrive(BaseDrive):
         """
         for module in self.modules:
             module.setModulePosition(distance)
+            
+    def generateBezierPoints(self, points):
+        """
+        So this builds upon the Bezier path stuff. Basically, the goal is 
+        to omit the need for control points. I have no idea if this is possible.
+        But when has that ever stopped me from trying?
+        """
+        pass # Currently researching.
 
     def getQuadraticBezierPosition(self, p: list, t):
         """
