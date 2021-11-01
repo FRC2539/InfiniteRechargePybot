@@ -519,6 +519,8 @@ class SwerveDrive(BaseDrive):
         So this builds upon the Bezier path stuff. Basically, the goal is 
         to omit the need for control points. I have no idea if this is possible.
         But when has that ever stopped me from trying?
+        Look here perhaps: 
+        http://15462.courses.cs.cmu.edu/fall2019content/uploads/BezierHermiteConversion.pdf
         """
         pass # Currently researching.
 
