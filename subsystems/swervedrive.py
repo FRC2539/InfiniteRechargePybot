@@ -652,14 +652,9 @@ class SwerveDrive(BaseDrive):
         rX = Matrix(augmentedX)                                 # Setup X matrix.
         rY = Matrix(augmentedY)                                 # Setup Y matrix.
         
-        rX.rref()                                               # Put it into Row-Reduced-Echelon Form.
-        rY.rref()                                               # Put it into Row-Reduced-Echelon Form.
-        
-        coefX = rX.getMatrix()                                  # Get the coefficients of the polynomial.
-        coefY = rY.getMatrix()                                  # Get the coefficients of the polynomial.
-        
-        print(coefX)
-    
+        rX.solve()                                               # Put it into Row-Reduced-Echelon Form.
+        #rY.solve()                                               # Put it into Row-Reduced-Echelon Form.
+            
     def generatePointPercentages(self, points: list):
         """
         Used in parametricSplineGenerator. Calculates t values between 0 and 

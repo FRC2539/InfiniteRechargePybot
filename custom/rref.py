@@ -12,19 +12,24 @@ class Matrix:
     
     def __init__(self, matrix):
         self.rows = []
-        self.numOfPivots = len(matrix[0])
+        self.numOfPivots = len(matrix[0]) - 1
         for row in matrix:
             self.rows.append(Row(row))
             
     def solve(self):
-        for piv in range(self.numOfPivots):
-            p = piv+1
-            pValue = self.rows[piv].getValue(piv);
-            for row in self.rows[p:]:                       # Every value underneath the pivot.
-                if row.getValue(piv) * pValue > 0:          # Same sign.
-                    row.scale(-pValue / row.getValue(piv))  # Note that we reverse the sign here.
-                else:
-                    row.scale(pValue / row.getValue(piv))   # Note that we do NOT reverse the sign here.
+        self.rearrange()
+        self.display()
+        
+                            
+    def display(self):
+        print('------')
+        for row in self.rows:
+            print(row.getRow())
+        print('------')
+        
+    def rearrange(self):
+        self.rows.sort(key=lambda x: x.numOfZeros(), reverse=False)
+
                     
 class Row:
     """
@@ -46,4 +51,6 @@ class Row:
     def getRow(self):
         return self.columns
     
+    def numOfZeros(self):
+        return self.columns.count(0)
         
