@@ -14,7 +14,6 @@ from commands.drivetrain.turntocommand import TurnToCommand
 from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.generatevectors import GenerateVectors
 from commands.drivetrain.pathfollowercommand import PathFollowerCommand
-from commands.drivetrain.cougarcoursecommand import CougarCourseCommand
 from commands.drivetrain.segmentfollowercommand import SegmentFollowerCommand
 from commands.drivetrain.dosadocommand import DosadoCommand
 from commands.drivetrain.bezierpathcommand import BezierPathCommand
