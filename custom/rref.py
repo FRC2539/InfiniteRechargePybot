@@ -26,12 +26,16 @@ class Matrix:
 
         for pivotSelector in range(self.pivots):
             selectedRow = self.m[pivotSelector]
+            print('d ' + str(selectedRow))
             a = selectedRow.getValue(pivotSelector)
             for i in range(pivotSelector+1, self.rows):         # This line might break it.
                 rowBelow = self.m[i]
-                b = rowBelow.get(pivotSelector)
+                b = rowBelow.getValue(pivotSelector)
                 conversion = (b / a) * -1
-                invConversion = (1 / conversion)
+                try:
+                    invConversion = (1 / conversion)
+                except ZeroDivisionError:
+                    continue
                 selectedRow.scale(conversion)
                 result = rowBelow.combine(selectedRow)
                 self.m[i] = result
@@ -42,16 +46,19 @@ class Matrix:
             a = selectedRow.getValue(pivotSelector)
             for i in range(pivotSelector):         # This line might break it.
                 rowAbove = self.m[i]
-                b = rowAbove.get(pivotSelector)
+                b = rowAbove.getValue(pivotSelector)
                 conversion = (b / a) * -1
-                invConversion = (1 / conversion)
+                try:
+                    invConversion = (1 / conversion)
+                except(ZeroDivisionError):
+                    continue
                 selectedRow.scale(conversion)
                 result = rowAbove.combine(selectedRow)
                 self.m[i] = result
                 selectedRow.scale(invConversion)
 
-        for i in self.m:
-            if not i.isEmpty():
+        for i in range(len(self.m)):
+            if not self.m[i].isEmpty():
                 selectedRow = self.m[i]
                 pivot = selectedRow.getValue(i)
                 selectedRow.scale(1 / pivot)
@@ -77,7 +84,7 @@ class Row:
         self.columns = r
         
     def combine(self, other):
-        return [i + j for i, j in zip(self.columns, other.columns)]
+        return Row([i + j for i, j in zip(self.columns, other.columns)])
     
     def scale(self, scalar):
         self.columns = [i * scalar for i in self.columns]
