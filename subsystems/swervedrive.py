@@ -652,8 +652,8 @@ class SwerveDrive(BaseDrive):
         rX = Matrix(augmentedX)                                 # Setup X matrix.
         rY = Matrix(augmentedY)                                 # Setup Y matrix.
         
-        rX.solve()                                               # Put it into Row-Reduced-Echelon Form.
-        #rY.solve()                                               # Put it into Row-Reduced-Echelon Form.
+        vX = rX.solve()                                         # Put it into Row-Reduced-Echelon Form. Assign the resulting vector to vX.
+        vY = rY.solve()                                         # Put it into Row-Reduced-Echelon Form. Assign the resulting vector to vY.
             
     def generatePointPercentages(self, points: list):
         """

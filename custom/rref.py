@@ -17,16 +17,18 @@ class Matrix:
         for row in matrix:
             self.m.append(Row(row))
             
+    def rref(self):
+        self.solve()
+        return self.getResults()
+            
     def solve(self):
         self.rearrange()
-        self.display()
 
         if self.rows < self.pivots:
             self.pivots = self.rows
 
         for pivotSelector in range(self.pivots):
             selectedRow = self.m[pivotSelector]
-            print('d ' + str(selectedRow))
             a = selectedRow.getValue(pivotSelector)
             for i in range(pivotSelector+1, self.rows):         # This line might break it.
                 rowBelow = self.m[i]
@@ -44,7 +46,7 @@ class Matrix:
         for pivotSelector in range(self.pivots):
             selectedRow = self.m[pivotSelector]
             a = selectedRow.getValue(pivotSelector)
-            for i in range(pivotSelector):         # This line might break it.
+            for i in range(pivotSelector):
                 rowAbove = self.m[i]
                 b = rowAbove.getValue(pivotSelector)
                 conversion = (b / a) * -1
@@ -62,14 +64,15 @@ class Matrix:
                 selectedRow = self.m[i]
                 pivot = selectedRow.getValue(i)
                 selectedRow.scale(1 / pivot)
-
-        self.display()
                             
     def display(self):
         print('------')
         for row in self.m:
             print(row.getRow())
         print('------')
+        
+    def getResults(self):
+        return [row.getRow()[-1] for row in self.m]
         
     def rearrange(self):
         self.m.sort(key=lambda x: x.numOfZeros(), reverse=False)
