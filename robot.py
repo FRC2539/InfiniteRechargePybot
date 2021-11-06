@@ -14,6 +14,8 @@ from commands2 import Subsystem, CommandScheduler
 from commands import autoconfig
 from commands.autonomouscommandgroup import AutonomousCommandGroup
 
+from commands.drivetrain.cougarcoursecommand import CougarCourseCommand # TEMPORARY
+
 from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
 from subsystems.chamber import Chamber as chamber
@@ -68,20 +70,8 @@ class KryptonBot(TimedCommandRobot):
 
         from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 
-        # zeroGyro = ZeroGyroCommand(flipOrientation=False)
-        # flipGyro = ZeroGyroCommand()
-
-        # ZeroGyroCommand().setGrouped(False)
-
-        # Schedule the autonomous command
-        # self.auto.beforeStarting(lambda: zeroGyro.initialize()).andThen(
-        #     lambda: flipGyro.initialize()
-        # ).schedule()
-
-        self.auto.schedule()
-
-        # Zero the gyro to orient the robot properly for teleop.
-        # ZeroGyroCommand().schedule()
+        #self.auto.schedule()
+        CougarCourseCommand([(1,0),(-1,0),(0,1),(0,-1)]).schedule()
 
     def teleopInit(self):
         self.auto.cancel()

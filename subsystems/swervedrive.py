@@ -6,10 +6,13 @@ from wpimath.kinematics import (
 from wpimath.geometry import Translation2d, Rotation2d, Pose2d
 
 from controller import logicalaxes
+from custom import rref
 
 from .cougarsystem import *
 from .basedrive import BaseDrive
 from .swervemodule import SwerveModule
+
+from custom.rref import Matrix
 
 import ports
 import constants
@@ -629,7 +632,7 @@ class SwerveDrive(BaseDrive):
             
     # Cougar Course (2.0) Stuff Below
     
-    def parametricSplineGenerator(self, points):
+    def parametricSplineGenerator(self, points: list):
         """
         So this builds upon the Bezier path stuff. Basically, the goal is 
         to omit the need for control points. I have no idea if this is possible.
@@ -638,7 +641,24 @@ class SwerveDrive(BaseDrive):
         Look up "Parametric Cubic Spline Tutorial"
         """
         
-        pass # Currently researching.
+        ts = self.generatePointPercentages(points)
+        
+        augmentedX, augmentedY = [], []                         # Create the augmented matrices. One for x and one for y because it's parametric. 
+                
+        for t, point in zip(ts, points):
+            augmentedX.append([t**3, t**2, t, 1, point[0]])     # Add the t in the form which it appears in the polynomial. Augment with x.
+            augmentedY.append([t**3, t**2, t, 1, point[1]])     # Add the t in the form which it appears in the polynomial. Augment with y.
+        
+        rX = Matrix(augmentedX)                                 # Setup X matrix.
+        rY = Matrix(augmentedY)                                 # Setup Y matrix.
+        
+        rX.rref()                                               # Put it into Row-Reduced-Echelon Form.
+        rY.rref()                                               # Put it into Row-Reduced-Echelon Form.
+        
+        coefX = rX.getMatrix()                                  # Get the coefficients of the polynomial.
+        coefY = rY.getMatrix()                                  # Get the coefficients of the polynomial.
+        
+        print(coefX)
     
     def generatePointPercentages(self, points: list):
         """
@@ -646,32 +666,25 @@ class SwerveDrive(BaseDrive):
         1 for each point.
         """
         
+        positions, t = [], []
+
         for x, y in points:
-            print(x)
-            print(y)
+            positions.append(Position(x, y))
+        
+        t.append(0)                                                 # Start with t = 0.
+        for i in range(len(positions) - 1):
+            try: 
+                t.append(positions[i] + positions[i+1] + t[i])    # Calculate the distance between two points and add the accumulated distance.
+            except(IndexError):
+                t.append(positions[i] + positions[i+1])             # Must be the first one, so just add the distance. 
+            last = positions[i] + positions[i+1] + t[i]
+        
+        for i in range(len(t)):
+            t[i] = t[i] / last
+        
+        return t
     
     # Bezier Stuff Below
-            
-    def parametricSplineGenerator(self, points):
-        """
-        So this builds upon the Bezier path stuff. Basically, the goal is 
-        to omit the need for control points. I have no idea if this is possible.
-        But when has that ever stopped me from trying?
-        Ideas:
-        Look up "Parametric Cubic Spline Tutorial"
-        """
-        
-        pass # Currently researching.
-    
-    def generatePointPercentages(self, points: list):
-        """
-        Used in parametricSplineGenerator. Calculates t values between 0 and 
-        1 for each point.
-        """
-        
-        for x, y in points:
-            print(x)
-            print(y)
 
     def getQuadraticBezierPosition(self, p: list, t):
         """
@@ -967,4 +980,4 @@ class Position:
         Replaces the typical '+' operator with a distance calculator
         that uses the simple distance formula.
         """
-        return math.sqrt((self.x + other.x) ** 2 + (self.y + other.y) ** 2)
+        return math.sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2)
