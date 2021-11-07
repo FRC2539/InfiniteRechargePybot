@@ -51,7 +51,7 @@ class KryptonBot(TimedCommandRobot):
         from commands.startupcommandgroup import StartUpCommandGroup
 
         StartUpCommandGroup().schedule()
-        
+
         if self.isSimulation():
             cougarcoursegrapher.init()
 
@@ -109,8 +109,6 @@ def graphCougarCourses():
     """
     Graph the Cougar Course equations.
     """
-
-    
 
 
 if __name__ == "__main__":

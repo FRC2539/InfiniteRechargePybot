@@ -18,8 +18,8 @@ class CougarCourseCommand(CommandBase):
         super().__init__()
 
         self.addRequirements(robot.drivetrain)
-        
-        self.points = points    # The desired points to drive through.
+
+        self.points = points  # The desired points to drive through.
 
         self.cX, self.cY = robot.drivetrain.calculateCoefficientsCougarCourse(
             self.points
@@ -29,23 +29,25 @@ class CougarCourseCommand(CommandBase):
         self.angleFunc = robot.drivetrain.setCoefficientsSlopeCougarCourse(
             self.cX, self.cY
         )
-        
+
         if graphAtSim:
-            
+
             try:
                 lastNum = list(constants.drivetrain.coursesToGraph.keys())[-1]
             except IndexError:
                 lastNum = -1
-                
+
             if name == "":
                 name = "Course #" + str(lastNum + 1)
-                
+
             constants.drivetrain.coursesToGraph[lastNum + 1] = (self.posFunc, name)
 
-        self.curveLength = robot.drivetrain.estimateLengthCougarCourse(self.cX, self.cY)    # The estimated length of the curve.
+        self.curveLength = robot.drivetrain.estimateLengthCougarCourse(
+            self.cX, self.cY
+        )  # The estimated length of the curve.
 
-        self.t = 0              # Percentage of the curve which we have completed
-        
+        self.t = 0  # Percentage of the curve which we have completed
+
     def initialize(self):
         pass
 

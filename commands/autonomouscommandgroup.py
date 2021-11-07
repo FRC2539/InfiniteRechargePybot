@@ -244,9 +244,11 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             InstantCommand(lambda: robot.conveyorintake.stop(), [robot.conveyorintake]),
             AutomatedShootCommand(3300, conveyorDelay=True, waitUntilAimed=True),
         )
-        
+
     def cougarCourseTest(self):
-        CougarCourseCommand([(0,1),(1,0),(0,-1)], graphAtSim=True, name='Test Path')
+        CougarCourseCommand(
+            [(0, 1), (1, 0), (0, -1)], graphAtSim=True, name="Test Path"
+        )
 
     # def badEightBall(self):
     #     """
@@ -318,7 +320,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         """
         self.addCommands(
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
-            InstandCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
+            InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
             AutomatedShootCommand(
                 4100, ballCount=3, conveyorDelay=True, waitUntilAimed=True
             ).withTimeout(4),

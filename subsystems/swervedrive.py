@@ -680,12 +680,18 @@ class SwerveDrive(BaseDrive):
 
         return rX, rY  # Return the two vectors consisting of the coefficients.
 
-    def setCoefficientsPosCougarCourse(self, xCoefficients, yCoefficients):
+    def setCoefficientsPosCougarCourse(self, xCoefficients: list, yCoefficients: list):
         """
         Sets the coefficients for the equations.
         Remember, we actually need the derivative!
         Returns a function that can calculate the
         position of the robot at t.
+        args:
+            xCoefficients: The coefficients for the x(t) polynomial.
+            yCoefficients: The coefficients for the y(t) polynomial.
+        returns:
+            A function that takes in a t value and returns
+            the position of the robot at that t.
         """
 
         # Returns a function that can calculate the angle of the robot at t.
@@ -706,12 +712,19 @@ class SwerveDrive(BaseDrive):
             ),  # AAAAAHHHHHHHHHHHHHHH
         ]
 
-    def setCoefficientsSlopeCougarCourse(self, xCoefficients, yCoefficients):
+    def setCoefficientsSlopeCougarCourse(
+        self, xCoefficients: list, yCoefficients: list
+    ):
         """
         Sets the coefficients for the equations.
         Remember, we actually need the derivative!
         Returns a function that can calculate the
-        position of the robot at t.
+        angle of wheels of the robot at t.
+        args:
+            xCoefficients: The coefficients for the x(t) polynomial.
+            yCoefficients: The coefficients for the y(t) polynomial.
+        returns:
+            A function that can calculate the wheel angles at t.
         """
 
         # Returns a function that can calculate the angle of the robot at t.
@@ -753,6 +766,12 @@ class SwerveDrive(BaseDrive):
         code. Basically divide the curve into a bunch of small, straight
         segments and sum the lengths of each segment. The total
         should be a close approximation to the length of the curve.
+        args:
+            xCoefficients: The coefficients for the x(t) polynomial.
+            yCoefficients: The coefficients for the y(t) polynomial.
+            iterations: The number of segments to divide the curve into.
+        returns:
+            The estimated length of the curve.
         """
 
         # Establish the total length variable and previous position variables.
@@ -785,6 +804,10 @@ class SwerveDrive(BaseDrive):
         """
         Used in parametricSplineGenerator. Calculates t values between 0 and
         1 for each point.
+        args:
+            points: A list of points to pass through.
+        returns:
+            The corresponding t values for each point.
         """
 
         t = []
