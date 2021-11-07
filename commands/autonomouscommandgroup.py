@@ -8,6 +8,7 @@ from commands2 import (
     WaitCommand,
     Swerve4ControllerCommand,
 )
+from commands.drivetrain.cougarcoursecommand import CougarCourseCommand
 
 from commands.drivetrain.turncommand import TurnCommand
 from commands.drivetrain.turntocommand import TurnToCommand
@@ -243,6 +244,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             InstantCommand(lambda: robot.conveyorintake.stop(), [robot.conveyorintake]),
             AutomatedShootCommand(3300, conveyorDelay=True, waitUntilAimed=True),
         )
+        
+    def cougarCourseTest(self):
+        CougarCourseCommand([(0,1),(1,0),(0,-1)], graphAtSim=True, name='Test Path')
 
     # def badEightBall(self):
     #     """

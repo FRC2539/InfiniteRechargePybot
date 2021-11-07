@@ -4,7 +4,7 @@ from commands2 import TimedCommandRobot
 from wpilib._impl.main import run
 from wpilib import RobotBase, DriverStation
 
-from custom import driverhud
+from custom import driverhud, cougarcoursegrapher
 import controller.layout
 import subsystems, constants
 import shutil, sys, os, inspect
@@ -13,8 +13,6 @@ from commands2 import Subsystem, CommandScheduler
 
 from commands import autoconfig
 from commands.autonomouscommandgroup import AutonomousCommandGroup
-
-from commands.drivetrain.cougarcoursecommand import CougarCourseCommand  # TEMPORARY
 
 from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
@@ -53,8 +51,9 @@ class KryptonBot(TimedCommandRobot):
         from commands.startupcommandgroup import StartUpCommandGroup
 
         StartUpCommandGroup().schedule()
-
-        from commands.drivetrain.drivecommand import DriveCommand
+        
+        if self.isSimulation():
+            cougarcoursegrapher.init()
 
     def autonomousInit(self):
         """This function is called each time autonomous mode starts."""
@@ -70,8 +69,7 @@ class KryptonBot(TimedCommandRobot):
 
         from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 
-        # self.auto.schedule()
-        CougarCourseCommand([(1, 0), (-1, 0), (0, 1), (0, -1)]).schedule()
+        self.auto.schedule()
 
     def teleopInit(self):
         self.auto.cancel()
@@ -107,40 +105,15 @@ class KryptonBot(TimedCommandRobot):
                 pass
 
 
-def addOutput():
+def graphCougarCourses():
     """
-    Creates the array of points for CougarCourses.
+    Graph the Cougar Course equations.
     """
 
-    import constants
-
-    from commands.drivetrain.generatevectors import GenerateVectors
-
-    ogOut = sys.stdout
-
-    with open(os.path.dirname(__file__) + "/trajectorydata.txt", "w") as f:
-
-        for id_, file_ in constants.drivetrain.preBuild.items():
-            calculatedPoints = GenerateVectors().generate(file_)
-
-            calculatedPoints.insert(0, id_)
-
-            sys.stdout = f
-
-            for point in calculatedPoints:
-                print(point)
-
-            print("|||")  # Used to signify the end of a set of points.
-
-        sys.stdout = ogOut
-
-        f.close()
+    
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 2 and "-g" in sys.argv:
-        addOutput()
-        sys.argv.remove("-g")
 
     if len(sys.argv) > 1 and sys.argv[1] == "deploy":
         shutil.rmtree("opkg_cache", ignore_errors=True)
