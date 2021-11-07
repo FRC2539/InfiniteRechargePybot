@@ -1,3 +1,5 @@
+from decimal import Decimal, getcontext
+
 from ctre import (
     CANCoderConfiguration,
     AbsoluteSensorRange,
@@ -23,6 +25,9 @@ IDs for the CANbus, sensors, PWM, and the liking.
 drivetrain = Constants()
 shooter = Constants()
 limelight = Constants()
+
+# Drivtrain Cougar Course Decimal Control
+drivetrain.decimalPlaces = 36
 
 # Drive Velocity Control
 drivetrain.dPk = 0.0085

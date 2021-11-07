@@ -20,7 +20,6 @@ class CougarCourseCommand(CommandBase):
         self.addRequirements(robot.drivetrain)
         self.points = points
 
-    def initialize(self):
         self.cX, self.cY = robot.drivetrain.calculateCoefficientsCougarCourse(
             self.points
         )
@@ -30,7 +29,8 @@ class CougarCourseCommand(CommandBase):
             self.cX, self.cY
         )
 
-        print(self.angleFunc(0))
+    def initialize(self):
+        pass
 
     def execute(self):
         pass

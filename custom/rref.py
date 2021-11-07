@@ -2,6 +2,8 @@ from decimal import Decimal, getcontext
 
 import math
 
+import constants
+
 
 class Matrix:
     """
@@ -22,7 +24,9 @@ class Matrix:
         for row in matrix:
             self.m.append(Row(row))
 
-        getcontext().prec = 30  # This is the precision of the decimal numbers.
+        getcontext().prec = (
+            constants.drivetrain.decimalPlaces
+        )  # This is the precision of the decimal numbers.
 
     def rref(self):
         """
@@ -60,8 +64,8 @@ class Matrix:
                 rowAbove = self.m[i]
                 b = rowAbove.getValue(pivotSelector)
                 try:
-                    conversion = (b / a) * -1
-                    invConversion = 1 / conversion
+                    conversion = (Decimal(b) / Decimal(a)) * Decimal(-1)
+                    invConversion = Decimal(1) / conversion
                 except (ZeroDivisionError):
                     continue
                 selectedRow.scale(conversion)

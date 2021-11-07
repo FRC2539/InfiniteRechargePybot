@@ -1,3 +1,7 @@
+from decimal import Decimal, getcontext
+
+import math
+
 from wpimath.kinematics import (
     SwerveDrive4Odometry,
     SwerveDrive4Kinematics,
@@ -6,7 +10,6 @@ from wpimath.kinematics import (
 from wpimath.geometry import Translation2d, Rotation2d, Pose2d
 
 from controller import logicalaxes
-from custom import rref
 
 from .cougarsystem import *
 from .basedrive import BaseDrive
@@ -16,8 +19,6 @@ from custom.rref import Matrix
 
 import ports
 import constants
-
-import math
 
 from networktables import NetworkTables
 
@@ -120,6 +121,8 @@ class SwerveDrive(BaseDrive):
         self.PosX = 0
         self.PosY = 0
         self.LastPositions = self.getPositions()
+
+        getcontext().prec = constants.drivetrain.decimalPlaces
 
         self.put("wheelAngles", self.getModuleAngles())
         self.put("wheelSpeeds", self.getSpeeds())
@@ -656,15 +659,24 @@ class SwerveDrive(BaseDrive):
         )  # Create the augmented matrices. One for x and one for y because it's parametric.
 
         for t, point in zip(ts, points):
-            augmentedX.append(
-                [t ** 3, t ** 2, t, 1, point[0]]
-            )  # Add the t in the form which it appears in the polynomial. Augment with x.
-            augmentedY.append(
-                [t ** 3, t ** 2, t, 1, point[1]]
-            )  # Add the t in the form which it appears in the polynomial. Augment with y.
+            subrowX = []
+            for n in range(
+                len(points) - 1, -1, -1
+            ):  # Count backwards because order matters!
+                subrowX.append(t ** n)  # Remember that n^0 is always 1!
+            subrowX.append(point[0])  # Add the coordinate because it's augmented.
+            augmentedX.append(subrowX)
 
-        rX = Matrix(augmentedX).rref()  # Setup X matrix.
-        rY = Matrix(augmentedY).rref()  # Setup Y matrix.
+            subrowY = []
+            for n in range(
+                len(points) - 1, -1, -1
+            ):  # Count backwards because order matters!
+                subrowY.append(t ** n)  # Remember that n^0 is always 1!
+            subrowY.append(point[1])  # Add the coordinate because it's augmented.
+            augmentedY.append(subrowY)
+
+        rX = Matrix(augmentedX).rref()  # Calculate the coefficients vector for the Xs.
+        rY = Matrix(augmentedY).rref()  # Calculate the coefficients vector for the Ys.
 
         return rX, rY  # Return the two vectors consisting of the coefficients.
 
@@ -680,17 +692,21 @@ class SwerveDrive(BaseDrive):
         # Basically does (dY/dt)/(dX/dt) and converts the slope to an angle.
         # Idk why we need the +90, but we do lol.
         return lambda t: [
-            xCoefficients[0] * t ** 3
-            + xCoefficients[1] * t ** 2
-            + xCoefficients[2] * t
-            + xCoefficients[3],
-            yCoefficients[0] * t ** 3
-            + yCoefficients[1] * t ** 2
-            + yCoefficients[2] * t
-            + yCoefficients[3],
+            sum(
+                [
+                    xCoefficients[i] * Decimal(t) ** (len(xCoefficients) - (i + 1))
+                    for i in range(len(xCoefficients))
+                ]
+            ),  # AAAAAHHHHHHHHHHHHHHH
+            sum(
+                [
+                    yCoefficients[i] * Decimal(t) ** (len(yCoefficients) - (i + 1))
+                    for i in range(len(yCoefficients))
+                ]
+            ),  # AAAAAHHHHHHHHHHHHHHH
         ]
 
-    def setCoefficientsSlopeCougarCourse(self, xCoefficents, yCoefficients):
+    def setCoefficientsSlopeCougarCourse(self, xCoefficients, yCoefficients):
         """
         Sets the coefficients for the equations.
         Remember, we actually need the derivative!
@@ -703,21 +719,27 @@ class SwerveDrive(BaseDrive):
         # Idk why we need the +90, but we do lol.
         return (
             lambda t: math.atan2(
-                (
-                    3 * yCoefficients[0] * t ** 2
-                    + 2 * yCoefficients[1] * t
-                    + yCoefficients[2]
-                ),
-                (
-                    3 * xCoefficents[0] * t ** 2
-                    + 2 * xCoefficents[1] * t
-                    + xCoefficents[2]
-                ),
+                sum(
+                    [
+                        (len(yCoefficients) - (i + 1))
+                        * yCoefficients[i]
+                        * Decimal(t) ** (len(yCoefficients) - i - 2)
+                        for i in range(len(yCoefficients))
+                    ]
+                ),  # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+                sum(
+                    [
+                        (len(xCoefficients) - (i + 1))
+                        * xCoefficients[i]
+                        * Decimal(t) ** (len(xCoefficients) - i - 2)
+                        for i in range(len(xCoefficients))
+                    ]
+                ),  # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
             )
             * 180
             / math.pi
-            + 90
-        )
+            + 90    
+        )           # But it works lol.
 
     def generatePointPercentages(self, points: list):
         """
