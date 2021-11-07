@@ -45,7 +45,7 @@ class ShootingProcessCommand(CommandBase):
         robot.shooter.setRPM(self.targetRPM)
 
     def execute(self):
-        #print("running shoot")
+        # print("running shoot")
         robot.shooter.setRPM(self.targetRPM)
         self.checkRPM()
 

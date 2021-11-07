@@ -51,10 +51,10 @@ class BaseDrive(CougarSystem):
         self.navX = AHRS.create_spi()
 
         # self.setGyroAngle(-90)
-        
+
         """Reset the gyro (the starting position is the reverse of the proper orientation)"""
-        #self.resetGyro(90)
-        #print("--resetGyro 90")
+        # self.resetGyro(90)
+        # print("--resetGyro 90")
 
         self.flatAngle = 0
 
@@ -70,7 +70,7 @@ class BaseDrive(CougarSystem):
         """Allow changing CAN Talon settings from dashboard"""
         self._publishPID("Speed", 0)
         self._publishPID("Position", 1)
-        
+
         """Return motor temperatues"""
         self.constantlyUpdate(
             "Motor Temperatures",

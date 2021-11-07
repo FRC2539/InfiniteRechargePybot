@@ -14,7 +14,7 @@ from commands2 import Subsystem, CommandScheduler
 from commands import autoconfig
 from commands.autonomouscommandgroup import AutonomousCommandGroup
 
-from commands.drivetrain.cougarcoursecommand import CougarCourseCommand # TEMPORARY
+from commands.drivetrain.cougarcoursecommand import CougarCourseCommand  # TEMPORARY
 
 from subsystems.monitor import Monitor as monitor
 from subsystems.drivetrain import DriveTrain as drivetrain
@@ -70,8 +70,8 @@ class KryptonBot(TimedCommandRobot):
 
         from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 
-        #self.auto.schedule()
-        CougarCourseCommand([(1,0),(-1,0),(0,1),(0,-1)]).schedule()
+        # self.auto.schedule()
+        CougarCourseCommand([(1, 0), (-1, 0), (0, 1), (0, -1)]).schedule()
 
     def teleopInit(self):
         self.auto.cancel()

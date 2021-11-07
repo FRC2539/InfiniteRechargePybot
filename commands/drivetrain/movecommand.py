@@ -11,7 +11,7 @@ class MoveCommand(CommandBase):
         Takes a distance in inches and stores it for later. We allow overriding
         name so that other autonomous driving commands can extend this class.
         """
-        
+
         if name is None:
             name = "Move %f inches" % distance
 

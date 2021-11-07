@@ -108,7 +108,7 @@ class CougarSystem(SubsystemBase):
 
     def makePersistent(self, key):
         """
-        Make the given key persist even 
+        Make the given key persist even
         when the robot is off.
         """
         self.table.setPersistent(key)
