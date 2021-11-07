@@ -71,7 +71,7 @@ class KryptonBot(TimedCommandRobot):
         from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 
         # self.auto.schedule()
-        CougarCourseCommand([(1, 0), (-1, 0), (0, 1), (0, -1), (-1, -1)]).schedule()
+        CougarCourseCommand([(1, 0), (-1, 0), (0, 1), (0, -1)]).schedule()
 
     def teleopInit(self):
         self.auto.cancel()

@@ -29,6 +29,8 @@ class CougarCourseCommand(CommandBase):
             self.cX, self.cY
         )
 
+        self.curveLength = robot.drivetrain.estimateLengthCougarCourse(self.cX, self.cY)
+
     def initialize(self):
         pass
 

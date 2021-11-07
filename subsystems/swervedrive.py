@@ -694,13 +694,13 @@ class SwerveDrive(BaseDrive):
         return lambda t: [
             sum(
                 [
-                    xCoefficients[i] * Decimal(t) ** (len(xCoefficients) - (i + 1))
+                    float(xCoefficients[i]) * t ** (len(xCoefficients) - (i + 1))
                     for i in range(len(xCoefficients))
                 ]
             ),  # AAAAAHHHHHHHHHHHHHHH
             sum(
                 [
-                    yCoefficients[i] * Decimal(t) ** (len(yCoefficients) - (i + 1))
+                    float(yCoefficients[i]) * t ** (len(yCoefficients) - (i + 1))
                     for i in range(len(yCoefficients))
                 ]
             ),  # AAAAAHHHHHHHHHHHHHHH
@@ -722,24 +722,64 @@ class SwerveDrive(BaseDrive):
                 sum(
                     [
                         (len(yCoefficients) - (i + 1))
-                        * yCoefficients[i]
-                        * Decimal(t) ** (len(yCoefficients) - i - 2)
-                        for i in range(len(yCoefficients))
+                        * float(yCoefficients[i])
+                        * t ** (len(yCoefficients) - i - 2)
+                        for i in range(
+                            len(yCoefficients) - 1
+                        )  # Subtract one because the code gets pissy when raising to a negative power.
                     ]
                 ),  # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
                 sum(
                     [
                         (len(xCoefficients) - (i + 1))
-                        * xCoefficients[i]
-                        * Decimal(t) ** (len(xCoefficients) - i - 2)
-                        for i in range(len(xCoefficients))
+                        * float(xCoefficients[i])
+                        * t ** (len(xCoefficients) - i - 2)
+                        for i in range(
+                            len(xCoefficients) - 1
+                        )  # Subtract one because the code gets pissy when raising to a negative power.
                     ]
                 ),  # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
             )
             * 180
             / math.pi
-            + 90    
-        )           # But it works lol.
+            + 90
+        )  # But it works lol.
+
+    def estimateLengthCougarCourse(
+        self, xCoefficients: list, yCoefficients: list, iterations: int = 1000
+    ):
+        """
+        This method is very, very similar to the one in the Bezier
+        code. Basically divide the curve into a bunch of small, straight
+        segments and sum the lengths of each segment. The total
+        should be a close approximation to the length of the curve.
+        """
+
+        # Establish the total length variable and previous position variables.
+        length = 0
+        previousX = 0
+        previousY = 0
+
+        # The function which we will call to get the position.
+        posFunc = self.setCoefficientsPosCougarCourse(xCoefficients, yCoefficients)
+
+        # Iterate through each step, taking the length of each sum with Pythagorean Theorem.
+        for i in range(iterations + 1):
+            t = i / iterations
+
+            # "positions" is (x,y).
+            positions = posFunc(t)
+
+            if i > 0:
+                xDiff = positions[0] - previousX
+                yDiff = positions[1] - previousY
+                length += math.sqrt(xDiff ** 2 + yDiff ** 2)
+
+            previousX = positions[0]
+            previousY = positions[1]
+
+        # Return the sum of the segments.
+        return length
 
     def generatePointPercentages(self, points: list):
         """
@@ -747,10 +787,10 @@ class SwerveDrive(BaseDrive):
         1 for each point.
         """
 
-        positions, t = [], []
+        t = []
 
-        for x, y in points:
-            positions.append(Position(x, y))
+        # Create objects that allows us to track the x and y more easily.
+        positions = self.createPositionObjects(points)
 
         t.append(0)  # Start with t = 0.
         for i in range(len(positions) - 1):
