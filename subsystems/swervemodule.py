@@ -30,7 +30,7 @@ class SwerveModule:
         """
         The class constructor.
         """
-        
+
         # Name the module (e.g. front left)
         self.moduleName = name
 
@@ -72,7 +72,7 @@ class SwerveModule:
         # Declare and setup the remote encoder.
         self.cancoder = CANCoder(canCoderID)
         self.cancoder.configAllSettings(constants.drivetrain.encoderConfig)
-        
+
         # Stores the offset for this module
         self.offset = offset
 
@@ -80,7 +80,7 @@ class SwerveModule:
         if self.offset is not None:
             self.cancoder.configMagnetOffset(self.offset)
 
-        # Store the offset basis for zeroing the CANCoder. 
+        # Store the offset basis for zeroing the CANCoder.
         # This is used to determine the offset in combination
         # with the getAbsoluteWheelAngle method
         self.offsetBasis = offsetBasis
@@ -174,7 +174,7 @@ class SwerveModule:
         Get wheel angle relative to the robot.
         """
         return self.cancoder.getPosition()  # Returns absolute position of CANCoder.
-    
+
     def getAbsoluteWheelAngle(self):
         """
         Get the absolute angle of the wheel's CANCoder.

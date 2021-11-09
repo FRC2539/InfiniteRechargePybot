@@ -37,7 +37,9 @@ for auto in autoVars:
 
 def init():
     table.putStringArray("autos", [a.lower() for a in definedAutos])
-    table.putString("selectedAuto", "shootfirstthree")
+    table.putString(
+        "selectedAuto", "cougarCourseTest"
+    )  # TEMPOARY. Should be the shootfirstthree auto.
 
 
 def getAutoProgram():

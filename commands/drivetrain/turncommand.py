@@ -69,7 +69,9 @@ class TurnCommand(CommandBase):
                 self.modulesInPosition = True
 
     def isFinished(self):
-        return abs(robot.drivetrain.getAngleTo(self.startAngle)) + self.tolerance > abs(self.degrees)
+        return abs(robot.drivetrain.getAngleTo(self.startAngle)) + self.tolerance > abs(
+            self.degrees
+        )
 
     def end(self, interrupted):
         robot.drivetrain.stop()

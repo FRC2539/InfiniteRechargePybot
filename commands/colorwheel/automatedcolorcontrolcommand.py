@@ -28,7 +28,7 @@ class AutomatedColorControlCommand(CommandBase):
     def initialize(self):
         # Find which color we are positioned on, on the color wheel
         self.updateColorReadings()
-                
+
         colorFromNetworkTables = robot.colorwheel.getFieldColor()
 
         # Find the index of goal color in the colors list

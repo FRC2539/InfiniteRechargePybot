@@ -8,13 +8,13 @@ from commands2 import (
     WaitCommand,
     Swerve4ControllerCommand,
 )
+from commands.drivetrain.cougarcoursecommand import CougarCourseCommand
 
 from commands.drivetrain.turncommand import TurnCommand
 from commands.drivetrain.turntocommand import TurnToCommand
 from commands.drivetrain.movecommand import MoveCommand
 from commands.drivetrain.generatevectors import GenerateVectors
 from commands.drivetrain.pathfollowercommand import PathFollowerCommand
-from commands.drivetrain.cougarcoursecommand import CougarCourseCommand
 from commands.drivetrain.segmentfollowercommand import SegmentFollowerCommand
 from commands.drivetrain.dosadocommand import DosadoCommand
 from commands.drivetrain.bezierpathcommand import BezierPathCommand
@@ -245,6 +245,11 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             AutomatedShootCommand(3300, conveyorDelay=True, waitUntilAimed=True),
         )
 
+    def cougarCourseTest(self):
+        CougarCourseCommand(
+            [(0, 1), (1, 0), (0, -1)], graphAtSim=True, name="Test Path"
+        )
+
     # def badEightBall(self):
     #     """
     #     Collects two additional balls from the trench, and then shoots all five.
@@ -314,13 +319,11 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         Soon to be eight ball. Robot shoots 3 starting balls then collects 5 additional balls from the north face of the rendevous point and shoots them. Currently starts with 3 balls, goes around the pillar and shoots them from there.
         """
         self.addCommands(
-            InstantCommand(
-                lambda: robot.shooter.setRPM(4100), [robot.shooter]
-            ),
-            InstandCommand(
-                lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]
-            ),
-            AutomatedShootCommand(4100, ballCount=3, conveyorDelay=True, waitUntilAimed=True).withTimeout(4),
+            InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
+            InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
+            AutomatedShootCommand(
+                4100, ballCount=3, conveyorDelay=True, waitUntilAimed=True
+            ).withTimeout(4),
             InstantCommand(
                 lambda: robot.conveyorintake.move(0.7), [robot.conveyorintake]
             ),
@@ -328,7 +331,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             InstantCommand(lambda: robot.shooter.setRPM(4100), [robot.shooter]),
             InstantCommand(lambda: robot.conveyorintake.stop(), [robot.conveyorintake]),
             TurnCommand(-15),
-            AutomatedShootCommand(4100, ballcount = 5, conveyorDelay=True, waitUntilAimed=True),
+            AutomatedShootCommand(
+                4100, ballcount=5, conveyorDelay=True, waitUntilAimed=True
+            ),
             InstantCommand(
                 lambda: robot.pneumatics.retractIntake(), [robot.pneumatics]
             ),
@@ -414,73 +419,83 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     def eightBall(self):
         """
         Shoot from the line, then collect 5 balls from the rendevous point and shoot those.
-        
+
         Speeds are slow for testing purposes.
         """
         self.addCommands(
-            #First 3 balls
+            # First 3 balls
             InstantCommand(lambda: robot.shooter.setRPM(2300), [robot.shooter]),
             InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
-            AutomatedShootCommand(2250, ballCount=3, conveyorDelay=True).withTimeout(2.5),
+            AutomatedShootCommand(2250, ballCount=3, conveyorDelay=True).withTimeout(
+                2.5
+            ),
             InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
-            
-            #Curve to 4 balls
-            MoveCommand(160, torySlow = 28000),
+            # Curve to 4 balls
+            MoveCommand(160, torySlow=28000),
             TurnCommand(98),
-            InstantCommand(lambda: robot.conveyorintake.move(0.85), [robot.conveyorintake]),
-            #Intake 0.85
-            MoveCommand(84, torySlow = 3250),
-            #Move 2750
-            #InstantCommand(lambda: robot.conveyorintake.move(0.75), [robot.conveyorintake]),
-            #MoveCommand(42, torySlow = 2000),
+            InstantCommand(
+                lambda: robot.conveyorintake.move(0.85), [robot.conveyorintake]
+            ),
+            # Intake 0.85
+            MoveCommand(84, torySlow=3250),
+            # Move 2750
+            # InstantCommand(lambda: robot.conveyorintake.move(0.75), [robot.conveyorintake]),
+            # MoveCommand(42, torySlow = 2000),
             InstantCommand(lambda: robot.shooter.setRPM(2800), [robot.shooter]),
             TurnCommand(149, tolerance=7),
-            
-            #Last ball
-            InstantCommand(lambda: robot.conveyorintake.move(0.8), [robot.conveyorintake]),
-            #Intake 0.8
-            MoveCommand(92, torySlow = 18000),
-            InstantCommand(lambda: robot.conveyorintake.outtakeBalls(), [robot.conveyorintake]),
+            # Last ball
+            InstantCommand(
+                lambda: robot.conveyorintake.move(0.8), [robot.conveyorintake]
+            ),
+            # Intake 0.8
+            MoveCommand(92, torySlow=18000),
+            InstantCommand(
+                lambda: robot.conveyorintake.outtakeBalls(), [robot.conveyorintake]
+            ),
             InstantCommand(lambda: robot.shooter.setRPM(2300), [robot.shooter]),
             SetHoodPositionCommand(100),
-            
-            #Turn to shoot.
+            # Turn to shoot.
             TurnCommand(125),
             AutomatedShootCommand(3000, ballCount=5, conveyorDelay=True).withTimeout(6),
         )
-    
+
     def pickupEightBall(self):
         """
         Experimental. Do not use this one in comp yet!
         """
         self.addCommands(
-            #First 3 balls
+            # First 3 balls
             InstantCommand(lambda: robot.shooter.setRPM(2300), [robot.shooter]),
             InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
-            AutomatedShootCommand(2250, ballCount=3, conveyorDelay=True).withTimeout(2.5),
+            AutomatedShootCommand(2250, ballCount=3, conveyorDelay=True).withTimeout(
+                2.5
+            ),
             InstantCommand(lambda: robot.pneumatics.extendIntake(), [robot.pneumatics]),
-            
-            #Curve to 4 balls
-            MoveCommand(160, torySlow = 28000),
+            # Curve to 4 balls
+            MoveCommand(160, torySlow=28000),
             TurnCommand(98),
-            InstantCommand(lambda: robot.conveyorintake.move(0.85), [robot.conveyorintake]),
-            #Intake 0.85
-            MoveCommand(84, torySlow = 3250),
-            #Move 2750
-            #InstantCommand(lambda: robot.conveyorintake.move(0.75), [robot.conveyorintake]),
-            #MoveCommand(42, torySlow = 2000),
+            InstantCommand(
+                lambda: robot.conveyorintake.move(0.85), [robot.conveyorintake]
+            ),
+            # Intake 0.85
+            MoveCommand(84, torySlow=3250),
+            # Move 2750
+            # InstantCommand(lambda: robot.conveyorintake.move(0.75), [robot.conveyorintake]),
+            # MoveCommand(42, torySlow = 2000),
             InstantCommand(lambda: robot.shooter.setRPM(2800), [robot.shooter]),
             TurnCommand(149, tolerance=7),
-            
-            #Last ball
-            InstantCommand(lambda: robot.conveyorintake.move(0.8), [robot.conveyorintake]),
-            #Intake 0.8
-            MoveCommand(92, torySlow = 18000),
-            InstantCommand(lambda: robot.conveyorintake.outtakeBalls(), [robot.conveyorintake]),
+            # Last ball
+            InstantCommand(
+                lambda: robot.conveyorintake.move(0.8), [robot.conveyorintake]
+            ),
+            # Intake 0.8
+            MoveCommand(92, torySlow=18000),
+            InstantCommand(
+                lambda: robot.conveyorintake.outtakeBalls(), [robot.conveyorintake]
+            ),
             InstantCommand(lambda: robot.shooter.setRPM(2300), [robot.shooter]),
             SetHoodPositionCommand(100),
-            
-            #Turn to shoot.
+            # Turn to shoot.
             TurnCommand(125),
             AutomatedShootCommand(3000, ballCount=5, conveyorDelay=True).withTimeout(6),
         )
@@ -505,4 +520,3 @@ class AutonomousCommandGroup(SequentialCommandGroup):
     #         TurnCommand(15),
     #         AutomatedShootCommand(conveyorDelay=True).withTimeout(8),
     #     )
-        

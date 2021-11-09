@@ -1,3 +1,7 @@
+from decimal import Decimal, getcontext
+
+import math
+
 from wpimath.kinematics import (
     SwerveDrive4Odometry,
     SwerveDrive4Kinematics,
@@ -11,12 +15,12 @@ from .cougarsystem import *
 from .basedrive import BaseDrive
 from .swervemodule import SwerveModule
 
+from custom.rref import Matrix
+
 import ports
 import constants
 
-import math
-
-from  networktables import NetworkTables
+from networktables import NetworkTables
 
 logicalaxes.registerAxis("forward")
 logicalaxes.registerAxis("strafe")
@@ -60,7 +64,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.frontLeftCANCoder,
                 self.speedLimit,
                 -255.498047,
-                180, # Offset basis - used for zeroing CANCoder
+                180,  # Offset basis - used for zeroing CANCoder
             ),
             SwerveModule(  # Front right module.
                 "front right",
@@ -69,7 +73,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.frontRightCANCoder,
                 self.speedLimit,
                 -272.548840625,
-                360, # Offset basis - used for zeroing CANCoder
+                360,  # Offset basis - used for zeroing CANCoder
                 invertedDrive=True,  # Invert for some reason?
             ),
             SwerveModule(  # Back left module.
@@ -79,7 +83,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.backLeftCANCoder,
                 self.speedLimit,
                 -40.8692515625,
-                180, # Offset basis - used for zeroing CANCoder
+                180,  # Offset basis - used for zeroing CANCoder
             ),
             SwerveModule(  # Back right module.
                 "back right",
@@ -88,7 +92,7 @@ class SwerveDrive(BaseDrive):
                 ports.drivetrain.backRightCANCoder,
                 self.speedLimit,
                 -128.759766125,
-                360, # Offset basis - used for zeroing CANCoder
+                360,  # Offset basis - used for zeroing CANCoder
                 invertedDrive=True,  # Invert for some reason. Ezra's going nuts lol.
             ),
         ]
@@ -118,27 +122,31 @@ class SwerveDrive(BaseDrive):
         self.PosY = 0
         self.LastPositions = self.getPositions()
 
+        getcontext().prec = constants.drivetrain.decimalPlaces
+
         self.put("wheelAngles", self.getModuleAngles())
         self.put("wheelSpeeds", self.getSpeeds())
         self.put("robotVector", [0, 0])
         self.put("correctedOffsets", [0])
-        
+
         # Stores whether or not the robot should send over the corrected wheel angle offsets
         self.sendOffsets = False
-        
+
         # Sync that value with network tables
         self.put("sendOffsets", self.sendOffsets)
-        
-        #Add Drive Motor Temperatures to the dashboard debug.
+
+        # Add Drive Motor Temperatures to the dashboard debug.
         self.constantlyUpdate(
             "Drive Motor Temperatures",
-            lambda: [module.getDriveMotor().getTemperature() for module in self.modules],
+            lambda: [
+                module.getDriveMotor().getTemperature() for module in self.modules
+            ],
         )
-        
-        #Add Turn Motor Temperatures to the dashboard debug.
+
+        # Add Turn Motor Temperatures to the dashboard debug.
         self.constantlyUpdate(
             "Turn Motor Temperatures",
-            lambda: [module.getTurnMotor().getTemperature() for module in self.modules]
+            lambda: [module.getTurnMotor().getTemperature() for module in self.modules],
         )
 
     def periodic(self):
@@ -171,15 +179,15 @@ class SwerveDrive(BaseDrive):
         self.put("wheelPercents", self.getPercents())
 
         self.updateSendOffsetsState()
-        
-        # Send the corrected wheel offsets 
+
+        # Send the corrected wheel offsets
         # if that has been indicated in the dashboard
         if self.sendOffsets:
             self.put("correctedOffsets", self.getCorrectedModuleOffsets())
-    
+
     def updateSendOffsetsState(self):
         self.sendOffsets = self.get("sendOffsets")
-    
+
     def generateRobotVector(self):
         """
         Creates vectors for each module depending
@@ -352,7 +360,7 @@ class SwerveDrive(BaseDrive):
         x = math.copysign(max(abs(x) - self.deadband, 0), x)
         y = math.copysign(max(abs(y) - self.deadband, 0), y)
         rotate = math.copysign(max(abs(rotate) - (self.deadband + 0.05), 0), rotate)
-        
+
         if [x, y, rotate] == [0, 0, 0]:
             self.stop()
             return
@@ -544,47 +552,52 @@ class SwerveDrive(BaseDrive):
 
         # Add module in front, not to be confused with gyro! Returns degrees.
         return [module.getWheelAngle() % 360 for module in self.modules]
-    
+
     def printAbsoluteModuleAngles(self):
         """
-        Outputs the absolute wheel angles 
+        Outputs the absolute wheel angles
         for each swerve module to the console.
         """
-        angleStrings = [F"{module.moduleName}: {module.getAbsoluteWheelAngle()} " for module in self.modules]
-        
+        angleStrings = [
+            f"{module.moduleName}: {module.getAbsoluteWheelAngle()} "
+            for module in self.modules
+        ]
+
         print("".join(angleStrings))
-        
+
     def getCorrectedModuleOffsets(self):
         """
         Determines how far off the offset for each module is.
         """
-        
+
         # Calculate the new offset for each swerve module
         # Algorithm: Current offset + (Base angle - absolute wheel angle)
         correctedAngles = [
-            module.offset + (module.offsetBasis - module.getAbsoluteWheelAngle()) for module in self.modules
+            module.offset + (module.offsetBasis - module.getAbsoluteWheelAngle())
+            for module in self.modules
         ]
-        
+
         return correctedAngles
-        
+
     def printCorrectedModuleOffsets(self):
         """
-        Use this when zeroing the wheels. 
-        
+        Use this when zeroing the wheels.
+
         Calculates and outputs what the new offset values should be.
-        
+
         These values SHOULD BE SIMILAR to the previous values.
         If they aren't, try zeroing the wheels differently.
         """
-        
+
         correctedAngles = self.getCorrectedModuleOffsets()
-        
+
         angleStrings = [
-            F"{module.moduleName}: {angle} " for module, angle in zip(self.modules, correctedAngles)
+            f"{module.moduleName}: {angle} "
+            for module, angle in zip(self.modules, correctedAngles)
         ]
-        
+
         print("".join(angleStrings))
-        
+
     def setModuleAngles(self, angles: list):  # Set a list of different angles.
         """
         Set the angle of the wheel using the turn motor.
@@ -626,6 +639,200 @@ class SwerveDrive(BaseDrive):
         """
         for module in self.modules:
             module.setModulePosition(distance)
+
+    # Cougar Course (2.0) Stuff Below
+
+    def calculateCoefficientsCougarCourse(self, points: list):
+        """
+        So this builds upon the Bezier path stuff. Basically, the goal is
+        to omit the need for control points. I have no idea if this is possible.
+        But when has that ever stopped me from trying?
+        Ideas:
+        Look up "Parametric Cubic Spline Tutorial"
+        """
+
+        ts = self.generatePointPercentages(points)
+
+        augmentedX, augmentedY = (
+            [],
+            [],
+        )  # Create the augmented matrices. One for x and one for y because it's parametric.
+
+        for t, point in zip(ts, points):
+            subrowX = []
+            for n in range(
+                len(points) - 1, -1, -1
+            ):  # Count backwards because order matters!
+                subrowX.append(t ** n)  # Remember that n^0 is always 1!
+            subrowX.append(point[0])  # Add the coordinate because it's augmented.
+            augmentedX.append(subrowX)
+
+            subrowY = []
+            for n in range(
+                len(points) - 1, -1, -1
+            ):  # Count backwards because order matters!
+                subrowY.append(t ** n)  # Remember that n^0 is always 1!
+            subrowY.append(point[1])  # Add the coordinate because it's augmented.
+            augmentedY.append(subrowY)
+
+        rX = Matrix(augmentedX).rref()  # Calculate the coefficients vector for the Xs.
+        rY = Matrix(augmentedY).rref()  # Calculate the coefficients vector for the Ys.
+
+        return rX, rY  # Return the two vectors consisting of the coefficients.
+
+    def setCoefficientsPosCougarCourse(self, xCoefficients: list, yCoefficients: list):
+        """
+        Sets the coefficients for the equations.
+        Remember, we actually need the derivative!
+        Returns a function that can calculate the
+        position of the robot at t.
+        args:
+            xCoefficients: The coefficients for the x(t) polynomial.
+            yCoefficients: The coefficients for the y(t) polynomial.
+        returns:
+            A function that takes in a t value and returns
+            the position of the robot at that t.
+        """
+
+        # Returns a function that can calculate the angle of the robot at t.
+        # Basically does (dY/dt)/(dX/dt) and converts the slope to an angle.
+        # Idk why we need the +90, but we do lol.
+        return lambda t: [
+            sum(
+                [
+                    float(xCoefficients[i]) * t ** (len(xCoefficients) - (i + 1))
+                    for i in range(len(xCoefficients))
+                ]
+            ),  # AAAAAHHHHHHHHHHHHHHH
+            sum(
+                [
+                    float(yCoefficients[i]) * t ** (len(yCoefficients) - (i + 1))
+                    for i in range(len(yCoefficients))
+                ]
+            ),  # AAAAAHHHHHHHHHHHHHHH
+        ]
+
+    def setCoefficientsSlopeCougarCourse(
+        self, xCoefficients: list, yCoefficients: list
+    ):
+        """
+        Sets the coefficients for the equations.
+        Remember, we actually need the derivative!
+        Returns a function that can calculate the
+        angle of wheels of the robot at t.
+        args:
+            xCoefficients: The coefficients for the x(t) polynomial.
+            yCoefficients: The coefficients for the y(t) polynomial.
+        returns:
+            A function that can calculate the wheel angles at t.
+        """
+
+        # Returns a function that can calculate the angle of the robot at t.
+        # Basically does (dY/dt)/(dX/dt) and converts the slope to an angle.
+        # Idk why we need the +90, but we do lol.
+        return (
+            lambda t: math.atan2(
+                sum(
+                    [
+                        (len(yCoefficients) - (i + 1))
+                        * float(yCoefficients[i])
+                        * t ** (len(yCoefficients) - i - 2)
+                        for i in range(
+                            len(yCoefficients) - 1
+                        )  # Subtract one because the code gets pissy when raising to a negative power.
+                    ]
+                ),  # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+                sum(
+                    [
+                        (len(xCoefficients) - (i + 1))
+                        * float(xCoefficients[i])
+                        * t ** (len(xCoefficients) - i - 2)
+                        for i in range(
+                            len(xCoefficients) - 1
+                        )  # Subtract one because the code gets pissy when raising to a negative power.
+                    ]
+                ),  # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+            )
+            * 180
+            / math.pi
+            + 90
+        )  # But it works lol.
+
+    def estimateLengthCougarCourse(
+        self, xCoefficients: list, yCoefficients: list, iterations: int = 1000
+    ):
+        """
+        This method is very, very similar to the one in the Bezier
+        code. Basically divide the curve into a bunch of small, straight
+        segments and sum the lengths of each segment. The total
+        should be a close approximation to the length of the curve.
+        args:
+            xCoefficients: The coefficients for the x(t) polynomial.
+            yCoefficients: The coefficients for the y(t) polynomial.
+            iterations: The number of segments to divide the curve into.
+        returns:
+            The estimated length of the curve.
+        """
+
+        # Establish the total length variable and previous position variables.
+        length = 0
+        previousX = 0
+        previousY = 0
+
+        # The function which we will call to get the position.
+        posFunc = self.setCoefficientsPosCougarCourse(xCoefficients, yCoefficients)
+
+        # Iterate through each step, taking the length of each sum with Pythagorean Theorem.
+        for i in range(iterations + 1):
+            t = i / iterations
+
+            # "positions" is (x,y).
+            positions = posFunc(t)
+
+            if i > 0:
+                xDiff = positions[0] - previousX
+                yDiff = positions[1] - previousY
+                length += math.sqrt(xDiff ** 2 + yDiff ** 2)
+
+            previousX = positions[0]
+            previousY = positions[1]
+
+        # Return the sum of the segments.
+        return length
+
+    def generatePointPercentages(self, points: list):
+        """
+        Used in parametricSplineGenerator. Calculates t values between 0 and
+        1 for each point.
+        args:
+            points: A list of points to pass through.
+        returns:
+            The corresponding t values for each point.
+        """
+
+        t = []
+
+        # Create objects that allows us to track the x and y more easily.
+        positions = self.createPositionObjects(points)
+
+        t.append(0)  # Start with t = 0.
+        for i in range(len(positions) - 1):
+            try:
+                t.append(
+                    positions[i] + positions[i + 1] + t[i]
+                )  # Calculate the distance between two points and add the accumulated distance.
+            except (IndexError):
+                t.append(
+                    positions[i] + positions[i + 1]
+                )  # Must be the first one, so just add the distance.
+            last = positions[i] + positions[i + 1] + t[i]
+
+        for i in range(len(t)):
+            t[i] = t[i] / last
+
+        return t
+
+    # Bezier Stuff Below
 
     def getQuadraticBezierPosition(self, p: list, t):
         """
@@ -891,116 +1098,6 @@ class SwerveDrive(BaseDrive):
         """
         return [Position(coord[0], coord[1]) for coord in points]
 
-    # Cougar Course Below.
-
-    def injectBetweenTwoPoints(self, startPoint: list, endPoint: list, spacing=1):
-        """
-        Used in CougarCourse. Adds additional points.
-        """
-
-        reverseNessesary = False
-
-        if startPoint[1] < endPoint[1]:
-            x1, y1 = startPoint[0], startPoint[1]
-            x2, y2 = endPoint[0], endPoint[1]
-        elif startPoint[1] > endPoint[1]:
-            x2, y2 = startPoint[0], startPoint[1]
-            x1, y1 = endPoint[0], endPoint[1]
-            reverseNessesary = True
-        else:
-            raise Exception("Start and end point cannot be the same!")
-
-        pointsInBetween = [[x1, y1]]
-
-        totalDistance = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
-
-        # Calculate spacing.
-        numOfPoints = math.ceil(totalDistance / spacing)
-        spacing = totalDistance / numOfPoints
-
-        # Angle diff.
-        theta = math.atan((y2 - y1) / (x2 - x1))
-
-        for segment in range(numOfPoints):
-            newX = math.sin(theta) * spacing + x1
-            newY = math.cos(theta) * spacing + y1
-
-            pointsInBetween.append([newX, newY])
-
-            x1 = newX  # Override for next loop.
-            y1 = newY  # Override for next loop.
-
-        if reverseNessesary:
-            pointsInBetween.reverse()
-
-        return pointsInBetween
-
-    def injectPoints(self, points: list, spacing=1):
-        """
-        Inject points between a series of points. Used in the CougarCourse.
-        """
-        final = []
-        for point in points:
-            startPoint = [point[0], point[1]]
-            endPoint = [point[2], point[3]]
-
-            pointsToInsert = self.injectBetweenTwoPoints(startPoint, endPoint, spacing)
-
-            for point in pointsToInsert:
-                final.append(point)
-
-        return final
-
-    def smoothPoints(
-        self, path: list, weightData=0.75, weightSmooth=0.25, tolerance=0.001
-    ):
-        """
-        Curves a lot of points. Used in
-        CougarCourse.
-        """
-        newPath = path.copy()
-
-        change = tolerance
-        while change >= tolerance:  # You touch this, you die.
-            change = 0
-            i = 1
-            while i < len(path) - 1:
-
-                j = 0
-                while j < len(path[i]):
-                    aux = newPath[i][j]
-                    newPath[i][j] += weightData * (
-                        path[i][j] - newPath[i][j]
-                    ) + weightSmooth * (
-                        newPath[i - 1][j] + newPath[i + 1][j] - (2 * newPath[i][j])
-                    )
-                    change += abs(aux - newPath[i][j])
-
-                    j += 1
-
-                i += 1
-
-        return newPath
-
-    def assertDistanceAlongCurve(self, points: list):
-        """
-        Adds the distance travelled to the points by using
-        the distance formula. Used in CougarCourse.
-        """
-        points[0].append(0)
-        i = 1
-        while i < len(points):
-            points[i].append(
-                points[i - 1][2]
-                + math.sqrt(
-                    (points[i][0] - points[i - 1][0]) ** 2
-                    + (points[i][1] - points[i - 1][1]) ** 2
-                )
-            )
-            i += 1
-
-        return points
-
     def setCruiseVelocity(self, slow=False):
         """
         Changes the motion magic's max cruise velocity.
@@ -1025,3 +1122,10 @@ class Position:
     def __init__(self, x, y):
         self.x = x
         self.y = y
+
+    def __add__(self, other: object):
+        """
+        Replaces the typical '+' operator with a distance calculator
+        that uses the simple distance formula.
+        """
+        return math.sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2)

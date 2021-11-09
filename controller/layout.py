@@ -55,10 +55,16 @@ from commands.pneumatics.toggleintakecommand import ToggleIntakeCommand
 from commands.colorwheel.spinwheelcommand import SpinWheelCommand
 from commands.colorwheel.rotationcontrolcommand import RotationControlCommand
 from commands.colorwheel.colorcontrolcommand import ColorControlCommand
+<<<<<<< HEAD
 
 # from commands.colorwheel.automatedcolorcontrolcommand import (
 #     AutomatedColorControlCommand,
 # )
+=======
+from commands.colorwheel.automatedcolorcontrolcommand import (
+    AutomatedColorControlCommand,
+)
+>>>>>>> 2add5fbda1265a990b57f20a014c54e014519a0e
 
 import constants
 import robot
