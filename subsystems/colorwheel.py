@@ -11,12 +11,13 @@ from rev.color import ColorSensorV3, ColorMatch
 
 from networktables import NetworkTables
 
+
 class ColorWheel(CougarSystem):
     """Controls the color wheel sensor."""
 
     def __init__(self):
         super().__init__("ColorWheel")
-        
+
         self.fmsInfo = NetworkTables.getTable("FMSInfo")
 
         self.colorMatcher = ColorMatch()
@@ -32,14 +33,14 @@ class ColorWheel(CougarSystem):
         for color in self.colors:
             self.colorMatcher.addColorMatch(color)
 
-        self.colorSensor = ColorSensorV3(wpilib.I2C.Port.kOnboard)
+        # self.colorSensor = ColorSensorV3(wpilib.I2C.Port.kOnboard)
 
-        self.colorSensor.configureColorSensor(
-            ColorSensorV3.ColorResolution.k18bit,
-            ColorSensorV3.ColorMeasurementRate.k50ms,
-        )
+        # self.colorSensor.configureColorSensor(
+        #     ColorSensorV3.ColorResolution.k18bit,
+        #     ColorSensorV3.ColorMeasurementRate.k50ms,
+        # )
 
-        self.constantlyUpdate("Color", self.getColorAsArray)
+        # self.constantlyUpdate("Color", self.getColorAsArray)
 
         self.put("Rotation Duration", 7)
 
@@ -55,20 +56,20 @@ class ColorWheel(CougarSystem):
         """
         self.feed()
         self.getNetworkTableValues()
-        
+
     def getFieldColor(self):
         return self.fmsInfo.getValue("GameSpecificMessage", "R")
 
     def getColorsList(self):
         return self.colors
 
-    def getColor(self):
-        return self.colorMatcher.matchClosestColor(self.colorSensor.getColor(), 0.9)
+    # def getColor(self):
+    #     return self.colorMatcher.matchClosestColor(self.colorSensor.getColor(), 0.9)
 
-    def getColorAsArray(self):
-        currentColor = self.getColor()
+    # def getColorAsArray(self):
+    #     currentColor = self.getColor()
 
-        return [currentColor.red, currentColor.green, currentColor.blue]
+    #     return [currentColor.red, currentColor.green, currentColor.blue]
 
     def getRotationDuration(self):
         return self.rotationControlDuration
