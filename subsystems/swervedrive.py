@@ -380,8 +380,7 @@ class SwerveDrive(BaseDrive):
                 moduleState, Rotation2d.fromDegrees(module.getWheelAngle())
             )
 
-            module.setWheelAngle(optimizedState.angle.degrees())
-            module.setWheelSpeed(optimizedState.speed)
+            module.setModuleState(optimizedState)
 
     def tankMove(self, y, rotate):
         """

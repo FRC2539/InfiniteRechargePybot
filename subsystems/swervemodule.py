@@ -14,6 +14,9 @@ import math
 
 import constants
 
+from wpimath.kinematics import SwerveModuleState
+from wpimath.geometry import Rotation2d
+
 
 class SwerveModule:
     def __init__(
@@ -168,6 +171,30 @@ class SwerveModule:
         # + str(self.cancoder.getPosition())
         # )
         pass
+
+    def setModuleState(self, moduleState):
+        """
+        Sets the swerve module to the given swerve module state
+        Angle - angle of swerve module
+        Speed - percents from 0 to 1
+
+        (Speeds are supposed to be in meters per second
+        Here we use them for percents)
+        """
+        self.setWheelAngle(moduleState.angle.degrees())
+        self.setWheelSpeed(moduleState.speed)
+
+    def getModuleState(self):
+        """
+        Returns the state of the swerve module as a generic
+        Swerve Module State object.
+        Angle - angle of swerve module
+        Speed - current speed (in/s) / max speed
+        """
+        return SwerveModuleState(
+            self.getWheelSpeed() / self.speedLimit,
+            Rotation2d.fromDegrees(self.getWheelAngle()),
+        )
 
     def getWheelAngle(self):
         """
