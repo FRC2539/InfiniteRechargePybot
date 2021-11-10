@@ -6,7 +6,9 @@ from wpimath.kinematics import (
     SwerveDrive4Odometry,
     SwerveDrive4Kinematics,
     SwerveModuleState,
+    ChassisSpeeds,
 )
+
 from wpimath.geometry import Translation2d, Rotation2d, Pose2d
 
 from controller import logicalaxes
@@ -365,23 +367,21 @@ class SwerveDrive(BaseDrive):
             self.stop()
             return
 
-        speeds, angles = self._calculateSpeeds(x, y, rotate)
+        targetChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+            y, x, rotate, self.navX.getRotation2d()
+        )
 
-        if (
-            x == 0 and y == 0 and rotate != 0
-        ):  # The robot won't apply power if it's just rotate (fsr?!)
-            for module, angle in zip(
-                self.modules, angles
-            ):  # You're going to need encoders, so only focus here.
-                module.setWheelAngle(angle)
-                module.setWheelSpeed(abs(rotate))
+        targetModuleStates = self.swerveKinematics.toSwerveModuleStates(
+            targetChassisSpeeds
+        )
 
-        else:
-            for module, speed, angle in zip(
-                self.modules, speeds, angles
-            ):  # You're going to need encoders, so only focus here.
-                module.setWheelAngle(angle)
-                module.setWheelSpeed(abs(math.sqrt(speed ** 2 + rotate ** 2)))
+        for module, moduleState in zip(self.modules, targetModuleStates):
+            optimizedState = SwerveModuleState.optimize(
+                moduleState, Rotation2d.fromDegrees(module.getWheelAngle())
+            )
+
+            module.setWheelAngle(optimizedState.angle.degrees())
+            module.setWheelSpeed(optimizedState.speed)
 
     def tankMove(self, y, rotate):
         """
