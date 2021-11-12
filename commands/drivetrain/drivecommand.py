@@ -26,25 +26,27 @@ class DriveCommand(CommandBase):
         robot.drivetrain.setProfile(0)
         robot.drivetrain.resetEncoders()
 
-        self.lastY = None
+        self.lastX = None
         self.slowed = False
 
     def execute(self):
         # Avoid quick changes in direction
-        y = logicalaxes.forward.get()
-        if self.lastY is None:
-            self.lastY = y
+        x = logicalaxes.forward.get()
+        if self.lastX is None:
+            self.lastX = x
         else:
             cooldown = 0.05
-            self.lastY -= math.copysign(cooldown, self.lastY)
+            self.lastX -= math.copysign(cooldown, self.lastX)
 
             # If the sign has changed, don't move
-            if self.lastY * y < 0:
-                y = 0
+            if self.lastX * x < 0:
+                x = 0
 
-            if abs(y) > abs(self.lastY):
-                self.lastY = y
+            if abs(x) > abs(self.lastX):
+                self.lastX = x
 
-        robot.drivetrain.move(
-            logicalaxes.strafe.get(), y, logicalaxes.rotate.get() * 0.9
-        )
+        # x - forward and backward axis (these axes are relative to the field)
+        # y - side to side axis
+        # rotate - counterclockwise rotation is positive
+
+        robot.drivetrain.move(x, logicalaxes.strafe.get(), logicalaxes.rotate.get())

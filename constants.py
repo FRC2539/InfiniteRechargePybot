@@ -6,6 +6,8 @@ from ctre import (
     SensorInitializationStrategy,
 )
 
+import math
+
 
 class Constants:
     """
@@ -86,9 +88,10 @@ drivetrain.trackWidth = 23.5
 # Center of the robot to the center of a wheel in inches.
 drivetrain.robotRadius = 16.84251
 
-drivetrain.speedLimit = (
-    50.0  # in inches per second (if you have feet per second, multiply by 12!)
-)
+drivetrain.speedLimit = 1.27  # meters per second (50 in/s)
+drivetrain.maxAcceleration = 1.27  # m/s^2
+drivetrain.angularSpeedLimit = math.pi * 1 / 3  # Radians per second
+drivetrain.maxAngularAcceleration = math.pi * 1 / 3  # Rad/s^2
 
 drivetrain.encoderConfig = CANCoderConfiguration()
 drivetrain.encoderConfig.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360

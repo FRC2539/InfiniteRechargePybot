@@ -35,8 +35,6 @@ class SwerveDrive(BaseDrive):
     A drivetrain class for swerve drive.
     """
 
-    # TODO: Program our own odometry class (Steven or younger kid).
-
     def __init__(self):
         """
         The constructor for the class. When returning lists, it should follow like:
@@ -56,6 +54,8 @@ class SwerveDrive(BaseDrive):
         self.speedLimit = (
             constants.drivetrain.speedLimit
         )  # Override the basedrive without editing the file.
+
+        self.angularSpeedLimit = constants.drivetrain.angularSpeedLimit
 
         # Creates a list of swerve modules.
         self.modules = [
@@ -114,7 +114,7 @@ class SwerveDrive(BaseDrive):
 
         self.swerveOdometry = SwerveDrive4Odometry(
             self.swerveKinematics,
-            self.navX.getRotation2d(),
+            self.navX.getRotation2d(),  # Flip the angle to match the orientation of odometry
             Pose2d(0, 0, Rotation2d(0)),
         )
 
@@ -272,84 +272,7 @@ class SwerveDrive(BaseDrive):
         ]  # Don't actually need these, this just keeps basedrive happy.
 
     def _calculateSpeeds(self, x, y, rotate):
-        """
-        Gonna take this nice and slow. Declaring variables to be simple,
-        should try to walk through while coding. Resources located here:
-        https://www.chiefdelphi.com/t/paper-4-wheel-independent-drive-independent-steering-swerve/107383
-        """
-
-        """
-        'self.getAngle()' is the robot's heading, 
-        multiply it by pi over 180 to convert to radians.
-        """
-
-        theta = self.getAngleTo(0) * (
-            math.pi / 180
-        )  # Gets the offset to zero, -pi to pi.
-
-        if (
-            self.isFieldOriented
-        ):  # Are we field-centric, as opposed to robot-centric. A tank drive is robot-centric, for example.
-
-            temp = y * math.cos(theta) + x * math.sin(
-                theta
-            )  # just the new y value being temporarily stored.
-            x = -y * math.sin(theta) + x * math.cos(theta)
-            y = temp
-
-        """
-        The bottom part is the most confusing part, but it basically uses ratios and vectors with the
-        pythagorean theorem to calculate the velocities.
-        """
-
-        A = x - rotate * (self.wheelBase / self.r)  # Use variables to simplify it.
-        B = x + rotate * (self.wheelBase / self.r)
-        C = y - rotate * (self.trackWidth / self.r)
-        D = y + rotate * (self.trackWidth / self.r)
-
-        ws1 = math.sqrt(B ** 2 + D ** 2)  # Front left speed
-        ws2 = math.sqrt(B ** 2 + C ** 2)  # Front right speed
-        ws3 = math.sqrt(A ** 2 + D ** 2)  # Back left speed
-        ws4 = math.sqrt(A ** 2 + C ** 2)  # Back right speed
-
-        wa1 = math.atan2(B, D) * 180 / math.pi  # Front left angle
-        wa2 = math.atan2(B, C) * 180 / math.pi  # Front right angle
-        wa3 = math.atan2(A, D) * 180 / math.pi  # Back left angle
-        wa4 = math.atan2(A, C) * 180 / math.pi  # Back right angle
-
-        speeds = [ws2, ws1, ws4, ws3]  # It is in order (FL, FR, BL, BR).
-        angles = [wa2, wa1, wa4, wa3]  # It is in order (FL, FR, BL, BR).
-
-        newSpeeds = speeds
-        newAngles = angles
-
-        maxSpeed = max(speeds)  # Find the largest speed.
-        minSpeed = min(speeds)  # Find the smallest speed.
-
-        if (
-            maxSpeed > 1
-        ):  # Normalize speeds if greater than 1, but keep then consistent with each other.
-            speeds[:] = [
-                speed / maxSpeed for speed in speeds
-            ]  # We can do this by dividing ALL by the largest value.
-
-        if (
-            minSpeed < -1
-        ):  # Normalize speeds if less than -1, but keep then consitent with each other.
-            speeds[:] = [
-                speed / minSpeed * -1 for speed in speeds
-            ]  # We can do this by dividing ALL by the smallest value. The negative maintains the signs.
-
-        magnitude = math.sqrt(
-            (x ** 2) + (y ** 2)
-        )  # Pythagorean theorem, vector of joystick.
-        if magnitude > 1:
-            magnitude = 1
-
-        speeds[:] = [
-            speed * magnitude for speed in speeds
-        ]  # Ensures that the speeds of the motors are relevant to the joystick input.
-        return newSpeeds, angles  # Return the calculated speed and angles.
+        pass
 
     def move(self, x, y, rotate):
         """
@@ -367,20 +290,62 @@ class SwerveDrive(BaseDrive):
             self.stop()
             return
 
-        targetChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-            y, x, rotate, self.navX.getRotation2d()
-        )
+        targetChassisSpeeds = self.convertControllerToChassisSpeeds(x, y, rotate)
 
-        targetModuleStates = self.swerveKinematics.toSwerveModuleStates(
+        targetModuleStates = self.convertChassisSpeedsToModuleStates(
             targetChassisSpeeds
         )
 
-        for module, moduleState in zip(self.modules, targetModuleStates):
+        optimizedModuleStates = self.optimizeModuleStates(targetModuleStates)
+
+        self.setModuleStates(optimizedModuleStates)
+
+    def convertControllerToChassisSpeeds(self, x, y, rotate):
+        # Convert the percent outputs from the joysticks
+        # to meters per second and radians per second
+        vx, vy, vrotate = (
+            x * self.speedLimit,
+            y * self.speedLimit,
+            rotate * self.angularSpeedLimit,
+        )
+
+        # Convert and return the target velocities to a chassis speeds object
+        return ChassisSpeeds.fromFieldRelativeSpeeds(
+            vx, vy, vrotate, self.navX.getRotation2d()
+        )
+
+    def optimizeModuleStates(self, moduleStates):
+        optimizedStates = []
+
+        # Optimize the module states to reduce how much we
+        # need to change the heading of the wheels
+        for module, moduleState in zip(self.modules, moduleStates):
             optimizedState = SwerveModuleState.optimize(
                 moduleState, Rotation2d.fromDegrees(module.getWheelAngle())
             )
 
-            module.setModuleState(optimizedState)
+            optimizedStates.append(optimizedState)
+
+        return optimizedStates
+
+    def convertChassisSpeedsToModuleStates(self, chassisSpeeds):
+        # Use inverse kinematics to convert the general chassis speeds
+        # object to module states for each swerve module
+        return self.swerveKinematics.toSwerveModuleStates(chassisSpeeds)
+
+    def getModuleStates(self):
+        """
+        Returns the module state objects that represent each swerve module
+        """
+
+        return [module.getModuleState() for module in self.modules]
+
+    def setModuleStates(self, moduleStates):
+        """
+        Set the states of the modules based on general swerve module state objects
+        """
+        for module, state in zip(self.modules, moduleStates):
+            module.setModuleState(state)
 
     def tankMove(self, y, rotate):
         """
@@ -473,32 +438,11 @@ class SwerveDrive(BaseDrive):
         """
         self.isFieldOriented = fieldCentric
 
-    def getModuleStates(self):
-        """
-        Returns a list of SwerveModuleState objects.
-        Usefulf for chassis speeds and odometry.
-        """
-
-        states = []
-        for module in self.modules:
-            s = module.getWheelSpeed() / 39.3701  # In Meters Per Second
-            a = Rotation2d(math.radians(module.getWheelAngle() - 180))
-            states.append(SwerveModuleState(s, a))
-
-        return states
-
-    def setModuleStates(self, moduleStates):
-        """
-        Set the states of the modules. Used by trajectory stuff.
-        """
-        for module, state in zip(self.modules, moduleStates):
-            module.setState(state)
-
     def getSpeeds(self, inIPS=True):  # Defaults to giving in inches per second.
         """
         Returns the speeds of the wheel.
         """
-        return [module.getWheelSpeed(inIPS) for module in self.modules]
+        return [module.getWheelSpeed() for module in self.modules]
 
     def setSpeeds(self, speeds: list):  # Set a speed in inches per second.
         """

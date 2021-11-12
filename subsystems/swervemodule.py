@@ -176,7 +176,7 @@ class SwerveModule:
         """
         Sets the swerve module to the given swerve module state
         Angle - angle of swerve module
-        Speed - percents from 0 to 1
+        Speed - meters per second
 
         (Speeds are supposed to be in meters per second
         Here we use them for percents)
@@ -189,10 +189,10 @@ class SwerveModule:
         Returns the state of the swerve module as a generic
         Swerve Module State object.
         Angle - angle of swerve module
-        Speed - current speed (in/s) / max speed
+        Speed - meters per second
         """
         return SwerveModuleState(
-            self.getWheelSpeed() / self.speedLimit,
+            self.getWheelSpeed(),
             Rotation2d.fromDegrees(self.getWheelAngle()),
         )
 
@@ -239,27 +239,23 @@ class SwerveModule:
             TalonFXControlMode.MotionMagic, angle
         )  # self.turnMotor.getSelectedSensorPosition(0) + diff)
 
-    def getWheelSpeed(self, inIPS=True):
+    def getWheelSpeed(self):
         """
         Get the drive speed of this specific module.
         """
-        # Returns the speed in inches per second if this is true.
-        if inIPS:
-            return self.ticksPerTenthToInchesPerSecond(
+        return self.inchesToMeters(
+            self.ticksPerTenthToInchesPerSecond(
                 self.driveMotor.getSelectedSensorVelocity()
             )
-
-        # Returns ticks per 0.1 seconds (100 mS).
-        return self.driveMotor.getSelectedSensorVelocity()
+        )
 
     def setWheelSpeed(self, speed):
         """
-        This will set the speed of the drive motor to a set velocity. 'speed' is given as a
-        percent, which is multiplied by 'self.speedLimit', a max speed in inches per second.
+        Sets the wheel speed to a speed given in meters per second.
         """
         self.driveMotor.set(
             TalonFXControlMode.Velocity,
-            self.inchesPerSecondToTicksPerTenth(speed * self.speedLimit),
+            self.inchesPerSecondToTicksPerTenth(self.metersToInches(speed)),
         )
 
     def getWheelPercent(self):
