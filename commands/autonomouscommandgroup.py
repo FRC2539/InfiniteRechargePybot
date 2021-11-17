@@ -18,6 +18,7 @@ from commands.drivetrain.pathfollowercommand import PathFollowerCommand
 from commands.drivetrain.segmentfollowercommand import SegmentFollowerCommand
 from commands.drivetrain.dosadocommand import DosadoCommand
 from commands.drivetrain.bezierpathcommand import BezierPathCommand
+from commands.drivetrain.trajectoryfollowercommand import TrajectoryFollowerCommand
 from commands.hood.sethoodpositioncommand import SetHoodPositionCommand
 
 from commands.limelight.automatedshootcommand import AutomatedShootCommand
@@ -60,36 +61,31 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         """
         Follow a basic trajectory.
         """
-        trajectory = TrajectoryGenerator.generateTrajectory(
-            Pose2d(0, 0, Rotation2d(0)),
-            [Translation2d(0.5, 0.25)],
-            Pose2d(1, 0, Rotation2d(0)),
-            TrajectoryConfig(
-                constants.drivetrain.speedLimit, constants.drivetrain.maxAcceleration
-            ),
-        )
-
+        
         self.addCommands(
-            Swerve4ControllerCommand(
-                trajectory,
-                robot.drivetrain.getSwervePose,
-                robot.drivetrain.swerveKinematics,
-                PIDController(1, 0, 0),
-                PIDController(1, 0, 0),
-                ProfiledPIDControllerRadians(
-                    1,
-                    0,
-                    0,
-                    TrapezoidProfileRadians.Constraints(
-                        constants.drivetrain.angularSpeedLimit,
-                        constants.drivetrain.maxAngularAcceleration,
-                    ),
-                ),
-                lambda: Rotation2d(0),
-                robot.drivetrain.setModuleStates,
-                [robot.drivetrain],
+            TrajectoryFollowerCommand(robot.drivetrain.trajectory)
             )
-        )
+
+        #self.addCommands(
+            #Swerve4ControllerCommand(
+                #robot.drivetrain.trajectory,
+                #robot.drivetrain.getSwervePose,
+                #robot.drivetrain.swerveKinematics,
+                #PIDController(1, 0, 0),
+                #PIDController(1, 0, 0),
+                #ProfiledPIDControllerRadians(
+                    #1,
+                    #0,
+                    #0,
+                    #TrapezoidProfileRadians.Constraints(
+                        #constants.drivetrain.angularSpeedLimit,
+                        #constants.drivetrain.maxAngularAcceleration,
+                    #),
+                #),
+                #robot.drivetrain.setModuleStates,
+                #[robot.drivetrain],
+            #)
+        #)
 
     def getOffTheLine(self):
         """

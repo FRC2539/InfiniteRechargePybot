@@ -9,6 +9,12 @@ from wpimath.kinematics import (
     ChassisSpeeds,
 )
 
+from wpimath.trajectory import (
+    TrajectoryGenerator,
+    TrajectoryConfig,
+    TrapezoidProfileRadians,
+)
+
 from wpimath.geometry import Translation2d, Rotation2d, Pose2d
 
 from controller import logicalaxes
@@ -150,6 +156,20 @@ class SwerveDrive(BaseDrive):
             "Turn Motor Temperatures",
             lambda: [module.getTurnMotor().getTemperature() for module in self.modules],
         )
+        
+        self.trajectoryConfig = TrajectoryConfig(
+                constants.drivetrain.speedLimit, constants.drivetrain.maxAcceleration
+            )
+        
+        self.trajectoryConfig.setKinematics(self.swerveKinematics)
+        
+        self.trajectory = TrajectoryGenerator.generateTrajectory(
+            Pose2d(0, 0, Rotation2d(0)),
+            [Translation2d(1, 0.5)],
+            Pose2d(2, 0, Rotation2d(0)),
+            self.trajectoryConfig,
+        )
+        
 
     def periodic(self):
         """
@@ -292,13 +312,7 @@ class SwerveDrive(BaseDrive):
 
         targetChassisSpeeds = self.convertControllerToChassisSpeeds(x, y, rotate)
 
-        targetModuleStates = self.convertChassisSpeedsToModuleStates(
-            targetChassisSpeeds
-        )
-
-        optimizedModuleStates = self.optimizeModuleStates(targetModuleStates)
-
-        self.setModuleStates(optimizedModuleStates)
+        self.setChassisSpeeds(targetChassisSpeeds)
 
     def convertControllerToChassisSpeeds(self, x, y, rotate):
         # Convert the percent outputs from the joysticks
@@ -313,6 +327,19 @@ class SwerveDrive(BaseDrive):
         return ChassisSpeeds.fromFieldRelativeSpeeds(
             vx, vy, vrotate, self.navX.getRotation2d()
         )
+    
+    def setChassisSpeeds(self, chassisSpeeds):
+        """
+        Converts a chassis speeds object to module states,
+        and then set the swerve module to those states.
+        """
+        
+        moduleStates = self.convertChassisSpeedsToModuleStates(chassisSpeeds)
+        
+        optimizedModuleStates = self.optimizeModuleStates(moduleStates)
+        
+        # Set the swerve modules to the module states
+        self.setModuleStates(optimizedModuleStates)
 
     def optimizeModuleStates(self, moduleStates):
         optimizedStates = []
