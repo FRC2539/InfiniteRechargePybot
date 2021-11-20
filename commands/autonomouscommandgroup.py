@@ -246,8 +246,10 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         )
 
     def cougarCourseTest(self):
-        CougarCourseCommand(
-            [(0, 1), (1, 0), (0, -1)], graphAtSim=True, name="Test Path"
+        self.addCommands(
+            CougarCourseCommand(
+                [(0, 100), (100, 0), (0, -100)], graphAtSim=True, name="Test Path"
+            )
         )
 
     # def badEightBall(self):

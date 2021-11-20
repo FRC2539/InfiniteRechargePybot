@@ -109,6 +109,8 @@ class CougarCourseCommand(CommandBase):
 
         # Set the angle of the wheels.
         robot.drivetrain.setUniformModuleAngle(self.angle)
+        
+        print(self.t)
 
     def isFinished(self):
         # We are done when we have travelled 100% of the curve.
