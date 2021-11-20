@@ -16,7 +16,7 @@ class RotationControlCommand(CommandBase):
     def __init__(self):
         super().__init__()
 
-        self.addRequirements(robot.colorwheel, robot.chamber)
+        self.addRequirements(robot.chamber)
 
     def initialize(self):
         self.timer = Timer()
@@ -27,7 +27,7 @@ class RotationControlCommand(CommandBase):
         robot.chamber.spinColorWheel()
 
     def isFinished(self):
-        return self.timer.hasElapsed(7.7)
+        return self.timer.hasElapsed(8)
 
     def end(self, interrupted):
         robot.chamber.stop()

@@ -72,10 +72,10 @@ class BaseDrive(CougarSystem):
         self._publishPID("Position", 1)
 
         """Return motor temperatues"""
-        self.constantlyUpdate(
-            "Motor Temperatures",
-            lambda: [motor.getTemperature() for motor in self.motors],
-        )
+        # self.constantlyUpdate(
+        #     "Motor Temperatures",
+        #     lambda: [motor.getTemperature() for motor in self.motors],
+        # )
 
     def initDefaultCommand(self):
         """

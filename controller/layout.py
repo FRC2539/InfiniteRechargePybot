@@ -55,9 +55,16 @@ from commands.pneumatics.toggleintakecommand import ToggleIntakeCommand
 from commands.colorwheel.spinwheelcommand import SpinWheelCommand
 from commands.colorwheel.rotationcontrolcommand import RotationControlCommand
 from commands.colorwheel.colorcontrolcommand import ColorControlCommand
+<<<<<<< HEAD
+
+# from commands.colorwheel.automatedcolorcontrolcommand import (
+#     AutomatedColorControlCommand,
+# )
+=======
 from commands.colorwheel.automatedcolorcontrolcommand import (
     AutomatedColorControlCommand,
 )
+>>>>>>> 2add5fbda1265a990b57f20a014c54e014519a0e
 
 import constants
 import robot
@@ -117,10 +124,11 @@ def init():
     # driveControllerOne.RightTopLeft.whileHeld(RaiseClimberCommand())
     # driveControllerOne.RightBottomLeft.whileHeld(LowerClimberCommand())
     # driveControllerOne.RightBottomRight.whileHeld(ForceDownCommand())
+
     driveControllerOne.RightBottomLeft.whileHeld(SpinWheelCommand())
     driveControllerOne.RightBottomMiddle.whenPressed(RotationControlCommand())
     driveControllerOne.RightBottomRight.whileHeld(ColorControlCommand())
-    driveControllerOne.RightTopRight.whenPressed(AutomatedColorControlCommand())
+    # driveControllerOne.RightTopRight.whenPressed(AutomatedColorControlCommand())
 
     driveControllerTwo.LeftBottomMiddle.whileHeld(SetRPMCommand(4400))
     driveControllerTwo.LeftTopMiddle.whileHeld(ConveyorIntakeForwardCommand())
