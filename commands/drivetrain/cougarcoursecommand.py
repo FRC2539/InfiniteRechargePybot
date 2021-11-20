@@ -4,6 +4,29 @@ import math
 
 import robot, constants
 
+# Used in the align() method.
+loopCount = 0
+
+
+def align(angle):
+    global loopCount
+
+    loopCount += 1
+
+    count = 0
+    if angle < 0:
+        angle += 360
+    for a in robot.drivetrain.getModuleAngles():
+        if abs(a - angle) < 3 or (
+            a > 357 and abs(angle) < 2
+        ):  # The 'or' is a temporary fix.
+            count += 1
+
+    if count >= 3:  # TODO: Tune the max loop count.
+        return True
+
+    return False
+
 
 class CougarCourseCommand(CommandBase):
     """
@@ -14,12 +37,13 @@ class CougarCourseCommand(CommandBase):
     on the fly.
     """
 
-    def __init__(self, points: list, graphAtSim=False, name=""):
+    def __init__(self, points: list, speed=1, graphAtSim=False, name=""):
         super().__init__()
 
         self.addRequirements(robot.drivetrain)
 
         self.points = points  # The desired points to drive through.
+        self.speed = speed  # The percent of maxSpeed at which this should be run.
 
         self.cX, self.cY = robot.drivetrain.calculateCoefficientsCougarCourse(
             self.points
@@ -49,10 +73,46 @@ class CougarCourseCommand(CommandBase):
         self.t = 0  # Percentage of the curve which we have completed
 
     def initialize(self):
-        pass
+        # The position of the back left module.
+        self.startPos = robot.drivetrain.getPositions()[2]
+
+        # The angle component.
+        self.angle = self.angleFunc(self.t)
+
+        if self.angle > 180:
+            self.angle -= 360
+
+        # Set the initial angle of the wheels.
+        robot.drivetrain.setUniformModuleAngle(self.angle)
+
+        while not align(self.angle):
+            pass
+
+        # Set the speed of the drivetrain.
+        robot.drivetrain.setUniformModuleSpeed(self.speed)
 
     def execute(self):
-        pass
+        # Update the completion percentage as we move.
+        self.t = abs(
+            (robot.drivetrain.getPositions()[2] - self.startPos) / self.curveLength
+        )
+
+        # Are we done?
+        if self.t >= 1:
+            robot.drivetrain.stop()
+
+        # Calculate the angle of the wheels.
+        self.angle = self.angleFunc(self.t)
+
+        if self.angle > 180:
+            self.angle -= 360
+
+        # Set the angle of the wheels.
+        robot.drivetrain.setUniformModuleAngle(self.angle)
+
+    def isFinished(self):
+        # We are done when we have travelled 100% of the curve.
+        return self.t >= 1
 
     def end(self, interrupted):
-        pass
+        robot.drivetrain.stop()
