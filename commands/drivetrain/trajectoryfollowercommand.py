@@ -20,20 +20,24 @@ from wpilib import Timer
 
 class TrajectoryFollowerCommand(CommandBase):
 
-    def __init__(self, trajectory):
+    def __init__(self, trajectory, distanceTolerance=0.1):
         super().__init__()
 
         self.addRequirements(robot.drivetrain)
         
         self.trajectory = trajectory
         
+        self.p = 1
+        self.i = 0.2
+        self.d = 0.03
+        
         self.driveController = HolonomicDriveController(
-                PIDController(1, 0, 0),
-                PIDController(1, 0, 0),
+                PIDController(self.p, self.i, self.d),
+                PIDController(self.p, self.i, self.d),
                 ProfiledPIDControllerRadians(
-                    1,
-                    0,
-                    0,
+                    self.p,
+                    self.i,
+                    self.d,
                     TrapezoidProfileRadians.Constraints(
                         constants.drivetrain.angularSpeedLimit,
                         constants.drivetrain.maxAngularAcceleration,
@@ -43,7 +47,7 @@ class TrajectoryFollowerCommand(CommandBase):
         
         self.timer = Timer()
         
-        self.distanceTolerance = 0.4
+        self.distanceTolerance = distanceTolerance
 
 
     def initialize(self):
@@ -54,14 +58,19 @@ class TrajectoryFollowerCommand(CommandBase):
         self.trajectoryDuration = self.trajectory.totalTime()
                 
         self.finalState = self.trajectory.sample(self.trajectoryDuration).pose
+        
+        robot.drivetrain.addAutoPeriodicFunction(self.trajectoryFollowerExecute)
 
-
-    def execute(self):
+    def trajectoryFollowerExecute(self):
+        robot.drivetrain.updateOdometry()
+        
         self.currentPose = robot.drivetrain.getSwervePose()
         
         self.currentTime = self.timer.get()
         
-        trajectoryState = self.trajectory.sample(self.currentTime)
+        trajectoryState = self.trajectory.sample(
+            self.currentTime + constants.drivetrain.autoPeriodicPeriod
+        )
         
         #heading = trajectoryState.pose.rotation()
         heading = Rotation2d(0)
@@ -71,15 +80,21 @@ class TrajectoryFollowerCommand(CommandBase):
         robot.drivetrain.setChassisSpeeds(chassisSpeeds)
         
     def isFinished(self):
+        self.currentTime = self.timer.get()
+        
         timeUp = self.currentTime >= self.trajectoryDuration
         
-        poseError = self.currentPose.relativeTo(self.finalState)
+        self.currentPose = robot.drivetrain.getSwervePose()
+        
+        distanceToTargetPosition = self.currentPose.translation().distance(
+            self.finalState.translation()
+        )
+        
+        atPosition = distanceToTargetPosition <= self.distanceTolerance
                 
-        atFinalLocation = abs(poseError.X()) < self.distanceTolerance and abs(poseError.Y()) < self.distanceTolerance
-        
-        print(timeUp, atFinalLocation, self.currentTime, self.trajectoryDuration)
-        
-        return atFinalLocation
+        return timeUp or atPosition
 
     def end(self, interrupted):
         self.timer.stop()
+        
+        robot.drivetrain.removeAutoPeriodicFunction(self.trajectoryFollowerExecute)

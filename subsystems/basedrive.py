@@ -50,12 +50,6 @@ class BaseDrive(CougarSystem):
         """Initialize the navX MXP"""
         self.navX = AHRS.create_spi()
 
-        # self.setGyroAngle(-90)
-
-        """Reset the gyro (the starting position is the reverse of the proper orientation)"""
-        # self.resetGyro(90)
-        # print("--resetGyro 90")
-
         self.flatAngle = 0
 
         """A record of the last arguments to move()"""
@@ -76,6 +70,21 @@ class BaseDrive(CougarSystem):
         #     "Motor Temperatures",
         #     lambda: [motor.getTemperature() for motor in self.motors],
         # )
+        
+        self.autoPeriodicFunctions = []
+        
+    def addAutoPeriodicFunction(self, callback):
+        self.autoPeriodicFunctions.append(callback)
+                
+    def removeAutoPeriodicFunction(self, callback):
+        self.autoPeriodicFunctions.remove(callback)
+        
+    def callAutoPeriodicFunctions(self):
+        """
+        Calls all of the functions that need to be updated at a faster rate for autonomous.
+        """
+        for function in self.autoPeriodicFunctions:
+            function()
 
     def initDefaultCommand(self):
         """

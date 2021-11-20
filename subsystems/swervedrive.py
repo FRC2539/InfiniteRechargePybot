@@ -120,7 +120,7 @@ class SwerveDrive(BaseDrive):
 
         self.swerveOdometry = SwerveDrive4Odometry(
             self.swerveKinematics,
-            self.navX.getRotation2d(),  # Flip the angle to match the orientation of odometry
+            -self.navX.getRotation2d(),  # Flip the angle to match the orientation of odometry
             Pose2d(0, 0, Rotation2d(0)),
         )
 
@@ -165,8 +165,12 @@ class SwerveDrive(BaseDrive):
         
         self.trajectory = TrajectoryGenerator.generateTrajectory(
             Pose2d(0, 0, Rotation2d(0)),
-            [Translation2d(1, 0.5)],
-            Pose2d(2, 0, Rotation2d(0)),
+            [
+                Translation2d(1, 0.15),
+                Translation2d(1.5, 0.2),
+                Translation2d(2, 0.15)
+            ],
+            Pose2d(3, 0, Rotation2d(0)),
             self.trajectoryConfig,
         )
         
@@ -180,7 +184,7 @@ class SwerveDrive(BaseDrive):
         self.feed()
 
         # Update's the robot's odometry.
-        self.updateOdometry()
+        #self.updateOdometry()
 
         # Update networktables.
         self.put("wheelAngles", self.getModuleAngles())
@@ -244,7 +248,7 @@ class SwerveDrive(BaseDrive):
         states = self.getModuleStates()
 
         self.swerveOdometry.update(
-            self.navX.getRotation2d(),
+            -self.navX.getRotation2d(),
             states[0],  # 0
             states[1],  # 1
             states[2],  # 2
@@ -255,7 +259,7 @@ class SwerveDrive(BaseDrive):
         """
         Resets the odometry to a given position, typically the one used when starting a trajectory.
         """
-        self.swerveOdometry.resetPosition(pose, self.navX.getRotation2d())
+        self.swerveOdometry.resetPosition(pose, -self.navX.getRotation2d())
 
     def getSwervePose(self):
         """
@@ -340,6 +344,17 @@ class SwerveDrive(BaseDrive):
         
         # Set the swerve modules to the module states
         self.setModuleStates(optimizedModuleStates)
+        
+    def setChassisSpeedsRaw(self, chassisSpeeds):
+        """
+        Converts a chassis speeds object to module states,
+        and then set the swerve module to those states.
+        """
+        
+        moduleStates = self.convertChassisSpeedsToModuleStates(chassisSpeeds)
+                
+        # Set the swerve modules to the module states
+        self.setModuleStates(moduleStates)
 
     def optimizeModuleStates(self, moduleStates):
         optimizedStates = []

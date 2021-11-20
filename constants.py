@@ -88,8 +88,8 @@ drivetrain.trackWidth = 23.5
 # Center of the robot to the center of a wheel in inches.
 drivetrain.robotRadius = 16.84251
 
-drivetrain.speedLimit = 1.27  # meters per second (50 in/s)
-drivetrain.maxAcceleration = 1.27  # m/s^2
+drivetrain.speedLimit = 1.3  # meters per second (50 in/s)
+drivetrain.maxAcceleration = 1.3  # m/s^2
 drivetrain.angularSpeedLimit = math.pi * 1 / 3  # Radians per second
 drivetrain.maxAngularAcceleration = math.pi * 1 / 3  # Rad/s^2
 
@@ -103,6 +103,8 @@ drivetrain.encoderConfig.sensorDirection = False
 drivetrain.mostRecentPath = []  # Updated in record auto.
 
 drivetrain.preBuild = {1: ".barrelracing.json"}
+
+drivetrain.autoPeriodicPeriod = 0.005 # Period to run auto code at a higher rate
 
 # Constants for the shooter below.
 

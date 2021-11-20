@@ -17,6 +17,7 @@ from commands.drivetrain.playsongcommand import PlaySongCommand
 from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 
 from commands.drivetrain.pathcommand import PathCommand
+from commands.drivetrain.resetautostatecommand import ResetAutoStateCommand
 
 from commands.resetcommand import ResetCommand
 
@@ -114,6 +115,7 @@ def init():
     driveControllerOne.LeftTopRight.whileHeld(RaiseClimberCommand())
     driveControllerOne.LeftBottomRight.whileHeld(LowerClimberCommand())
     driveControllerOne.LeftBottomLeft.whileHeld(ForceDownCommand())
+    driveControllerOne.LeftTopLeft.whenPressed(ResetAutoStateCommand())
 
     # driveControllerOne.RightTopLeft.whileHeld(RaiseClimberCommand())
     # driveControllerOne.RightBottomLeft.whileHeld(LowerClimberCommand())

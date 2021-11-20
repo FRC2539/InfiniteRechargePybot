@@ -47,27 +47,25 @@ class KryptonBot(TimedCommandRobot):
         self.selectedAuto = autoconfig.getAutoProgram()
         self.auto = AutonomousCommandGroup()
 
-        from commands.drivetrain.zerocancoderscommand import ZeroCANCodersCommand
         from commands.startupcommandgroup import StartUpCommandGroup
 
         StartUpCommandGroup().schedule()
 
         if self.isSimulation():
             cougarcoursegrapher.init()
+            
+        import robot
+
+        self.addPeriodic(
+            robot.drivetrain.callAutoPeriodicFunctions, 
+            constants.drivetrain.autoPeriodicPeriod
+        )
 
     def autonomousInit(self):
         """This function is called each time autonomous mode starts."""
 
-        from commands.drivetrain.pathfollowercommand import PathFollowerCommand
-
-        from commands.autonomouscommandgroup import AutonomousCommandGroup
-
-        from commands2 import InstantCommand
-
         # Send field data to the dashboard
         driverhud.showField()
-
-        from commands.drivetrain.zerogyrocommand import ZeroGyroCommand
 
         self.auto.schedule()
 

@@ -64,28 +64,7 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         
         self.addCommands(
             TrajectoryFollowerCommand(robot.drivetrain.trajectory)
-            )
-
-        #self.addCommands(
-            #Swerve4ControllerCommand(
-                #robot.drivetrain.trajectory,
-                #robot.drivetrain.getSwervePose,
-                #robot.drivetrain.swerveKinematics,
-                #PIDController(1, 0, 0),
-                #PIDController(1, 0, 0),
-                #ProfiledPIDControllerRadians(
-                    #1,
-                    #0,
-                    #0,
-                    #TrapezoidProfileRadians.Constraints(
-                        #constants.drivetrain.angularSpeedLimit,
-                        #constants.drivetrain.maxAngularAcceleration,
-                    #),
-                #),
-                #robot.drivetrain.setModuleStates,
-                #[robot.drivetrain],
-            #)
-        #)
+        )
 
     def getOffTheLine(self):
         """
