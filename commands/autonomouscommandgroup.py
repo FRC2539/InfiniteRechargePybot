@@ -134,8 +134,8 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             MoveCommand(10, torySlow=4000),
             InstantCommand(lambda: robot.shooter.setRPM(3300), [robot.shooter]),
             MoveCommand(-145, angle=-20),
-            InstantCommand(lambda: robot.conveyorintake.stop(), [robot.conveyorintake]),
-            AutomatedShootCommand(3300, conveyorDelay=True, waitUntilAimed=True),
+            InstantCommand(lambda: robot.conveyorintake.waitToRetract(), [robot.conveyorintake]),
+            AutomatedShootCommand(3400, conveyorDelay=True),
         )
 
     def cougarCourseTest(self):

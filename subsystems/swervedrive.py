@@ -17,6 +17,8 @@ from wpimath.trajectory import (
 
 from wpimath.geometry import Translation2d, Rotation2d, Pose2d
 
+from wpimath.spline import QuinticHermiteSpline
+
 from controller import logicalaxes
 
 from .cougarsystem import *
