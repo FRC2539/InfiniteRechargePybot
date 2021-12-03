@@ -13,6 +13,8 @@ from wpimath.geometry import Translation2d, Rotation2d, Pose2d
 from wpilib.controller import HolonomicDriveController
 from wpilib.controller import PIDController, ProfiledPIDControllerRadians
 
+from wpimath.kinematics import ChassisSpeeds
+
 import constants
 
 from wpilib import Timer
@@ -27,15 +29,15 @@ class TrajectoryFollowerCommand(CommandBase):
         
         self.trajectory = trajectory
         
-        self.p = 1
-        self.i = 0.2
-        self.d = 0.03
+        self.p = 2
+        self.i = 0
+        self.d = 0
         
         self.driveController = HolonomicDriveController(
                 PIDController(self.p, self.i, self.d),
                 PIDController(self.p, self.i, self.d),
                 ProfiledPIDControllerRadians(
-                    self.p,
+                    2,
                     self.i,
                     self.d,
                     TrapezoidProfileRadians.Constraints(
@@ -76,7 +78,7 @@ class TrajectoryFollowerCommand(CommandBase):
         heading = Rotation2d(0)
         
         chassisSpeeds = self.driveController.calculate(self.currentPose, trajectoryState, heading)
-        
+                
         robot.drivetrain.setChassisSpeeds(chassisSpeeds)
         
     def isFinished(self):
@@ -92,7 +94,7 @@ class TrajectoryFollowerCommand(CommandBase):
         
         atPosition = distanceToTargetPosition <= self.distanceTolerance
                 
-        return timeUp or atPosition
+        return timeUp
 
     def end(self, interrupted):
         self.timer.stop()

@@ -165,14 +165,20 @@ class SwerveDrive(BaseDrive):
         
         self.trajectoryConfig.setKinematics(self.swerveKinematics)
         
+        #self.trajectory = TrajectoryGenerator.generateTrajectory(
+            #Pose2d(0, 0, Rotation2d(0)),
+            #[
+                #Translation2d(1, -1),
+            #],
+            #Pose2d(2, 0, Rotation2d(0)),
+            #self.trajectoryConfig,
+        #)
+        
         self.trajectory = TrajectoryGenerator.generateTrajectory(
-            Pose2d(0, 0, Rotation2d(0)),
             [
-                Translation2d(1, 0.15),
-                Translation2d(1.5, 0.2),
-                Translation2d(2, 0.15)
+                Pose2d(0, 0, Rotation2d(30)),
+                Pose2d(2, 0, Rotation2d.fromDegrees(-30)),
             ],
-            Pose2d(3, 0, Rotation2d(0)),
             self.trajectoryConfig,
         )
         
