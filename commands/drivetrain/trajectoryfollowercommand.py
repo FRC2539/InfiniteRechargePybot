@@ -31,7 +31,7 @@ class TrajectoryFollowerCommand(CommandBase):
         
         self.p = 2
         self.i = 0
-        self.d = 0
+        self.d = 0.03
         
         self.driveController = HolonomicDriveController(
                 PIDController(self.p, self.i, self.d),
