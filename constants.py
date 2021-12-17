@@ -62,6 +62,11 @@ drivetrain.stDk = 0
 drivetrain.stFFk = 0
 drivetrain.stIZk = 0
 
+# PID for holonomic drive controller
+drivetrain.hPk = 2
+drivetrain.hIk = 0
+drivetrain.hDk = 0.03
+
 # Gear ratios on the drivetrain.
 drivetrain.driveMotorGearRatio = 6.86
 drivetrain.turnMotorGearRatio = 12.8
@@ -87,6 +92,8 @@ drivetrain.trackWidth = 23.5
 
 # Center of the robot to the center of a wheel in inches.
 drivetrain.robotRadius = 16.84251
+
+drivetrain.autoSpeedLimit = 2
 
 drivetrain.speedLimit = 1.3  # meters per second (50 in/s)
 drivetrain.maxAcceleration = 1.3  # m/s^2

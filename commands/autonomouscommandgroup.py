@@ -65,6 +65,17 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         self.addCommands(
             TrajectoryFollowerCommand(robot.drivetrain.trajectory)
         )
+        
+    def triangle(self):
+        self.addCommands(
+           
+            TurnCommand(60),
+            MoveCommand(-72),
+            TurnCommand(-120),
+            MoveCommand(72),
+            TurnCommand(-60),
+            MoveCommand(-72),
+        )
 
     def getOffTheLine(self):
         """

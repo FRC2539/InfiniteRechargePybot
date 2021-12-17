@@ -10,9 +10,6 @@ from wpimath.trajectory import (
 
 from wpimath.geometry import Translation2d, Rotation2d, Pose2d
 
-from wpilib.controller import HolonomicDriveController
-from wpilib.controller import PIDController, ProfiledPIDControllerRadians
-
 from wpimath.kinematics import ChassisSpeeds
 
 import constants
@@ -29,23 +26,7 @@ class TrajectoryFollowerCommand(CommandBase):
         
         self.trajectory = trajectory
         
-        self.p = 2
-        self.i = 0
-        self.d = 0.03
-        
-        self.driveController = HolonomicDriveController(
-                PIDController(self.p, self.i, self.d),
-                PIDController(self.p, self.i, self.d),
-                ProfiledPIDControllerRadians(
-                    2,
-                    self.i,
-                    self.d,
-                    TrapezoidProfileRadians.Constraints(
-                        constants.drivetrain.angularSpeedLimit,
-                        constants.drivetrain.maxAngularAcceleration,
-                    ),
-                ),
-        )
+        self.driveController = robot.drivetrain.driveController
         
         self.timer = Timer()
         
@@ -53,6 +34,8 @@ class TrajectoryFollowerCommand(CommandBase):
 
 
     def initialize(self):
+        #robot.drivetrain.setModuleProfiles(1, turn=False)
+
         self.timer.reset()
         
         self.timer.start()
@@ -74,10 +57,15 @@ class TrajectoryFollowerCommand(CommandBase):
             self.currentTime + constants.drivetrain.autoPeriodicPeriod
         )
         
+        #trajectoryPose = trajectoryState.pose
+        
+        #linearVelocityRef = constants.drivetrain.autoSpeedLimit
+        
         #heading = trajectoryState.pose.rotation()
         heading = Rotation2d(0)
         
         chassisSpeeds = self.driveController.calculate(self.currentPose, trajectoryState, heading)
+        #chassisSpeeds = self.driveController.calculate(self.currentPose, trajectoryPose, linearVelocityRef, heading)
                 
         robot.drivetrain.setChassisSpeeds(chassisSpeeds)
         
@@ -94,9 +82,11 @@ class TrajectoryFollowerCommand(CommandBase):
         
         atPosition = distanceToTargetPosition <= self.distanceTolerance
                 
-        return timeUp
+        return timeUp or atPosition
 
     def end(self, interrupted):
         self.timer.stop()
         
         robot.drivetrain.removeAutoPeriodicFunction(self.trajectoryFollowerExecute)
+        
+        #robot.drivetrain.setModuleProfiles(0, turn=False)

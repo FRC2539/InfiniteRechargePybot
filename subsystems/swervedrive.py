@@ -15,6 +15,10 @@ from wpimath.trajectory import (
     TrapezoidProfileRadians,
 )
 
+
+from wpilib.controller import HolonomicDriveController
+from wpilib.controller import PIDController, ProfiledPIDControllerRadians
+
 from wpimath.geometry import Translation2d, Rotation2d, Pose2d
 
 from wpimath.spline import QuinticHermiteSpline
@@ -159,8 +163,26 @@ class SwerveDrive(BaseDrive):
             lambda: [module.getTurnMotor().getTemperature() for module in self.modules],
         )
         
+        self.hPk = constants.drivetrain.hPk
+        self.hIk = constants.drivetrain.hIk
+        self.hDk = constants.drivetrain.hDk
+        
+        self.driveController = HolonomicDriveController(
+                PIDController(self.hPk, self.hIk, self.hDk),
+                PIDController(self.hPk, self.hIk, self.hDk),
+                ProfiledPIDControllerRadians(
+                    self.hPk,
+                    self.hIk,
+                    self.hDk,
+                    TrapezoidProfileRadians.Constraints(
+                        constants.drivetrain.angularSpeedLimit,
+                        constants.drivetrain.maxAngularAcceleration,
+                    ),
+                ),
+        )
+        
         self.trajectoryConfig = TrajectoryConfig(
-                constants.drivetrain.speedLimit, constants.drivetrain.maxAcceleration
+                constants.drivetrain.autoSpeedLimit, constants.drivetrain.maxAcceleration
             )
         
         self.trajectoryConfig.setKinematics(self.swerveKinematics)
