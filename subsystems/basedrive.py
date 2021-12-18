@@ -70,15 +70,15 @@ class BaseDrive(CougarSystem):
         #     "Motor Temperatures",
         #     lambda: [motor.getTemperature() for motor in self.motors],
         # )
-        
+
         self.autoPeriodicFunctions = []
-        
+
     def addAutoPeriodicFunction(self, callback):
         self.autoPeriodicFunctions.append(callback)
-                
+
     def removeAutoPeriodicFunction(self, callback):
         self.autoPeriodicFunctions.remove(callback)
-        
+
     def callAutoPeriodicFunctions(self):
         """
         Calls all of the functions that need to be updated at a faster rate for autonomous.
@@ -222,6 +222,19 @@ class BaseDrive(CougarSystem):
         between -180 and 180, inclusive.
         """
         degrees = targetAngle - self.getAngle()
+        while degrees > 180:
+            degrees -= 360
+        while degrees < -180:
+            degrees += 360
+
+        return degrees
+
+    def getAngleRelativeTo(self, targetAngle, currentAngle):
+        """
+        Returns the anglular distance from the given target. Values will be
+        between -180 and 180, inclusive.
+        """
+        degrees = targetAngle - currentAngle
         while degrees > 180:
             degrees -= 360
         while degrees < -180:

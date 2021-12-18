@@ -20,6 +20,7 @@ from commands.drivetrain.dosadocommand import DosadoCommand
 from commands.drivetrain.bezierpathcommand import BezierPathCommand
 from commands.drivetrain.trajectoryfollowercommand import TrajectoryFollowerCommand
 from commands.hood.sethoodpositioncommand import SetHoodPositionCommand
+from commands.drivetrain.turncommand import TurnCommand
 
 from commands.limelight.automatedshootcommand import AutomatedShootCommand
 
@@ -61,14 +62,14 @@ class AutonomousCommandGroup(SequentialCommandGroup):
         """
         Follow a basic trajectory.
         """
-        
-        self.addCommands(
-            TrajectoryFollowerCommand(robot.drivetrain.trajectory)
-        )
-        
+
+        self.addCommands(TrajectoryFollowerCommand(robot.drivetrain.trajectory))
+
+    def turnTest(self):
+        self.addCommands(TurnCommand(90), TurnCommand(-90))
+
     def triangle(self):
         self.addCommands(
-           
             TurnCommand(60),
             MoveCommand(-72),
             TurnCommand(-120),
@@ -145,7 +146,9 @@ class AutonomousCommandGroup(SequentialCommandGroup):
             MoveCommand(10, torySlow=4000),
             InstantCommand(lambda: robot.shooter.setRPM(3300), [robot.shooter]),
             MoveCommand(-145, angle=-20),
-            InstantCommand(lambda: robot.conveyorintake.waitToRetract(), [robot.conveyorintake]),
+            InstantCommand(
+                lambda: robot.conveyorintake.waitToRetract(), [robot.conveyorintake]
+            ),
             AutomatedShootCommand(3400, conveyorDelay=True),
         )
 

@@ -2,12 +2,6 @@ from commands2 import CommandBase
 
 import robot
 
-from wpimath.trajectory import (
-    TrajectoryGenerator,
-    TrajectoryConfig,
-    TrapezoidProfileRadians,
-)
-
 from wpimath.geometry import Translation2d, Rotation2d, Pose2d
 
 from wpimath.kinematics import ChassisSpeeds
