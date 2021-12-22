@@ -17,7 +17,7 @@ import constants
 class TurnCommand(CommandBase):
     """Allows autonomous turning using the drive base encoders."""
 
-    def __init__(self, degrees, speedPercent=0.4, tolerance=3):
+    def __init__(self, degrees, speedPercent=0.3, tolerance=3):
         super().__init__()
 
         self.degrees = degrees
@@ -65,13 +65,6 @@ class TurnCommand(CommandBase):
         # Store the current pose of the robot
         self.currentPose = robot.drivetrain.getSwervePose()
         self.currentAngle = self.currentPose.rotation()
-
-        # chassisSpeeds = self.driveController.calculate(
-        #     self.currentPose,
-        #     self.desiredPose,
-        #     constants.drivetrain.speedLimit,
-        #     self.desiredAngle,
-        # )
 
         speed = self.getSpeed()
 

@@ -65,8 +65,8 @@ class AutonomousCommandGroup(SequentialCommandGroup):
 
         self.addCommands(TrajectoryFollowerCommand(robot.drivetrain.trajectory))
 
-    def turnTest(self):
-        self.addCommands(TurnCommand(90), TurnCommand(-90))
+    def moveTest(self):
+        self.addCommands(MoveCommand(3, 0))
 
     def triangle(self):
         self.addCommands(

@@ -1,83 +1,74 @@
 from commands2 import CommandBase
-from custom import driverhud
+from wpimath.geometry._geometry import Pose2d
+from wpimath.kinematics._kinematics import ChassisSpeeds
 import robot
+
+from wpimath.geometry import Rotation2d, Translation2d, Transform2d
+
+from wpimath.kinematics import SwerveModuleState
+
+import constants
 
 
 class MoveCommand(CommandBase):
-    def __init__(
-        self, distance, angle=0, tolerance=5, slow=False, torySlow=None, name=None
-    ):
+    def __init__(self, x, y, speed=0.005, tolerance=1):
         """
-        Takes a distance in inches and stores it for later. We allow overriding
-        name so that other autonomous driving commands can extend this class.
+        Moves the robot to a position x meters forward/backward
+        and y meters left/right.
         """
 
-        if name is None:
-            name = "Move %f inches" % distance
+        # TODO either generate an acceleration curve, or, more preferably,
+        # use trajectories
 
         super().__init__()
 
-        self.distance = -distance
-        self.angle = angle
-        self.tol = tolerance  # Angle tolerance in degrees.
-        self.isSlow = slow
-        self.torySlow = torySlow
+        # Store where the robot should move to
+        self.targetPosition = Translation2d(x, y)
 
-        self.moveSet = False
+        self.tolerance = tolerance
+
+        self.driveController = robot.drivetrain.driveController
+
+        # Make the speed a percent of the robot's speed limit
+        self.speed = speed * constants.drivetrain.speedLimit
+
         self.addRequirements(robot.drivetrain)
 
     def initialize(self):
-        if self.isSlow:
-            robot.drivetrain.setCruiseVelocity(True)
-
-        if self.torySlow != None:  # This IF overrides the previous one.
-            robot.drivetrain.setVariableCruiseVelocity(self.torySlow)
+        self.transformToPosition = Transform2d(self.targetPosition, Rotation2d(0))
 
         robot.drivetrain.setModuleProfiles(1, turn=False)
 
-        self.count = 0
-        self.startPos = robot.drivetrain.getPositions()
+        # Get the current state of the robot
+        self.currentPose = robot.drivetrain.getSwervePose()
 
-        robot.drivetrain.setUniformModuleAngle(self.angle)
+        # Convert the position we are given to a pose
+        self.desiredPose = self.currentPose.transformBy(self.transformToPosition)
+        # self.desiredPose = Pose2d(self.targetPosition, Rotation2d(0))
 
-    def execute(self):
-        self.count = 0
-        print(robot.drivetrain.getModuleAngles())
-        if self.count != 4 and not self.moveSet:
-            for currentAngle in robot.drivetrain.getModuleAngles():
-                if (
-                    abs(currentAngle - self.angle) < self.tol
-                    or abs(currentAngle - self.angle - 360) < self.tol
-                ):
-                    self.count += 1
-                else:
-                    continue
+        robot.drivetrain.addAutoPeriodicFunction(self.moveCommandExecute)
 
-        if self.count == 4:  # All angles aligned.
-            print("ALL ANGLES ALIGNED, SETTING POSITIONS")
-            robot.drivetrain.setPositions(
-                [self.distance, self.distance, self.distance, self.distance]
-            )
+    def moveCommandExecute(self):
+        # Update the odometry that estimates our current position
+        robot.drivetrain.updateOdometry()
 
-            self.moveSet = True
+        # Get the current state of the robot
+        self.currentPose = robot.drivetrain.getSwervePose()
 
-        robot.drivetrain.setUniformModuleAngle(self.angle)
+        chassisSpeeds = self.driveController.calculate(
+            self.currentPose, self.desiredPose, self.speed, Rotation2d(0)
+        )
+
+        robot.drivetrain.setChassisSpeeds(chassisSpeeds)
 
     def isFinished(self):
-        count = 0
-        for position, start in zip(robot.drivetrain.getPositions(), self.startPos):
-            if abs(position - (start + self.distance)) < 4:
-                count += 1
-            else:
-                print("not finished: " + str(abs(position - (start + self.distance))))
-                return False
-
-        if count == 4:
-            return True
+        return (
+            self.currentPose.translation().distance(self.desiredPose.translation())
+            < self.tolerance
+        )
 
     def end(self, interrupted):
         robot.drivetrain.stop()
-        robot.drivetrain.setCruiseVelocity()
         robot.drivetrain.setModuleProfiles(0, turn=False)
-        self.moveSet = False
-        print("\n\n\nDone\n\n\n")
+
+        robot.drivetrain.removeAutoPeriodicFunction(self.moveCommandExecute)
