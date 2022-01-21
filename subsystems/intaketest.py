@@ -14,12 +14,12 @@ class IntakeTest(CougarSystem):
     def __init__(self):
         super().__init__("ConveyorIntake")
 
-        self.motor = WPI_TalonSRX(ports.conveyor.motorID)
+        self.motor = WPI_TalonSRX(ports.intaketest.motorID)
 
         self.motor.setNeutralMode(NeutralMode.Brake)
         self.motor.setInverted(True)
 
-        self.speed = 0.6
+        self.speed = 1
 
     def periodic(self):
         """

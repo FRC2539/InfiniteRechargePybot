@@ -65,3 +65,7 @@ climber = PortsList()
 climber.motorID = 12
 
 colorwheel = PortsList()
+
+intaketest = PortsList()
+
+intaketest.motorID = 21

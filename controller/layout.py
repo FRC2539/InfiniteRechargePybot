@@ -101,11 +101,11 @@ def init():
     )  # Fast speed when pressed again.
 
     # Standard, field orientation intake mode.
-    driveControllerTwo.LeftThumb.whileHeld(RejectCommand())
+    driveControllerTwo.LeftThumb.whileHeld(IntakeCommand())
     # driveControllerTwo.LeftThumb.whileHeld(ConveyorIntakeForwardCommand())
 
     # Intake w/ robot orientation.
-    driveControllerTwo.RightThumb.whileHeld(IntakeCommand())
+    driveControllerTwo.RightThumb.whileHeld(RejectCommand())
     # driveControllerTwo.RightThumb.whileHeld(ConveyorIntakeForwardCommand())
 
     driveControllerTwo.RightThumb.whenPressed(ToggleFieldOrientationCommand(False))
