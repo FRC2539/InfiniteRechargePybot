@@ -25,6 +25,7 @@ from subsystems.turret import Turret as turret
 from subsystems.pneumatics import Pneumatics as pneumatics
 from subsystems.climber import Climber as climber
 from subsystems.colorwheel import ColorWheel as colorwheel
+from subsystems.intaketest import IntakeTest as intaketest
 
 
 import math
@@ -53,12 +54,12 @@ class KryptonBot(TimedCommandRobot):
 
         if self.isSimulation():
             cougarcoursegrapher.init()
-            
+
         import robot
 
         self.addPeriodic(
-            robot.drivetrain.callAutoPeriodicFunctions, 
-            constants.drivetrain.autoPeriodicPeriod
+            robot.drivetrain.callAutoPeriodicFunctions,
+            constants.drivetrain.autoPeriodicPeriod,
         )
 
     def autonomousInit(self):

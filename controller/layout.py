@@ -57,6 +57,9 @@ from commands.colorwheel.spinwheelcommand import SpinWheelCommand
 from commands.colorwheel.rotationcontrolcommand import RotationControlCommand
 from commands.colorwheel.colorcontrolcommand import ColorControlCommand
 
+from commands.intaketest.intakecommand import IntakeCommand
+from commands.intaketest.rejectcommand import RejectCommand
+
 # from commands.colorwheel.automatedcolorcontrolcommand import (
 #     AutomatedColorControlCommand,
 # )
@@ -98,10 +101,13 @@ def init():
     )  # Fast speed when pressed again.
 
     # Standard, field orientation intake mode.
-    driveControllerTwo.LeftThumb.whileHeld(ConveyorIntakeForwardCommand())
+    driveControllerTwo.LeftThumb.whileHeld(RejectCommand())
+    # driveControllerTwo.LeftThumb.whileHeld(ConveyorIntakeForwardCommand())
 
     # Intake w/ robot orientation.
-    driveControllerTwo.RightThumb.whileHeld(ConveyorIntakeForwardCommand())
+    driveControllerTwo.RightThumb.whileHeld(IntakeCommand())
+    # driveControllerTwo.RightThumb.whileHeld(ConveyorIntakeForwardCommand())
+
     driveControllerTwo.RightThumb.whenPressed(ToggleFieldOrientationCommand(False))
     driveControllerTwo.RightThumb.whenReleased(ToggleFieldOrientationCommand(True))
 
